@@ -8,8 +8,11 @@ namespace Project1.Models
         [Key]
         public int OrderID { get; set; } // 訂單編號，主鍵
 
-        [ForeignKey("MemberID")]
+        
         public int MemberID { get; set; } // 會員編號，外鍵
+
+        [ForeignKey("MemberID")]
+        public Member Member { get; set; }
 
 
         [Required]

@@ -32,5 +32,8 @@ namespace Project1.Models
 
 		[Required]
 		public bool IsAdministrator { get; set; } // 是否為系統管理員，1/0
-	}
+
+
+        public ICollection<Order> Order { get; set; }
+    }
 }
