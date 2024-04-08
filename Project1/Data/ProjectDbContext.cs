@@ -12,9 +12,14 @@ namespace Project1.Data
 
         public ProjectDbContext(DbContextOptions<ProjectDbContext> options) : base(options)
         {
-
+            
         }
-
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ShoppingCart>().HasData(
+                new ShoppingCart { CartID=1, CourseID=1, Quantity=1, CreatedAt=DateTime.UtcNow}
+                );
+        }
         public virtual DbSet<Course> Course { get; set; }
         public virtual DbSet<Trainer> Trainer { get; set; }
 

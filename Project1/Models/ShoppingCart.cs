@@ -20,7 +20,7 @@ namespace Project1.Models
 
         [Display(Name = "Modified At")]
         [DataType(DataType.DateTime)]
-        public DateTime ModifiedAt { get; set; }//修改時間
+        public DateTime? ModifiedAt { get; set; }//修改時間
 
         // Navigation property
         //public virtual Course Course { get; set; }
