@@ -18,7 +18,12 @@ namespace Project1.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var CourseAvg = _ProjectDbContext.CourseRanking.OrderByDescending(x => x.CourseAverageRating).ToList();
+            var CourseRank = CourseAvg.Take(10);
+            ViewData["CourseRank"] = CourseRank.Select(x=> x.CourseAverageRating).ToString();
+
+            return View(CourseRank);
+
         }
 
         public IActionResult Privacy()

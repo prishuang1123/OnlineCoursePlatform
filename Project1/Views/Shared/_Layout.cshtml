@@ -1,6 +1,4 @@
-﻿5431321.
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -17,6 +15,7 @@
     <link rel="stylesheet" href="css/ion.rangeSlider.skinFlat.css" />
     <link rel="stylesheet" href="css/magnific-popup.css">
     <link rel="stylesheet" href="css/main.css">
+	@await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
 	<header class="header_area sticky-header">
@@ -25,7 +24,7 @@
 				<div class="container">
 					<!-- Brand and toggle get grouped for better mobile display -->
 					<a class="navbar-brand logo_h" href="index.html">
-						<h3>寵互動</h3>
+						<h3>寵護動</h3>
 					</a>
 					<button class="navbar-toggler" type="button" data-toggle="collapse"
 							data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -37,25 +36,12 @@
 					<!-- Collect the nav links, forms, and other content for toggling -->
 					<div class="collapse navbar-collapse offset" id="navbarSupportedContent">
 						<ul class="nav navbar-nav menu_nav ml-auto">
-							<li class="nav-item active"><a class="nav-link" href="index.html">Home</a></li>
+							<li class="nav-item active"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
 							<li class="nav-item submenu dropdown">
 								<a href="" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
 								   aria-haspopup="true" aria-expanded="false">Shop</a>
 								<ul class="dropdown-menu">
 									<li class="nav-item"><a class="nav-link" asp-area="" asp-controller="test" asp-action="Index">test</a></li>
-									<li class="nav-item">
-										<a class="nav-link" href="single-product.html">
-											Product
-											Details
-										</a>
-									</li>
-									<li class="nav-item">
-										<a class="nav-link" href="checkout.html">Product Checkout</a>
-									</li>
-									<li class="nav-item"><a class="nav-link" href="cart.html">Shopping Cart</a></li>
-									<li class="nav-item">
-										<a class="nav-link" href="confirmation.html">Confirmation</a>
-									</li>
 								</ul>
 							</li>
 							<li class="nav-item submenu dropdown">
