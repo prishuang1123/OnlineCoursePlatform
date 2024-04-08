@@ -1,9 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace Project1.Models
 {
 	public class InstructorRanking
 	{
+		[Key]
 		public int InstructorRankingID { get; set; } // 排行榜編號，主鍵，唯一識別每次排名
 
 		public int CourseID { get; set; } // 課程編號，外鍵

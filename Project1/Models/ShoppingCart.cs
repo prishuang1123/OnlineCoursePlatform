@@ -5,6 +5,7 @@ namespace Project1.Models
 {
     public class ShoppingCart
     {
+        [Key]
         public int CartID { get; set; }//購物車主鍵
 
         //[ForeignKey("Course")]

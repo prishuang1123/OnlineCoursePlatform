@@ -5,6 +5,7 @@ namespace Project1.Models
 {
 	public class PTDetail
 	{
+		[Key]
 		public int PTDetaillID { get; set; } // PT課程明細編號，主鍵
 
 		public int MemberID { get; set; } // 會員ID，外鍵

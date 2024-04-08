@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-
+using System.ComponentModel.DataAnnotations;
 namespace Project1.Models
 {
 	public class CourseRating
 	{
+		[Key]
 		public int CourseRatingID { get; set; } // 評分編號，主鍵，唯一識別每次評分
 
 		public int CourseID { get; set; } // 課程編號，外鍵

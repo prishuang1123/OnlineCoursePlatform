@@ -5,6 +5,7 @@ namespace Project1.Models
 {
     public class EnrollmentRanking
     {
+        [Key]
         public int EnrollmentRankingID { get; set; }//唯一識別每次排名,主鍵
 
         public int CourseID { get; set; }//外鍵

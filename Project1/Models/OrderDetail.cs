@@ -5,6 +5,7 @@ namespace Project1.Models
 {
     public class OrderDetail
     {
+        [Key]
         public int OrderDetailID { get; set; }//訂單明細編號,主鍵
 
         //[ForeignKey("Order")]
