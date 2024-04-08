@@ -5,44 +5,48 @@ namespace Project1.Models
 {
     public class Course
     {
- 
-            [Key]
-            public int CourseID { get; set; }
 
-            [Required]
-            public string CourseName { get; set; }
+		[Key]
+		public int CourseID { get; set; } // 課程編號，主鍵
 
-            [ForeignKey("TrainerID")]
-            public int TrainerID { get; set; }
+		[Required]
+		public string CourseName { get; set; } // 課程名稱
 
-            [Required]
-            public string PetCategory { get; set; }
+		public int TrainerID { get; set; } // 訓練師編號，外鍵
 
-            [Required]
-            public string CourseCategory { get; set; }
+		[ForeignKey("TrainerID")]
+		public Trainer Trainer { get; set; } // 訓練師
 
-            public string CourseType { get; set; }
+		[Required]
+		public string PetCategory { get; set; } // 寵物分類
 
-            public string Description { get; set; }
+		[Required]
+		public string CourseCategory { get; set; } // 課程分類
 
-            [Required]
-            public string ApprovalStatus { get; set; }
+		public string CourseType { get; set; } // 課程類型
 
-            public decimal Price { get; set; }
-            
-            [ForeignKey("DiscountID")]
-            public int? DiscountID { get; set; }
+		public string Description { get; set; } // 課程描述
 
-            public string Location { get; set; }
+		[Required]
+		public string ApprovalStatus { get; set; } // 審核狀態
 
-            public int MaxParticipants { get; set; }
+		public decimal Price { get; set; } // 價格
 
-            public int EnrollmentCount { get; set; }
+		public int? DiscountID { get; set; } // 折扣編號，外鍵
 
-            public DateTime CreatedAt { get; set; }
+		[ForeignKey("DiscountID")]
+		public Discount Discount { get; set; } // 折扣
 
-            public DateTime UpdatedAt { get; set; }
+		public string Location { get; set; } // 上課地址
 
-            
-    }
+		public int MaxParticipants { get; set; } // 課程參加人數上限
+
+		public int EnrollmentCount { get; set; } // 報名人數
+
+		public DateTime CreatedAt { get; set; } // 課程建立時間
+
+		public DateTime UpdatedAt { get; set; } // 課程最後更新時間
+
+		public int Clicks { get; set; } // 課程頁面被點擊次數
+	}
 }
