@@ -11,8 +11,8 @@ namespace Project1.Models
         
         public int OrderID { get; set; } // 外鍵
 
-        [ForeignKey("OrderID")]
-        public Order Order { get; set; }
+        //[ForeignKey("OrderID")]
+        //public Order Order { get; set; }
 
         [Required]
         public string PaymentMethod { get; set; } // 支付方式

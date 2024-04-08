@@ -40,13 +40,15 @@ namespace Project1.Data
 
         public virtual DbSet<Payment> Payment { get; set; }
 
-        public virtual DbSet<Cart> Cart { get; set; }
+        public virtual DbSet<ShoppingCart> Cart { get; set; }
 
         public virtual DbSet<Discount> Discount { get; set; }
 
         public virtual DbSet<ClassSchedule> ClassSchedule { get; set; }
 
         public virtual DbSet<EnrollmentRanking> EnrollmentRanking { get; set; }
+
+        public virtual DbSet<Member> Member { get; set; }
 
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -121,9 +123,9 @@ namespace Project1.Data
                 entity.ToTable("Payment");
             });
 
-            modelBuilder.Entity<Cart>(entity =>
+            modelBuilder.Entity<ShoppingCart>(entity =>
             {
-                entity.ToTable("Cart");
+                entity.ToTable("ShoppingCart");
             });
 
             modelBuilder.Entity<Discount>(entity =>
@@ -138,8 +140,13 @@ namespace Project1.Data
 
             modelBuilder.Entity<EnrollmentRanking>(entity =>
             {
-				entity.ToTable("EnrollmentRanking");
-            }
+                entity.ToTable("EnrollmentRanking");
+            });
+
+            modelBuilder.Entity<Member>(entity =>
+            {
+                entity.ToTable("Member");
+            });
         }
     }
 }
