@@ -8,18 +8,18 @@ namespace Project1.Models
 
 		public int CourseID { get; set; } // 課程編號，外鍵
 
-		[ForeignKey("CourseID")]
-		public Course Course { get; set; } // 課程
+		//[ForeignKey("CourseID")]
+		//public Course Course { get; set; } // 課程
 
 		public int TrainerID { get; set; } // 訓練師編號，外鍵
 
-		[ForeignKey("TrainerID")]
-		public Trainer Trainer { get; set; } // 訓練師
+		//[ForeignKey("TrainerID")]
+		//public Trainer Trainer { get; set; } // 訓練師
 
 		public int UserID { get; set; } // 用戶編號，外鍵
 
-		[ForeignKey("MemberID")]
-		public Member Member { get; set; } // 用戶
+		//[ForeignKey("MemberID")]
+		//public Member Member { get; set; } // 用戶
 
 		public int Rating { get; set; } // 評分，例如1至5
 

@@ -11,8 +11,8 @@ namespace Project1.Models
         
         public int MemberID { get; set; } // 會員編號，外鍵
 
-        [ForeignKey("MemberID")]
-        public Member Member { get; set; }
+        //[ForeignKey("MemberID")]
+        //public Member Member { get; set; }
 
 
         [Required]

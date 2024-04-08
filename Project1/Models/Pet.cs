@@ -23,8 +23,8 @@ namespace Project1.Models
 
 		public int MemberID { get; set; } // 主人的ID
 
-		[ForeignKey("MemberID")]
-		public Member Member { get; set; } // 定義導覽屬性
+		//[ForeignKey("MemberID")]
+		//public Member Member { get; set; } // 定義導覽屬性
 
 		public DateTime Birthday { get; set; } // 寵物的生日
 	}

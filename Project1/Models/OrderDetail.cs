@@ -7,19 +7,19 @@ namespace Project1.Models
     {
         public int OrderDetailID { get; set; }//訂單明細編號,主鍵
 
-        [ForeignKey("Order")]
+        //[ForeignKey("Order")]
         public int OrderID { get; set; }//訂單編號,外鍵
 
-        [ForeignKey("Course")]
+        //[ForeignKey("Course")]
         public int CourseID { get; set; }//課程編號,外鍵
 
-        [ForeignKey("Payment")]
+        //[ForeignKey("Payment")]
         public int PaymentID { get; set; }//外鍵
 
         public int Quantity { get; set; }//課程數量
 
-        [ForeignKey("Discount")]
-        public int? DiscountID { get; set; }//折扣編號,外鍵
+        //[ForeignKey("Discount")]
+        public int DiscountID { get; set; }//折扣編號,外鍵
 
         [Display(Name = "Unit Price")]
         public decimal UnitPrice { get; set; }//課程單價

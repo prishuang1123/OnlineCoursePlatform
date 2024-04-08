@@ -34,9 +34,24 @@ namespace Project1.Data
 
         public virtual DbSet<InstructorRanking> InstructorRanking { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public virtual DbSet<Order> Order { get; set; }
+
+        public virtual DbSet<OrderDetail> OrderDetail { get; set; }
+
+        public virtual DbSet<Payment> Payment { get; set; }
+
+        public virtual DbSet<Cart> Cart { get; set; }
+
+        public virtual DbSet<Discount> Discount { get; set; }
+
+        public virtual DbSet<ClassSchedule> ClassSchedule { get; set; }
+
+        public virtual DbSet<EnrollmentRanking> EnrollmentRanking { get; set; }
+
+
+		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=(localdb)\\ProjectModels;Database=ProjectDb;Trusted_Connection=True;MultipleActiveResultSets=true");
+            optionsBuilder.UseSqlServer("Server=(localdb)\\ProjectModels;Database=ProjectDb;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -90,6 +105,41 @@ namespace Project1.Data
             {
 				entity.ToTable("InstructorRanking");
             });
+
+            modelBuilder.Entity<Order>(entity =>
+            {
+                entity.ToTable("Order");
+            });
+
+            modelBuilder.Entity<OrderDetail>(entity =>
+            {
+                entity.ToTable("OrderDetail");
+            });
+
+            modelBuilder.Entity<Payment>(entity =>
+            {
+                entity.ToTable("Payment");
+            });
+
+            modelBuilder.Entity<Cart>(entity =>
+            {
+                entity.ToTable("Cart");
+            });
+
+            modelBuilder.Entity<Discount>(entity =>
+            {
+                entity.ToTable("Discount");
+            });
+
+            modelBuilder.Entity<ClassSchedule>(entity =>
+            {
+                entity.ToTable("ClassSchedule");
+            });
+
+            modelBuilder.Entity<EnrollmentRanking>(entity =>
+            {
+				entity.ToTable("EnrollmentRanking");
+            }
         }
     }
 }

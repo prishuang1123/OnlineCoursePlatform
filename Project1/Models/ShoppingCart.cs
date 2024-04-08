@@ -7,7 +7,7 @@ namespace Project1.Models
     {
         public int CartID { get; set; }//購物車主鍵
 
-        [ForeignKey("Course")]
+        //[ForeignKey("Course")]
         public int CourseID { get; set; }//外鍵
 
         [Range(1, int.MaxValue, ErrorMessage = "Quantity must be at least 1")]
@@ -22,6 +22,6 @@ namespace Project1.Models
         public DateTime ModifiedAt { get; set; }//修改時間
 
         // Navigation property
-        public virtual Course Course { get; set; }
+        //public virtual Course Course { get; set; }
     }
 }

@@ -14,8 +14,8 @@ namespace Project1.Models
 
 		public int TrainerID { get; set; } // 訓練師編號，外鍵
 
-		[ForeignKey("TrainerID")]
-		public Trainer Trainer { get; set; } // 訓練師
+		//[ForeignKey("TrainerID")]
+		//public Trainer Trainer { get; set; } // 訓練師
 
 		[Required]
 		public string PetCategory { get; set; } // 寵物分類
@@ -34,8 +34,8 @@ namespace Project1.Models
 
 		public int? DiscountID { get; set; } // 折扣編號，外鍵
 
-		[ForeignKey("DiscountID")]
-		public Discount Discount { get; set; } // 折扣
+		//[ForeignKey("DiscountID")]
+		//public Discount Discount { get; set; } // 折扣
 
 		public string Location { get; set; } // 上課地址
 
