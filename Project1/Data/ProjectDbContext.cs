@@ -19,6 +19,13 @@ namespace Project1.Data
             modelBuilder.Entity<ShoppingCart>().HasData(
                 new ShoppingCart { CartID=1, CourseID=1, Quantity=1, CreatedAt=DateTime.UtcNow}
                 );
+            modelBuilder.Entity<Order>().HasData(
+                new Order { OrderID=1, MemberID=1, OrderDate=DateTime.Now, OrderStatus="Processing", TotalAmount=300, CreatedAt=DateTime.Now },
+                new Order { OrderID = 2, MemberID = 2, OrderDate = DateTime.Now, OrderStatus = "Delivered", TotalAmount = 500, CreatedAt = DateTime.Now },
+                new Order { OrderID = 3, MemberID = 3, OrderDate = DateTime.Now, OrderStatus = "Cancelled", TotalAmount = 200, CreatedAt = DateTime.Now },
+                new Order { OrderID = 4, MemberID = 4, OrderDate = DateTime.Now, OrderStatus = "Processing", TotalAmount = 150, CreatedAt = DateTime.Now },
+                new Order { OrderID = 5, MemberID = 5, OrderDate = DateTime.Now, OrderStatus = "Shipped", TotalAmount = 350, CreatedAt = DateTime.Now }
+                );
         }
         public virtual DbSet<Course> Course { get; set; }
         public virtual DbSet<Trainer> Trainer { get; set; }
