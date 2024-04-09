@@ -38,7 +38,7 @@ namespace Project1.Migrations
 
                     b.HasKey("SchedulerID");
 
-                    b.ToTable("ClassSchedule");
+                    b.ToTable("ClassSchedule", (string)null);
                 });
 
             modelBuilder.Entity("Project1.Models.Course", b =>
@@ -103,7 +103,7 @@ namespace Project1.Migrations
 
                     b.HasKey("CourseID");
 
-                    b.ToTable("Course");
+                    b.ToTable("Course", (string)null);
                 });
 
             modelBuilder.Entity("Project1.Models.CourseClicksRanking", b =>
@@ -131,7 +131,7 @@ namespace Project1.Migrations
 
                     b.HasKey("CourseClicksRankingID");
 
-                    b.ToTable("CourseClicksRanking");
+                    b.ToTable("CourseClicksRanking", (string)null);
                 });
 
             modelBuilder.Entity("Project1.Models.CourseRanking", b =>
@@ -156,7 +156,7 @@ namespace Project1.Migrations
 
                     b.HasKey("CourseRankingID");
 
-                    b.ToTable("CourseRanking");
+                    b.ToTable("CourseRanking", (string)null);
                 });
 
             modelBuilder.Entity("Project1.Models.CourseRating", b =>
@@ -188,7 +188,7 @@ namespace Project1.Migrations
 
                     b.HasKey("CourseRatingID");
 
-                    b.ToTable("CourseRating");
+                    b.ToTable("CourseRating", (string)null);
                 });
 
             modelBuilder.Entity("Project1.Models.Discount", b =>
@@ -226,7 +226,7 @@ namespace Project1.Migrations
 
                     b.HasKey("DiscountID");
 
-                    b.ToTable("Discount");
+                    b.ToTable("Discount", (string)null);
                 });
 
             modelBuilder.Entity("Project1.Models.EnrollmentRanking", b =>
@@ -254,7 +254,7 @@ namespace Project1.Migrations
 
                     b.HasKey("EnrollmentRankingID");
 
-                    b.ToTable("EnrollmentRanking");
+                    b.ToTable("EnrollmentRanking", (string)null);
                 });
 
             modelBuilder.Entity("Project1.Models.InstructorRanking", b =>
@@ -279,7 +279,7 @@ namespace Project1.Migrations
 
                     b.HasKey("InstructorRankingID");
 
-                    b.ToTable("InstructorRanking");
+                    b.ToTable("InstructorRanking", (string)null);
                 });
 
             modelBuilder.Entity("Project1.Models.Location", b =>
@@ -296,7 +296,7 @@ namespace Project1.Migrations
 
                     b.HasKey("LocationID");
 
-                    b.ToTable("Location");
+                    b.ToTable("Location", (string)null);
                 });
 
             modelBuilder.Entity("Project1.Models.Member", b =>
@@ -341,7 +341,7 @@ namespace Project1.Migrations
 
                     b.HasKey("MemberID");
 
-                    b.ToTable("Member");
+                    b.ToTable("Member", (string)null);
                 });
 
             modelBuilder.Entity("Project1.Models.Order", b =>
@@ -373,7 +373,7 @@ namespace Project1.Migrations
 
                     b.HasKey("OrderID");
 
-                    b.ToTable("Order");
+                    b.ToTable("Order", (string)null);
 
                     b.HasData(
                         new
@@ -460,7 +460,7 @@ namespace Project1.Migrations
 
                     b.HasKey("OrderDetailID");
 
-                    b.ToTable("OrderDetail");
+                    b.ToTable("OrderDetail", (string)null);
                 });
 
             modelBuilder.Entity("Project1.Models.PTDetail", b =>
@@ -482,7 +482,7 @@ namespace Project1.Migrations
 
                     b.HasKey("PTDetaillID");
 
-                    b.ToTable("PTDetail");
+                    b.ToTable("PTDetail", (string)null);
                 });
 
             modelBuilder.Entity("Project1.Models.Payment", b =>
@@ -508,7 +508,7 @@ namespace Project1.Migrations
 
                     b.HasKey("PaymentID");
 
-                    b.ToTable("Payment");
+                    b.ToTable("Payment", (string)null);
                 });
 
             modelBuilder.Entity("Project1.Models.Pet", b =>
@@ -546,7 +546,7 @@ namespace Project1.Migrations
 
                     b.HasKey("PetID");
 
-                    b.ToTable("Pet");
+                    b.ToTable("Pet", (string)null);
                 });
 
             modelBuilder.Entity("Project1.Models.ShoppingCart", b =>
@@ -571,7 +571,7 @@ namespace Project1.Migrations
 
                     b.HasKey("CartID");
 
-                    b.ToTable("Cart");
+                    b.ToTable("Cart", (string)null);
 
                     b.HasData(
                         new
@@ -616,7 +616,7 @@ namespace Project1.Migrations
 
                     b.HasKey("TrainerID");
 
-                    b.ToTable("Trainer");
+                    b.ToTable("Trainer", (string)null);
                 });
 
             modelBuilder.Entity("Project1.Models.TrainerServiceArea", b =>
@@ -635,7 +635,7 @@ namespace Project1.Migrations
 
                     b.HasKey("TeachingAreaID");
 
-                    b.ToTable("TrainerServiceArea");
+                    b.ToTable("TrainerServiceArea", (string)null);
                 });
 #pragma warning restore 612, 618
         }
