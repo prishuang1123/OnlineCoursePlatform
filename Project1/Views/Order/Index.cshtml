@@ -68,15 +68,18 @@
                     @order.ModifiedAt
                 </td>
                 <td>
-                    <a asp-action="Read" asp-controller="Order" class="genric-btn primary-border px-3">
-                        <i class="bi bi-eye"></i>
-                    </a>
-                    <a asp-action="Update" asp-controller="Order" class="genric-btn primary-border px-3">
-                        <i class="bi bi-pencil-square"></i>
-                    </a>
-                    <a asp-action="Delete" asp-controller="Order" class="genric-btn primary-border px-3">
-                        <i class="bi bi-trash"></i>
-                    </a>
+                    <div class="w-75 btn-group" role="group">
+                        <a asp-action="View" asp-controller="Order" class="genric-btn default mx-1 px-2">
+                            <i class="bi bi-eye"></i>
+                        </a>
+                        <a asp-action="Edit" asp-controller="Order" class="genric-btn default mx-1 px-2">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                        <a asp-action="Delete" asp-controller="Order" class="genric-btn default mx-1 px-2">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </div>
+                   
                 </td>
             </tr>
         }
