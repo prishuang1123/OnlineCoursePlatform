@@ -15,7 +15,6 @@
     <link rel="stylesheet" href="css/ion.rangeSlider.skinFlat.css" />
     <link rel="stylesheet" href="css/magnific-popup.css">
     <link rel="stylesheet" href="css/main.css">
-	@await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
 	<header class="header_area sticky-header">
@@ -42,6 +41,19 @@
 								   aria-haspopup="true" aria-expanded="false">Shop</a>
 								<ul class="dropdown-menu">
 									<li class="nav-item"><a class="nav-link" asp-area="" asp-controller="test" asp-action="Index">test</a></li>
+									<li class="nav-item">
+										<a class="nav-link" href="single-product.html">
+											Product
+											Details
+										</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" href="checkout.html">Product Checkout</a>
+									</li>
+									<li class="nav-item"><a class="nav-link" href="cart.html">Shopping Cart</a></li>
+									<li class="nav-item">
+										<a class="nav-link" href="confirmation.html">Confirmation</a>
+									</li>
 								</ul>
 							</li>
 							<li class="nav-item submenu dropdown">
@@ -56,11 +68,11 @@
 							</li>
 							<li class="nav-item submenu dropdown">
 								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
-								   aria-haspopup="true" aria-expanded="false">Pages</a>
+								   aria-haspopup="true" aria-expanded="false" >訓練師</a>
 								<ul class="dropdown-menu">
-									<li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
-									<li class="nav-item"><a class="nav-link" href="tracking.html">Tracking</a></li>
-									<li class="nav-item"><a class="nav-link" href="elements.html">Elements</a></li>
+									<li class="nav-item"><a class="nav-link" >訓練師頁面</a></li>
+									<li class="nav-item"><a class="nav-link"  asp-controller="Trainer" asp-action="Index">課程</a></li>
+									<li class="nav-item"><a class="nav-link" href="elements.html">預約</a></li>
 								</ul>
 							</li>
 							<li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>

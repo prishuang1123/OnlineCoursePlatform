@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Project1.Data;
 
@@ -11,9 +12,11 @@ using Project1.Data;
 namespace Project1.Migrations
 {
     [DbContext(typeof(ProjectDbContext))]
-    partial class ProjectDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240408071251_addSeedCartData")]
+    partial class addSeedCartData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,9 +53,10 @@ namespace Project1.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CourseID"));
 
                     b.Property<string>("ApprovalStatus")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("Clicks")
+                    b.Property<int>("Clicks")
                         .HasColumnType("int");
 
                     b.Property<string>("CourseCategory")
@@ -64,24 +68,27 @@ namespace Project1.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CourseType")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("DiscountID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("EnrollmentCount")
+                    b.Property<int>("EnrollmentCount")
                         .HasColumnType("int");
 
                     b.Property<string>("Location")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("MaxParticipants")
+                    b.Property<int>("MaxParticipants")
                         .HasColumnType("int");
 
                     b.Property<string>("PetCategory")
@@ -370,53 +377,6 @@ namespace Project1.Migrations
                     b.HasKey("OrderID");
 
                     b.ToTable("Order");
-
-                    b.HasData(
-                        new
-                        {
-                            OrderID = 1,
-                            CreatedAt = new DateTime(2024, 4, 10, 11, 39, 25, 659, DateTimeKind.Local).AddTicks(392),
-                            MemberID = 1,
-                            OrderDate = new DateTime(2024, 4, 10, 11, 39, 25, 659, DateTimeKind.Local).AddTicks(379),
-                            OrderStatus = "Processing",
-                            TotalAmount = 300m
-                        },
-                        new
-                        {
-                            OrderID = 2,
-                            CreatedAt = new DateTime(2024, 4, 10, 11, 39, 25, 659, DateTimeKind.Local).AddTicks(394),
-                            MemberID = 2,
-                            OrderDate = new DateTime(2024, 4, 10, 11, 39, 25, 659, DateTimeKind.Local).AddTicks(393),
-                            OrderStatus = "Delivered",
-                            TotalAmount = 500m
-                        },
-                        new
-                        {
-                            OrderID = 3,
-                            CreatedAt = new DateTime(2024, 4, 10, 11, 39, 25, 659, DateTimeKind.Local).AddTicks(396),
-                            MemberID = 3,
-                            OrderDate = new DateTime(2024, 4, 10, 11, 39, 25, 659, DateTimeKind.Local).AddTicks(395),
-                            OrderStatus = "Cancelled",
-                            TotalAmount = 200m
-                        },
-                        new
-                        {
-                            OrderID = 4,
-                            CreatedAt = new DateTime(2024, 4, 10, 11, 39, 25, 659, DateTimeKind.Local).AddTicks(397),
-                            MemberID = 4,
-                            OrderDate = new DateTime(2024, 4, 10, 11, 39, 25, 659, DateTimeKind.Local).AddTicks(397),
-                            OrderStatus = "Processing",
-                            TotalAmount = 150m
-                        },
-                        new
-                        {
-                            OrderID = 5,
-                            CreatedAt = new DateTime(2024, 4, 10, 11, 39, 25, 659, DateTimeKind.Local).AddTicks(399),
-                            MemberID = 5,
-                            OrderDate = new DateTime(2024, 4, 10, 11, 39, 25, 659, DateTimeKind.Local).AddTicks(398),
-                            OrderStatus = "Shipped",
-                            TotalAmount = 350m
-                        });
                 });
 
             modelBuilder.Entity("Project1.Models.OrderDetail", b =>
@@ -574,7 +534,7 @@ namespace Project1.Migrations
                         {
                             CartID = 1,
                             CourseID = 1,
-                            CreatedAt = new DateTime(2024, 4, 10, 3, 39, 25, 659, DateTimeKind.Utc).AddTicks(230),
+                            CreatedAt = new DateTime(2024, 4, 8, 7, 12, 50, 415, DateTimeKind.Utc).AddTicks(7487),
                             Quantity = 1
                         });
                 });
@@ -586,10 +546,6 @@ namespace Project1.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TrainerID"));
-
-                    b.Property<string>("CourseID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Experience")
                         .IsRequired()
