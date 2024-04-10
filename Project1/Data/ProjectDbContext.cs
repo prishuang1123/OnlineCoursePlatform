@@ -26,8 +26,10 @@ namespace Project1.Data
                 new Order { OrderID = 4, MemberID = 4, OrderDate = DateTime.Now, OrderStatus = "Processing", TotalAmount = 150, CreatedAt = DateTime.Now },
                 new Order { OrderID = 5, MemberID = 5, OrderDate = DateTime.Now, OrderStatus = "Shipped", TotalAmount = 350, CreatedAt = DateTime.Now }
                 );
+
         }
         public virtual DbSet<Course> Course { get; set; }
+
         public virtual DbSet<Trainer> Trainer { get; set; }
 
         public virtual DbSet<Pet> Pet { get; set; }

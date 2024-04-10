@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Project1.Data;
 using Project1.Models;
 using System.Diagnostics;
@@ -18,7 +19,24 @@ namespace Project1.Controllers
 
         public IActionResult Index()
         {
+            var CourseAvg = _ProjectDbContext.CourseRanking.OrderByDescending(x => x.CourseAverageRating).Take(10).ToList();
+            var CourseClick = _ProjectDbContext.Course.OrderByDescending(x => x.Clicks).Take(10).ToList();
+            ViewData["CourseRankbyAvg"] = CourseAvg;
+
+            ViewData["CourseRankbyClick"] = CourseClick;
+
             return View();
+
+        }
+
+        public async Task<JsonResult> IndexJson1()
+        {
+            var topRatedCourses = await _ProjectDbContext.CourseRanking.OrderByDescending(x => x.CourseAverageRating).Take(10).ToListAsync();
+            var topClickedCourses = await _ProjectDbContext.Course.OrderByDescending(x => x.Clicks).Take(10).ToListAsync();
+
+            var result = new { TopRatedCourses = topRatedCourses, TopClickedCourses = topClickedCourses };
+
+            return Json(result);
         }
 
         public IActionResult Privacy()

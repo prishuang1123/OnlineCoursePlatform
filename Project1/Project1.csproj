@@ -8,6 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="bundleconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="bundleconfig.json" />
     <None Include="wwwroot\css\.DS_Store" />
     <None Include="wwwroot\img\.DS_Store" />
     <None Include="wwwroot\img\organic-food\.DS_Store" />

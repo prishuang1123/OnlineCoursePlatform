@@ -23,9 +23,9 @@ namespace Project1.Models
 		[Required]
 		public string CourseCategory { get; set; } // 課程分類
 
-		public string CourseType { get; set; } // 課程類型
+		public string? CourseType { get; set; } // 課程類型
 
-		public string Description { get; set; } // 課程描述
+		public string? Description { get; set; } // 課程描述
 
 		
 		public string? ApprovalStatus { get; set; } // 審核狀態
@@ -37,9 +37,9 @@ namespace Project1.Models
 		//[ForeignKey("DiscountID")]
 		//public Discount Discount { get; set; } // 折扣
 
-		public string Location { get; set; } // 上課地址
+		public string? Location { get; set; } // 上課地址
 
-		public int MaxParticipants { get; set; } // 課程參加人數上限
+		public int? MaxParticipants { get; set; } // 課程參加人數上限
 
 		public int? EnrollmentCount { get; set; } // 報名人數
 
