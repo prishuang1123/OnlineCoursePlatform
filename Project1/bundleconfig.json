@@ -1,0 +1,8 @@
+[
+  {
+    "outputFileName": "wwwroot/datatables/js/jquery.dataTables.min.js",
+    "inputFiles": [
+      "wwwroot/datatables/js/jquery.dataTables.js"
+    ]
+  }
+]

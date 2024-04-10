@@ -1,0 +1,31 @@
+﻿@model Project1.Models.Course
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Course</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CourseName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CourseName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TrainerID)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TrainerID)
+        </dd>
+        <!-- Add similar lines for other properties of Course model -->
+        <!-- Remember to replace DisplayNameFor and DisplayFor methods with appropriate ones for each property -->
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-CourseID="@Model?.CourseID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
