@@ -11,6 +11,7 @@ namespace Project1.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly ProjectDbContext _ProjectDbContext;
 
+
         public HomeController(ILogger<HomeController> logger, ProjectDbContext ProjectDbConext)
         {
             _logger = logger;
@@ -32,14 +33,22 @@ namespace Project1.Controllers
         public async Task<JsonResult> IndexJson1()
         {
             var topRatedCourses = await _ProjectDbContext.CourseRanking.OrderByDescending(x => x.CourseAverageRating).Take(10).ToListAsync();
-            var topClickedCourses = await _ProjectDbContext.Course.OrderByDescending(x => x.Clicks).Take(10).ToListAsync();
+           
 
-            var result = new { TopRatedCourses = topRatedCourses, TopClickedCourses = topClickedCourses };
 
-            return Json(result);
+            return Json(topRatedCourses);
         }
 
-        public IActionResult Privacy()
+		public async Task<JsonResult> IndexJson2()
+		{
+		
+			var topClickedCourses = await _ProjectDbContext.Course.OrderByDescending(x => x.Clicks).Take(10).ToListAsync();
+
+
+			return Json(topClickedCourses);
+		}
+
+		public IActionResult Privacy()
         {
             return View();
         }

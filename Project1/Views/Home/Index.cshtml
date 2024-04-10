@@ -53,45 +53,84 @@
         
    </style>
 }
-    <table id="CourseRanking-table" class="table">
-        <thead>
-          <tr>
-              <td>課程ID</td>
-              <td>教練ID</td>
-              <td>課程平均分數</td>
-              <td>日期</td>
-          </tr>
-        </thead>
-    </table>
 
+
+
+
+
+
+<table id="CourseRanking-table" class="table">
+        <thead>
+        <tr>
+            <td>課程ID</td>
+            <td>教練ID</td>
+            <td>課程平均分數</td>
+            <td>日期</td>
+        </tr>
+
+        </thead>
+</table>
+
+<div class="col-lg-4">
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <select id="select">
+                <option value="1">平均分數</option>
+                <option value="2">點擊次數</option>
+            </select>
+        </div>
+    </div>
+</div>
 
 @section Scripts{
     <script src="~/datatables/js/jquery.datatables.min.js" asp-append-version="true"></script>
     <script src="https://cdn.datatables.net/fixedheader/3.2.4/js/dataTables.fixedHeader.min.js">
     </script>
-    <script>   
-        $(document).ready(function () {
-            $("table").DataTable({
-                ajax: {
-                    type:"GET",
-                    url: "/Home/IndexJson1",
-                    dataSrc: function (json) {
-                        return json;
+    <script>
+        if ($("#select").val() == "1") {
+            $(document).ready(function () {
+                $("table").DataTable({
+                    ajax: {
+                        type: "GET",
+                        url: "/Home/IndexJson1",
+                        dataSrc: function (json) {
+                            return json;
+                        },
                     },
-                },
-                columns:[
-                    { "data": "TopRatedCourses.courseID", "width": "10%" },
-                    { "data": "TopRatedCourses.trainerID", "width": "10%" },
-                    { "data": "TopRatedCourses.courseAverageRating", "width": "10%" },
-                    { "data": "TopRatedCourses.date", "width": "10%" },
-                    { "data": "TopClickedCourses.clicks", "width": "10%" },
-                ],
-                language: {
-                    url: '//cdn.datatables.net/plug-ins/2.0.3/i18n/zh-HANT.json',
-                },
+                    columns: [
+                        { "data": "courseID", "width": "10%" },
+                        { "data": "trainerID", "width": "10%" },
+                        { "data": "courseAverageRating", "width": "10%" },
+                        { "data": "date", "width": "10%" },
+                    ],
+                    language: {
+                        url: '//cdn.datatables.net/plug-ins/2.0.3/i18n/zh-HANT.json',
+                    },
+                });
             });
-        });
-    
+        } else {
+            $(document).ready(function () {
+                $("table").DataTable({
+                    ajax: {
+                        type: "GET",
+                        url: "/Home/IndexJson2",
+                        dataSrc: function (json) {
+                            return json;
+                        },
+                    },
+                    columns: [
+                        { "data": "courseID", "width": "10%" },
+                        { "data": "trainerID", "width": "10%" },
+                        { "data": "courseAverageRating", "width": "10%" },
+                        { "data": "date", "width": "10%" },
+                    ],
+                    language: {
+                        url: '//cdn.datatables.net/plug-ins/2.0.3/i18n/zh-HANT.json',
+                    },
+                });
+            });
+        }
 
     </script>
     
