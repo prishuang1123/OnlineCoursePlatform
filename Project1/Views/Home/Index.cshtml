@@ -2,6 +2,8 @@
 
 @{
     ViewData["Title"] = "Home Page";
+    var CourseRankbyAvg = ViewData["CourseRankbyAvg"] as List<CourseRanking>;
+    var CourseRankbyClick = ViewData["CourseRankbyClick"] as List<Course>;
 }
 
 @section Styles{
@@ -10,44 +12,141 @@
            background-color: darkblue;
            color: white;
        }
+        /* 弹出式窗口 */
+        .modal {
+            display: none; /* 默认隐藏 */
+            position:  relative; /* 固定定位 */
+            z-index: 1; /* 使其位于所有其他元素之上 */
+            left: 0;
+            top: 0;
+            width: 200px;
+            height: 100%;
+            overflow: auto; /* 当内容超出屏幕时可以滚动 */
+            background-color: rgb(0,0,0); /* 背景颜色 */
+            background-color: rgba(0,0,0,0); /* 透明度 */
+        }
+
+        /* 弹出式窗口内容 */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* 居中显示 */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            color: black;
+        }
+
+        /* 关闭按钮 */
+        .close {
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+            .close:hover,
+            .close:focus {
+                color: #000;
+                text-decoration: none;
+                cursor: pointer;
+            }
+        
    </style>
 }
-
-<div class="col-lg-12">
+<section class="banner-area">
+    <div class="container">
+        <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end"
+                <div class="col-lg-12">
+                    <div class="active-banner-slider owl-carousel">
+                        <!-- single-slide -->
+                        <div class="row single-slide align-items-center d-flex">
+                            <div class="col-lg-5 col-md-6">
+                                <div class="banner-content">
+                                    <h1>Nike New <br>Collection!</h1>
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                                        incididunt ut labore et
+                                        dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.
+                                    </p>
+                                    <div class="add-bag d-flex align-items-center">
+                                        <a class="add-btn" href=""><span class="lnr lnr-cross"></span></a>
+                                        <span class="add-text text-uppercase">Add to Bag</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-7">
+                                <div class="banner-img">
+                                    <img class="img-fluid" src="img/banner/banner-img.png" alt="">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- single-slide -->
+                        <div class="row single-slide align-items-center d-flex">
+                            <div class="col-lg-5 col-md-6">
+                                <div class="banner-content">
+                                    <h1>Nike New <br>Collection!</h1>
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                                        incididunt ut labore et
+                                        dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.
+                                    </p>
+                                    <div class="add-bag d-flex align-items-center">
+                                        <a class="add-btn" href=""><span class="lnr lnr-cross"></span></a>
+                                        <span class="add-text text-uppercase">Add to Bag</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-7">
+                                <div class="banner-img">
+                                    <img class="img-fluid" src="img/banner/banner-img.png" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+</section>
     <table id="CourseRanking-table" class="table">
         <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.CourseID)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.TrainerID)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CourseAverageRating)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Date)
-                </th>
-            </tr>
+          <tr>
+              <td>課程ID</td>
+              <td>教練ID</td>
+              <td>課程平均分數</td>
+              <td>日期</td>
+          </tr>
         </thead>
-        <tbody>
-            @foreach(var item in Model){
-                <tr>
-                    <th>
-                        @Html.DisplayFor(modelitem => item.CourseID)
-                    </th>
-                    <th>
-                        @Html.DisplayFor(modelitem => item.TrainerID)
-                    </th>
-                    <th>
-                        @Html.DisplayFor(modelitem => item.CourseAverageRating)
-                    </th>
-                    <th>
-                        @Html.DisplayFor(modelitem => item.Date);
-                    </th>
-                </tr>
-            }
-        </tbody>
     </table>
-</div>
+
+
+@section Scripts{
+    <script src="~/datatables/js/jquery.datatables.min.js" asp-append-version="true"></script>
+    <script src="https://cdn.datatables.net/fixedheader/3.2.4/js/dataTables.fixedHeader.min.js">
+    </script>
+    <script>   
+        $(document).ready(function () {
+            $("table").DataTable({
+                ajax: {
+                    type:"GET",
+                    url: "/Home/IndexJson1",
+                    dataSrc: function (json) {
+                        return json;
+                    },
+                },
+                columns:[
+                    { "data": "TopRatedCourses.courseID", "width": "10%" },
+                    { "data": "TopRatedCourses.trainerID", "width": "10%" },
+                    { "data": "TopRatedCourses.courseAverageRating", "width": "10%" },
+                    { "data": "TopRatedCourses.date", "width": "10%" },
+                    { "data": "TopClickedCourses.clicks", "width": "10%" },
+                ],
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/2.0.3/i18n/zh-HANT.json',
+                },
+            });
+        });
+    
+
+    </script>
+    
+}
