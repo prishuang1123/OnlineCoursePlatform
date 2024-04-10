@@ -27,8 +27,8 @@ namespace Project1.Models
 
 		public string Description { get; set; } // 課程描述
 
-		[Required]
-		public string ApprovalStatus { get; set; } // 審核狀態
+		
+		public string? ApprovalStatus { get; set; } // 審核狀態
 
 		public decimal Price { get; set; } // 價格
 
@@ -41,12 +41,12 @@ namespace Project1.Models
 
 		public int MaxParticipants { get; set; } // 課程參加人數上限
 
-		public int EnrollmentCount { get; set; } // 報名人數
+		public int? EnrollmentCount { get; set; } // 報名人數
 
 		public DateTime CreatedAt { get; set; } // 課程建立時間
 
 		public DateTime UpdatedAt { get; set; } // 課程最後更新時間
 
-		public int Clicks { get; set; } // 課程頁面被點擊次數
+		public int? Clicks { get; set; } // 課程頁面被點擊次數
 	}
 }

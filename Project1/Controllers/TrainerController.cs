@@ -44,20 +44,22 @@ namespace Project1.Controllers
 
             return View(Course);
         }
-        // GET: Customers/Create
+
+        //新增
+        // GET: Course/Create
         public IActionResult Create()
         {
             return View();
         }
-        // POST: Customers/Create
+        // POST:Course/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Course course)
+        public async Task<IActionResult> Create([Bind("CourseID,CourseName,TrainerID,PetCategory,CourseCategory,CourseType,Description,ApprovalStatus,Price,DiscountID,Location,MaxParticipants,EnrollmentCount,CreatedAt,UpdatedAt,Clicks")] Course course)
         {
             if (ModelState.IsValid)
             {
                 _projectDbContext.Add(course);
-                _projectDbContext.SaveChanges();
+                await _projectDbContext.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(course);
