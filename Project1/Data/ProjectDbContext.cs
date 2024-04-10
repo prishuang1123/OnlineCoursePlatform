@@ -49,9 +49,9 @@ namespace Project1.Data
         public virtual DbSet<EnrollmentRanking> EnrollmentRanking { get; set; }
 
         public virtual DbSet<Member> Member { get; set; }
+        public object Courses { get; internal set; }
 
-
-		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("Server=(localdb)\\ProjectModels;Database=ProjectDb;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True");
         }
