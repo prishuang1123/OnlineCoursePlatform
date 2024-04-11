@@ -39,7 +39,8 @@ namespace Project1.Controllers
             {
                 _db.Order.Add(obj);
                 _db.SaveChanges();
-                return RedirectToAction("Index", "Order");
+				TempData["success"] = "訂單創建功!!";
+				return RedirectToAction("Index", "Order");
             }
             return View();
         }
@@ -49,12 +50,24 @@ namespace Project1.Controllers
             {
                 return NotFound();
             }
+
             Order? orderObj = await _db.Order.FirstOrDefaultAsync(obj => obj.OrderID == id);
-            if (orderObj == null)
+			IEnumerable<OrderDetail>? orderDetailObjList = await _db.OrderDetail.Where(obj => obj.OrderID == id).ToListAsync();
+            if (orderDetailObjList == null||orderObj==null)
             {
                 return NotFound();
             }
-            return View(orderObj);
+			OrderDetailsViewModel? orderDetailsViewModel = new OrderDetailsViewModel
+            {
+                order = orderObj,
+                orderDetails = orderDetailObjList
+            };
+
+            if (orderDetailsViewModel == null)
+            {
+                return NotFound();
+            }
+            return View(orderDetailsViewModel);
         }
 
         public async Task<IActionResult> Edit(int? id)
@@ -80,7 +93,8 @@ namespace Project1.Controllers
               
                 try
                 {
-                    _db.Order.Update(obj);
+					obj.ModifiedAt = DateTime.UtcNow;
+					_db.Order.Update(obj);
                     await _db.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -94,7 +108,8 @@ namespace Project1.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Index", "Order");
+				TempData["success"] = "訂單更新成功!!";
+				return RedirectToAction("Index", "Order");
             }
             return View();
         }
@@ -119,7 +134,8 @@ namespace Project1.Controllers
         { 
             _db.Order.Remove(obj);
             _db.SaveChanges();
-            return RedirectToAction("Index", "Order");
+			TempData["success"] = "訂單刪除成功!!";
+			return RedirectToAction("Index", "Order");
         }
 
         private bool OrderExists(int id)
