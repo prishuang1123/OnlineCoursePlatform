@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Project1.Data;
 using Project1.Models;
+using System.Diagnostics.Metrics;
 
 
 namespace Project1.Controllers
@@ -24,6 +26,7 @@ namespace Project1.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(Order obj)
         {
             HashSet<Order> objOrderHashset = _db.Order.ToHashSet();
@@ -40,13 +43,26 @@ namespace Project1.Controllers
             }
             return View();
         }
+        public async Task<IActionResult> ViewDetails(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+            Order? orderObj = await _db.Order.FirstOrDefaultAsync(obj => obj.OrderID == id);
+            if (orderObj == null)
+            {
+                return NotFound();
+            }
+            return View(orderObj);
+        }
 
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || id==0) {
                 return NotFound();
             }
-            Order orderObj = _db.Order.FirstOrDefault(obj => obj.OrderID == id);
+            Order? orderObj = await _db.Order.FirstOrDefaultAsync(obj => obj.OrderID == id);
             if (orderObj == null)
             {
                 return NotFound();
@@ -55,13 +71,29 @@ namespace Project1.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(Order obj)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Order obj)
         {
             
             if (ModelState.IsValid)
             {
-                _db.Order.Update(obj);
-                _db.SaveChanges();
+              
+                try
+                {
+                    _db.Order.Update(obj);
+                    await _db.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!OrderExists(obj.OrderID))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
                 return RedirectToAction("Index", "Order");
             }
             return View();
@@ -82,11 +114,17 @@ namespace Project1.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Delete(Order obj)
         { 
             _db.Order.Remove(obj);
             _db.SaveChanges();
             return RedirectToAction("Index", "Order");
+        }
+
+        private bool OrderExists(int id)
+        {
+            return _db.Order.Any(e => e.OrderID == id);
         }
     }
 }

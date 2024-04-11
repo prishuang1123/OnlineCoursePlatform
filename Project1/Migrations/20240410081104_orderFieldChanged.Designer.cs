@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Project1.Data;
 
@@ -11,9 +12,11 @@ using Project1.Data;
 namespace Project1.Migrations
 {
     [DbContext(typeof(ProjectDbContext))]
-    partial class ProjectDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240410081104_orderFieldChanged")]
+    partial class orderFieldChanged
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -375,45 +378,45 @@ namespace Project1.Migrations
                         new
                         {
                             OrderID = 1,
-                            CreatedAt = new DateTime(2024, 4, 10, 16, 20, 25, 850, DateTimeKind.Local).AddTicks(2059),
+                            CreatedAt = new DateTime(2024, 4, 10, 16, 11, 3, 407, DateTimeKind.Local).AddTicks(1941),
                             MemberID = 1,
-                            OrderDate = new DateTime(2024, 4, 10, 16, 20, 25, 850, DateTimeKind.Local).AddTicks(2043),
+                            OrderDate = new DateTime(2024, 4, 10, 16, 11, 3, 407, DateTimeKind.Local).AddTicks(1926),
                             OrderStatus = "Processing",
                             TotalAmount = 300m
                         },
                         new
                         {
                             OrderID = 2,
-                            CreatedAt = new DateTime(2024, 4, 10, 16, 20, 25, 850, DateTimeKind.Local).AddTicks(2062),
+                            CreatedAt = new DateTime(2024, 4, 10, 16, 11, 3, 407, DateTimeKind.Local).AddTicks(1944),
                             MemberID = 2,
-                            OrderDate = new DateTime(2024, 4, 10, 16, 20, 25, 850, DateTimeKind.Local).AddTicks(2061),
+                            OrderDate = new DateTime(2024, 4, 10, 16, 11, 3, 407, DateTimeKind.Local).AddTicks(1943),
                             OrderStatus = "Delivered",
                             TotalAmount = 500m
                         },
                         new
                         {
                             OrderID = 3,
-                            CreatedAt = new DateTime(2024, 4, 10, 16, 20, 25, 850, DateTimeKind.Local).AddTicks(2066),
+                            CreatedAt = new DateTime(2024, 4, 10, 16, 11, 3, 407, DateTimeKind.Local).AddTicks(1946),
                             MemberID = 3,
-                            OrderDate = new DateTime(2024, 4, 10, 16, 20, 25, 850, DateTimeKind.Local).AddTicks(2064),
+                            OrderDate = new DateTime(2024, 4, 10, 16, 11, 3, 407, DateTimeKind.Local).AddTicks(1945),
                             OrderStatus = "Cancelled",
                             TotalAmount = 200m
                         },
                         new
                         {
                             OrderID = 4,
-                            CreatedAt = new DateTime(2024, 4, 10, 16, 20, 25, 850, DateTimeKind.Local).AddTicks(2068),
+                            CreatedAt = new DateTime(2024, 4, 10, 16, 11, 3, 407, DateTimeKind.Local).AddTicks(1948),
                             MemberID = 4,
-                            OrderDate = new DateTime(2024, 4, 10, 16, 20, 25, 850, DateTimeKind.Local).AddTicks(2067),
+                            OrderDate = new DateTime(2024, 4, 10, 16, 11, 3, 407, DateTimeKind.Local).AddTicks(1947),
                             OrderStatus = "Processing",
                             TotalAmount = 150m
                         },
                         new
                         {
                             OrderID = 5,
-                            CreatedAt = new DateTime(2024, 4, 10, 16, 20, 25, 850, DateTimeKind.Local).AddTicks(2070),
+                            CreatedAt = new DateTime(2024, 4, 10, 16, 11, 3, 407, DateTimeKind.Local).AddTicks(1950),
                             MemberID = 5,
-                            OrderDate = new DateTime(2024, 4, 10, 16, 20, 25, 850, DateTimeKind.Local).AddTicks(2069),
+                            OrderDate = new DateTime(2024, 4, 10, 16, 11, 3, 407, DateTimeKind.Local).AddTicks(1949),
                             OrderStatus = "Shipped",
                             TotalAmount = 350m
                         });
@@ -574,7 +577,7 @@ namespace Project1.Migrations
                         {
                             CartID = 1,
                             CourseID = 1,
-                            CreatedAt = new DateTime(2024, 4, 10, 8, 20, 25, 850, DateTimeKind.Utc).AddTicks(1880),
+                            CreatedAt = new DateTime(2024, 4, 10, 8, 11, 3, 407, DateTimeKind.Utc).AddTicks(1774),
                             Quantity = 1
                         });
                 });
