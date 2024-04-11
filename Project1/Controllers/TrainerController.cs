@@ -65,15 +65,16 @@ namespace Project1.Controllers
             return View(course);
         }
 
+        //編輯
         // GET: Course/Edit/5
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var course = _projectDbContext.Trainer.Find(id);
+            var course =await _projectDbContext.Course.FindAsync(id);
             if (course == null)
             {
                 return NotFound();
@@ -84,7 +85,7 @@ namespace Project1.Controllers
         // POST: Course/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, Course course)
+        public async Task<IActionResult> Edit(int id, [Bind("CourseID,CourseName,TrainerID,PetCategory,CourseCategory,CourseType,Description,ApprovalStatus,Price,DiscountID,Location,MaxParticipants,EnrollmentCount,CreatedAt,UpdatedAt,Clicks")] Course course)
         {
             if (id != course.CourseID)
             {
@@ -93,22 +94,36 @@ namespace Project1.Controllers
 
             if (ModelState.IsValid)
             {
-                _projectDbContext.Update(course);
-                _projectDbContext.SaveChanges();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    _projectDbContext.Update(course);//有值就updata到customer
+                    await _projectDbContext.SaveChangesAsync();//回傳到資料庫
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!CustomerExists(course.CourseID))
+                    {
+                        return NotFound();//如果id不存在就notfound
+                    }
+                    else
+                    {
+                        throw;//如果不是不存在的問題就拋回上一層的呼叫
+                    }
+                }
+                return RedirectToAction(nameof(Index));//如果更新成功就回到Index
             }
             return View(course);
         }
 
         // GET: Course/Delete/5
-        public IActionResult Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var course = _projectDbContext.Trainer.Find(id);
+            var course =await _projectDbContext.Course.FindAsync(id);
             if (course == null)
             {
                 return NotFound();
@@ -122,15 +137,19 @@ namespace Project1.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            var course = _projectDbContext.Trainer.Find(id);
+            var course = _projectDbContext.Course.Find(id);
             if (course == null)
             {
                 return NotFound();
             }
 
-            _projectDbContext.Trainer.Remove(course);
+            _projectDbContext.Course.Remove(course); // Corrected to remove from Course entity set
             _projectDbContext.SaveChanges();
             return RedirectToAction(nameof(Index));
+        }
+        private bool CustomerExists(int id)
+        {
+            return _projectDbContext.Trainer.Any(e => int.Parse(e.CourseID) == id);
         }
     }
 }
