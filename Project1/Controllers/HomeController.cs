@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Project1.Data;
 using Project1.Models;
+using Project1.ViewModels;
 using System.Diagnostics;
 
 namespace Project1.Controllers
@@ -38,6 +40,26 @@ namespace Project1.Controllers
 
             return Json(result);
         }
+
+        //登入
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Login ([Bind("Name","Email","Phone")]LoginViewModel lvm)
+        {
+            //server端驗證
+            if (ModelState.IsValid)
+            {
+                //寫資料庫
+                return RedirectToAction("Index");
+            }
+            return View(lvm);
+        }
+
 
         public IActionResult Privacy()
         {
