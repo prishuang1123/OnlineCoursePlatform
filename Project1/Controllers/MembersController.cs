@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Project1.Data;
 using Project1.Models;
+using Project1.ViewModels;
 
 namespace Project1.Controllers
 {
@@ -17,6 +18,27 @@ namespace Project1.Controllers
         public MembersController(ProjectDbContext context)
         {
             _context = context;
+        }
+
+        //GET:顯示登入頁面
+        public IActionResult Login()
+        {
+            return View();
+        }
+        //Post:處理登入
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login([Bind("Name", "Email", "Phone")] LoginViewModel lvm)
+        {
+            var member = await _context.Member
+                       .FirstOrDefaultAsync(m => m.Email == lvm.Email && m.Phone == lvm.Phone);
+            if (member != null)
+            {
+                
+                return RedirectToAction("Index");
+            }
+            ViewBag.IsLogin = true;
+            return View();
         }
 
         // GET: Members

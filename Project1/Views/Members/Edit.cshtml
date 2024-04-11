@@ -4,9 +4,9 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<h1>修改資料</h1>
 
-<h4>Member</h4>
+@* <h4>Member</h4> *@
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -14,59 +14,61 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="MemberID" />
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
+                <label asp-for="Name" class="control-label">姓名</label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
+                <label asp-for="Email" class="control-label">電子郵件</label>
                 <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Phone" class="control-label"></label>
+                <label asp-for="Phone" class="control-label">手機號碼</label>
                 <input asp-for="Phone" class="form-control" />
                 <span asp-validation-for="Phone" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Birthday" class="control-label"></label>
+                <label asp-for="Birthday" class="control-label">生日</label>
                 <input asp-for="Birthday" class="form-control" />
                 <span asp-validation-for="Birthday" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="MemberType" class="control-label"></label>
+                <label asp-for="MemberType" class="control-label">會員等級</label>
                 <input asp-for="MemberType" class="form-control" />
                 <span asp-validation-for="MemberType" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="RegistrationDate" class="control-label"></label>
+                <label asp-for="RegistrationDate" class="control-label">加入日期</label>
                 <input asp-for="RegistrationDate" class="form-control" />
                 <span asp-validation-for="RegistrationDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ResidenceArea" class="control-label"></label>
+                <label asp-for="ResidenceArea" class="control-label">居住地區</label>
                 <input asp-for="ResidenceArea" class="form-control" />
                 <span asp-validation-for="ResidenceArea" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsTrainer" /> @Html.DisplayNameFor(model => model.IsTrainer)
+                    @* @Html.DisplayNameFor(model => model.IsTrainer) *@
+                    <input class="form-check-input" asp-for="IsTrainer" /> 成為訓練師
                 </label>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsAdministrator" /> @Html.DisplayNameFor(model => model.IsAdministrator)
+                    @* @Html.DisplayNameFor(model => model.IsAdministrator) *@
+                    <input class="form-check-input" asp-for="IsAdministrator" /> 管理員
                 </label>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="儲存" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">回到會員資料</a>
 </div>
 
 @section Scripts {

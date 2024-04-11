@@ -41,25 +41,7 @@ namespace Project1.Controllers
             return Json(result);
         }
 
-        //登入
-        public IActionResult Login()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Login ([Bind("Name","Email","Phone")]LoginViewModel lvm)
-        {
-            //server端驗證
-            if (ModelState.IsValid)
-            {
-                //寫資料庫
-                return RedirectToAction("Index");
-            }
-            return View(lvm);
-        }
-
+        
 
         public IActionResult Privacy()
         {
