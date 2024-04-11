@@ -1,0 +1,123 @@
+﻿@model IEnumerable<Project1.Models.Course>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+</style>
+
+<h1>全部課程</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<div class="col-lg-8">
+    <table class="table table-hover table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CourseName)
+            </th>
+            @* <th>
+                @Html.DisplayNameFor(model => model.TrainerID)
+            </th> *@
+            <th>
+                @Html.DisplayNameFor(model => model.PetCategory)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CourseCategory)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CourseType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            @* <th>
+                @Html.DisplayNameFor(model => model.ApprovalStatus)
+            </th> *@
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DiscountID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Location)
+            </th>
+            @* <th>
+                @Html.DisplayNameFor(model => model.MaxParticipants)
+            </th> *@
+            @* <th>
+                @Html.DisplayNameFor(model => model.EnrollmentCount)
+            </th> *@
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedAt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UpdatedAt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Clicks)
+            </th>
+            <th>變更</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CourseName)
+            </td>
+            @* <td>
+                @Html.DisplayFor(modelItem => item.TrainerID)
+            </td> *@
+            <td>
+                @Html.DisplayFor(modelItem => item.PetCategory)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CourseCategory)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CourseType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            @* <td>
+                @Html.DisplayFor(modelItem => item.ApprovalStatus)
+            </td> *@
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DiscountID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Location)
+            </td>
+           @*  <td>
+                @Html.DisplayFor(modelItem => item.MaxParticipants)
+            </td> *@
+            @* <td>
+                @Html.DisplayFor(modelItem => item.EnrollmentCount)
+            </td> *@
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedAt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UpdatedAt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Clicks)
+            </td>
+            <td>
+                    <a asp-action="Edit" asp-route-id="@item.CourseID">編輯</a>
+                <a asp-action="Details" asp-route-id="@item.CourseID">檢視</a>
+                <a asp-action="Delete" asp-route-id="@item.CourseID">刪除</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+</div>

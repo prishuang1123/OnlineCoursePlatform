@@ -1,105 +1,101 @@
-﻿
-@model Project1.Models.Course
+﻿@model Project1.Models.Course
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
 }
 
-<h1>課程</h1>
+<h1>Edit</h1>
 
+<h4>Course</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <@* div class="form-group">
-                <label asp-for="CourseID" class="control-label">課程ID</label>
-                <input asp-for="CourseID" class="form-control" />
-                <span asp-validation-for="CourseID" class="text-danger"></span>
-            </div> *@
+            <input type="hidden" asp-for="CourseID" />
             <div class="form-group">
-                <label asp-for="CourseName" class="control-label">課程名稱</label>
+                <label asp-for="CourseName" class="control-label"></label>
                 <input asp-for="CourseName" class="form-control" />
                 <span asp-validation-for="CourseName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PetCategory" class="control-label">寵物品種</label>
+                <label asp-for="TrainerID" class="control-label"></label>
+                <input asp-for="TrainerID" class="form-control" />
+                <span asp-validation-for="TrainerID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PetCategory" class="control-label"></label>
                 <input asp-for="PetCategory" class="form-control" />
                 <span asp-validation-for="PetCategory" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CourseCategory" class="control-label">課程分類</label>
+                <label asp-for="CourseCategory" class="control-label"></label>
                 <input asp-for="CourseCategory" class="form-control" />
                 <span asp-validation-for="CourseCategory" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CourseType" class="control-label">課程類型</label>
+                <label asp-for="CourseType" class="control-label"></label>
                 <input asp-for="CourseType" class="form-control" />
                 <span asp-validation-for="CourseType" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Description" class="control-label">課程描述</label>
+                <label asp-for="Description" class="control-label"></label>
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            @* <div class="form-group">
-                <label asp-for="ApprovalStatus" class="control-label">審核狀態</label>
+            <div class="form-group">
+                <label asp-for="ApprovalStatus" class="control-label"></label>
                 <input asp-for="ApprovalStatus" class="form-control" />
                 <span asp-validation-for="ApprovalStatus" class="text-danger"></span>
-            </div> *@
+            </div>
             <div class="form-group">
-                <label asp-for="Price" class="control-label">價格</label>
+                <label asp-for="Price" class="control-label"></label>
                 <input asp-for="Price" class="form-control" />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="DiscountID" class="control-label">折扣編號</label>
+                <label asp-for="DiscountID" class="control-label"></label>
                 <input asp-for="DiscountID" class="form-control" />
                 <span asp-validation-for="DiscountID" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Location" class="control-label">上課地點</label>
+                <label asp-for="Location" class="control-label"></label>
                 <input asp-for="Location" class="form-control" />
                 <span asp-validation-for="Location" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="MaxParticipants" class="control-label">人數上限</label>
+                <label asp-for="MaxParticipants" class="control-label"></label>
                 <input asp-for="MaxParticipants" class="form-control" />
                 <span asp-validation-for="MaxParticipants" class="text-danger"></span>
             </div>
-          @*   <div class="form-group">
-                <label asp-for="EnrollmentCount" class="control-label">報名人數</label>
+            <div class="form-group">
+                <label asp-for="EnrollmentCount" class="control-label"></label>
                 <input asp-for="EnrollmentCount" class="form-control" />
                 <span asp-validation-for="EnrollmentCount" class="text-danger"></span>
-            </div> *@
+            </div>
             <div class="form-group">
-                <label asp-for="CreatedAt" class="control-label">課程時間</label>
+                <label asp-for="CreatedAt" class="control-label"></label>
                 <input asp-for="CreatedAt" class="form-control" />
                 <span asp-validation-for="CreatedAt" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="UpdatedAt" class="control-label">最後報名時間</label>
+                <label asp-for="UpdatedAt" class="control-label"></label>
                 <input asp-for="UpdatedAt" class="form-control" />
                 <span asp-validation-for="UpdatedAt" class="text-danger"></span>
             </div>
-            @* <div class="form-group">
-                <label asp-for="Clicks" class="control-label">點擊次數</label>
+            <div class="form-group">
+                <label asp-for="Clicks" class="control-label"></label>
                 <input asp-for="Clicks" class="form-control" />
                 <span asp-validation-for="Clicks" class="text-danger"></span>
-            </div> *@
+            </div>
             <div class="form-group">
-                <input type="submit" value="新增" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">返回課程頁面</a>
+    <a asp-action="Index">Back to List</a>
 </div>
 
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
