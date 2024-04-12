@@ -39,7 +39,7 @@ namespace Project1.Controllers
             {
                 _db.Order.Add(obj);
                 _db.SaveChanges();
-				TempData["success"] = "訂單創建功!!";
+				TempData["success"] = "訂單創建成功!!";
 				return RedirectToAction("Index", "Order");
             }
             return View();
