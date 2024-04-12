@@ -1,98 +1,64 @@
-﻿@model IEnumerable<CourseRanking>
-
-@{
+﻿@{
     ViewData["Title"] = "Home Page";
-    var CourseRankbyAvg = ViewData["CourseRankbyAvg"] as List<CourseRanking>;
-    var CourseRankbyClick = ViewData["CourseRankbyClick"] as List<Course>;
 }
 
 @section Styles{
-   <style>
+    <link href="~/datatables/css/jquery.datatables.min.css" rel="stylesheet" />
+    <style>
        thead{
-           background-color: darkblue;
-           color: white;
-       }
-        /* 弹出式窗口 */
-        .modal {
-            display: none; /* 默认隐藏 */
-            position:  relative; /* 固定定位 */
-            z-index: 1; /* 使其位于所有其他元素之上 */
-            left: 0;
-            top: 0;
-            width: 200px;
-            height: 100%;
-            overflow: auto; /* 当内容超出屏幕时可以滚动 */
-            background-color: rgb(0,0,0); /* 背景颜色 */
-            background-color: rgba(0,0,0,0); /* 透明度 */
-        }
-
-        /* 弹出式窗口内容 */
-        .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto; /* 居中显示 */
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            color: black;
-        }
-
-        /* 关闭按钮 */
-        .close {
-            color: #aaaaaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-            .close:hover,
-            .close:focus {
-                color: #000;
-                text-decoration: none;
-                cursor: pointer;
-            }
-        
+           background-color: burlywood;
+           color: darkslategray;
+       }  
+       
    </style>
 }
-    <table id="CourseRanking-table" class="table">
-        <thead>
-          <tr>
-              <td>課程ID</td>
-              <td>教練ID</td>
-              <td>課程平均分數</td>
-              <td>日期</td>
-          </tr>
-        </thead>
-    </table>
+
+
+
+
+
+<div class="container">
+        <table class="table">
+                <thead>
+                <tr>
+                    <td data-sort="CourseID">課程ID</td>
+                    <td data-sort="TrainerID">教練ID</td>
+                    <td data-sort="Clicks">點擊次數</td>
+                    <td data-sort="CourseAverageRating">課程平均分數</td>
+                    <td data-sort="TotalQuantity">總購買量</td>
+                </tr>
+                </thead>
+                <tbody>
+            @foreach( var item in Model)
+            {
+                <tr>
+                    <td>@item.CourseID</td>
+                    <td>@item.TrainerID</td>
+                    <td>@item.Clicks</td>
+                    <td>@item.CourseAverageRating</td>
+                    <td>@item.TotalQuantity</td>
+                </tr>
+            }
+        </tbody>
+        </table>  
+</div>
 
 
 @section Scripts{
     <script src="~/datatables/js/jquery.datatables.min.js" asp-append-version="true"></script>
     <script src="https://cdn.datatables.net/fixedheader/3.2.4/js/dataTables.fixedHeader.min.js">
     </script>
-    <script>   
+    <script>
         $(document).ready(function () {
             $("table").DataTable({
-                ajax: {
-                    type:"GET",
-                    url: "/Home/IndexJson1",
-                    dataSrc: function (json) {
-                        return json;
-                    },
-                },
-                columns:[
-                    { "data": "TopRatedCourses.courseID", "width": "10%" },
-                    { "data": "TopRatedCourses.trainerID", "width": "10%" },
-                    { "data": "TopRatedCourses.courseAverageRating", "width": "10%" },
-                    { "data": "TopRatedCourses.date", "width": "10%" },
-                    { "data": "TopClickedCourses.clicks", "width": "10%" },
-                ],
+                "paging": true,
+                "searching": true,
+                "info": true,
                 language: {
                     url: '//cdn.datatables.net/plug-ins/2.0.3/i18n/zh-HANT.json',
-                },
+                }
             });
         });
-    
-
     </script>
     
 }

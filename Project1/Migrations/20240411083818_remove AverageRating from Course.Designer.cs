@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Project1.Data;
 
@@ -11,9 +12,11 @@ using Project1.Data;
 namespace Project1.Migrations
 {
     [DbContext(typeof(ProjectDbContext))]
-    partial class ProjectDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240411083818_remove AverageRating from Course")]
+    partial class removeAverageRatingfromCourse
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -406,45 +409,45 @@ namespace Project1.Migrations
                         new
                         {
                             OrderID = 1,
-                            CreatedAt = new DateTime(2024, 4, 10, 11, 39, 25, 659, DateTimeKind.Local).AddTicks(392),
+                            CreatedAt = new DateTime(2024, 4, 11, 16, 38, 18, 36, DateTimeKind.Local).AddTicks(1653),
                             MemberID = 1,
-                            OrderDate = new DateTime(2024, 4, 10, 11, 39, 25, 659, DateTimeKind.Local).AddTicks(379),
+                            OrderDate = new DateTime(2024, 4, 11, 16, 38, 18, 36, DateTimeKind.Local).AddTicks(1643),
                             OrderStatus = "Processing",
                             TotalAmount = 100m
                         },
                         new
                         {
                             OrderID = 2,
-                            CreatedAt = new DateTime(2024, 4, 10, 11, 39, 25, 659, DateTimeKind.Local).AddTicks(394),
+                            CreatedAt = new DateTime(2024, 4, 11, 16, 38, 18, 36, DateTimeKind.Local).AddTicks(1654),
                             MemberID = 2,
-                            OrderDate = new DateTime(2024, 4, 10, 11, 39, 25, 659, DateTimeKind.Local).AddTicks(393),
+                            OrderDate = new DateTime(2024, 4, 11, 16, 38, 18, 36, DateTimeKind.Local).AddTicks(1654),
                             OrderStatus = "Delivered",
                             TotalAmount = 200m
                         },
                         new
                         {
                             OrderID = 3,
-                            CreatedAt = new DateTime(2024, 4, 10, 11, 39, 25, 659, DateTimeKind.Local).AddTicks(396),
+                            CreatedAt = new DateTime(2024, 4, 11, 16, 38, 18, 36, DateTimeKind.Local).AddTicks(1656),
                             MemberID = 3,
-                            OrderDate = new DateTime(2024, 4, 10, 11, 39, 25, 659, DateTimeKind.Local).AddTicks(395),
+                            OrderDate = new DateTime(2024, 4, 11, 16, 38, 18, 36, DateTimeKind.Local).AddTicks(1655),
                             OrderStatus = "Cancelled",
                             TotalAmount = 300m
                         },
                         new
                         {
                             OrderID = 4,
-                            CreatedAt = new DateTime(2024, 4, 10, 11, 39, 25, 659, DateTimeKind.Local).AddTicks(397),
+                            CreatedAt = new DateTime(2024, 4, 11, 16, 38, 18, 36, DateTimeKind.Local).AddTicks(1657),
                             MemberID = 4,
-                            OrderDate = new DateTime(2024, 4, 10, 11, 39, 25, 659, DateTimeKind.Local).AddTicks(397),
+                            OrderDate = new DateTime(2024, 4, 11, 16, 38, 18, 36, DateTimeKind.Local).AddTicks(1657),
                             OrderStatus = "Processing",
                             TotalAmount = 800m
                         },
                         new
                         {
                             OrderID = 5,
-                            CreatedAt = new DateTime(2024, 4, 10, 11, 39, 25, 659, DateTimeKind.Local).AddTicks(399),
+                            CreatedAt = new DateTime(2024, 4, 11, 16, 38, 18, 36, DateTimeKind.Local).AddTicks(1659),
                             MemberID = 5,
-                            OrderDate = new DateTime(2024, 4, 10, 11, 39, 25, 659, DateTimeKind.Local).AddTicks(398),
+                            OrderDate = new DateTime(2024, 4, 11, 16, 38, 18, 36, DateTimeKind.Local).AddTicks(1658),
                             OrderStatus = "Shipped",
                             TotalAmount = 1000m
                         });
@@ -464,16 +467,16 @@ namespace Project1.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("DiscountID")
+                    b.Property<int>("DiscountID")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("ModifiedAt")
+                    b.Property<DateTime>("ModifiedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("OrderID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PaymentID")
+                    b.Property<int>("PaymentID")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
@@ -488,7 +491,6 @@ namespace Project1.Migrations
                     b.HasKey("OrderDetailID");
 
                     b.ToTable("OrderDetail");
-                });
 
                     b.HasData(
                         new
@@ -781,7 +783,7 @@ namespace Project1.Migrations
                         {
                             CartID = 1,
                             CourseID = 1,
-                            CreatedAt = new DateTime(2024, 4, 10, 3, 39, 25, 659, DateTimeKind.Utc).AddTicks(230),
+                            CreatedAt = new DateTime(2024, 4, 11, 8, 38, 18, 36, DateTimeKind.Utc).AddTicks(1560),
                             Quantity = 1
                         });
                 });
