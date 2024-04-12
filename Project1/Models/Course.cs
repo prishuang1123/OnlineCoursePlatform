@@ -47,5 +47,6 @@ namespace Project1.Models
 		public DateTime UpdatedAt { get; set; } // 課程最後更新時間
 
 		public int? Clicks { get; set; } // 課程頁面被點擊次數
-	}
+        public decimal? CourseAverageRating { get; internal set; }
+    }
 }

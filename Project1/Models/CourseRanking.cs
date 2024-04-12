@@ -20,5 +20,6 @@ namespace Project1.Models
 		public decimal CourseAverageRating { get; set; } // 平均評分
 
 		public DateTime Date { get; set; } // 排名日期
-	}
+
+    }
 }

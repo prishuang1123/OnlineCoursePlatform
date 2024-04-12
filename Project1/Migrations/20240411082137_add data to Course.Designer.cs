@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Project1.Data;
 
@@ -11,9 +12,11 @@ using Project1.Data;
 namespace Project1.Migrations
 {
     [DbContext(typeof(ProjectDbContext))]
-    partial class ProjectDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240411082137_add data to Course")]
+    partial class adddatatoCourse
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,7 +58,7 @@ namespace Project1.Migrations
                     b.Property<int?>("Clicks")
                         .HasColumnType("int");
 
-                    b.Property<decimal?>("CourseAverageRating")
+                    b.Property<decimal>("CourseAverageRating")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("CourseCategory")
@@ -110,10 +113,11 @@ namespace Project1.Migrations
                             CourseID = 1,
                             ApprovalStatus = "Approved",
                             Clicks = 0,
+                            CourseAverageRating = 0m,
                             CourseCategory = "skill",
                             CourseName = "Dog sit",
                             CourseType = "1by1",
-                            CreatedAt = new DateTime(2024, 4, 11, 8, 38, 18, 36, DateTimeKind.Utc).AddTicks(1717),
+                            CreatedAt = new DateTime(2024, 4, 11, 8, 21, 37, 13, DateTimeKind.Utc).AddTicks(9202),
                             Description = "Sitting for 1 hour",
                             EnrollmentCount = 0,
                             Location = "Taipei",
@@ -128,10 +132,11 @@ namespace Project1.Migrations
                             CourseID = 2,
                             ApprovalStatus = "Approved",
                             Clicks = 0,
+                            CourseAverageRating = 0m,
                             CourseCategory = "skill",
                             CourseName = "Dog catch",
                             CourseType = "1by1",
-                            CreatedAt = new DateTime(2024, 4, 11, 8, 38, 18, 36, DateTimeKind.Utc).AddTicks(1720),
+                            CreatedAt = new DateTime(2024, 4, 11, 8, 21, 37, 13, DateTimeKind.Utc).AddTicks(9205),
                             Description = "catch ball for 1 hour",
                             EnrollmentCount = 0,
                             Location = "Taipei",
@@ -146,10 +151,11 @@ namespace Project1.Migrations
                             CourseID = 3,
                             ApprovalStatus = "Approved",
                             Clicks = 0,
+                            CourseAverageRating = 0m,
                             CourseCategory = "skill",
                             CourseName = "Dog shake hand",
                             CourseType = "1by1",
-                            CreatedAt = new DateTime(2024, 4, 11, 8, 38, 18, 36, DateTimeKind.Utc).AddTicks(1723),
+                            CreatedAt = new DateTime(2024, 4, 11, 8, 21, 37, 13, DateTimeKind.Utc).AddTicks(9207),
                             Description = "shake hand for 1 hour",
                             EnrollmentCount = 0,
                             Location = "Taipei",
@@ -406,45 +412,45 @@ namespace Project1.Migrations
                         new
                         {
                             OrderID = 1,
-                            CreatedAt = new DateTime(2024, 4, 11, 16, 38, 18, 36, DateTimeKind.Local).AddTicks(1653),
+                            CreatedAt = new DateTime(2024, 4, 11, 16, 21, 37, 13, DateTimeKind.Local).AddTicks(9114),
                             MemberID = 1,
-                            OrderDate = new DateTime(2024, 4, 11, 16, 38, 18, 36, DateTimeKind.Local).AddTicks(1643),
+                            OrderDate = new DateTime(2024, 4, 11, 16, 21, 37, 13, DateTimeKind.Local).AddTicks(9104),
                             OrderStatus = "Processing",
                             TotalAmount = 100m
                         },
                         new
                         {
                             OrderID = 2,
-                            CreatedAt = new DateTime(2024, 4, 11, 16, 38, 18, 36, DateTimeKind.Local).AddTicks(1654),
+                            CreatedAt = new DateTime(2024, 4, 11, 16, 21, 37, 13, DateTimeKind.Local).AddTicks(9116),
                             MemberID = 2,
-                            OrderDate = new DateTime(2024, 4, 11, 16, 38, 18, 36, DateTimeKind.Local).AddTicks(1654),
+                            OrderDate = new DateTime(2024, 4, 11, 16, 21, 37, 13, DateTimeKind.Local).AddTicks(9115),
                             OrderStatus = "Delivered",
                             TotalAmount = 200m
                         },
                         new
                         {
                             OrderID = 3,
-                            CreatedAt = new DateTime(2024, 4, 11, 16, 38, 18, 36, DateTimeKind.Local).AddTicks(1656),
+                            CreatedAt = new DateTime(2024, 4, 11, 16, 21, 37, 13, DateTimeKind.Local).AddTicks(9117),
                             MemberID = 3,
-                            OrderDate = new DateTime(2024, 4, 11, 16, 38, 18, 36, DateTimeKind.Local).AddTicks(1655),
+                            OrderDate = new DateTime(2024, 4, 11, 16, 21, 37, 13, DateTimeKind.Local).AddTicks(9117),
                             OrderStatus = "Cancelled",
                             TotalAmount = 300m
                         },
                         new
                         {
                             OrderID = 4,
-                            CreatedAt = new DateTime(2024, 4, 11, 16, 38, 18, 36, DateTimeKind.Local).AddTicks(1657),
+                            CreatedAt = new DateTime(2024, 4, 11, 16, 21, 37, 13, DateTimeKind.Local).AddTicks(9119),
                             MemberID = 4,
-                            OrderDate = new DateTime(2024, 4, 11, 16, 38, 18, 36, DateTimeKind.Local).AddTicks(1657),
+                            OrderDate = new DateTime(2024, 4, 11, 16, 21, 37, 13, DateTimeKind.Local).AddTicks(9118),
                             OrderStatus = "Processing",
                             TotalAmount = 800m
                         },
                         new
                         {
                             OrderID = 5,
-                            CreatedAt = new DateTime(2024, 4, 11, 16, 38, 18, 36, DateTimeKind.Local).AddTicks(1659),
+                            CreatedAt = new DateTime(2024, 4, 11, 16, 21, 37, 13, DateTimeKind.Local).AddTicks(9120),
                             MemberID = 5,
-                            OrderDate = new DateTime(2024, 4, 11, 16, 38, 18, 36, DateTimeKind.Local).AddTicks(1658),
+                            OrderDate = new DateTime(2024, 4, 11, 16, 21, 37, 13, DateTimeKind.Local).AddTicks(9119),
                             OrderStatus = "Shipped",
                             TotalAmount = 1000m
                         });
@@ -494,7 +500,7 @@ namespace Project1.Migrations
                         {
                             OrderDetailID = 1,
                             CourseID = 1,
-                            CreatedAt = new DateTime(2024, 4, 11, 8, 38, 18, 36, DateTimeKind.Utc).AddTicks(1677),
+                            CreatedAt = new DateTime(2024, 4, 11, 8, 21, 37, 13, DateTimeKind.Utc).AddTicks(9156),
                             DiscountID = 1,
                             ModifiedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             OrderID = 1,
@@ -507,7 +513,7 @@ namespace Project1.Migrations
                         {
                             OrderDetailID = 2,
                             CourseID = 1,
-                            CreatedAt = new DateTime(2024, 4, 11, 8, 38, 18, 36, DateTimeKind.Utc).AddTicks(1679),
+                            CreatedAt = new DateTime(2024, 4, 11, 8, 21, 37, 13, DateTimeKind.Utc).AddTicks(9158),
                             DiscountID = 1,
                             ModifiedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             OrderID = 2,
@@ -520,7 +526,7 @@ namespace Project1.Migrations
                         {
                             OrderDetailID = 3,
                             CourseID = 1,
-                            CreatedAt = new DateTime(2024, 4, 11, 8, 38, 18, 36, DateTimeKind.Utc).AddTicks(1680),
+                            CreatedAt = new DateTime(2024, 4, 11, 8, 21, 37, 13, DateTimeKind.Utc).AddTicks(9160),
                             DiscountID = 1,
                             ModifiedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             OrderID = 3,
@@ -533,7 +539,7 @@ namespace Project1.Migrations
                         {
                             OrderDetailID = 4,
                             CourseID = 2,
-                            CreatedAt = new DateTime(2024, 4, 11, 8, 38, 18, 36, DateTimeKind.Utc).AddTicks(1682),
+                            CreatedAt = new DateTime(2024, 4, 11, 8, 21, 37, 13, DateTimeKind.Utc).AddTicks(9161),
                             DiscountID = 2,
                             ModifiedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             OrderID = 4,
@@ -546,7 +552,7 @@ namespace Project1.Migrations
                         {
                             OrderDetailID = 5,
                             CourseID = 2,
-                            CreatedAt = new DateTime(2024, 4, 11, 8, 38, 18, 36, DateTimeKind.Utc).AddTicks(1683),
+                            CreatedAt = new DateTime(2024, 4, 11, 8, 21, 37, 13, DateTimeKind.Utc).AddTicks(9163),
                             DiscountID = 2,
                             ModifiedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             OrderID = 5,
@@ -559,7 +565,7 @@ namespace Project1.Migrations
                         {
                             OrderDetailID = 6,
                             CourseID = 2,
-                            CreatedAt = new DateTime(2024, 4, 11, 8, 38, 18, 36, DateTimeKind.Utc).AddTicks(1685),
+                            CreatedAt = new DateTime(2024, 4, 11, 8, 21, 37, 13, DateTimeKind.Utc).AddTicks(9164),
                             DiscountID = 2,
                             ModifiedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             OrderID = 6,
@@ -572,7 +578,7 @@ namespace Project1.Migrations
                         {
                             OrderDetailID = 7,
                             CourseID = 3,
-                            CreatedAt = new DateTime(2024, 4, 11, 8, 38, 18, 36, DateTimeKind.Utc).AddTicks(1686),
+                            CreatedAt = new DateTime(2024, 4, 11, 8, 21, 37, 13, DateTimeKind.Utc).AddTicks(9166),
                             DiscountID = 3,
                             ModifiedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             OrderID = 7,
@@ -585,7 +591,7 @@ namespace Project1.Migrations
                         {
                             OrderDetailID = 8,
                             CourseID = 3,
-                            CreatedAt = new DateTime(2024, 4, 11, 8, 38, 18, 36, DateTimeKind.Utc).AddTicks(1687),
+                            CreatedAt = new DateTime(2024, 4, 11, 8, 21, 37, 13, DateTimeKind.Utc).AddTicks(9168),
                             DiscountID = 3,
                             ModifiedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             OrderID = 8,
@@ -598,7 +604,7 @@ namespace Project1.Migrations
                         {
                             OrderDetailID = 9,
                             CourseID = 3,
-                            CreatedAt = new DateTime(2024, 4, 11, 8, 38, 18, 36, DateTimeKind.Utc).AddTicks(1688),
+                            CreatedAt = new DateTime(2024, 4, 11, 8, 21, 37, 13, DateTimeKind.Utc).AddTicks(9169),
                             DiscountID = 3,
                             ModifiedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             OrderID = 9,
@@ -611,7 +617,7 @@ namespace Project1.Migrations
                         {
                             OrderDetailID = 10,
                             CourseID = 6,
-                            CreatedAt = new DateTime(2024, 4, 11, 8, 38, 18, 36, DateTimeKind.Utc).AddTicks(1690),
+                            CreatedAt = new DateTime(2024, 4, 11, 8, 21, 37, 13, DateTimeKind.Utc).AddTicks(9170),
                             DiscountID = 6,
                             ModifiedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             OrderID = 10,
@@ -624,7 +630,7 @@ namespace Project1.Migrations
                         {
                             OrderDetailID = 11,
                             CourseID = 6,
-                            CreatedAt = new DateTime(2024, 4, 11, 8, 38, 18, 36, DateTimeKind.Utc).AddTicks(1691),
+                            CreatedAt = new DateTime(2024, 4, 11, 8, 21, 37, 13, DateTimeKind.Utc).AddTicks(9172),
                             DiscountID = 6,
                             ModifiedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             OrderID = 11,
@@ -637,7 +643,7 @@ namespace Project1.Migrations
                         {
                             OrderDetailID = 12,
                             CourseID = 9,
-                            CreatedAt = new DateTime(2024, 4, 11, 8, 38, 18, 36, DateTimeKind.Utc).AddTicks(1692),
+                            CreatedAt = new DateTime(2024, 4, 11, 8, 21, 37, 13, DateTimeKind.Utc).AddTicks(9173),
                             DiscountID = 9,
                             ModifiedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             OrderID = 12,
@@ -650,7 +656,7 @@ namespace Project1.Migrations
                         {
                             OrderDetailID = 13,
                             CourseID = 9,
-                            CreatedAt = new DateTime(2024, 4, 11, 8, 38, 18, 36, DateTimeKind.Utc).AddTicks(1694),
+                            CreatedAt = new DateTime(2024, 4, 11, 8, 21, 37, 13, DateTimeKind.Utc).AddTicks(9175),
                             DiscountID = 9,
                             ModifiedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             OrderID = 13,
@@ -663,7 +669,7 @@ namespace Project1.Migrations
                         {
                             OrderDetailID = 14,
                             CourseID = 10,
-                            CreatedAt = new DateTime(2024, 4, 11, 8, 38, 18, 36, DateTimeKind.Utc).AddTicks(1695),
+                            CreatedAt = new DateTime(2024, 4, 11, 8, 21, 37, 13, DateTimeKind.Utc).AddTicks(9176),
                             DiscountID = 10,
                             ModifiedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             OrderID = 14,
@@ -676,7 +682,7 @@ namespace Project1.Migrations
                         {
                             OrderDetailID = 15,
                             CourseID = 10,
-                            CreatedAt = new DateTime(2024, 4, 11, 8, 38, 18, 36, DateTimeKind.Utc).AddTicks(1696),
+                            CreatedAt = new DateTime(2024, 4, 11, 8, 21, 37, 13, DateTimeKind.Utc).AddTicks(9177),
                             DiscountID = 10,
                             ModifiedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             OrderID = 15,
@@ -780,7 +786,7 @@ namespace Project1.Migrations
                         {
                             CartID = 1,
                             CourseID = 1,
-                            CreatedAt = new DateTime(2024, 4, 11, 8, 38, 18, 36, DateTimeKind.Utc).AddTicks(1560),
+                            CreatedAt = new DateTime(2024, 4, 11, 8, 21, 37, 13, DateTimeKind.Utc).AddTicks(9025),
                             Quantity = 1
                         });
                 });
