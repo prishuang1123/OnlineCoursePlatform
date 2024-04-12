@@ -33,15 +33,15 @@ namespace Project1.Data
                 new OrderDetail { OrderDetailID = 4, OrderID = 4, CourseID = 2, PaymentID = 4, Quantity = 4, DiscountID = 2, UnitPrice = 200, Subtotal = 800, CreatedAt = DateTime.UtcNow },
                 new OrderDetail { OrderDetailID = 5, OrderID = 5, CourseID = 2, PaymentID = 5, Quantity = 5, DiscountID = 2, UnitPrice = 200, Subtotal = 1000, CreatedAt = DateTime.UtcNow },
                 new OrderDetail { OrderDetailID = 6, OrderID = 6, CourseID = 2, PaymentID = 6, Quantity = 6, DiscountID = 2, UnitPrice = 200, Subtotal = 1200, CreatedAt = DateTime.UtcNow },
-                new OrderDetail { OrderDetailID = 7, OrderID = 7, CourseID = 3, PaymentID = 7, Quantity = 7, DiscountID = 3, UnitPrice = 300, Subtotal = 2100, CreatedAt = DateTime.UtcNow },
-                new OrderDetail { OrderDetailID = 8, OrderID = 8, CourseID = 3, PaymentID = 8, Quantity = 8, DiscountID = 3, UnitPrice = 300, Subtotal = 2400, CreatedAt = DateTime.UtcNow },
-                new OrderDetail { OrderDetailID = 9, OrderID = 9, CourseID = 3, PaymentID = 9, Quantity = 9, DiscountID = 3, UnitPrice = 300, Subtotal = 2700, CreatedAt = DateTime.UtcNow },
-                new OrderDetail { OrderDetailID = 10, OrderID = 10, CourseID = 6, PaymentID = 10, Quantity = 3, DiscountID = 6, UnitPrice = 150, Subtotal = 450, CreatedAt = DateTime.UtcNow },
-                new OrderDetail { OrderDetailID = 11, OrderID = 11, CourseID = 6, PaymentID = 11, Quantity = 3, DiscountID = 6, UnitPrice = 150, Subtotal = 450, CreatedAt = DateTime.UtcNow },
-                new OrderDetail { OrderDetailID = 12, OrderID = 12, CourseID = 9, PaymentID = 12, Quantity = 2, DiscountID = 9, UnitPrice = 250, Subtotal = 500, CreatedAt = DateTime.UtcNow },
-                new OrderDetail { OrderDetailID = 13, OrderID = 13, CourseID = 9, PaymentID = 13, Quantity = 3, DiscountID = 9, UnitPrice = 250, Subtotal = 750, CreatedAt = DateTime.UtcNow },
-                new OrderDetail { OrderDetailID = 14, OrderID = 14, CourseID = 10, PaymentID = 14, Quantity = 4, DiscountID = 10, UnitPrice = 300, Subtotal = 1200, CreatedAt = DateTime.UtcNow },
-                new OrderDetail { OrderDetailID = 15, OrderID = 15, CourseID = 10, PaymentID = 15, Quantity = 2, DiscountID = 10, UnitPrice = 300, Subtotal = 600, CreatedAt = DateTime.UtcNow }
+                new OrderDetail { OrderDetailID = 7, OrderID = 3, CourseID = 3, PaymentID = 7, Quantity = 7, DiscountID = 3, UnitPrice = 300, Subtotal = 2100, CreatedAt = DateTime.UtcNow },
+                new OrderDetail { OrderDetailID = 8, OrderID = 2, CourseID = 3, PaymentID = 8, Quantity = 8, DiscountID = 3, UnitPrice = 300, Subtotal = 2400, CreatedAt = DateTime.UtcNow },
+                new OrderDetail { OrderDetailID = 9, OrderID = 3, CourseID = 3, PaymentID = 9, Quantity = 9, DiscountID = 3, UnitPrice = 300, Subtotal = 2700, CreatedAt = DateTime.UtcNow },
+                new OrderDetail { OrderDetailID = 10, OrderID = 2, CourseID = 6, PaymentID = 10, Quantity = 3, DiscountID = 6, UnitPrice = 150, Subtotal = 450, CreatedAt = DateTime.UtcNow },
+                new OrderDetail { OrderDetailID = 11, OrderID = 3, CourseID = 6, PaymentID = 11, Quantity = 3, DiscountID = 6, UnitPrice = 150, Subtotal = 450, CreatedAt = DateTime.UtcNow },
+                new OrderDetail { OrderDetailID = 12, OrderID = 3, CourseID = 9, PaymentID = 12, Quantity = 2, DiscountID = 9, UnitPrice = 250, Subtotal = 500, CreatedAt = DateTime.UtcNow },
+                new OrderDetail { OrderDetailID = 13, OrderID = 2, CourseID = 9, PaymentID = 13, Quantity = 3, DiscountID = 9, UnitPrice = 250, Subtotal = 750, CreatedAt = DateTime.UtcNow },
+                new OrderDetail { OrderDetailID = 14, OrderID = 1, CourseID = 10, PaymentID = 14, Quantity = 4, DiscountID = 10, UnitPrice = 300, Subtotal = 1200, CreatedAt = DateTime.UtcNow },
+                new OrderDetail { OrderDetailID = 15, OrderID = 1, CourseID = 10, PaymentID = 15, Quantity = 2, DiscountID = 10, UnitPrice = 300, Subtotal = 600, CreatedAt = DateTime.UtcNow }
                 );
 
                 modelBuilder.Entity<Course>().HasData(
