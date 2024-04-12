@@ -1,0 +1,81 @@
+﻿@model Project1.Models.Member
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>詳細資訊</h1>
+
+<div>
+    @* <h4>Member</h4> *@
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @* @Html.DisplayNameFor(model => model.Name) *@
+            姓名
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @* @Html.DisplayNameFor(model => model.Email) *@
+            電子郵件
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt class = "col-sm-2">
+            @* @Html.DisplayNameFor(model => model.Phone) *@
+            手機號碼
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Phone)
+        </dd>
+        <dt class = "col-sm-2">
+            @* @Html.DisplayNameFor(model => model.Birthday) *@
+            生日
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Birthday)
+        </dd>
+        <dt class = "col-sm-2">
+            @* @Html.DisplayNameFor(model => model.MemberType) *@
+            會員等級
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.MemberType)
+        </dd>
+        <dt class = "col-sm-2">
+            @* @Html.DisplayNameFor(model => model.RegistrationDate) *@
+            加入日期
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.RegistrationDate)
+        </dd>
+        <dt class = "col-sm-2">
+            @* @Html.DisplayNameFor(model => model.ResidenceArea) *@
+            居住地區
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ResidenceArea)
+        </dd>
+        <dt class = "col-sm-2">
+            @* @Html.DisplayNameFor(model => model.IsTrainer) *@
+            成為訓練師
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IsTrainer)
+        </dd>
+        <dt class = "col-sm-2">
+            @* @Html.DisplayNameFor(model => model.IsAdministrator) *@
+            管理員
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IsAdministrator)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.MemberID">修改</a> |
+    <a asp-action="Index">回到會員資訊</a>
+</div>

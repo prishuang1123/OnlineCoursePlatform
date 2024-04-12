@@ -8,6 +8,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="NewFolder1\**" />
+    <Compile Remove="NewFolder2\**" />
+    <Content Remove="NewFolder1\**" />
+    <Content Remove="NewFolder2\**" />
+    <EmbeddedResource Remove="NewFolder1\**" />
+    <EmbeddedResource Remove="NewFolder2\**" />
+    <None Remove="NewFolder1\**" />
+    <None Remove="NewFolder2\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Models\CourseClicksRanking.cs" />
+    <Compile Remove="Models\PTDetail.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="bundleconfig.json" />
   </ItemGroup>
 
@@ -28,6 +44,10 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.3" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\Shared\Partials\" />
   </ItemGroup>
 
 </Project>

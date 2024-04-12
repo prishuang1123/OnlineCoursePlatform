@@ -1,26 +1,26 @@
-﻿@model Order
+﻿@model OrderDetailsViewModel
 
 @{
     ViewData["Title"] = "ViewDetails";
 }
 
 <form asp-controller="Order" asp-action="ViewDetails" method="post">
-    <input asp-for="OrderID" hidden />
+    <input asp-for="order.OrderID" hidden />
     <div class="p-3 mt-4">
         <div class="row pb-2">
-            <h2>Edit Order Details</h2>
+            <h2>View Order Details</h2>
         </div>
     </div>
     <div asp-validation-summary="ModelOnly"></div>
     <div class="mb-3 row p-1">
-        <label asp-for="OrderID" class="p-0" disabled></label>
-        <input asp-for="OrderID" type="text" class="form-control" disabled />
-        <span asp-validation-for="OrderID" class="text-danger"></span>
+        <label asp-for="order.OrderID" class="p-0" disabled></label>
+        <input asp-for="order.OrderID" type="text" class="form-control" disabled />
+        <span asp-validation-for="order.OrderID" class="text-danger"></span>
     </div>
     <div class="mb-3 row p-1">
-        <label asp-for="MemberID" class="p-0 control-label"></label>
-        <input asp-for="MemberID" type="text" class="form-control" disabled />
-        <span asp-validation-for="MemberID" class="text-danger"></span>
+        <label asp-for="order.MemberID" class="p-0 control-label"></label>
+        <input asp-for="order.MemberID" type="text" class="form-control" disabled />
+        <span asp-validation-for="order.MemberID" class="text-danger"></span>
     </div>
     @* <div class="mb-3 row p-1">
     <label asp-for="OrderDate" class="p-0"></label>
@@ -29,54 +29,141 @@
     </div> *@
     <div class="mb-3 row p-1">
         <div>
-            <label asp-for="OrderDate" class="pr-3"></label>
+            <label asp-for="order.OrderDate" class="pr-3"></label>
         </div>
         <div>
-            <input asp-for="OrderDate" type="date" class="form-control" disabled />
-            <span asp-validation-for="OrderDate" class="text-danger"></span>
+            <input asp-for="order.OrderDate" type="date" class="form-control" disabled />
+            <span asp-validation-for="order.OrderDate" class="text-danger"></span>
         </div>
     </div>
     <div class="mb-3 row p-1">
         <div>
-            <label asp-for="OrderStatus" class="pr-3"></label>
+            <label asp-for="order.OrderStatus" class="pr-3"></label>
         </div>
         <div>
-            <select asp-for="OrderStatus" class="form-control pl-3 pr-4" disabled>
+            <select asp-for="order.OrderStatus" class="form-control pl-3 pr-4" disabled>
                 <option value="Processing">Processing</option>
                 <option value="Shipped">Shipped</option>
                 <option value="Delivered">Delivered</option>
                 <option value="Completed">Completed</option>
                 <option value="Cancelled">Cancelled</option>
             </select>
-            <span asp-validation-for="OrderStatus" class="text-danger"></span>
+            <span asp-validation-for="order.OrderStatus" class="text-danger"></span>
         </div>
     </div>
 
     <div class="mb-3 row p-1">
-        <label asp-for="TotalAmount" class="p-0"></label>
-        <input asp-for="TotalAmount" type="text" class="form-control" disabled />
-        <span asp-validation-for="TotalAmount" class="text-danger"></span>
+        <label asp-for="order.TotalAmount" class="p-0"></label>
+        <input asp-for="order.TotalAmount" type="text" class="form-control" disabled />
+        <span asp-validation-for="order.TotalAmount" class="text-danger"></span>
     </div>
     <div class="mb-3 row p-1">
-        <label asp-for="CreatedAt" class="p-0"></label>
-        <input asp-for="CreatedAt" type="text" class="form-control" disabled />
-        <span asp-validation-for="CreatedAt" class="text-danger"></span>
+        <label asp-for="order.CreatedAt" class="p-0"></label>
+        <input asp-for="order.CreatedAt" type="text" class="form-control" disabled />
+        <span asp-validation-for="order.CreatedAt" class="text-danger"></span>
     </div>
     <div class="mb-3 row p-1">
-        <label asp-for="ModifiedAt" class="p-0"></label>
-        <input asp-for="ModifiedAt" type="text" class="form-control" disabled />
-        <span asp-validation-for="ModifiedAt" class="text-danger"></span>
+        <label asp-for="order.ModifiedAt" class="p-0"></label>
+        <input asp-for="order.ModifiedAt" type="text" class="form-control" disabled />
+        <span asp-validation-for="order.ModifiedAt" class="text-danger"></span>
     </div>
-    <div class="row">
-        <div class="col-6 col-md-3">
-            <a asp-controller="Order" asp-action="Index" class="btn btn-outline-secondary form-control">
-                Back to list
-            </a>
-        </div>
-    </div>
-
 
 </form>
+<div class="p-3 mt-4">
+    <div class="row pb-2">
+        <h3>Order Details for OrderID: @Model.order.OrderID</h3>
+    </div>
+</div>
+
+<table class="table table-hover table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>
+                Order Detail ID
+            </th>
+            <th>
+                Order ID
+            </th>
+            <th>
+                Course ID
+            </th>
+            <th>
+                Payment ID
+            </th>
+            <th>
+                Quantity
+            </th>
+            <th>
+                Discount ID
+            </th>
+            <th>
+                Unit Price
+            </th>
+            <th>
+                Subtotal
+            </th>
+            <th>
+                CreatedAt
+            </th>
+            <th>
+                ModifiedAt
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var orderDetail in Model.orderDetails)
+        {
+            <tr>
+                <td>
+                    @orderDetail.OrderDetailID
+                </td>
+                <td>
+                    @orderDetail.OrderID
+                </td>
+                <td>
+                    @orderDetail.CourseID
+                </td>
+                <td>
+                    @orderDetail.PaymentID
+                </td>
+                <td>
+                    @orderDetail.Quantity
+                </td>
+                <td>
+                    @orderDetail.DiscountID
+                </td>
+                <td>
+                    @orderDetail.UnitPrice
+                </td>
+                <td>
+                    @orderDetail.Subtotal
+                </td>
+                <td>
+                    @orderDetail.CreatedAt
+                </td>
+                <td>
+                    @orderDetail.ModifiedAt
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-12" style="height:50px;"></div>
+        </div>
+
+    </div>
+</section>
+
+<div class="row">
+    <div class="col-6 col-md-3 text-right">
+        <a asp-controller="Order" asp-action="Index" class="btn btn-outline-secondary form-control">
+            Back to list
+        </a>
+    </div>
+</div>
 
 @section Scripts {
     @{

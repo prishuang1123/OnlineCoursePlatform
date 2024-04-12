@@ -22,7 +22,6 @@ namespace Project1.Models
 		public string Qualifications { get; set; } // 資格
 
 		public string Status { get; set; } // 審核狀態，例如 "尚未審核"、"已審核"、"審核未通過"
-        public string CourseID { get; internal set; }
 
         //public ICollection<Course> Courses { get; set; }
 
