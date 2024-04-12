@@ -4,17 +4,18 @@
     ViewData["Title"] = "Index";
 }
 
-</style>
 
-<h1>全部課程</h1>
+<div class="container">
+<h1>我的課程</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
-</p>
-<div class="col-lg-8">
-    <table class="table table-hover table-striped table-bordered">
-    <thead>
-        <tr>
+    <a asp-action="Create" class="btn btn-outline-secondary"><i class="bi bi-plus-circle-fill "></i>新增</a>
+    </p>
+</div>
+<div class="">
+    <table class="table table-hover  table-bordered">
+        <thead class="text-nowrap bd-highlig ">
+            <tr>
             <th>
                 @Html.DisplayNameFor(model => model.CourseName)
             </th>
@@ -111,10 +112,11 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Clicks)
             </td>
-            <td>
-                    <a asp-action="Edit" asp-route-id="@item.CourseID">編輯</a>
-                <a asp-action="Details" asp-route-id="@item.CourseID">檢視</a>
-                <a asp-action="Delete" asp-route-id="@item.CourseID">刪除</a>
+                    <td class="text-nowrap bd-highlight">
+                        <a asp-action="Edit" asp-route-id="@item.CourseID"  >
+                            <i class="bi bi-clipboard-plus"></i></a>
+                        <a asp-action="Details" asp-route-id="@item.CourseID"><i class="bi bi-eye-fill "></i></a>
+                        <a asp-action="Delete" asp-route-id="@item.CourseID"><i class="bi bi-trash-fill"></i></a>
             </td>
         </tr>
 }

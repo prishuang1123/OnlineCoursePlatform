@@ -10,43 +10,57 @@ namespace Project1.Models
 		public int CourseID { get; set; } // 課程編號，主鍵
 
 		[Required]
+		[Display(Name ="課程名稱")]
 		public string CourseName { get; set; } // 課程名稱
 
-		public int TrainerID { get; set; } // 訓練師編號，外鍵
+        [Display(Name = "訓練師ID")]
+        public int TrainerID { get; set; } // 訓練師編號，外鍵
 
 		//[ForeignKey("TrainerID")]
 		//public Trainer Trainer { get; set; } // 訓練師
 
 		[Required]
-		public string PetCategory { get; set; } // 寵物分類
+        [Display(Name = "寵物分類")]
+        public string PetCategory { get; set; } // 寵物分類
 
 		[Required]
-		public string CourseCategory { get; set; } // 課程分類
+        [Display(Name = "課程分類")]
+        public string CourseCategory { get; set; } // 課程分類
 
-		public string? CourseType { get; set; } // 課程類型
+        [Display(Name = "課程類型")]
+        public string? CourseType { get; set; } // 課程類型
 
-		public string? Description { get; set; } // 課程描述
+        [Display(Name = "課程描述")]
+        public string? Description { get; set; } // 課程描述
 
-		
-		public string? ApprovalStatus { get; set; } // 審核狀態
+        [Display(Name = "審核狀態")]
+        public string? ApprovalStatus { get; set; } // 審核狀態
 
-		public decimal Price { get; set; } // 價格
+        [Display(Name = "價格")]
+        public decimal Price { get; set; } // 價格
 
-		public int? DiscountID { get; set; } // 折扣編號，外鍵
+        [Display(Name = "折扣編號")]
+        public int? DiscountID { get; set; } // 折扣編號，外鍵
 
-		//[ForeignKey("DiscountID")]
-		//public Discount Discount { get; set; } // 折扣
+        //[ForeignKey("DiscountID")]
+        //public Discount Discount { get; set; } // 折扣
 
-		public string? Location { get; set; } // 上課地址
+        [Display(Name = "上課地點")]
+        public string? Location { get; set; } // 上課地址
 
-		public int? MaxParticipants { get; set; } // 課程參加人數上限
+        [Display(Name = "人數上限")]
+        public int? MaxParticipants { get; set; } // 課程參加人數上限
 
-		public int? EnrollmentCount { get; set; } // 報名人數
+        [Display(Name = "已報名人數")]
+        public int? EnrollmentCount { get; set; } // 報名人數
 
-		public DateTime CreatedAt { get; set; } // 課程建立時間
+        [Display(Name = "上課時間")]
+        public DateTime CreatedAt { get; set; } // 課程建立時間
 
-		public DateTime UpdatedAt { get; set; } // 課程最後更新時間
+        [Display(Name = "最後報名期限")]
+        public DateTime UpdatedAt { get; set; } // 課程最後更新時間
 
-		public int? Clicks { get; set; } // 課程頁面被點擊次數
+        [Display(Name = "點擊")]
+        public int? Clicks { get; set; } // 課程頁面被點擊次數
 	}
 }
