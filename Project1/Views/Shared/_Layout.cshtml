@@ -86,6 +86,18 @@
 								</ul>
 							</li>
 							<li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+							<li class="nav-item submenu dropdown">
+								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
+								   aria-haspopup="true" aria-expanded="false">會員管理</a>
+								<ul class="dropdown-menu">
+									<li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Members" asp-action="Index">會員總覽</a></li>
+									<li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Members" asp-action="create">會員新增</a></li>
+								</ul>
+							</li>
+							<li>
+								<a class="nav-link" asp-controller="Members" asp-action="Login">Login</a>
+							</li>
+							
 						</ul>
 						<ul class="nav navbar-nav navbar-right">
 							<li class="nav-item"><a href="#" class="cart"><span class="ti-bag"></span></a></li>
@@ -93,6 +105,7 @@
 								<button class="search"><span class="lnr lnr-magnifier" id="search"></span></button>
 							</li>
 						</ul>
+						
 					</div>
 				</div>
 			</nav>
