@@ -26,6 +26,15 @@ namespace Project1.Data
                 new Order { OrderID = 4, MemberID = 4, OrderDate = DateTime.Now, OrderStatus = "Processing", TotalAmount = 150, CreatedAt = DateTime.Now },
                 new Order { OrderID = 5, MemberID = 5, OrderDate = DateTime.Now, OrderStatus = "Shipped", TotalAmount = 350, CreatedAt = DateTime.Now }
                 );
+            modelBuilder.Entity<OrderDetail>().HasData(
+                new OrderDetail { OrderDetailID = 1, OrderID = 1, CourseID = 1, Quantity = 1, UnitPrice=10, Subtotal=10},
+                new OrderDetail { OrderDetailID = 2, OrderID = 1, CourseID = 2, Quantity = 2, UnitPrice = 20, Subtotal = 40 },
+                new OrderDetail { OrderDetailID = 3, OrderID = 1, CourseID = 3, Quantity = 3, UnitPrice = 30, Subtotal = 90 },
+                new OrderDetail { OrderDetailID = 4, OrderID = 2, CourseID = 4, Quantity = 4, UnitPrice = 40, Subtotal = 160 },
+                new OrderDetail { OrderDetailID = 5, OrderID = 3, CourseID = 5, Quantity = 5, UnitPrice = 50, Subtotal = 250 },
+                new OrderDetail { OrderDetailID = 6, OrderID = 3, CourseID = 6, Quantity = 6, UnitPrice = 60, Subtotal = 360 }
+
+                );
 
         }
         public virtual DbSet<Course> Course { get; set; }
