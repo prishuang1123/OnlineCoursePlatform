@@ -488,7 +488,6 @@ namespace Project1.Migrations
                     b.HasKey("OrderDetailID");
 
                     b.ToTable("OrderDetail");
-                });
 
                     b.HasData(
                         new
@@ -687,6 +686,7 @@ namespace Project1.Migrations
                             UnitPrice = 300m
                         });
                 });
+                
 
             modelBuilder.Entity("Project1.Models.Payment", b =>
                 {
