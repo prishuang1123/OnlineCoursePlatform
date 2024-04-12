@@ -57,17 +57,11 @@ namespace Project1.Data
 
         public virtual DbSet<Pet> Pet { get; set; }
 
-
         public virtual DbSet<TrainerServiceArea> TrainerServiceArea { get; set; }
 
         public virtual DbSet<Location> Location { get; set; }
 
         public virtual DbSet<CourseRating> CourseRating { get; set; }
-
-        public virtual DbSet<CourseRanking> CourseRanking { get; set; }
-
-
-        public virtual DbSet<InstructorRanking> InstructorRanking { get; set; }
 
         public virtual DbSet<Order> Order { get; set; }
 
@@ -80,8 +74,6 @@ namespace Project1.Data
         public virtual DbSet<Discount> Discount { get; set; }
 
         public virtual DbSet<ClassSchedule> ClassSchedule { get; set; }
-
-        public virtual DbSet<EnrollmentRanking> EnrollmentRanking { get; set; }
 
         public virtual DbSet<Member> Member { get; set; }
         public object Courses { get; internal set; }
