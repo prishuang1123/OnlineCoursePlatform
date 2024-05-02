@@ -21,5 +21,7 @@ namespace Project1.Models
 
 		public string Status { get; set; } // 審核狀態，例如 "尚未審核"、"已審核"、"審核未通過"
 
+		public string? Photo {  get; set; } //圖片
+
     }
 }

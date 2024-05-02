@@ -56,5 +56,8 @@ namespace Project1.Models
 
         [Display(Name = "點擊")]
         public int? Clicks { get; set; } // 課程頁面被點擊次數
+
+        [Display (Name = "封面圖")]
+        public string? ThumbnailUrl { get; set; }
 	}
 }
