@@ -9,7 +9,7 @@ namespace Project1.ViewModel
         public int TrainerID { get; set; }
         public int? Clicks { get; set; }
 
-        public decimal CourseAverageRating { get; set; }
+        public double CourseAverageRating { get; set; }
 
         public int TotalQuantity { get; set; }
 
