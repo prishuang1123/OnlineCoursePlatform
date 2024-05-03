@@ -10,12 +10,16 @@
   <ItemGroup>
     <Compile Remove="NewFolder1\**" />
     <Compile Remove="NewFolder2\**" />
+    <Compile Remove="Views\Shared\Partials\**" />
     <Content Remove="NewFolder1\**" />
     <Content Remove="NewFolder2\**" />
+    <Content Remove="Views\Shared\Partials\**" />
     <EmbeddedResource Remove="NewFolder1\**" />
     <EmbeddedResource Remove="NewFolder2\**" />
+    <EmbeddedResource Remove="Views\Shared\Partials\**" />
     <None Remove="NewFolder1\**" />
     <None Remove="NewFolder2\**" />
+    <None Remove="Views\Shared\Partials\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -44,10 +48,6 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.3" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Views\Shared\Partials\" />
   </ItemGroup>
 
 </Project>
