@@ -17,7 +17,7 @@
 
 
 
-<div class="container">
+<div class="bg-light container">
         <table class="table">
                 <thead>
                 <tr>
@@ -26,6 +26,7 @@
                     <td data-sort="Clicks">點擊次數</td>
                 @*     <td data-sort="CourseAverageRating">課程平均分數</td> *@
                     <td data-sort="TotalQuantity">總購買量</td>
+                    <td data-sort="CourseAverageRating">平均分數</td>
                 </tr>
                 </thead>
                 <tbody>
@@ -37,6 +38,7 @@
                     <td>@item.Clicks</td>
                    @*  <td>@item.CourseAverageRating</td> *@
                     <td>@item.TotalQuantity</td>
+                    <td>@item.CourseAverageRating</td>
                 </tr>
             }
         </tbody>

@@ -32,6 +32,8 @@ namespace Project1.Models
         public DateTime CreatedAt { get; set; }
         public DateTime? ModifiedAt { get; set; }
 
+        public int? DiscountID { get; set; }
+
         //public ICollection<Payment> Payment { get; set; }
 
         public Order()

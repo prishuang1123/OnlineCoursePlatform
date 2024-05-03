@@ -39,12 +39,6 @@ namespace Project1.Models
         [Display(Name = "價格")]
         public decimal Price { get; set; } // 價格
 
-        [Display(Name = "折扣編號")]
-        public int? DiscountID { get; set; } // 折扣編號，外鍵
-
-        //[ForeignKey("DiscountID")]
-        //public Discount Discount { get; set; } // 折扣
-
         [Display(Name = "上課地點")]
         public string? Location { get; set; } // 上課地址
 
@@ -62,5 +56,8 @@ namespace Project1.Models
 
         [Display(Name = "點擊")]
         public int? Clicks { get; set; } // 課程頁面被點擊次數
+
+        [Display (Name = "封面圖")]
+        public string? ThumbnailUrl { get; set; }
 	}
 }

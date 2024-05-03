@@ -29,17 +29,22 @@ namespace Project1.Controllers
                 .Select(g => new { CourseID = g.Key, TotalQuantity = g.Sum(x => x.Quantity) }); // 將結果轉換為 List
 
             var courses = (from c in _ProjectDbContext.Course
-                           //join cr in _ProjectDbContext.CourseRanking on c.CourseID equals cr.CourseID into joined
-                           //from subcr in joined.DefaultIfEmpty()
+                               //join cr in _ProjectDbContext.CourseRanking on c.CourseID equals cr.CourseID into joined
+                               //from subcr in joined.DefaultIfEmpty()
+                           join cr in _ProjectDbContext.CourseRating on c.CourseID equals cr.CourseID into joined
                            let totalQuantityRecord = quantityTotals.FirstOrDefault(q => q.CourseID == c.CourseID)
                            let totalQuantity = totalQuantityRecord != null ? totalQuantityRecord.TotalQuantity : 0
+                           let averageRating = joined.GroupBy(r => r.CourseID)
+                                         .Select(g => g.Average(r => r.Rating))
+                                         .FirstOrDefault()
                            select new CourseRankViewModel
                            {
                                CourseID = c.CourseID,
                                TrainerID = c.TrainerID,
                                Clicks = c.Clicks,
                                //CourseAverageRating = subcr != null ? subcr.CourseAverageRating : 0,
-                               TotalQuantity = totalQuantity
+                               TotalQuantity = totalQuantity,
+                               CourseAverageRating = Math.Round(averageRating, 2)
                            }); // 將 LINQ to Entities 轉換為 LINQ to Objects
 
             return View(courses);

@@ -17,8 +17,6 @@ namespace Project1.Models
         [Range(1,10)]
         public int Quantity { get; set; }//課程數量
         //, (ErrorMessage ="Quantity can only be between 1-10")
-        //[ForeignKey("Discount")]
-        public int? DiscountID { get; set; }//折扣編號,外鍵
 
         [Display(Name = "Unit Price")]
         public decimal UnitPrice { get; set; }//課程單價

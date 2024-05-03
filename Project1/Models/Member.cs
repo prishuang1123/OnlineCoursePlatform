@@ -20,9 +20,6 @@ namespace Project1.Models
 		public DateTime Birthday { get; set; } // 會員生日
 
 		[Required]
-		public string MemberType { get; set; } // 會員類型，例如 "一般會員"
-
-		[Required]
 		public DateTime RegistrationDate { get; set; } // 會員註冊日期
 
 		public string ResidenceArea { get; set; } // 會員居住區域
@@ -33,7 +30,6 @@ namespace Project1.Models
 		[Required]
 		public bool IsAdministrator { get; set; } // 是否為系統管理員，1/0
 
-
-        //public ICollection<Order> Order { get; set; }
+		public string? Photo { get; set; }
     }
 }
