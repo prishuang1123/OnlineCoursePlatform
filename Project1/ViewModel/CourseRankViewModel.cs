@@ -13,5 +13,10 @@ namespace Project1.ViewModel
 
         public int TotalQuantity { get; set; }
 
+        public string? ThumbnailUrl { get; set; }
+
+        public string CourseName { get; set; }
+
+        public string? Description { get; set; }
     }
 }
