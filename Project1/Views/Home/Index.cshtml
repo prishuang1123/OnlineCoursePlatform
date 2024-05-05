@@ -2,65 +2,62 @@
     ViewData["Title"] = "Home Page";
 }
 
-@section Styles{
-    <link href="~/datatables/css/jquery.datatables.min.css" rel="stylesheet" />
+@section Styles {
+    <link href="https://cdn.datatables.net/2.0.5/css/dataTables.dataTables.min.css" rel="stylesheet" />
     <style>
-       thead{
-           background-color: burlywood;
-           color: darkslategray;
-       }  
-       
-   </style>
+        thead {
+            background-color: burlywood;
+            color: darkslategray;
+        }
+
+        .card-img-top {
+            width: 100%;
+            height: 20vw;
+            object-fit: cover;
+        }
+    </style>
+
 }
-
-
-
-
-
-<div class="bg-light container">
-        <table class="table">
-                <thead>
-                <tr>
-                    <td data-sort="CourseID">課程ID</td>
-                    <td data-sort="TrainerID">教練ID</td>
-                    <td data-sort="Clicks">點擊次數</td>
-                @*     <td data-sort="CourseAverageRating">課程平均分數</td> *@
-                    <td data-sort="TotalQuantity">總購買量</td>
-                    <td data-sort="CourseAverageRating">平均分數</td>
-                </tr>
-                </thead>
-                <tbody>
-            @foreach( var item in Model)
-            {
-                <tr>
-                    <td>@item.CourseID</td>
-                    <td>@item.TrainerID</td>
-                    <td>@item.Clicks</td>
-                   @*  <td>@item.CourseAverageRating</td> *@
-                    <td>@item.TotalQuantity</td>
-                    <td>@item.CourseAverageRating</td>
-                </tr>
-            }
-        </tbody>
-        </table>  
+<div id="app" class="container">
+    <div class="row">
+        <div class="col-xl-3 col-md-6 mb-1" v-for="course in courses">
+            <div class="card mb-3">
+                <img :src="course.thumbnailUrl" class="card-img-top img-fluid" style="object-fit: cover;" />
+                <a href="">{{ course.courseName }}</a>
+                <div class="position-absolute top-0 end-0 p-2 bg-primary text-white">{{course.courseID}}</div>
+                <div class="card-body">
+                    <p class="card-text">{{ course.description }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-
-@section Scripts{
-    <script src="~/datatables/js/jquery.datatables.min.js" asp-append-version="true"></script>
-    <script src="https://cdn.datatables.net/fixedheader/3.2.4/js/dataTables.fixedHeader.min.js">
-    </script>
+@section Scripts {
+    @* <script src="https://cdn.datatables.net/2.0.5/js/dataTables.min.js" asp-append-version="true"></script> *@
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.8/axios.min.js" integrity="sha512-PJa3oQSLWRB7wHZ7GQ/g+qyv6r4mbuhmiDb8BjSFZ8NZ2a42oTtAq5n0ucWAwcQDlikAtkub+tPVCw4np27WCg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://unpkg.com/vue@3.4.25/dist/vue.global.js"></script>
     <script>
-        $(document).ready(function () {
-            $("table").DataTable({
-                "paging": true,
-                "searching": true,
-                "info": true,
-                language: {
-                    url: '//cdn.datatables.net/plug-ins/2.0.3/i18n/zh-HANT.json',
+        var VueApp = {
+            data() {
+                return {
+                    courses: [],
                 }
-            });
-        });
+            },
+            mounted() {
+                var url = "https://localhost:7177/Home/GetCourse";
+                axios.get(url).then(response => {
+                    this.courses =  response.data;
+
+                }).catch(error => {
+                    alert(error);
+                });
+            }
+        }
+
+        var app = Vue.createApp(VueApp).mount("#app");
+
+
     </script>
-    
+
 }
