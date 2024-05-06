@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="CourseName" class="control-label"></label>
@@ -82,6 +82,12 @@
                 <input asp-for="Clicks" class="form-control" />
                 <span asp-validation-for="Clicks" class="text-danger"></span>
             </div> *@
+          @*   圖片 *@
+            <div class="form-group">
+                <label asp-for="ThumbnailUrl" class="control-label"></label>
+                <input type="file" name="thumbnailFile" class="form-control" accept="image/*" />
+            </div>
+
             <div class="form-group">
                 <input type="submit" value="新增" class="btn btn-primary" />
             </div>
@@ -92,4 +98,9 @@
 <div>
     <a asp-action="Index">返回課程首頁</a>
 </div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
 

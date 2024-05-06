@@ -10,12 +10,24 @@
   <ItemGroup>
     <Compile Remove="NewFolder1\**" />
     <Compile Remove="NewFolder2\**" />
+    <Compile Remove="wwwroot\img\CoursePhoto\**" />
+    <Compile Remove="wwwroot\img\MemberPhoto\**" />
+    <Compile Remove="wwwroot\img\TrainerPhoto\**" />
     <Content Remove="NewFolder1\**" />
     <Content Remove="NewFolder2\**" />
+    <Content Remove="wwwroot\img\CoursePhoto\**" />
+    <Content Remove="wwwroot\img\MemberPhoto\**" />
+    <Content Remove="wwwroot\img\TrainerPhoto\**" />
     <EmbeddedResource Remove="NewFolder1\**" />
     <EmbeddedResource Remove="NewFolder2\**" />
+    <EmbeddedResource Remove="wwwroot\img\CoursePhoto\**" />
+    <EmbeddedResource Remove="wwwroot\img\MemberPhoto\**" />
+    <EmbeddedResource Remove="wwwroot\img\TrainerPhoto\**" />
     <None Remove="NewFolder1\**" />
     <None Remove="NewFolder2\**" />
+    <None Remove="wwwroot\img\CoursePhoto\**" />
+    <None Remove="wwwroot\img\MemberPhoto\**" />
+    <None Remove="wwwroot\img\TrainerPhoto\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -48,9 +60,6 @@
 
   <ItemGroup>
     <Folder Include="Views\Shared\Partials\" />
-    <Folder Include="wwwroot\img\MemberPhoto\" />
-    <Folder Include="wwwroot\img\CoursePhoto\" />
-    <Folder Include="wwwroot\img\TrainerPhoto\" />
   </ItemGroup>
 
 </Project>
