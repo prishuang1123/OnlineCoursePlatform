@@ -19,17 +19,51 @@
 
 }
 <div id="app" class="container">
+    <h1>{{selectedRank}}排行榜</h1>
+    <select v-model="selectedRank">
+        <option v-for="option in options" v-bind:value="option.name">{{ option.name }}</option>
+        
+    </select>
     <div class="row">
-        <div class="col-xl-3 col-md-6 mb-1" v-for="course in courses">
-            <div class="card mb-3">
-                <img :src="course.thumbnailUrl" class="card-img-top img-fluid" style="object-fit: cover;" />
-                <a href="">{{ course.courseName }}</a>
-                <div class="position-absolute top-0 end-0 p-2 bg-primary text-white">{{course.courseID}}</div>
-                <div class="card-body">
-                    <p class="card-text">{{ course.description }}</p>
+        <template v-if="selectedRank == '銷售量'">
+            <div class="col-xl-3 col-md-6 mb-1" v-for="course in courses">
+                <div class="card mb-3">
+                    <img :src="course.thumbnailUrl" class="card-img-top img-fluid" style="object-fit: cover;" />
+                    <a href="">{{ course.courseName }}</a>
+                    <div class="position-absolute top-0 end-0 p-2 bg-primary text-white">{{course.courseID}}</div>
+                    <div class="card-body">
+                        <p class="card-text">課程介紹: {{ course.description }}</p>
+                        <p class="card-text">課程售量: {{course.totalQuantity}}</p>
+                    </div>
                 </div>
             </div>
-        </div>
+        </template>
+        <template v-else-if="selectedRank == '平均分數'">
+            <div class="col-xl-3 col-md-6 mb-1" v-for="course in courses">
+                <div class="card mb-3">
+                    <img :src="course.thumbnailUrl" class="card-img-top img-fluid" style="object-fit: cover;" />
+                    <a href="">{{ course.courseName }}</a>
+                    <div class="position-absolute top-0 end-0 p-2 bg-primary text-white">{{course.courseID}}</div>
+                    <div class="card-body">
+                        <p class="card-text">課程介紹: {{ course.description }}</p>
+                        <p class="card-text">課程平均分數: {{course.courseAverageRating}}</p>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <template v-else-if="selectedRank == '點擊次數'">
+            <div class="col-xl-3 col-md-6 mb-1" v-for="course in courses">
+                <div class="card mb-3">
+                    <img :src="course.thumbnailUrl" class="card-img-top img-fluid" style="object-fit: cover;" />
+                    <a href="">{{ course.courseName }}</a>
+                    <div class="position-absolute top-0 end-0 p-2 bg-primary text-white">{{course.courseID}}</div>
+                    <div class="card-body">
+                        <p class="card-text">課程介紹: {{ course.description }}</p>
+                        <p class="card-text">課程點擊次數: {{course.clicks}}</p>
+                    </div>
+                </div>
+            </div>
+        </template>
     </div>
 </div>
 
@@ -41,17 +75,24 @@
         var VueApp = {
             data() {
                 return {
+                    selectedRank: '銷售量',
                     courses: [],
+                    options:[
+                        { name:"銷售量", value:"quantity" },
+                        { name:"平均分數", value:"rate"},
+                        { name:"點擊次數", value:"clicks"},
+                    ]
                 }
             },
             mounted() {
-                var url = "https://localhost:7177/Home/GetCourse";
+                var url = "https://localhost:7177/Home/GetQuantity";
                 axios.get(url).then(response => {
-                    this.courses =  response.data;
+                    this.courses = response.data;
 
                 }).catch(error => {
                     alert(error);
                 });
+
             }
         }
 
