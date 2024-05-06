@@ -26,8 +26,6 @@ namespace Project1.Controllers
 
         public IActionResult Index()
         {
-            
-
             return View();
         }
 
@@ -39,23 +37,19 @@ namespace Project1.Controllers
 
             var courses = (from c in _ProjectDbContext.Course
                            join cr in _ProjectDbContext.CourseRating on c.CourseID equals cr.CourseID into joined
-                           let totalQuantityRecord = quantityTotals.FirstOrDefault(q => q.CourseID == c.CourseID)
+                           let totalQuantityRecord = quantityTotals.FirstOrDefault(g => g.CourseID == c.CourseID)
                            let totalQuantity = totalQuantityRecord != null ? totalQuantityRecord.TotalQuantity : 0
-                           let top5 = totalQuantity
-                           let averageRating = joined.GroupBy(r => r.CourseID)
-                                         .Select(g => g.Average(r => r.Rating)).FirstOrDefault()
+                           orderby totalQuantity descending
                            select new CourseRankViewModel
                            {
                                CourseID = c.CourseID,
                                TrainerID = c.TrainerID,
-                               Clicks = c.Clicks,
                                TotalQuantity = totalQuantity,
-                               CourseAverageRating = Math.Round(averageRating, 2),
                                ThumbnailUrl = c.ThumbnailUrl,
                                CourseName = c.CourseName,
                                Description = c.Description
                            }
-            );
+            ).Take(5);
 
             return Json(courses);
         }
