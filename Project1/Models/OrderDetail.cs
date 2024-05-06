@@ -14,19 +14,13 @@ namespace Project1.Models
         //[ForeignKey("Course")]
         public int CourseID { get; set; }//課程編號,外鍵
 
-        //[ForeignKey("Payment")]
-        public int? PaymentID { get; set; }//外鍵
-
         [Range(1,10)]
         public int Quantity { get; set; }//課程數量
         //, (ErrorMessage ="Quantity can only be between 1-10")
-        //[ForeignKey("Discount")]
-        public int? DiscountID { get; set; }//折扣編號,外鍵
 
         [Display(Name = "Unit Price")]
         public decimal UnitPrice { get; set; }//課程單價
 
-        public decimal Subtotal { get; set; }//小計
 
         [Display(Name = "Created At")]
         [DataType(DataType.DateTime)]

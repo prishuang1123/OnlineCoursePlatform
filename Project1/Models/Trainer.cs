@@ -10,8 +10,6 @@ namespace Project1.Models
 
 		public int MemberID { get; set; } // 會員ID，外鍵
 
-		//[ForeignKey("MemberID")]
-		//public Member Member { get; set; } // 會員
 
 		public string TrainerName { get; set; } // 名字
 
@@ -23,16 +21,7 @@ namespace Project1.Models
 
 		public string Status { get; set; } // 審核狀態，例如 "尚未審核"、"已審核"、"審核未通過"
 
-        //public ICollection<Course> Courses { get; set; }
+		public string? Photo {  get; set; } //圖片
 
-        //public ICollection<CourseClicksRanking> CoursesClicksRanking { get; set; }
-
-        //public ICollection<CourseRanking> CoursesRanking { get; set;}
-
-        //public ICollection<TrainerServiceArea> TrainerServiceArea { get; set; }
-
-        //public ICollection<InstructorRanking> InstructorRanking { get; set; }
-
-        //public ICollection<EnrollmentRanking> EnrollmentRanking { get; set; }
     }
 }
