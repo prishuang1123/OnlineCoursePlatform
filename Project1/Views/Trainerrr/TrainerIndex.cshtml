@@ -1,0 +1,74 @@
+﻿@using static Project1.Controllers.TrainerrrController
+@model IEnumerable<Project1.Models.Trainer>
+
+@{
+    ViewData["Title"] = "Trainer Index";
+}
+@section Styles {
+    <style>
+        .status-pass {
+            color: green;
+        }
+
+        .status-fail {
+            color: red;
+        }
+    </style>
+}
+
+
+<h1>訓練師</h1>
+
+<p>
+    <a asp-action="CreateTrainer">新增訓練師</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Trainer ID
+            </th>
+            <th>
+                Trainer Name
+            </th>
+            <th>
+                Specialization
+            </th>
+            <th>
+                Experience
+            </th>
+            <th>
+                Qualifications
+            </th>
+            <th>
+                Status
+            </th>
+            <th>
+                操作
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var trainer in Model)
+        {
+            <tr>
+                <td>@trainer.TrainerID</td>
+                <td>@trainer.TrainerName</td>
+                <td>@trainer.Specialization</td>
+                <td>@trainer.Experience</td>
+                <td>@trainer.Qualifications</td>
+                <td>@trainer.Status</td>
+
+                <td>
+                    <form asp-action="ChangeApprovalStatus" method="post">
+                        <input type="hidden" name="trainerId" value="@trainer.TrainerID" />
+                        <button type="submit" name="newStatus" value="通過" class="btn btn-success">批准</button>
+                        <button type="submit" name="newStatus" value="未通過" class="btn btn-danger">拒絕</button>
+                        <a asp-action="TrainerDetails" asp-route-id="@trainer.TrainerID">Details</a> |
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
