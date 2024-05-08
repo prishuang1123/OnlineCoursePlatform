@@ -6,114 +6,34 @@
 
 
 <div class="container">
-<h1>我的課程</h1>
-
-<p>
-    <a asp-action="Create" class="btn btn-outline-secondary"><i class="bi bi-plus-circle-fill "></i>新增</a>
-    </p>
-</div>
-<div class="">
-    <table class="table table-hover  table-bordered">
-        <thead class="text-nowrap bd-highlig ">
-            <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.CourseName)
-            </th>
-            @* <th>
-                @Html.DisplayNameFor(model => model.TrainerID)
-            </th> *@
-            <th>
-                @Html.DisplayNameFor(model => model.PetCategory)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CourseCategory)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CourseType)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            @* <th>
-                @Html.DisplayNameFor(model => model.ApprovalStatus)
-            </th> *@
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Location)
-            </th>
-            @* <th>
-                @Html.DisplayNameFor(model => model.MaxParticipants)
-            </th> *@
-            @* <th>
-                @Html.DisplayNameFor(model => model.EnrollmentCount)
-            </th> *@
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedAt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UpdatedAt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Clicks)
-            </th>
-            <th>變更</th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.CourseName)
-            </td>
-            @* <td>
-                @Html.DisplayFor(modelItem => item.TrainerID)
-            </td> *@
-            <td>
-                @Html.DisplayFor(modelItem => item.PetCategory)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CourseCategory)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CourseType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            @* <td>
-                @Html.DisplayFor(modelItem => item.ApprovalStatus)
-            </td> *@
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Location)
-            </td>
-           @*  <td>
-                @Html.DisplayFor(modelItem => item.MaxParticipants)
-            </td> *@
-            @* <td>
-                @Html.DisplayFor(modelItem => item.EnrollmentCount)
-            </td> *@
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdatedAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Clicks)
-            </td>
-                    <td class="text-nowrap bd-highlight">
-                        <a asp-action="Edit" asp-route-id="@item.CourseID"  >
-                            <i class="bi bi-clipboard-plus"></i></a>
-                        <a asp-action="Details" asp-route-id="@item.CourseID"><i class="bi bi-eye-fill "></i></a>
-                        <a asp-action="Delete" asp-route-id="@item.CourseID"><i class="bi bi-trash-fill"></i></a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <a asp-action="Create">新增</a>
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">   
+                    <div class="card-body d-flex flex-column justify-content-between">
+                        <div>
+                            <div style="max-width:100%; max-height:100%;">
+                                <img src="@item.ThumbnailUrl" class="card-img-top img-fluid" alt="Course Thumbnail" style="object-fit: cover;">
+                            </div>
+                        </div>
+                        <div>
+                            <h5 class="card-title mt-3">@item.CourseName</h5>
+                            <p class="card-text">@item.Description</p>
+                        </div>
+                        <div>
+                            <div class="btn-group mt-3" role="group">
+                                <a href="@Url.Action("Details", new { id = item.CourseID })" class="btn btn-primary mr-2">查看</a>
+                                <a href="@Url.Action("Edit", new { id = item.CourseID })" class="btn btn-secondary mr-2">编辑</a>
+                                <form asp-action="Delete" asp-route-id="@item.CourseID">
+                                    <button type="submit" class="btn btn-danger">删除</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>

@@ -1,66 +1,206 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+<head>
 
-@section Styles{
-    <link href="~/datatables/css/jquery.datatables.min.css" rel="stylesheet" />
+
+@section Styles {
     <style>
-       thead{
-           background-color: burlywood;
-           color: darkslategray;
-       }  
-       
-   </style>
-}
+        .single-product {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            transition: transform 0.3s ease-in-out;
+        }
 
-
-
-
-
-<div class="bg-light container">
-        <table class="table">
-                <thead>
-                <tr>
-                    <td data-sort="CourseID">課程ID</td>
-                    <td data-sort="TrainerID">教練ID</td>
-                    <td data-sort="Clicks">點擊次數</td>
-                @*     <td data-sort="CourseAverageRating">課程平均分數</td> *@
-                    <td data-sort="TotalQuantity">總購買量</td>
-                    <td data-sort="CourseAverageRating">平均分數</td>
-                </tr>
-                </thead>
-                <tbody>
-            @foreach( var item in Model)
-            {
-                <tr>
-                    <td>@item.CourseID</td>
-                    <td>@item.TrainerID</td>
-                    <td>@item.Clicks</td>
-                   @*  <td>@item.CourseAverageRating</td> *@
-                    <td>@item.TotalQuantity</td>
-                    <td>@item.CourseAverageRating</td>
-                </tr>
+            .single-product:hover {
+                transform: scale(1.05);
             }
-        </tbody>
-        </table>  
-</div>
 
-
-@section Scripts{
-    <script src="~/datatables/js/jquery.datatables.min.js" asp-append-version="true"></script>
-    <script src="https://cdn.datatables.net/fixedheader/3.2.4/js/dataTables.fixedHeader.min.js">
-    </script>
-    <script>
-        $(document).ready(function () {
-            $("table").DataTable({
-                "paging": true,
-                "searching": true,
-                "info": true,
-                language: {
-                    url: '//cdn.datatables.net/plug-ins/2.0.3/i18n/zh-HANT.json',
+                .single-product:hover .overlay {
+                    background-color: rgba(0, 0, 0, 0.7); /* Darker overlay on hover */
                 }
-            });
-        });
+
+        .product-details {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.7); /* Darker overlay */
+            border-radius: 10px;
+        }
+
+        .single-product:hover .product-title {
+            font-size: 30px; /* Increase font size on hover */
+        }
+    </style>
+}
+</head>
+<body>
+<!-- banner start -->
+<section class="banner-area">
+    <div class="container">
+        <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end"
+                <div class="col-lg-12">
+                    <div class="active-banner-slider owl-carousel">
+                        <!-- single-slide -->
+                        <div class="row single-slide align-items-center d-flex">
+                            <div class="col-lg-5 col-md-6">
+                                <div class="banner-content">
+                                    <h1>Nike New <br>Collection!</h1>
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                                        incididunt ut labore et
+                                        dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.
+                                    </p>
+                                    <div class="add-bag d-flex align-items-center">
+                                        <a class="add-btn" href=""><span class="lnr lnr-cross"></span></a>
+                                        <span class="add-text text-uppercase">Add to Bag</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-7">
+                                <div class="banner-img">
+                                    <img class="img-fluid" src="img/banner/banner-img.png" alt="">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- single-slide -->
+                        <div class="row single-slide">
+                            <div class="col-lg-5">
+                                <div class="banner-content">
+                                    <h1>Nike New <br>Collection!</h1>
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                                        incididunt ut labore et
+                                        dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.
+                                    </p>
+                                    <div class="add-bag d-flex align-items-center">
+                                        <a class="add-btn" href=""><span class="lnr lnr-cross"></span></a>
+                                        <span class="add-text text-uppercase">Add to Bag</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-7">
+                                <div class="banner-img">
+                                    <img class="img-fluid" src="img/banner/banner-img.png" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+</section>
+<!-- banner end -->
+</body>
+<section id="app" class="lattest-product-area pb-40 category-list">
+    <div class="container">
+        <h1>最熱賣課程</h1>
+        <div class="row justify-content-center">
+            <div v-for="(item, index) in quantity" :key="index" class="col-lg-4 col-md-6 mb-0">
+                <div class="single-product position-relative overflow-hidden">
+                    <div class="position-absolute top-0 end-0 p-2 bg-primary text-white">{{ index + 1 }}</div>
+                    <img :src="item.thumbnailUrl" class="img-fluid" alt="Course Thumbnail" />
+                    <div class="product-details text-white">
+                        <h5 class="mb-3 text-white product-title">{{ item.courseName }}</h5>
+                        <p class="mb-0">{{ item.description }}</p>
+                        <p class="mb-0">課程售量: {{ item.totalQuantity }}</p>
+                        <div class="prd-bottom mt-3">
+                            <a :href="`/quantity/${item.id}`" class="social-info text-white">
+                                <span class="lnr lnr-move"></span>
+                                <p class="hover-text">查看詳情</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h1>評分最高課程</h1>
+        <div class="row justify-content-center">
+            <div v-for="(item, index) in average" :key="index" class="col-lg-4 col-md-6 mb-0">
+                <div class="single-product position-relative overflow-hidden">
+                    <div class="position-absolute top-0 end-0 p-2 bg-primary text-white">{{ index + 1 }}</div>
+                    <img :src="item.thumbnailUrl" class="img-fluid" alt="Course Thumbnail" />
+                    <div class="product-details text-white">
+                        <h5 class="mb-3 text-white product-title">{{ item.courseName }}</h5>
+                        <p class="mb-0">{{ item.description }}</p>
+                        <p class="mb-0">課程售量: {{ item.courseAverageRating }}</p>
+                        <div class="prd-bottom mt-3">
+                            <a :href="`/average/${item.id}`" class="social-info text-white">
+                                <span class="lnr lnr-move"></span>
+                                <p class="hover-text">查看詳情</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h1>點擊最多課程</h1>
+        <div class="row justify-content-center">
+            <div v-for="(item, index) in clicks" :key="index" class="col-lg-4 col-md-6 mb-0">
+                <div class="single-product position-relative overflow-hidden">
+                    <div class="position-absolute top-0 end-0 p-2 bg-primary text-white">{{ index + 1 }}</div>
+                    <img :src="item.thumbnailUrl" class="img-fluid" alt="Course Thumbnail" />
+                    <div class="product-details text-white">
+                        <h5 class="mb-3 text-white product-title">{{ item.courseName }}</h5>
+                        <p class="mb-0">{{ item.description }}</p>
+                        <p class="mb-0">課程售量: {{ item.clicks }}</p>
+                        <div class="prd-bottom mt-3">
+                            <a :href="`/clicks/${item.id}`" class="social-info text-white">
+                                <span class="lnr lnr-move"></span>
+                                <p class="hover-text">查看詳情</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.8/axios.min.js"
+            integrity="sha512-PJa3oQSLWRB7wHZ7GQ/g+qyv6r4mbuhmiDb8BjSFZ8NZ2a42oTtAq5n0ucWAwcQDlikAtkub+tPVCw4np27WCg=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://unpkg.com/vue@3.4.25/dist/vue.global.js"></script>
+
+    <script>
+        var VueApp = {
+            data() {
+                return {
+                    quantity: [],
+                    average: [],
+                    clicks: [],
+                }
+            },
+            mounted() {
+                var url1 = "https://localhost:7177/Home/GetQuantity";
+                axios.get(url1).then(response => {
+                    this.quantity = response.data;
+                }).catch(error => {
+                    alert(error);
+                });
+
+                var url2 = "https://localhost:7177/Home/GetAverageRating";
+                axios.get(url2).then(response => {
+                    this.average = response.data;
+                }).catch(error => {
+                    alert(error);
+                });
+
+                var url3 = "https://localhost:7177/Home/GetClicks";
+                axios.get(url3).then(response => {
+                    this.clicks = response.data;
+                }).catch(error => {
+                    alert(error);
+                })
+            }
+        }
+
+        var app = Vue.createApp(VueApp).mount("#app");
+
+
     </script>
-    
+
 }
