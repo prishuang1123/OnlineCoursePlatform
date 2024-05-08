@@ -41,10 +41,6 @@ namespace Project1.Data
                 new OrderDetail { OrderDetailID = 9, OrderID = 4, CourseID = 2, Quantity = 6, UnitPrice = 100, CreatedAt = DateTime.UtcNow },
                 new OrderDetail { OrderDetailID = 10, OrderID = 4, CourseID = 3, Quantity = 8, UnitPrice = 100, CreatedAt = DateTime.UtcNow },
                 new OrderDetail { OrderDetailID = 11, OrderID = 4, CourseID = 3, Quantity = 8, UnitPrice = 100, CreatedAt = DateTime.UtcNow }
-
-
-
-
                 );
 
             modelBuilder.Entity<Course>().HasData(
@@ -142,7 +138,7 @@ namespace Project1.Data
                 new Trainer
                 {
                     TrainerID = 1,
-                    MemberID = 4, 
+                    MemberID = 4,
                     TrainerName = "張三",
                     Specialization = "舉重",
                     Experience = "10年舉重訓練經驗",
@@ -241,6 +237,43 @@ namespace Project1.Data
                 }
             );
 
+            modelBuilder.Entity<CourseCategory>().HasData(
+                    new CourseCategory
+                    {
+                        CourseCategoryID = 1,
+                        CourseCategoryName = "運動"
+                    },
+                    new CourseCategory
+                    {
+                        CourseCategoryID = 2,
+                        CourseCategoryName = "技能"
+                    },
+                    new CourseCategory
+                    {
+                        CourseCategoryID = 3,
+                        CourseCategoryName = "陪玩"
+                    }
+                );
+
+            // 生成台灣全縣市的假資料
+            List<string> taiwanCities = new List<string>
+        {
+            "臺北市", "新北市", "桃園市", "臺中市", "臺南市", "高雄市",
+            "基隆市", "新竹市", "嘉義市", "新竹縣", "苗栗縣", "彰化縣",
+            "南投縣", "雲林縣", "嘉義縣", "屏東縣", "宜蘭縣", "花蓮縣",
+            "臺東縣", "澎湖縣", "金門縣", "連江縣"
+        };
+
+            int id = 1;
+            foreach (var city in taiwanCities)
+            {
+                modelBuilder.Entity<Location>().HasData(new Location
+                {
+                    LocationID = id++,
+                    LocationName = city
+                });
+            }
+
         }
         public virtual DbSet<Course> Course { get; set; }
 
@@ -269,7 +302,7 @@ namespace Project1.Data
         public virtual DbSet<Member> Member { get; set; }
         //public object Courses { get; internal set; }
 
-        public virtual DbSet<Blog> Blog { get; set; }  
+        public virtual DbSet<Blog> Blog { get; set; }
 
         public virtual DbSet<CourseCategory> CourseCategory { get; set; }
 
