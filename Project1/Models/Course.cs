@@ -25,7 +25,7 @@ namespace Project1.Models
 
 		[Required]
         [Display(Name = "課程分類")]
-        public string CourseCategory { get; set; } // 課程分類
+        public int CourseCategoryID { get; set; } // 課程分類
 
         [Display(Name = "課程類型")]
         public string? CourseType { get; set; } // 課程類型
@@ -40,7 +40,7 @@ namespace Project1.Models
         public decimal Price { get; set; } // 價格
 
         [Display(Name = "上課地點")]
-        public string? Location { get; set; } // 上課地址
+        public int? LocationID { get; set; } // 上課地址
 
         [Display(Name = "人數上限")]
         public int? MaxParticipants { get; set; } // 課程參加人數上限

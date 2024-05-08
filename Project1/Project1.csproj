@@ -10,15 +10,20 @@
   <ItemGroup>
     <Compile Remove="NewFolder1\**" />
     <Compile Remove="NewFolder2\**" />
+    <Compile Remove="Views\test\**" />
     <Content Remove="NewFolder1\**" />
     <Content Remove="NewFolder2\**" />
+    <Content Remove="Views\test\**" />
     <EmbeddedResource Remove="NewFolder1\**" />
     <EmbeddedResource Remove="NewFolder2\**" />
+    <EmbeddedResource Remove="Views\test\**" />
     <None Remove="NewFolder1\**" />
     <None Remove="NewFolder2\**" />
+    <None Remove="Views\test\**" />
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\testController.cs" />
     <Compile Remove="Models\CourseClicksRanking.cs" />
     <Compile Remove="Models\PTDetail.cs" />
   </ItemGroup>

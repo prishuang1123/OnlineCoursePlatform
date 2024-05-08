@@ -49,40 +49,65 @@ namespace Project1.Controllers
                                CourseName = c.CourseName,
                                Description = c.Description
                            }
-            ).Take(5);
+            ).Take(6);
 
             return Json(courses);
         }
 
         public async Task<JsonResult> GetAverageRating()
-        {
-            var quantityTotals = _ProjectDbContext.OrderDetail
-                .GroupBy(x => x.CourseID)
-                .Select(g => new { CourseID = g.Key, TotalQuantity = g.Sum(x => x.Quantity) }); // 將結果轉換為 List
+        { 
 
             var courses = (from c in _ProjectDbContext.Course
                            join cr in _ProjectDbContext.CourseRating on c.CourseID equals cr.CourseID into joined
-                           let totalQuantityRecord = quantityTotals.FirstOrDefault(q => q.CourseID == c.CourseID)
-                           let totalQuantity = totalQuantityRecord != null ? totalQuantityRecord.TotalQuantity : 0
-                           let top5 = totalQuantity
                            let averageRating = joined.GroupBy(r => r.CourseID)
                                          .Select(g => g.Average(r => r.Rating)).FirstOrDefault()
+                           orderby averageRating descending
                            select new CourseRankViewModel
                            {
                                CourseID = c.CourseID,
                                TrainerID = c.TrainerID,
-                               Clicks = c.Clicks,
-                               TotalQuantity = totalQuantity,
                                CourseAverageRating = Math.Round(averageRating, 2),
                                ThumbnailUrl = c.ThumbnailUrl,
                                CourseName = c.CourseName,
                                Description = c.Description
                            }
-            );
+            ).Take(6);
 
             return Json(courses);
         }
 
+        public async Task<JsonResult> GetClicks()
+        {
+
+            var courses = (from c in _ProjectDbContext.Course
+                           
+                           orderby c.Clicks descending
+                           select new CourseRankViewModel
+                           {
+                               CourseID = c.CourseID,
+                               TrainerID = c.TrainerID,
+                               ThumbnailUrl = c.ThumbnailUrl,
+                               CourseName = c.CourseName,
+                               Description = c.Description,
+                               Clicks = c.Clicks,
+                           }
+            ).Take(6);
+
+            return Json(courses);
+        }
+
+        public async Task<JsonResult> Search()
+        {
+            var alldata = (from c in _ProjectDbContext.Course
+                           join cr in _ProjectDbContext.Trainer on c.TrainerID equals cr.TrainerID into joined
+                           select new CourseRankViewModel
+                           {
+                            
+                           }
+            );
+
+            return Json(null);
+        }
 
         public IActionResult Privacy()
         {
