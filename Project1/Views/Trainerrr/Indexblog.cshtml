@@ -1,0 +1,91 @@
+﻿@model IEnumerable<Project1.Models.Course>
+
+@{
+    ViewData["Title"] = "Indexblog";
+}
+
+@section Styles{
+    <style>
+        .post {
+            margin-bottom: 20px;
+        }
+
+        .avatar img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .comment {
+            margin-top: 10px;
+        }
+        .color-1{
+        /*     background-color:goldenrod; */
+        
+        }
+    </style>
+}
+    <div class="container">
+    <!-- 在這裡放置標頭內容 -->
+        <h1 class="mt-5">訓練師部落格</h1>
+        @* <header> *@       
+            <!-- 在這裡放置訓練師頭像 -->
+        <div class="avatar col-md-4">
+            <img src="c:\users\鈞\source\repos\project1\project1\wwwroot\img\exclusive.jpg" />
+            </div>
+        @* </header> *@
+        <div class="row mt-5">
+            <div class="col-md-4">
+                <h2>評論</h2>
+            <div  id=" checkinPosts" ">
+                    <!-- 這裡使用動態加載打卡後的貼文 -->
+                </div>
+                
+            </div>
+            <div class="col-md-8">
+                <h2>發佈貼文</h2>
+                @* <form action="/post" method="POST"> *@
+                    <div class="mb-3">
+                        <input type="text" class="form-control" name="title" placeholder="標題" required>
+                    </div>
+                    <div class="mb-3">
+                        <textarea class="form-control" name="content" rows="5" placeholder="內容" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">發佈</button>
+                @* </form> *@
+                <h2 class="mt-5">已發佈的貼文</h2>
+                <div id="posts">
+                    <!-- 使用 JavaScript 動態加載已發佈的貼文 -->
+            </div>
+            <h2 class="mt-4">全部的課程</h2>
+            <ul id="courses" class="color-1 me-md-3">
+                <!-- 這裡使用動態加載已有的課程 -->
+                <div class="row">
+            @foreach (var item in Model)
+            {
+                        <div class="col-md-4">
+                            <!-- 添加 col-md-4 以保持卡片在大屏幕上的排列 -->
+                            <div class="card mb-4">
+                                <img src="商品圖片連結" class="card-img-top" alt="商品圖片">
+                                <div class="card-body">
+                                    <h5 class="card-title">@Html.DisplayFor(modelItem => item.CourseName)</h5>
+                                    <p class="card-text">@Html.DisplayFor(modelItem => item.Description)</p>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item">價格: @Html.DisplayFor(modelItem => item.Price)</li>
+                                    </ul>
+                                    <div class="card-footer">
+                                        <a href="@Url.Action("Details", "YourControllerName", new { id = item.CourseID })" class="btn btn-primary">查看</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+            }
+                </div>
+            </ul>
+
+            </div>
+        </div>
+    </div>
+
+
