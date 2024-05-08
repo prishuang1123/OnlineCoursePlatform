@@ -1,0 +1,113 @@
+﻿<button class="btn btn-danger" onclick="GetMember()">會員總覽</button>
+<input id="memberId"></input>
+<button class="btn btn-danger" onclick="GetMemberById()">會員查詢</button>
+<button class="btn btn-danger" onclick="updateMember()">會員修改</button>
+<button class="btn btn-danger" onclick="createMember()">會員新增</button>
+<button class="btn btn-danger" onclick="deleteMember()">會員刪除</button>
+
+
+@section Scripts
+{
+    <script>
+        var baseAddress = "https://localhost:7177"
+
+        //會員總覽
+        //fetch呼叫
+        function GetMember() {
+            fetch(`${baseAddress}/api/MembersAPI`, {
+                method: "GET",
+            }).then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+            }).then(data => {
+                alert(JSON.stringify(data));
+            }).catch(err => {
+                alert(err);
+            });
+        }
+
+        //會員查詢
+        function GetMemberById() {
+            var memberId = $("#memberId").val()
+            fetch(`${baseAddress}/api/MembersAPI/18`, {
+                method: "GET",
+            }).then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+            }).then(data => {
+                alert(JSON.stringify(data));
+            }).catch(err => {
+                alert(err);
+            });
+        }
+
+        //會員編輯
+        function updateMember() {
+            var data = {
+                "MemberID":"18",
+                "Name": "test edit",
+                "Email": "aaa",
+                "Phone": "000",
+            }
+            fetch(`${baseAddress}/api/MembersAPI/18`, {
+                method : "PUT",
+                body:JSON.stringify(data),
+                headers: {
+                    "content-type":"application/json"
+                }
+            }).then(response => {
+                if (response.ok) {
+                    return response.text();
+                }
+            }).then(data => {
+                alert(data);
+            }).catch(err => {
+                alert(err);
+            })
+        }
+
+        //新增會員
+        function createMember() {
+            var data = {
+                "MemberID":0,
+                "Name":"xxxx",
+                "Email":"yyyy",
+                "Phone":"zzzz",
+                //"IsTrainer":"true"
+            }
+            fetch(`${baseAddress}/api/MembersAPI`, {
+                method: "POST",
+                body: JSON.stringify(data),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }).then(response => {
+                if (response.ok) {
+                    return response.text();
+                } 
+            }).then(data => {
+                alert(data);
+            }).catch(err => {
+                alert('Error: ' + err.message);
+            });
+
+        }
+        
+        //刪除會員
+        function deleteMember(){
+            fetch(`${baseAddress}/api/MembersAPI/5`, {
+                method: "DELETE",
+            }).then(response => {
+                if (response.ok) {
+                    return response.text();
+                }
+            }).then(data => {
+                alert(data);
+            }).catch(err => {
+                alert(err);
+            })
+        }
+    </script>
+}
