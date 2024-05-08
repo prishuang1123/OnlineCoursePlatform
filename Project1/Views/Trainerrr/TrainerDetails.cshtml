@@ -1,0 +1,104 @@
+﻿@model Project1.Models.Trainer
+
+@{
+    ViewData["Title"] = "Trainer Details";
+}
+@section Styles {
+    <style>
+        .status-pass {
+            color: green;
+        }
+
+        .status-fail {
+            color: red;
+        }
+    </style>
+}
+
+<h1>Trainer Details</h1>
+
+<div>
+    <h4>Trainer</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Trainer ID
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TrainerID)
+        </dd>
+        <dt class="col-sm-2">
+            Member ID
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MemberID)
+        </dd>
+        <dt class="col-sm-2">
+            Trainer Name
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TrainerName)
+        </dd>
+        <dt class="col-sm-2">
+            Specialization
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Specialization)
+        </dd>
+        <dt class="col-sm-2">
+            Experience
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Experience)
+        </dd>
+        <dt class="col-sm-2">
+            Qualifications
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Qualifications)
+        </dd>
+        <dt class="col-sm-2">
+            Status
+        </dt>
+        <dd id="status" class="col-sm-10">
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+        <dt class="col-sm-2">
+            Photo
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Photo)
+        </dd>
+    </dl>
+
+    <!-- 表單，用於更改審核狀態 -->
+    <form id="changeStatusForm" asp-action="TrainerDetailsbtn" method="post">
+        <input type="hidden" name="trainerId" value="@Model.TrainerID" />
+        <button type="submit" name="newStatus" value="通過" class="btn btn-success newStatus-pass">批准</button>
+        <button type="submit" name="newStatus" value="未通過" class="btn btn-danger newStatus-fail">拒絕</button>
+    </form>
+
+    <a asp-action="TrainerIndex">返回訓練師列表</a>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // 當按鈕被點擊時
+            $('button[name="newStatus"]').click(function () {
+                // 獲取按鈕的值
+                var newStatus = $(this).val();
+                // 根據按鈕的值，為 Status 字段添加對應的類
+                if (newStatus === "通過") {
+                    $('#status').removeClass('status-fail').addClass('status-pass');
+                    // 彈出通過提示框
+                    alert('審核狀態已成功更改為通過。');
+                } else if (newStatus === "未通過") {
+                    $('#status').removeClass('status-pass').addClass('status-fail');
+                    // 彈出未通過提示框
+                    alert('審核狀態已成功更改為未通過。');
+                }
+            });
+        });
+    </script>
+}

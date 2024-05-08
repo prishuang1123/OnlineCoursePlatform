@@ -62,26 +62,31 @@
             <ul id="courses" class="color-1 me-md-3">
                 <!-- 這裡使用動態加載已有的課程 -->
                 <div class="row">
-            @foreach (var item in Model)
-            {
-                        <div class="col-md-4">
-                            <!-- 添加 col-md-4 以保持卡片在大屏幕上的排列 -->
-                            <div class="card mb-4">
-                                <img src="商品圖片連結" class="card-img-top" alt="商品圖片">
-                                <div class="card-body">
-                                    <h5 class="card-title">@Html.DisplayFor(modelItem => item.CourseName)</h5>
-                                    <p class="card-text">@Html.DisplayFor(modelItem => item.Description)</p>
-                                    <ul class="list-group list-group-flush">
-                                        <li class="list-group-item">價格: @Html.DisplayFor(modelItem => item.Price)</li>
-                                    </ul>
-                                    <div class="card-footer">
-                                        <a href="@Url.Action("Details", "YourControllerName", new { id = item.CourseID })" class="btn btn-primary">查看</a>
-                                    </div>
-                                </div>
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">   
+                    <div class="card-body d-flex flex-column justify-content-between">
+                        <div>
+                            <div style="max-width:100%; max-height:100%;">
+                                <img src="@item.ThumbnailUrl" class="card-img-top img-fluid" alt="Course Thumbnail" style="object-fit: cover;">
                             </div>
                         </div>
-            }
+                        <div>
+                            <h5 class="card-title mt-3">@item.CourseName</h5>
+                            <p class="card-text">@item.Description</p>
+                        </div>
+                        <div>
+                            <div class="btn-group mt-3" role="group">
+                                <a href="@Url.Action("Details", new { id = item.CourseID })" class="btn btn-primary mr-2">查看</a>
+                                
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </div>
+        }
+    </div>
             </ul>
 
             </div>

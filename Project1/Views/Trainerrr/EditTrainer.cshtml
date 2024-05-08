@@ -1,0 +1,38 @@
+﻿@model Project1.Models.Trainer
+@{
+    ViewData["Title"] = "EditTrainer";
+}
+<form asp-action="EditTrainer" method="post">
+    <div class="form-group">
+        <label asp-for="TrainerName">Trainer Name:</label>
+        <input asp-for="TrainerName" class="form-control" />
+        <span asp-validation-for="TrainerName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Specialization">Specialization:</label>
+        <input asp-for="Specialization" class="form-control" />
+        <span asp-validation-for="Specialization" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Experience">Experience:</label>
+        <input asp-for="Experience" class="form-control" />
+        <span asp-validation-for="Experience" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Qualifications">Qualifications:</label>
+        <input asp-for="Qualifications" class="form-control" />
+        <span asp-validation-for="Qualifications" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Status">Status:</label>
+        <input asp-for="Status" class="form-control" />
+        <span asp-validation-for="Status" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Photo">Photo:</label>
+        <input asp-for="Photo" class="form-control" />
+        <span asp-validation-for="Photo" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="TrainerIndex">Back to List</a>
+</form>
