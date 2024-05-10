@@ -320,6 +320,7 @@ namespace Project1.Controllers
         {
             return _context.Trainer.Any(e => e.TrainerID == id);
         }
+
     }
 }
 

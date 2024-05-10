@@ -1,0 +1,24 @@
+﻿@model List<Project1.Models.Trainer>
+<div id="search_results_container">
+    <!-- 显示 Trainer 搜索结果 -->
+    <h3>Trainer</h3>
+    <ul>
+        @if(Model != null)
+        {         
+            @foreach (var trainer in Model)
+            {
+                <li>@trainer.TrainerName</li>
+                <li>@trainer.TrainerID</li>
+            }
+        }
+    </ul>
+
+</div>
+    <!-- 显示 Course 搜索结果 -->
+@*     <h3>Courses</h3>
+    <ul>
+        @foreach (var course in Model)
+        {
+            <li>@course.CourseName</li>
+        }
+    </ul> *@
