@@ -98,9 +98,21 @@ namespace Project1.Controllers
         {
             // 查询 Trainer 表中匹配 TrainerName 的数据
             var trainers = _ProjectDbContext.Trainer.Where(t => t.TrainerName.Contains(searchTerm)).ToList();
+            var courses = _ProjectDbContext.Course.Where(t => t.CourseName.Contains(searchTerm)).ToList();
+            var location = _ProjectDbContext.Location.FirstOrDefault(t => t.LocationName.Contains(searchTerm));
+            if(location != null)
+            {
+                var locationID = location.LocationID;
+                courses = _ProjectDbContext.Course.Where(t => t.LocationID == locationID).ToList();
+            }
+            var viewmodel = new SearchViewModel
+            {
+                trainers = trainers,
+                courses = courses,
+            };
 
             // 返回部分视图，并将查询结果传递给视图
-            return PartialView("_SearchResults", trainers);
+            return PartialView("_SearchResults", viewmodel);
         }
 
         public IActionResult Privacy()

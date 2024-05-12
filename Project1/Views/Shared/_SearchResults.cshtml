@@ -1,11 +1,11 @@
-﻿@model List<Project1.Models.Trainer>
+﻿@model SearchViewModel
 <div id="search_results_container">
     <!-- 显示 Trainer 搜索结果 -->
     <h3>Trainer</h3>
     <ul>
         @if(Model != null)
         {         
-            @foreach (var trainer in Model)
+            @foreach (var trainer in Model.trainers)
             {
                 <li>@trainer.TrainerName</li>
                 <li>@trainer.TrainerID</li>
@@ -13,12 +13,16 @@
         }
     </ul>
 
-</div>
-    <!-- 显示 Course 搜索结果 -->
-@*     <h3>Courses</h3>
+    <h3>Course</h3>
     <ul>
-        @foreach (var course in Model)
+        @if (Model != null)
         {
-            <li>@course.CourseName</li>
+            @foreach (var course in Model.courses)
+            {
+                <li>@course.CourseName</li>
+                <li>@course.CourseID</li>
+            }
         }
-    </ul> *@
+    </ul>
+
+</div>

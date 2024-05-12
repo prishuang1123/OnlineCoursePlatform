@@ -2,8 +2,6 @@
 
 namespace Project1.ViewModels
 {
-    
-
 
     public class SearchViewModel
     {

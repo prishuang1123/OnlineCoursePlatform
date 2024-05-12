@@ -81,15 +81,9 @@
             </nav>
         </div>
         <!-- Search Form -->
-        <div class="search_input" id="search_input_box">
-            <div class="container">
+        <div cass="search_input" id="search_input_box">
+            <div class="conltainer">
                 <form id="search_form" class="d-flex justify-content-between">
-                    <div class="col-lg-2">
-                        <select id="search_catagory" class="">
-                            <option value="trainer">訓練師</option>
-                            <option value="course">課程</option>
-                        </select>
-                    </div>
                     <div class="col-lg-8">
                         <input type="text" class="form-control" id="search_input" placeholder="Search Here">
                     </div>
@@ -241,9 +235,9 @@
                     return;
                 }
                 debounceTimeout = setTimeout(function () {
+                    var url = "https://localhost:7177/Home/Searchtrainers";
                     // 向服务器发送异步请求
-                    var url1 = "https://localhost:7177/Home/Searchtrainers";
-                    axios.get(url1, { params: { searchTerm: searchTerm } }).then(response => {
+                    axios.get(url, { params: { searchTerm: searchTerm } }).then(response => {
                         $('#search_results_container').html(response.data).show();
                     }).catch(error => {
                         alert(error);
