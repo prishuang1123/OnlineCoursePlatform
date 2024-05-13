@@ -100,10 +100,16 @@ namespace Project1.Controllers
             var trainers = _ProjectDbContext.Trainer.Where(t => t.TrainerName.Contains(searchTerm)).ToList();
             var courses = _ProjectDbContext.Course.Where(t => t.CourseName.Contains(searchTerm)).ToList();
             var location = _ProjectDbContext.Location.FirstOrDefault(t => t.LocationName.Contains(searchTerm));
+            var category = _ProjectDbContext.CourseCategory.FirstOrDefault(t => t.CourseCategoryName.Contains(searchTerm));
             if(location != null)
             {
                 var locationID = location.LocationID;
                 courses = _ProjectDbContext.Course.Where(t => t.LocationID == locationID).ToList();
+            }
+            if(category != null)
+            {
+                var categoryID = category.CourseCategoryID;
+                courses = _ProjectDbContext.Course.Where(t => t.CourseCategoryID == categoryID).ToList();
             }
             var viewmodel = new SearchViewModel
             {

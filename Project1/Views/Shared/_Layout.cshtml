@@ -224,7 +224,7 @@
         $(document).ready(function () {
             let debounceTimeout;
 
-            $('#search_input').on('keyup', function () {
+            $('#search_input').on('input', function () {
                 clearTimeout(debounceTimeout); // 清除之前的定时器
 
                 var searchTerm = $(this).val().trim(); // 获取输入框的值

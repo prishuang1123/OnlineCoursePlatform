@@ -1,27 +1,30 @@
 ﻿@model SearchViewModel
 <div id="search_results_container">
     <!-- 显示 Trainer 搜索结果 -->
-    <h3>Trainer</h3>
     <ul>
-        @if(Model != null)
-        {         
+        @if (Model != null)
+        {
             @foreach (var trainer in Model.trainers)
             {
-                <li>@trainer.TrainerName</li>
+                <li><a asp-action="TrainerIndex" asp-controller="Trainerrr" asp-route-id="@trainer.TrainerID">@trainer.TrainerName</a></li>
                 <li>@trainer.TrainerID</li>
             }
         }
     </ul>
-
-    <h3>Course</h3>
     <ul>
         @if (Model != null)
         {
             @foreach (var course in Model.courses)
             {
-                <li>@course.CourseName</li>
+                <li><a asp-action="Index" asp-controller="Trainerrr" asp-route-id="@course.CourseID">@course.CourseName</a></li>
                 <li>@course.CourseID</li>
             }
+        }
+    </ul>
+    <ul>
+        @if (!Model.trainers.Any() && !Model.courses.Any())
+        {
+            <li>找不到相關的資料</li>
         }
     </ul>
 
