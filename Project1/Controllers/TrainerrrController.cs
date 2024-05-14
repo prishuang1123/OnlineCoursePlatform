@@ -321,6 +321,16 @@ namespace Project1.Controllers
             return _context.Trainer.Any(e => e.TrainerID == id);
         }
 
+        public IActionResult AllTrainers()
+        {
+            return View();
+        }
+
+        public JsonResult getTrainers()
+        {
+            var trainers = _context.Trainer;
+            return Json(trainers);
+        }
     }
 }
 

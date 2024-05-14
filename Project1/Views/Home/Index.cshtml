@@ -125,7 +125,7 @@
                     <div class="product-details text-white">
                         <h5 class="mb-3 text-white product-title">{{ item.courseName }}</h5>
                         <p class="mb-0">{{ item.description }}</p>
-                        <p class="mb-0">課程售量: {{ item.courseAverageRating }}</p>
+                        <p class="mb-0">課程評分: {{ item.courseAverageRating }}</p>
                         <div class="prd-bottom mt-3">
                             <a :href="`/average/${item.id}`" class="social-info text-white">
                                 <span class="lnr lnr-move"></span>
@@ -145,7 +145,7 @@
                     <div class="product-details text-white">
                         <h5 class="mb-3 text-white product-title">{{ item.courseName }}</h5>
                         <p class="mb-0">{{ item.description }}</p>
-                        <p class="mb-0">課程售量: {{ item.clicks }}</p>
+                        <p class="mb-0">課程點擊數: {{ item.clicks }}</p>
                         <div class="prd-bottom mt-3">
                             <a :href="`/clicks/${item.id}`" class="social-info text-white">
                                 <span class="lnr lnr-move"></span>

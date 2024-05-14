@@ -55,6 +55,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="DTO\" />
     <Folder Include="Views\Shared\Partials\" />
     <Folder Include="wwwroot\img\MemberPhoto\" />
     <Folder Include="wwwroot\img\CoursePhoto\" />
