@@ -1,0 +1,39 @@
+﻿<section id="app" class="lattest-product-area pb-40 category-list">
+    <div class="container">
+        <div class="row justify-content-center">
+            <h1>訓練師</h1>
+            <div v-for="trainer in trainers" class="col-lg-4 col-md-6 mb-0">
+                <div class="single-product position-relative overflow-hidden">
+                <img :src="trainer.photo" class="img-fluid" alt="Trainer's photo"/>
+                    <div class="product-details text-black">
+                        <h5 class="mb-3 text-white product-title">{{trainer.trainerName}}</h5>
+                        <p class="mb-0">專長:{{trainer.specialization}}</p>
+                        <p class="mb-0">經驗:{{trainer.experience}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts{
+    <script>
+        var vueApp = {
+            data() {
+                return {
+                    trainers: [],
+                }
+            },
+            mounted() {
+                var url = "https://localhost:7177/Trainerrr/getTrainers";
+                axios.get(url).then(response => {
+                    this.trainers = response.data;
+                }).catch(error => {
+                    alert(error);
+                });
+            }
+        }
+
+        var app = Vue.createApp(vueApp).mount('#app');
+    </script>
+}

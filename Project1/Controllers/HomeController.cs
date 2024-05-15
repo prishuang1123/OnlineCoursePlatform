@@ -1,11 +1,9 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Project1.Data;
-using Project1.DTO;
 using Project1.Migrations;
 using Project1.Models;
-using Project1.ViewModel;
 using Project1.ViewModels;
 using System.Diagnostics;
 using System.Linq;
@@ -16,7 +14,6 @@ namespace Project1.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ProjectDbContext _ProjectDbContext;
-        
 
         public HomeController(ILogger<HomeController> logger, ProjectDbContext ProjectDbConext)
         {
@@ -33,7 +30,7 @@ namespace Project1.Controllers
         {
             var quantityTotals = _ProjectDbContext.OrderDetail
                 .GroupBy(x => x.CourseID)
-                .Select(g => new { CourseID = g.Key, TotalQuantity = g.Sum(x => x.Quantity) }); // �N���G�ഫ�� List
+                .Select(g => new { CourseID = g.Key, TotalQuantity = g.Sum(x => x.Quantity) }); // 將結果轉換為 List
 
             var courses = (from c in _ProjectDbContext.Course
                            join cr in _ProjectDbContext.CourseRating on c.CourseID equals cr.CourseID into joined
@@ -96,17 +93,31 @@ namespace Project1.Controllers
             return Json(courses);
         }
 
-        public async Task<JsonResult> Search()
+        public IActionResult Searchtrainers(string searchTerm)
         {
-            var alldata = (from c in _ProjectDbContext.Course
-                           join cr in _ProjectDbContext.Trainer on c.TrainerID equals cr.TrainerID into joined
-                           select new CourseRankViewModel
-                           {
-                            
-                           }
-            );
+            // 查询 Trainer 表中匹配 TrainerName 的数据
+            var trainers = _ProjectDbContext.Trainer.Where(t => t.TrainerName.Contains(searchTerm)).ToList();
+            var courses = _ProjectDbContext.Course.Where(t => t.CourseName.Contains(searchTerm)).ToList();
+            var location = _ProjectDbContext.Location.FirstOrDefault(t => t.LocationName.Contains(searchTerm));
+            var category = _ProjectDbContext.CourseCategory.FirstOrDefault(t => t.CourseCategoryName.Contains(searchTerm));
+            if(location != null)
+            {
+                var locationID = location.LocationID;
+                courses = _ProjectDbContext.Course.Where(t => t.LocationID == locationID).ToList();
+            }
+            if(category != null)
+            {
+                var categoryID = category.CourseCategoryID;
+                courses = _ProjectDbContext.Course.Where(t => t.CourseCategoryID == categoryID).ToList();
+            }
+            var viewmodel = new SearchViewModel
+            {
+                trainers = trainers,
+                courses = courses,
+            };
 
-            return Json(null);
+            // 返回部分视图，并将查询结果传递给视图
+            return PartialView("_SearchResults", viewmodel);
         }
 
         public IActionResult Privacy()

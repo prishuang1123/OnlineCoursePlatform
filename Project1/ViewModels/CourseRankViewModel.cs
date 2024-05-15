@@ -1,7 +1,7 @@
 ﻿using Project1.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace Project1.ViewModel
+namespace Project1.ViewModels
 {
     public class CourseRankViewModel
     {

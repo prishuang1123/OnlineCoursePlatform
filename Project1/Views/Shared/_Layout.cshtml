@@ -25,7 +25,7 @@
             <nav class="navbar navbar-expand-lg navbar-light main_box">
                 <div class="container">
                     <!-- Brand and toggle get grouped for better mobile display -->
-                    <a class="navbar-brand logo_h" href="index.html">
+                    <a class="navbar-brand logo_h" asp-area="" asp-controller="Home" asp-action="Index">
                         <h3>寵護動</h3>
                     </a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -39,32 +39,6 @@
                     <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
                         <ul class="nav navbar-nav menu_nav ml-auto">
                             <li class="nav-item active"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                   @*          <li class="nav-item submenu dropdown">
-                                <a href="" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
-                                   aria-haspopup="true" aria-expanded="false">Shop</a>
-                                <ul class="dropdown-menu">
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="single-product.html">Product Details</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="checkout.html">Product Checkout</a>
-                                    </li>
-                                    <li class="nav-item"><a class="nav-link" href="cart.html">Shopping Cart</a></li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="confirmation.html">Confirmation</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="nav-item submenu dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
-                                   aria-haspopup="true" aria-expanded="false">Blog</a>
-                                <ul class="dropdown-menu">
-                                    <li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="single-blog.html">Blog Details</a>
-                                    </li>
-                                </ul>
-                            </li> *@
                             <li class="nav-item submenu dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
                                    aria-haspopup="true" aria-expanded="false">購物車</a>
@@ -76,7 +50,7 @@
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
                                    aria-haspopup="true" aria-expanded="false">訓練師</a>
                                 <ul class="dropdown-menu">
-                                    <li class="nav-item"><a class="nav-link">訓練師頁面</a></li>
+                                    <li class="nav-item"><a class="nav-link" asp-controller="Trainerrr" asp-action="AllTrainers">訓練師頁面</a></li>
                                     <li class="nav-item"><a class="nav-link" asp-controller="Trainerrr" asp-action="Indexblog">我的部落格</a></li>
                                     <li class="nav-item"><a class="nav-link" asp-controller="Trainerrr" asp-action="Index">課程</a></li>
                                     <li class="nav-item"><a class="nav-link" asp-controller="Trainerrr" asp-action="TrainerIndex">訓練師審核</a></li>
@@ -102,19 +76,27 @@
                                 <button class="search"><span class="lnr lnr-magnifier" id="search"></span></button>
                             </li>
                         </ul>
-
                     </div>
                 </div>
             </nav>
         </div>
         <!-- Search Form -->
-        <div class="search_input" id="search_input_box">
-            <div class="container">
-                <form class="d-flex justify-content-between">
-                    <input type="text" class="form-control" id="search_input" placeholder="Search Here">
-                    <button type="submit" class="btn"></button>
-                    <span class="lnr lnr-cross" id="close_search" title="Close Search"></span>
+        <div cass="search_input" id="search_input_box">
+            <div class="conltainer">
+                <form id="search_form" class="d-flex justify-content-between">
+                    <div class="col-lg-8">
+                        <input type="text" class="form-control" id="search_input" placeholder="Search Here">
+                    </div>
+                    <div class="col-lg-2">
+                        <span class="lnr lnr-cross form-control" id="close_search" title="Close Search"></span>
+                    </div>
                 </form>
+                <div id="search_results" class="search_results" style="text-align:left">
+                    <div id="search_results_container">
+                        <ul>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
@@ -124,14 +106,13 @@
             <div class="row">
                 <div class="col-12" style="height:200px;"></div>
             </div>
-
         </div>
     </section>
 
     <div class="container">
         <main role="main" class="pb-3">
             <partial name="_Notifications" />
-            @RenderBody()
+                    @RenderBody()
         </main>
     </div>
 
@@ -234,6 +215,54 @@
     <script src="/js/jquery.magnific-popup.min.js"></script>
     <script src="/js/owl.carousel.min.js"></script>
     <script src="/js/main.js"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.8/axios.min.js"
+            integrity="sha512-PJa3oQSLWRB7wHZ7GQ/g+qyv6r4mbuhmiDb8BjSFZ8NZ2a42oTtAq5n0ucWAwcQDlikAtkub+tPVCw4np27WCg=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://unpkg.com/vue@3.4.25/dist/vue.global.js"></script>
+        @await RenderSectionAsync("Scripts", required: false)
+    <script>
+        $(document).ready(function () {
+            let debounceTimeout;
+
+            $('#search_input').on('input', function () {
+                clearTimeout(debounceTimeout); // 清除之前的定时器
+
+                var searchTerm = $(this).val().trim(); // 获取输入框的值
+
+                // 如果输入框的值为空，则隐藏搜索结果下拉框
+                if (searchTerm === '') {
+                    $('#search_results_container').html('').hide();
+                    return;
+                }
+                debounceTimeout = setTimeout(function () {
+                    var url = "https://localhost:7177/Home/Searchtrainers";
+                    // 向服务器发送异步请求
+                    axios.get(url, { params: { searchTerm: searchTerm } }).then(response => {
+                        $('#search_results_container').html(response.data).show();
+                    }).catch(error => {
+                        alert(error);
+                    });
+                }, 200); // 设置延迟时间，比如 300 毫秒
+            });
+        });
+
+
+
+
+        // $.ajax({
+        //     url: 'https://localhost:7177/Home/Searchtrainers', // 指定搜索的Action方法
+        //     type: 'GET',
+        //     data: { searchTerm: searchTerm }, // 将搜索词作为参数发送
+        //     success: function (data) {
+        //         // 将搜索结果渲染到下拉框中并显示
+        //         this.
+        //         $('#search_results_container').html(data).show();
+        //         console.log(data)
+        //         console.log(searchTerm)
+        //     }
+        // });
+
+    </script>
+
 </body>
 </html>
