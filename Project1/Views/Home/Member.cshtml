@@ -46,10 +46,15 @@
         //新增會員
         function CreateMember() {
             var data = {
-                "MemberID":0,
-                "Name":"Wayne",
-                "Email":"zzzzz",
-                "Phone":"123454321",
+                "memberID": 0,
+                "name": "Wayne",
+                "email": "sssssss",
+                "phone": "123454322",
+                "birthday": "2023-01-01",
+                "registrationDate": "2023-01-01",
+                "residenceArea": "",
+                "isTrainer": false,
+                "isAdministrator": false
             }
             fetch(`${baseAddress}/api/MembersAPI`, {
                 method:"POST",
@@ -71,12 +76,12 @@
         //編輯會員
         function EditMember() {
             var data = {
-                "MemberID":"18",
+                "MemberID":"55",
                 "Name":"xxx",
                 "Email":"yyy",
                 "Phone":"zzz",
             }
-            fetch(`${baseAddress}/api/MembersAPI/18`, {
+            fetch(`${baseAddress}/api/MembersAPI/55`, {
                 method: "PUT",
                 body: JSON.stringify(data),
                 headers: {

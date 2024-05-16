@@ -17,6 +17,11 @@ namespace Project1.Data
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Member>()
+        .Property(b => b.IsTrainer)
+        .IsRequired(false); // 設定為允許null
+
+
             modelBuilder.Entity<ShoppingCart>().HasData(
                 new ShoppingCart { CartID = 1, CourseID = 1, Quantity = 1, CreatedAt = DateTime.UtcNow }
                 );

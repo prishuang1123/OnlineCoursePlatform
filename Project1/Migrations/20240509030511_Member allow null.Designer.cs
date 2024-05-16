@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Project1.Data;
 
@@ -11,9 +12,11 @@ using Project1.Data;
 namespace Project1.Migrations
 {
     [DbContext(typeof(ProjectDbContext))]
-    partial class ProjectDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240509030511_Member allow null")]
+    partial class Memberallownull
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -149,7 +152,7 @@ namespace Project1.Migrations
                             CourseCategory = "技能",
                             CourseName = "幼犬訓練",
                             CourseType = "一對一",
-                            CreatedAt = new DateTime(2024, 5, 9, 3, 14, 9, 618, DateTimeKind.Utc).AddTicks(1673),
+                            CreatedAt = new DateTime(2024, 5, 9, 3, 5, 11, 10, DateTimeKind.Utc).AddTicks(4513),
                             Description = "幼犬基本訓練",
                             EnrollmentCount = 0,
                             Location = "台北",
@@ -157,7 +160,7 @@ namespace Project1.Migrations
                             PetCategory = "狗",
                             Price = 100m,
                             TrainerID = 1,
-                            UpdatedAt = new DateTime(2024, 5, 9, 3, 14, 9, 618, DateTimeKind.Utc).AddTicks(1674)
+                            UpdatedAt = new DateTime(2024, 5, 9, 3, 5, 11, 10, DateTimeKind.Utc).AddTicks(4514)
                         },
                         new
                         {
@@ -167,7 +170,7 @@ namespace Project1.Migrations
                             CourseCategory = "技能",
                             CourseName = "幼犬訓練",
                             CourseType = "一對一",
-                            CreatedAt = new DateTime(2024, 5, 9, 3, 14, 9, 618, DateTimeKind.Utc).AddTicks(1677),
+                            CreatedAt = new DateTime(2024, 5, 9, 3, 5, 11, 10, DateTimeKind.Utc).AddTicks(4517),
                             Description = "幼犬基本訓練",
                             EnrollmentCount = 0,
                             Location = "台北",
@@ -175,7 +178,7 @@ namespace Project1.Migrations
                             PetCategory = "狗",
                             Price = 100m,
                             TrainerID = 1,
-                            UpdatedAt = new DateTime(2024, 5, 9, 3, 14, 9, 618, DateTimeKind.Utc).AddTicks(1677)
+                            UpdatedAt = new DateTime(2024, 5, 9, 3, 5, 11, 10, DateTimeKind.Utc).AddTicks(4517)
                         },
                         new
                         {
@@ -185,7 +188,7 @@ namespace Project1.Migrations
                             CourseCategory = "技能",
                             CourseName = "幼犬訓練",
                             CourseType = "一對一",
-                            CreatedAt = new DateTime(2024, 5, 9, 3, 14, 9, 618, DateTimeKind.Utc).AddTicks(1679),
+                            CreatedAt = new DateTime(2024, 5, 9, 3, 5, 11, 10, DateTimeKind.Utc).AddTicks(4548),
                             Description = "幼犬基本訓練",
                             EnrollmentCount = 0,
                             Location = "台北",
@@ -193,7 +196,7 @@ namespace Project1.Migrations
                             PetCategory = "狗",
                             Price = 100m,
                             TrainerID = 1,
-                            UpdatedAt = new DateTime(2024, 5, 9, 3, 14, 9, 618, DateTimeKind.Utc).AddTicks(1680)
+                            UpdatedAt = new DateTime(2024, 5, 9, 3, 5, 11, 10, DateTimeKind.Utc).AddTicks(4549)
                         },
                         new
                         {
@@ -203,7 +206,7 @@ namespace Project1.Migrations
                             CourseCategory = "技能",
                             CourseName = "幼犬訓練",
                             CourseType = "一對一",
-                            CreatedAt = new DateTime(2024, 5, 9, 3, 14, 9, 618, DateTimeKind.Utc).AddTicks(1682),
+                            CreatedAt = new DateTime(2024, 5, 9, 3, 5, 11, 10, DateTimeKind.Utc).AddTicks(4551),
                             Description = "幼犬基本訓練",
                             EnrollmentCount = 0,
                             Location = "台北",
@@ -211,7 +214,7 @@ namespace Project1.Migrations
                             PetCategory = "狗",
                             Price = 100m,
                             TrainerID = 1,
-                            UpdatedAt = new DateTime(2024, 5, 9, 3, 14, 9, 618, DateTimeKind.Utc).AddTicks(1682)
+                            UpdatedAt = new DateTime(2024, 5, 9, 3, 5, 11, 10, DateTimeKind.Utc).AddTicks(4552)
                         },
                         new
                         {
@@ -221,7 +224,7 @@ namespace Project1.Migrations
                             CourseCategory = "技能",
                             CourseName = "幼犬訓練",
                             CourseType = "一對一",
-                            CreatedAt = new DateTime(2024, 5, 9, 3, 14, 9, 618, DateTimeKind.Utc).AddTicks(1684),
+                            CreatedAt = new DateTime(2024, 5, 9, 3, 5, 11, 10, DateTimeKind.Utc).AddTicks(4554),
                             Description = "幼犬基本訓練",
                             EnrollmentCount = 0,
                             Location = "台北",
@@ -229,7 +232,7 @@ namespace Project1.Migrations
                             PetCategory = "狗",
                             Price = 100m,
                             TrainerID = 1,
-                            UpdatedAt = new DateTime(2024, 5, 9, 3, 14, 9, 618, DateTimeKind.Utc).AddTicks(1684)
+                            UpdatedAt = new DateTime(2024, 5, 9, 3, 5, 11, 10, DateTimeKind.Utc).AddTicks(4554)
                         });
                 });
 
@@ -288,7 +291,7 @@ namespace Project1.Migrations
                             Comment = "好學習",
                             CourseID = 1,
                             Rating = 5,
-                            RatingDate = new DateTime(2024, 5, 9, 3, 14, 9, 618, DateTimeKind.Utc).AddTicks(1712),
+                            RatingDate = new DateTime(2024, 5, 9, 3, 5, 11, 10, DateTimeKind.Utc).AddTicks(4582),
                             TrainerID = 1,
                             UserID = 1
                         },
@@ -298,7 +301,7 @@ namespace Project1.Migrations
                             Comment = "好學習",
                             CourseID = 1,
                             Rating = 4,
-                            RatingDate = new DateTime(2024, 5, 9, 3, 14, 9, 618, DateTimeKind.Utc).AddTicks(1713),
+                            RatingDate = new DateTime(2024, 5, 9, 3, 5, 11, 10, DateTimeKind.Utc).AddTicks(4583),
                             TrainerID = 1,
                             UserID = 3
                         },
@@ -308,7 +311,7 @@ namespace Project1.Migrations
                             Comment = "好學習",
                             CourseID = 1,
                             Rating = 3,
-                            RatingDate = new DateTime(2024, 5, 9, 3, 14, 9, 618, DateTimeKind.Utc).AddTicks(1715),
+                            RatingDate = new DateTime(2024, 5, 9, 3, 5, 11, 10, DateTimeKind.Utc).AddTicks(4585),
                             TrainerID = 1,
                             UserID = 2
                         },
@@ -318,7 +321,7 @@ namespace Project1.Migrations
                             Comment = "好學習",
                             CourseID = 2,
                             Rating = 4,
-                            RatingDate = new DateTime(2024, 5, 9, 3, 14, 9, 618, DateTimeKind.Utc).AddTicks(1716),
+                            RatingDate = new DateTime(2024, 5, 9, 3, 5, 11, 10, DateTimeKind.Utc).AddTicks(4586),
                             TrainerID = 1,
                             UserID = 1
                         },
@@ -328,7 +331,7 @@ namespace Project1.Migrations
                             Comment = "好學習",
                             CourseID = 2,
                             Rating = 5,
-                            RatingDate = new DateTime(2024, 5, 9, 3, 14, 9, 618, DateTimeKind.Utc).AddTicks(1742),
+                            RatingDate = new DateTime(2024, 5, 9, 3, 5, 11, 10, DateTimeKind.Utc).AddTicks(4587),
                             TrainerID = 1,
                             UserID = 3
                         },
@@ -338,7 +341,7 @@ namespace Project1.Migrations
                             Comment = "好學習",
                             CourseID = 2,
                             Rating = 5,
-                            RatingDate = new DateTime(2024, 5, 9, 3, 14, 9, 618, DateTimeKind.Utc).AddTicks(1743),
+                            RatingDate = new DateTime(2024, 5, 9, 3, 5, 11, 10, DateTimeKind.Utc).AddTicks(4588),
                             TrainerID = 1,
                             UserID = 2
                         },
@@ -348,7 +351,7 @@ namespace Project1.Migrations
                             Comment = "好學習",
                             CourseID = 3,
                             Rating = 5,
-                            RatingDate = new DateTime(2024, 5, 9, 3, 14, 9, 618, DateTimeKind.Utc).AddTicks(1744),
+                            RatingDate = new DateTime(2024, 5, 9, 3, 5, 11, 10, DateTimeKind.Utc).AddTicks(4589),
                             TrainerID = 1,
                             UserID = 1
                         },
@@ -358,7 +361,7 @@ namespace Project1.Migrations
                             Comment = "好學習",
                             CourseID = 3,
                             Rating = 5,
-                            RatingDate = new DateTime(2024, 5, 9, 3, 14, 9, 618, DateTimeKind.Utc).AddTicks(1745),
+                            RatingDate = new DateTime(2024, 5, 9, 3, 5, 11, 10, DateTimeKind.Utc).AddTicks(4590),
                             TrainerID = 1,
                             UserID = 3
                         },
@@ -368,7 +371,7 @@ namespace Project1.Migrations
                             Comment = "好學習",
                             CourseID = 3,
                             Rating = 3,
-                            RatingDate = new DateTime(2024, 5, 9, 3, 14, 9, 618, DateTimeKind.Utc).AddTicks(1746),
+                            RatingDate = new DateTime(2024, 5, 9, 3, 5, 11, 10, DateTimeKind.Utc).AddTicks(4591),
                             TrainerID = 1,
                             UserID = 2
                         },
@@ -378,7 +381,7 @@ namespace Project1.Migrations
                             Comment = "好學習",
                             CourseID = 4,
                             Rating = 3,
-                            RatingDate = new DateTime(2024, 5, 9, 3, 14, 9, 618, DateTimeKind.Utc).AddTicks(1747),
+                            RatingDate = new DateTime(2024, 5, 9, 3, 5, 11, 10, DateTimeKind.Utc).AddTicks(4593),
                             TrainerID = 1,
                             UserID = 1
                         },
@@ -388,7 +391,7 @@ namespace Project1.Migrations
                             Comment = "好學習",
                             CourseID = 4,
                             Rating = 3,
-                            RatingDate = new DateTime(2024, 5, 9, 3, 14, 9, 618, DateTimeKind.Utc).AddTicks(1748),
+                            RatingDate = new DateTime(2024, 5, 9, 3, 5, 11, 10, DateTimeKind.Utc).AddTicks(4594),
                             TrainerID = 1,
                             UserID = 3
                         },
@@ -398,7 +401,7 @@ namespace Project1.Migrations
                             Comment = "好學習",
                             CourseID = 4,
                             Rating = 4,
-                            RatingDate = new DateTime(2024, 5, 9, 3, 14, 9, 618, DateTimeKind.Utc).AddTicks(1749),
+                            RatingDate = new DateTime(2024, 5, 9, 3, 5, 11, 10, DateTimeKind.Utc).AddTicks(4595),
                             TrainerID = 1,
                             UserID = 2
                         },
@@ -408,7 +411,7 @@ namespace Project1.Migrations
                             Comment = "好學習",
                             CourseID = 5,
                             Rating = 5,
-                            RatingDate = new DateTime(2024, 5, 9, 3, 14, 9, 618, DateTimeKind.Utc).AddTicks(1751),
+                            RatingDate = new DateTime(2024, 5, 9, 3, 5, 11, 10, DateTimeKind.Utc).AddTicks(4596),
                             TrainerID = 1,
                             UserID = 1
                         },
@@ -418,7 +421,7 @@ namespace Project1.Migrations
                             Comment = "好學習",
                             CourseID = 5,
                             Rating = 5,
-                            RatingDate = new DateTime(2024, 5, 9, 3, 14, 9, 618, DateTimeKind.Utc).AddTicks(1752),
+                            RatingDate = new DateTime(2024, 5, 9, 3, 5, 11, 10, DateTimeKind.Utc).AddTicks(4597),
                             TrainerID = 1,
                             UserID = 3
                         },
@@ -428,7 +431,7 @@ namespace Project1.Migrations
                             Comment = "好學習",
                             CourseID = 5,
                             Rating = 5,
-                            RatingDate = new DateTime(2024, 5, 9, 3, 14, 9, 618, DateTimeKind.Utc).AddTicks(1753),
+                            RatingDate = new DateTime(2024, 5, 9, 3, 5, 11, 10, DateTimeKind.Utc).AddTicks(4598),
                             TrainerID = 1,
                             UserID = 2
                         });
@@ -528,6 +531,7 @@ namespace Project1.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool?>("IsTrainer")
+                        .IsRequired()
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
@@ -562,7 +566,7 @@ namespace Project1.Migrations
                             IsTrainer = false,
                             Name = "John Doe",
                             Phone = "1234567890",
-                            RegistrationDate = new DateTime(2024, 5, 9, 11, 14, 9, 618, DateTimeKind.Local).AddTicks(1790),
+                            RegistrationDate = new DateTime(2024, 5, 9, 11, 5, 11, 10, DateTimeKind.Local).AddTicks(4634),
                             ResidenceArea = "Taipei"
                         },
                         new
@@ -574,7 +578,7 @@ namespace Project1.Migrations
                             IsTrainer = false,
                             Name = "Jane Smith",
                             Phone = "0987654321",
-                            RegistrationDate = new DateTime(2024, 5, 9, 11, 14, 9, 618, DateTimeKind.Local).AddTicks(1794),
+                            RegistrationDate = new DateTime(2024, 5, 9, 11, 5, 11, 10, DateTimeKind.Local).AddTicks(4637),
                             ResidenceArea = "New York"
                         },
                         new
@@ -586,7 +590,7 @@ namespace Project1.Migrations
                             IsTrainer = false,
                             Name = "Emily Johnson",
                             Phone = "1357924680",
-                            RegistrationDate = new DateTime(2024, 5, 9, 11, 14, 9, 618, DateTimeKind.Local).AddTicks(1797),
+                            RegistrationDate = new DateTime(2024, 5, 9, 11, 5, 11, 10, DateTimeKind.Local).AddTicks(4640),
                             ResidenceArea = "Los Angeles"
                         },
                         new
@@ -598,7 +602,7 @@ namespace Project1.Migrations
                             IsTrainer = true,
                             Name = "Michael Brown",
                             Phone = "1122334455",
-                            RegistrationDate = new DateTime(2024, 5, 9, 11, 14, 9, 618, DateTimeKind.Local).AddTicks(1799),
+                            RegistrationDate = new DateTime(2024, 5, 9, 11, 5, 11, 10, DateTimeKind.Local).AddTicks(4642),
                             ResidenceArea = "London"
                         },
                         new
@@ -610,7 +614,7 @@ namespace Project1.Migrations
                             IsTrainer = false,
                             Name = "Sophia Wilson",
                             Phone = "9988776655",
-                            RegistrationDate = new DateTime(2024, 5, 9, 11, 14, 9, 618, DateTimeKind.Local).AddTicks(1801),
+                            RegistrationDate = new DateTime(2024, 5, 9, 11, 5, 11, 10, DateTimeKind.Local).AddTicks(4644),
                             ResidenceArea = "Paris"
                         });
                 });
@@ -653,45 +657,45 @@ namespace Project1.Migrations
                         new
                         {
                             OrderID = 1,
-                            CreatedAt = new DateTime(2024, 5, 9, 11, 14, 9, 618, DateTimeKind.Local).AddTicks(1561),
+                            CreatedAt = new DateTime(2024, 5, 9, 11, 5, 11, 10, DateTimeKind.Local).AddTicks(4428),
                             MemberID = 1,
-                            OrderDate = new DateTime(2024, 5, 9, 11, 14, 9, 618, DateTimeKind.Local).AddTicks(1546),
+                            OrderDate = new DateTime(2024, 5, 9, 11, 5, 11, 10, DateTimeKind.Local).AddTicks(4417),
                             OrderStatus = "Processing",
                             TotalAmount = 100m
                         },
                         new
                         {
                             OrderID = 2,
-                            CreatedAt = new DateTime(2024, 5, 9, 11, 14, 9, 618, DateTimeKind.Local).AddTicks(1563),
+                            CreatedAt = new DateTime(2024, 5, 9, 11, 5, 11, 10, DateTimeKind.Local).AddTicks(4431),
                             MemberID = 2,
-                            OrderDate = new DateTime(2024, 5, 9, 11, 14, 9, 618, DateTimeKind.Local).AddTicks(1562),
+                            OrderDate = new DateTime(2024, 5, 9, 11, 5, 11, 10, DateTimeKind.Local).AddTicks(4430),
                             OrderStatus = "Delivered",
                             TotalAmount = 200m
                         },
                         new
                         {
                             OrderID = 3,
-                            CreatedAt = new DateTime(2024, 5, 9, 11, 14, 9, 618, DateTimeKind.Local).AddTicks(1565),
+                            CreatedAt = new DateTime(2024, 5, 9, 11, 5, 11, 10, DateTimeKind.Local).AddTicks(4433),
                             MemberID = 3,
-                            OrderDate = new DateTime(2024, 5, 9, 11, 14, 9, 618, DateTimeKind.Local).AddTicks(1564),
+                            OrderDate = new DateTime(2024, 5, 9, 11, 5, 11, 10, DateTimeKind.Local).AddTicks(4432),
                             OrderStatus = "Cancelled",
                             TotalAmount = 300m
                         },
                         new
                         {
                             OrderID = 4,
-                            CreatedAt = new DateTime(2024, 5, 9, 11, 14, 9, 618, DateTimeKind.Local).AddTicks(1567),
+                            CreatedAt = new DateTime(2024, 5, 9, 11, 5, 11, 10, DateTimeKind.Local).AddTicks(4434),
                             MemberID = 4,
-                            OrderDate = new DateTime(2024, 5, 9, 11, 14, 9, 618, DateTimeKind.Local).AddTicks(1566),
+                            OrderDate = new DateTime(2024, 5, 9, 11, 5, 11, 10, DateTimeKind.Local).AddTicks(4434),
                             OrderStatus = "Processing",
                             TotalAmount = 800m
                         },
                         new
                         {
                             OrderID = 5,
-                            CreatedAt = new DateTime(2024, 5, 9, 11, 14, 9, 618, DateTimeKind.Local).AddTicks(1568),
+                            CreatedAt = new DateTime(2024, 5, 9, 11, 5, 11, 10, DateTimeKind.Local).AddTicks(4436),
                             MemberID = 5,
-                            OrderDate = new DateTime(2024, 5, 9, 11, 14, 9, 618, DateTimeKind.Local).AddTicks(1568),
+                            OrderDate = new DateTime(2024, 5, 9, 11, 5, 11, 10, DateTimeKind.Local).AddTicks(4435),
                             OrderStatus = "Shipped",
                             TotalAmount = 1000m
                         });
@@ -732,7 +736,7 @@ namespace Project1.Migrations
                         {
                             OrderDetailID = 1,
                             CourseID = 1,
-                            CreatedAt = new DateTime(2024, 5, 9, 3, 14, 9, 618, DateTimeKind.Utc).AddTicks(1597),
+                            CreatedAt = new DateTime(2024, 5, 9, 3, 5, 11, 10, DateTimeKind.Utc).AddTicks(4466),
                             OrderID = 1,
                             Quantity = 2,
                             UnitPrice = 100m
@@ -741,7 +745,7 @@ namespace Project1.Migrations
                         {
                             OrderDetailID = 2,
                             CourseID = 2,
-                            CreatedAt = new DateTime(2024, 5, 9, 3, 14, 9, 618, DateTimeKind.Utc).AddTicks(1599),
+                            CreatedAt = new DateTime(2024, 5, 9, 3, 5, 11, 10, DateTimeKind.Utc).AddTicks(4468),
                             OrderID = 1,
                             Quantity = 4,
                             UnitPrice = 100m
@@ -750,7 +754,7 @@ namespace Project1.Migrations
                         {
                             OrderDetailID = 3,
                             CourseID = 3,
-                            CreatedAt = new DateTime(2024, 5, 9, 3, 14, 9, 618, DateTimeKind.Utc).AddTicks(1600),
+                            CreatedAt = new DateTime(2024, 5, 9, 3, 5, 11, 10, DateTimeKind.Utc).AddTicks(4469),
                             OrderID = 1,
                             Quantity = 3,
                             UnitPrice = 100m
@@ -759,7 +763,7 @@ namespace Project1.Migrations
                         {
                             OrderDetailID = 4,
                             CourseID = 4,
-                            CreatedAt = new DateTime(2024, 5, 9, 3, 14, 9, 618, DateTimeKind.Utc).AddTicks(1601),
+                            CreatedAt = new DateTime(2024, 5, 9, 3, 5, 11, 10, DateTimeKind.Utc).AddTicks(4471),
                             OrderID = 2,
                             Quantity = 3,
                             UnitPrice = 100m
@@ -768,7 +772,7 @@ namespace Project1.Migrations
                         {
                             OrderDetailID = 5,
                             CourseID = 5,
-                            CreatedAt = new DateTime(2024, 5, 9, 3, 14, 9, 618, DateTimeKind.Utc).AddTicks(1603),
+                            CreatedAt = new DateTime(2024, 5, 9, 3, 5, 11, 10, DateTimeKind.Utc).AddTicks(4472),
                             OrderID = 2,
                             Quantity = 3,
                             UnitPrice = 100m
@@ -777,7 +781,7 @@ namespace Project1.Migrations
                         {
                             OrderDetailID = 6,
                             CourseID = 3,
-                            CreatedAt = new DateTime(2024, 5, 9, 3, 14, 9, 618, DateTimeKind.Utc).AddTicks(1604),
+                            CreatedAt = new DateTime(2024, 5, 9, 3, 5, 11, 10, DateTimeKind.Utc).AddTicks(4474),
                             OrderID = 2,
                             Quantity = 2,
                             UnitPrice = 100m
@@ -786,7 +790,7 @@ namespace Project1.Migrations
                         {
                             OrderDetailID = 7,
                             CourseID = 3,
-                            CreatedAt = new DateTime(2024, 5, 9, 3, 14, 9, 618, DateTimeKind.Utc).AddTicks(1605),
+                            CreatedAt = new DateTime(2024, 5, 9, 3, 5, 11, 10, DateTimeKind.Utc).AddTicks(4475),
                             OrderID = 3,
                             Quantity = 5,
                             UnitPrice = 100m
@@ -795,7 +799,7 @@ namespace Project1.Migrations
                         {
                             OrderDetailID = 8,
                             CourseID = 4,
-                            CreatedAt = new DateTime(2024, 5, 9, 3, 14, 9, 618, DateTimeKind.Utc).AddTicks(1606),
+                            CreatedAt = new DateTime(2024, 5, 9, 3, 5, 11, 10, DateTimeKind.Utc).AddTicks(4476),
                             OrderID = 3,
                             Quantity = 7,
                             UnitPrice = 100m
@@ -804,7 +808,7 @@ namespace Project1.Migrations
                         {
                             OrderDetailID = 9,
                             CourseID = 2,
-                            CreatedAt = new DateTime(2024, 5, 9, 3, 14, 9, 618, DateTimeKind.Utc).AddTicks(1608),
+                            CreatedAt = new DateTime(2024, 5, 9, 3, 5, 11, 10, DateTimeKind.Utc).AddTicks(4478),
                             OrderID = 4,
                             Quantity = 6,
                             UnitPrice = 100m
@@ -813,7 +817,7 @@ namespace Project1.Migrations
                         {
                             OrderDetailID = 10,
                             CourseID = 3,
-                            CreatedAt = new DateTime(2024, 5, 9, 3, 14, 9, 618, DateTimeKind.Utc).AddTicks(1609),
+                            CreatedAt = new DateTime(2024, 5, 9, 3, 5, 11, 10, DateTimeKind.Utc).AddTicks(4479),
                             OrderID = 4,
                             Quantity = 8,
                             UnitPrice = 100m
@@ -822,7 +826,7 @@ namespace Project1.Migrations
                         {
                             OrderDetailID = 11,
                             CourseID = 3,
-                            CreatedAt = new DateTime(2024, 5, 9, 3, 14, 9, 618, DateTimeKind.Utc).AddTicks(1610),
+                            CreatedAt = new DateTime(2024, 5, 9, 3, 5, 11, 10, DateTimeKind.Utc).AddTicks(4480),
                             OrderID = 4,
                             Quantity = 8,
                             UnitPrice = 100m
@@ -925,7 +929,7 @@ namespace Project1.Migrations
                         {
                             CartID = 1,
                             CourseID = 1,
-                            CreatedAt = new DateTime(2024, 5, 9, 3, 14, 9, 618, DateTimeKind.Utc).AddTicks(1419),
+                            CreatedAt = new DateTime(2024, 5, 9, 3, 5, 11, 10, DateTimeKind.Utc).AddTicks(4290),
                             Quantity = 1
                         });
                 });

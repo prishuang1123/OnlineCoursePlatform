@@ -52,6 +52,11 @@ namespace Project1.Controllers
                     Name = member.Name,
                     Email = member.Email,
                     Phone = member.Phone,
+                    //Birthday = (DateTime)member.Birthday,
+                    //RegistrationDate = (DateTime)member.RegistrationDate,
+                    //ResidenceArea = member.ResidenceArea,
+                    //IsTrainer = (bool)member.IsTrainer,
+                    //IsAdministrator = (bool)member.IsAdministrator
                 };
             }
             return MemDTO;
@@ -76,6 +81,11 @@ namespace Project1.Controllers
             Memb.Name = memberDTO.Name;
             Memb.Email = memberDTO.Email;
             Memb.Phone = memberDTO.Phone;
+            Memb.ResidenceArea = memberDTO.ResidenceArea;
+            Memb.Birthday = memberDTO.Birthday;
+            Memb.RegistrationDate = memberDTO.RegistrationDate;
+            Memb.IsTrainer = memberDTO.IsTrainer;
+            Memb.IsAdministrator = memberDTO.IsAdministrator;
             _context.Entry(Memb).State = EntityState.Modified;
 
             try
@@ -94,13 +104,18 @@ namespace Project1.Controllers
         // POST: api/MembersAPI
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<string> PostMember([FromBody]MemberDTO MemDTO)
+        public async Task<string> PostMember([FromBody]MemberDTO memDTO)
         {
             Member member = new Member
             {
-                Name = MemDTO.Name,
-                Email = MemDTO.Email,
-                Phone = MemDTO.Phone,
+				Name = memDTO.Name,
+				Email = memDTO.Email,
+				Phone = memDTO.Phone,
+                Birthday = memDTO.Birthday,
+                RegistrationDate = memDTO.RegistrationDate,
+                ResidenceArea = memDTO.ResidenceArea,
+                IsTrainer = memDTO.IsTrainer,
+                IsAdministrator = memDTO.IsAdministrator
             };
             _context.Member.Add(member);
             await _context.SaveChangesAsync();
@@ -124,6 +139,32 @@ namespace Project1.Controllers
 
             return "刪除成功";
         }
+
+        //篩選條件查詢會員
+        //POST api/MembersAPI/filter
+        [HttpPost("filter")]
+        public async Task<IEnumerable<MemberDTO>> FilterMembers(MemberDTO memberDTO) 
+        {
+            return _context.Member.Where(
+                    meb => meb.MemberID == memberDTO.MemberID ||
+                    meb.Name.Contains(memberDTO.Name) ||
+                    meb.Email.Contains(memberDTO.Email) ||
+                    meb.Phone.Contains(memberDTO.Phone)||
+                    meb.ResidenceArea.Contains(memberDTO.ResidenceArea)).Select(meb => new MemberDTO
+                    {
+                        MemberID = meb.MemberID,
+                        Name = meb.Name,
+                        Email = meb.Email,
+                        Phone = meb.Phone,
+                        Birthday = (DateTime)meb.Birthday,
+                        RegistrationDate = (DateTime)meb.RegistrationDate,
+                        ResidenceArea = meb.ResidenceArea,
+                        IsTrainer = (bool)meb.IsTrainer,
+                        IsAdministrator = (bool)meb.IsAdministrator
+                    });
+                    
+        }
+
 
         private bool MemberExists(int id)
         {
