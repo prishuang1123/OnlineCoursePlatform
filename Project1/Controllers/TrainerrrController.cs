@@ -10,6 +10,7 @@ using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pag
 using Project1.Data;
 using Project1.Models;
 using Project1.ViewModels;
+using static Project1.Controllers.TrainerrrController;
 
 
 
@@ -442,10 +443,10 @@ namespace Project1.Controllers
             var currentTrainer = GetCurrentTrainer();
 
             // 取得該訓練師的所有部落格文章
-            var blogPosts = await _context.Blog.Where(b => b.TrainerID == currentTrainer.TrainerID).ToListAsync();
+            //var blogPosts = await _context.Blog.Where(b => b.TrainerID == currentTrainer.TrainerID).ToListAsync();
 
             // 返回部落格首頁視圖，並傳遞部落格文章列表
-            return View(blogPosts);
+            return View();
         }
 
         // 取得當前登入的訓練師
@@ -465,7 +466,31 @@ namespace Project1.Controllers
         }
         //---------------------------------------------------------------------------------------------
    
-     
+        //訓練師總覽頁面
+        public IActionResult AllTrainers()
+        {
+            return View();
+        }
+
+        //取得所有訓練師的資料
+        public async Task<JsonResult> getTrainers()
+        {
+            var trainers = (from t in _context.Trainer
+                            join s in _context.Specialization on t.SpecializationID equals s.SpecializationID into joined
+                            from s in joined.DefaultIfEmpty() 
+                            let specializationName = s != null ? s.SpecializationName : null 
+                            select new TrainerViewModel
+                            {
+                                TrainerID = t.TrainerID,
+                                TrainerName = t.TrainerName,
+                                Experience = t.Experience,
+                                Photo = t.Photo,
+                                Qualifications = t.Qualifications,
+                                SpecializationName = specializationName 
+                            }).ToList(); 
+            return Json(trainers);
+
+        }
 
     }
 }
