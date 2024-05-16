@@ -57,6 +57,12 @@ namespace Project1.Controllers
         {
             return View();
         }
+        //註冊畫面
+        public IActionResult Register()
+        {
+            return View();
+        }
+
         //系統管理員編輯會員(即地編輯畫面)
         public IActionResult MemberVueSPA()
         {

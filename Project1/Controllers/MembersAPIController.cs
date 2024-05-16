@@ -100,7 +100,7 @@ namespace Project1.Controllers
         }
 
 
-        //新增員工
+        //新增會員
         // POST: api/MembersAPI
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]

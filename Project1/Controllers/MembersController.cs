@@ -30,15 +30,20 @@ namespace Project1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login([Bind("Name", "Email", "Phone")] LoginViewModel lvm)
         {
-            var member = await _context.Member
-                       .FirstOrDefaultAsync(m => m.Email == lvm.Email && m.Phone == lvm.Phone);
-            if (member != null)
+            
+            if (ModelState.IsValid)
             {
+                var member = await _context.Member
+                           .FirstOrDefaultAsync(m => m.Email == lvm.Email && m.Phone == lvm.Phone);
+                if (member != null)
+                {
+
+                    return RedirectToAction("Index","Home");
+                }
                 
-                return RedirectToAction("Index");
             }
-            ViewBag.IsLogin = true;
-            return View();
+            ViewBag.failLogin = "帳密錯誤";
+            return View(lvm);
         }
 
         // GET: Members
