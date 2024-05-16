@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Project1.Data;
 using Project1.Models;
+using Project1.ViewModels;
 
 
 namespace Project1.Controllers
@@ -328,7 +329,18 @@ namespace Project1.Controllers
 
         public JsonResult getTrainers()
         {
-            var trainers = _context.Trainer;
+            var trainers = (from t in _context.Trainer
+                            join s in _context.Specialization on t.SpecializationID equals s.SpecializationID
+                            select new TrainerViewModel
+                            {
+                                TrainerID = t.TrainerID,
+                                TrainerName = t.TrainerName,
+                                Experience = t.Experience,
+                                Photo = t.Photo,
+                                Qualifications = t.Qualifications,
+                                SpecializationName = s.SpecializationName
+                            }).ToList();
+
             return Json(trainers);
         }
     }
