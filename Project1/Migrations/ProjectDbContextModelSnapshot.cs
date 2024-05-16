@@ -58,7 +58,7 @@ namespace Project1.Migrations
 
                     b.HasKey("BlogID");
 
-                    b.ToTable("Blog");
+                    b.ToTable("Blog", (string)null);
                 });
 
             modelBuilder.Entity("Project1.Models.ClassSchedule", b =>
@@ -77,7 +77,7 @@ namespace Project1.Migrations
 
                     b.HasKey("SchedulerID");
 
-                    b.ToTable("ClassSchedule");
+                    b.ToTable("ClassSchedule", (string)null);
                 });
 
             modelBuilder.Entity("Project1.Models.Course", b =>
@@ -136,7 +136,7 @@ namespace Project1.Migrations
 
                     b.HasKey("CourseID");
 
-                    b.ToTable("Course");
+                    b.ToTable("Course", (string)null);
 
                     b.HasData(
                         new
@@ -440,7 +440,7 @@ namespace Project1.Migrations
 
                     b.HasKey("CourseCategoryID");
 
-                    b.ToTable("CourseCategory");
+                    b.ToTable("CourseCategory", (string)null);
 
                     b.HasData(
                         new
@@ -489,7 +489,7 @@ namespace Project1.Migrations
 
                     b.HasKey("CourseRatingID");
 
-                    b.ToTable("CourseRating");
+                    b.ToTable("CourseRating", (string)null);
 
                     b.HasData(
                         new
@@ -657,7 +657,7 @@ namespace Project1.Migrations
 
                     b.HasKey("CourseTypeID");
 
-                    b.ToTable("CourseType");
+                    b.ToTable("CourseType", (string)null);
 
                     b.HasData(
                         new
@@ -707,26 +707,7 @@ namespace Project1.Migrations
 
                     b.HasKey("DiscountID");
 
-                    b.ToTable("Discount");
-                });
-
-            modelBuilder.Entity("Project1.Models.FollowItem", b =>
-                {
-                    b.Property<int>("FollowItemId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FollowItemId"));
-
-                    b.Property<int>("CourseID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MemberID")
-                        .HasColumnType("int");
-
-                    b.HasKey("FollowItemId");
-
-                    b.ToTable("FollowItem");
+                    b.ToTable("Discount", (string)null);
                 });
 
             modelBuilder.Entity("Project1.Models.Images", b =>
@@ -745,7 +726,7 @@ namespace Project1.Migrations
 
                     b.HasKey("ImageID");
 
-                    b.ToTable("Images");
+                    b.ToTable("Images", (string)null);
                 });
 
             modelBuilder.Entity("Project1.Models.Location", b =>
@@ -762,7 +743,7 @@ namespace Project1.Migrations
 
                     b.HasKey("LocationID");
 
-                    b.ToTable("Location");
+                    b.ToTable("Location", (string)null);
 
                     b.HasData(
                         new
@@ -925,7 +906,7 @@ namespace Project1.Migrations
 
                     b.HasKey("MemberID");
 
-                    b.ToTable("Member");
+                    b.ToTable("Member", (string)null);
 
                     b.HasData(
                         new
@@ -1082,7 +1063,7 @@ namespace Project1.Migrations
 
                     b.HasKey("OrderID");
 
-                    b.ToTable("Order");
+                    b.ToTable("Order", (string)null);
 
                     b.HasData(
                         new
@@ -1160,7 +1141,7 @@ namespace Project1.Migrations
 
                     b.HasKey("OrderDetailID");
 
-                    b.ToTable("OrderDetail");
+                    b.ToTable("OrderDetail", (string)null);
 
                     b.HasData(
                         new
@@ -1287,7 +1268,7 @@ namespace Project1.Migrations
 
                     b.HasKey("PaymentID");
 
-                    b.ToTable("Payment");
+                    b.ToTable("Payment", (string)null);
                 });
 
             modelBuilder.Entity("Project1.Models.Pet", b =>
@@ -1325,7 +1306,7 @@ namespace Project1.Migrations
 
                     b.HasKey("PetID");
 
-                    b.ToTable("Pet");
+                    b.ToTable("Pet", (string)null);
                 });
 
             modelBuilder.Entity("Project1.Models.PetCategory", b =>
@@ -1341,7 +1322,7 @@ namespace Project1.Migrations
 
                     b.HasKey("PetCategoryID");
 
-                    b.ToTable("PetCategory");
+                    b.ToTable("PetCategory", (string)null);
 
                     b.HasData(
                         new
@@ -1381,7 +1362,7 @@ namespace Project1.Migrations
 
                     b.HasKey("CartID");
 
-                    b.ToTable("Cart");
+                    b.ToTable("Cart", (string)null);
 
                     b.HasData(
                         new
@@ -1407,7 +1388,7 @@ namespace Project1.Migrations
 
                     b.HasKey("SpecializationID");
 
-                    b.ToTable("Specialization");
+                    b.ToTable("Specialization", (string)null);
 
                     b.HasData(
                         new
@@ -1487,7 +1468,7 @@ namespace Project1.Migrations
 
                     b.HasKey("TrainerID");
 
-                    b.ToTable("Trainer");
+                    b.ToTable("Trainer", (string)null);
 
                     b.HasData(
                         new
@@ -1608,7 +1589,7 @@ namespace Project1.Migrations
 
                     b.HasKey("TeachingAreaID");
 
-                    b.ToTable("TrainerServiceArea");
+                    b.ToTable("TrainerServiceArea", (string)null);
                 });
 #pragma warning restore 612, 618
         }
