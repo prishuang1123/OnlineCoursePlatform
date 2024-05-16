@@ -57,7 +57,7 @@ namespace Project1.Controllers
             {
                 return NotFound();
             }
-			OrderDetailsViewModel? orderDetailsViewModel = new OrderDetailsViewModel
+			OrderDetailsVM? orderDetailsViewModel = new OrderDetailsVM
             {
                 order = orderObj,
                 orderDetails = orderDetailObjList

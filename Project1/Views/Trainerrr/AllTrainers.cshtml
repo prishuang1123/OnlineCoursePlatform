@@ -101,10 +101,12 @@
                 filterTrainers(specialization) {
                     if (specialization == "所有訓練師") {
                         this.trainers = this.originalTrainers;
+                        this.currentPage = 1;
                     }
                     else {
                         this.trainers = this.originalTrainers;
                         this.trainers = this.trainers.filter(t => t.specializationName == specialization.trim());
+                        this.currentPage = 1;
                     }
                 },
             },

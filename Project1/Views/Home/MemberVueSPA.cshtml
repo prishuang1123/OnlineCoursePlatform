@@ -1,0 +1,427 @@
+﻿@section Styles
+{
+    @* 樣式進不來 *@
+    <style>
+        thead {
+            background-color: maroon;
+            color: white;
+        }
+
+        input[type="checkbox"]:disabled {
+            background-color: #e9ecef;
+            border: 1px solid #ced4da;
+            cursor: not-allowed;
+        }
+
+        /* select.form-select {
+            -webkit-appearance: none !important;
+            -moz-appearance: none !important;
+            appearance: none !important;
+        } */
+
+        
+    </style>
+}
+<div id="MemberApp">
+    @* VueSPA網頁內容 *@
+
+    @* 1.篩選員工介面 *@
+    <div class="container">
+        <div class="row" style="width:50%;margin-left:auto;margin-right:0">
+            <label class="col-md-4 form-label">篩選關鍵字</label>
+            @* 篩選關鍵字會進到filter屬性 *@
+            <input class="col-md-8 form-control" v-model="filter" placeholder="請輸入篩選關鍵字" v-on:keyup="filterMembers" />
+        </div>
+        @* 新增紀錄按鈕 *@
+        <div class="from-group">
+            <div class="from-group">
+                @* type button 比較好做按鈕圖案 *@
+                <button type="button" class="btn btn-primary" v-on:click="showModal">新增會員</button>
+            </div>
+        </div>
+        @* 2.員工Table直接在Table(表格使用者介面) *@
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <td>編號</td>
+                    <td>姓名</td>
+                    <td>電子郵件</td>
+                    <td>手機號碼</td>
+                    <td>生日</td>
+                    <td>註冊日期</td>
+                    <td>居住地</td>
+                    <td>訓練師</td>
+                    <td>管理員</td>
+                    @* 編輯:放按鈕 *@
+                    <td>編輯</td>
+                </tr>
+            </thead>
+            <tbody>
+                @* 即地編輯 In-place editing *@
+                    @* 測試結構 *@
+                    @* <td>{{memberDTO.memberID}}</td>
+                    <td>{{memberDTO.name}}</td>
+                    <td>{{memberDTO.email}}</td>
+                    <td>{{memberDTO.phone}}</td> *@
+                    @* 編輯範本 *@
+                    @* 加入Edit屬性 *@
+                <tr v-for="memberDTO in memberDTOArray">
+                    <template v-if="memberDTO.Edit==true">
+                        <td><label>{{memberDTO.memberID}}</label></td>
+                        <td><input type="text" v-model="memberDTO.name" /></td>
+                        <td><input type="text" v-model="memberDTO.email" /></td>
+                        <td><input type="text" v-model="memberDTO.phone" /></td>
+                        <td><input type="date" v-model="memberDTO.birthday" /></td>
+                        <td><input type="date" v-model="memberDTO.registrationDate" /></td>
+                        @* <td><input type="text" v-model="memberDTO.residenceArea" /></td> *@
+                        <td>
+                            <select id="yourSelectElementId" v-model="memberDTO.residenceArea" class="form-select">
+                                <option value="">請選擇縣市</option>
+                                <option v-for="city in cities" :value="city">{{ city }}</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="checkbox" v-model="memberDTO.isTrainer" />
+                        </td>
+                        <td>
+                            <input type="checkbox" v-model="memberDTO.isAdministrator" />
+                        </td>
+                        @* 編輯範本中的按鈕 : 更新、取消*@
+                        <td>
+                            @* 更新後的資料當作參數 *@
+                            <button type="button" class="btn btn-success" v-on:click="update(memberDTO)">更新</button>
+                            <button type="button" class="btn btn-warning" v-on:click="cancel">取消</button>
+                        </td>
+                    </template>
+                    @* 顯示範本 *@
+                    <template v-else>
+                        <td><label>{{memberDTO.memberID}}</label></td>
+                        <td><label>{{memberDTO.name}}</label></td>
+                        <td><label>{{memberDTO.email}}</label></td>
+                        <td><label>{{memberDTO.phone}}</label></td>
+                        <td><label>{{memberDTO.birthday}}</label></td>
+                        <td><label>{{memberDTO.registrationDate}}</label></td>
+                        <td><label>{{memberDTO.residenceArea}}</label></td>
+                        <td>
+                            <input type="checkbox" v-model="memberDTO.isTrainer" disabled/>
+                        </td>
+                        <td>
+                            <input type="checkbox" v-model="memberDTO.isAdministrator" disabled/>
+                        </td>
+                        @* 顯示範本中的按鈕 : 編輯、刪除(函式名稱不可使用delete，因為是VUE的保留字)*@
+                        <td>
+                            @* 更新後的資料當作參數 *@
+                            <button type="button" class="btn btn-warning" v-on:click="edit(memberDTO.memberID)">編輯</button>
+                            <button type="button" class="btn btn-danger" v-on:click="deleteMember(memberDTO.memberID)">刪除</button>
+                        </td>
+                    </template>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    @* 3.新增員工介面(彈出視窗)  設定ID insertModal*@
+    <div class="modal fade"
+         id="insertModal"
+         tabindex="-1"
+         data-bs-backdrop="static"
+         data-bs-keyboard="false"
+         role="dialog"
+         aria-labelledby="modalTitleId"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-md"
+             role="document">
+            <div class="modal-content">
+                @* content包含header *@
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitleId">
+                        新增會員紀錄
+                    </h5>
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                @* content包含body *@
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">姓名</label>
+                        <input class="form-control" v-model="name"></input>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">電子郵件</label>
+                        <input class="form-control" v-model="email"></input>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">手機號碼</label>
+                        <input class="form-control" v-model="phone"></input>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">生日</label>
+                        <input class="form-control" type="date" v-model="birthday"></input>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">註冊日期</label>
+                        <input class="form-control" type="date" v-model="registrationDate"></input>
+                    </div>
+                    @* 居住地選擇 *@
+                    <div class="mb-3">
+                        <label class="form-label">居住地</label>
+                        @* <input type="text" v-model="residenceArea"></input> *@
+                        <select v-model="residenceArea" class="form-select">
+                            <option value="">請選擇縣市</option>
+                            <option v-for="city in cities" :value="city">{{ city }}</option>
+                        </select>
+                    </div>
+                    @* 居住地選擇 *@
+                    <div class="mb-3 ">
+                        <label>
+                            <input type="checkbox" v-model="isTrainer" />
+                            訓練師
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            <input type="checkbox" v-model="isAdministrator" />
+                            管理員
+                        </label>
+                    </div>
+                </div>
+                @* content包含footer *@
+                <div class="modal-footer">
+                    @* 預設dismiss會關閉 不須事件處理 *@
+                    <button type="button"
+                            class="btn btn-primary"
+                            data-bs-dismiss="modal"
+                            @@click="resetFormFields">
+                        取消新增
+                    </button>
+                    <button type="button" class="btn btn-primary" v-on:click="insert">新增</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts
+{
+    @* 引用Vue *@
+    <script src="https://unpkg.com/vue@3.4.27/dist/vue.global.js"></script>
+    @* 引用axios  體積:jQuery > axios > fetch*@
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.8/axios.min.js" integrity="sha512-PJa3oQSLWRB7wHZ7GQ/g+qyv6r4mbuhmiDb8BjSFZ8NZ2a42oTtAq5n0ucWAwcQDlikAtkub+tPVCw4np27WCg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    @* 擬態視窗x引用 *@
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js"></script>
+    
+    <script>
+        var baseAddress = "https://localhost:7177";
+        var vueApp = {
+            data() {
+                return {
+                    filter: "",
+                    //保留一份編輯前的資料
+                    originalName: "",
+                    originalEmail: "",
+                    originalPhone: "",
+                    originalResidenceArea: "",
+                    originalBirthday: "",
+                    originalRegistrationDate: "",
+                    originalIsTrainer:"",
+                    originalIsAdministrator:"",
+                    memberDTOArray: [
+                        //測試結構
+                        // {
+                        //     employeeId:1,
+                        //     firstName:"John",
+                        //     lastName:"Chen",
+                        //     title:"CEO"
+                        // }
+                    ],
+                    name: "",
+                    email: "",
+                    phone: "",
+                    birthday:"",
+                    residenceArea: "",
+                    registrationDate:"",
+                    isTrainer:"",
+                    isAdministrator:"",
+                    cities: ["基隆市", "台北市", "新北市", "桃園市", "新竹市", "新竹縣", "苗栗縣", "台中市", "彰化縣", "南投縣", "雲林縣", "嘉義市", "嘉義縣", "台南市", "高雄市", "屏東縣", "宜蘭縣", "花蓮縣", "台東縣", "澎湖縣", "金門縣", "連江縣"]
+                
+                };
+            },
+            methods: {
+
+                //與server端溝通(編輯後更新資料)
+                update: function (memberDTO) {
+                    //alert("update");
+                    let _this = this;
+                    var ret = confirm(`確定要更新編號為"${memberDTO.memberID}"的資料嗎?`)
+                    //注意參數格式與要求(用postman測試較佳)
+                    if (ret == true) {
+                        var p = {
+                        memberID : memberDTO.memberID,
+                        name : memberDTO.name,
+                        email : memberDTO.email,
+                        phone : memberDTO.phone,
+                        //轉型成JSON格式
+                        birthday: new Date(memberDTO.birthday).toISOString(),
+                        registrationDate: new Date(memberDTO.registrationDate).toISOString(),
+                        residenceArea: memberDTO.residenceArea,
+                        //轉型成布林值
+                        isTrainer : Boolean(memberDTO.isTrainer),
+                        isAdministrator : Boolean(memberDTO.isAdministrator)
+                    };
+                    axios.put(`${baseAddress}/api/MembersAPI/${memberDTO.memberID}`, p).then(response => {
+                        alert(response.data);
+                        _this.filterMembers(); //修改成功取出新的結果
+                    }).catch(err => {
+                        alert(err);
+                    });
+                    }
+                    
+                },
+                //狀態改變(取消編輯)
+                cancel: function () {
+                    //alert("cancel");
+                    let _this = this;
+                    for (var i = 0; i < _this.memberDTOArray.length; i++) {
+                        var item = _this.memberDTOArray[i];
+                        //var name = item.name;
+                        //找到ID後將Edit屬性改成false(顯示狀態)
+                        if (item.Edit == true) {
+                            item.Edit = false;
+                            //回填保留的值
+                            item.name = _this.originalName;
+                            item.email = _this.originalEmail;
+                            item.phone = _this.originalPhone;
+                            item.residenceArea = _this.originalResidenceArea;
+                            item.birthday = _this.originalBirthday;
+                            item.registrationDate = _this.originalRegistrationDate;
+                            item.isTrainer = _this.isTrainer;
+                            item.isAdministrator = _this.isAdministrator;
+                        }
+                    }
+                },
+                //狀態改變(編輯)
+                edit: function (memberID) {
+                    //alert("edit")
+                    //依據ID來編輯
+                    let _this = this;
+                    for (var i = 0; i < _this.memberDTOArray.length; i++) {
+                        var item = _this.memberDTOArray[i]
+                        //找到ID後將Edit屬性改成true(編輯狀態)
+                        if (memberID == item.memberID) {
+                            item.Edit = true;
+                            //將編輯前的資料作保留(取消編輯時可以回復原狀)
+                            //json小寫
+                            _this.originalName = item.name;
+                            _this.originalEmail = item.email;
+                            _this.originalPhone = item.phone;
+                            _this.originalResidenceArea = item.residenceArea;
+                            _this.originalBirthday = item.birthday;
+                            _this.originalRegistrationDate = item.registrationDate;
+
+                            // 使用日期字符串而不轉換為 Date
+                            item.birthday = item.birthday.substring(0, 10);
+                            item.registrationDate = item.registrationDate.substring(0, 10);
+                            //item.birthday = birthday;
+                            //item.registrationDate = registrationDate;
+                        }
+                    }
+                },
+                //與server端溝通(刪除資料)
+                deleteMember: function (memberID) {
+                    //alert("delete")
+                    let _this = this;
+                    var ret = confirm(`確定要刪除編號為"${memberID}"的資料嗎?`);
+                    if (ret == true) {
+                        axios.delete(`${baseAddress}/api/MembersAPI/${memberID}`).then(response => {
+                            alert(response.data);
+                            _this.filterMembers();//刪除成功取出新的結果
+                        }).catch(err => {
+                            alert(err)
+                        });
+                    }
+
+                },
+                //與server端溝通(查詢資料)
+                filterMembers: function () {
+                    //alert("filter");
+                    let _this = this;//預防callback錯誤
+                    //注意參數格式與要求(用postman測試較佳)
+                    var p = {};
+                    p.memberID = isNaN(Number(_this.filter)) ? -1 : Number(_this.filter);
+                    p.name = p.email = p.phone = p.residenceArea = _this.filter;
+
+                    axios.post(`${baseAddress}/api/MembersAPI/filter`, p).then(response => {
+                        //alert(JSON.stringify(response.data));
+                        //加入Edit屬性，類似viewbag動態語言
+                        _this.memberDTOArray = response.data;
+                        for (var i = 0; i < _this.memberDTOArray.length; i++) {
+                            _this.memberDTOArray[i].Edit = false;//初始值為false==>show顯示範本
+                        }
+                    }).catch(err => {
+                        alert(err);
+                    });
+                },
+                //與server端溝通(新增員工)
+                insert: function () {
+                    //alert("insert");
+                    let _this = this;
+                    //console.log("即將新增的居住地:", _this.residenceArea);  // 檢查居住地數值
+
+                    // 參數格式要注意會影響呼叫，看DTO需要甚麼欄位
+                    var p = {
+                        memberID: 0, //id不能填但是需要有這個欄位
+                        name: _this.name,
+                        email: _this.email,
+                        phone: _this.phone,
+                        //轉型成JSON格式
+                        birthday: new Date(_this.birthday).toISOString(),
+                        registrationDate: new Date(_this.registrationDate).toISOString(),
+                        residenceArea: _this.residenceArea,
+                        //轉型成布林值
+                        isTrainer: Boolean(_this.isTrainer),
+                        isAdministrator: Boolean(_this.isAdministrator)
+                    };
+                    // console.log(p);
+                    axios.post(`${baseAddress}/api/MembersAPI`, p).then(response => {
+                        alert(response.data);
+                        //新增完成後隱藏頁面
+                        $("#insertModal").modal("hide");
+                        //更新顯示畫面
+                        _this.filterMembers();
+                    }).catch(err => {
+                        alert(err)
+                    })
+                },
+                //當取消新增時清空欄位
+                resetFormFields: function () {
+                    this.name = "";
+                    this.email = "";
+                    this.phone = "";
+                    this.birthday = "";
+                    this.registrationDate = "";
+                    this.residenceArea = ""; //不能清空
+                    this.isTrainer = ""; 
+                    this.isAdministrator = ""; 
+                },
+                //新增員工按鈕(顯示新增畫面)
+                showModal: function () {
+                    //alert("新增員工紐");
+                    $("#insertModal").modal("show");
+                }
+            },
+            //mounted : 掛載成功就show
+            mounted: function () {
+                let _this = this;
+                _this.filterMembers();//呼叫自己的函式
+                _this.$nextTick(() => {
+                    $('select.form-select').not('.no-nice-select').niceSelect();
+                });
+            }
+        };
+        var app = Vue.createApp(vueApp).mount("#MemberApp");
+    </script>
+}

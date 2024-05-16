@@ -125,6 +125,27 @@ namespace Project1.Controllers
             return View();
         }
 
+        //�t�κ޲z���s��|�����յe��
+        public IActionResult Member()
+        {
+            return View();
+        }
+        //���U�e��
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        //�t�κ޲z���s��|��(�Y�a�s��e��)
+        public IActionResult MemberVueSPA()
+        {
+            return View();
+        }
+
+        
+
+
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
