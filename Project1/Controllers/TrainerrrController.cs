@@ -74,6 +74,10 @@ namespace Project1.Controllers
             return PartialView("_CourseListPartial", courses);
         }
 
+            // 返回包含搜尋結果的部分視圖 "_CourseListPartial"
+            return PartialView("_CourseListPartial", courses);
+        }
+
 
         // GET: Trainerrr/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -461,27 +465,40 @@ namespace Project1.Controllers
             // 返回 JSON 結果
             return Json(blogs);
         }
-
-        public IActionResult AllTrainers()
+        //---------------------------------------------------------------------------------------------
+        public async Task<IActionResult> TrainerCourse()
         {
-            return View();
+            return View(await _context.Course.ToListAsync());
         }
 
-        public JsonResult getTrainers()
-        {
-            var trainers = (from t in _context.Trainer
-                            join s in _context.Specialization on t.SpecializationID equals s.SpecializationID
-                            select new TrainerViewModel
-                            {
-                                TrainerID = t.TrainerID,
-                                TrainerName = t.TrainerName,
-                                Experience = t.Experience,
-                                Photo = t.Photo,
-                                Qualifications = t.Qualifications,
-                                SpecializationName = s.SpecializationName
-                            }).ToList();
+        //---------------------------顯示部落格首頁------------------------------------------------
 
-            return Json(trainers);
+        public async Task<IActionResult> Indexblog()
+        {
+            // 取得當前登入的訓練師
+            var currentTrainer = GetCurrentTrainer();
+
+            // 取得該訓練師的所有部落格文章
+            var blogPosts = await _context.Blog.Where(b => b.TrainerID == currentTrainer.TrainerID).ToListAsync();
+
+            // 返回部落格首頁視圖，並傳遞部落格文章列表
+            return View(blogPosts);
+        }
+
+        // 取得當前登入的訓練師
+        private Trainer GetCurrentTrainer()
+        {
+            // 這裡示範一個假設的方法，根據你的身份驗證機制來取得當前登入的訓練師
+            var trainerId = 1; // 假設訓練師ID為1
+            return _context.Trainer.FirstOrDefault(t => t.TrainerID == trainerId);
+        }
+
+        public async Task<JsonResult> GetBlog()
+        {
+            var blogs = await _context.Blog.ToListAsync();
+
+            // 返回 JSON 結果
+            return Json(blogs);
         }
     }
 }
