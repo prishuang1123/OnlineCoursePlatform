@@ -48,10 +48,10 @@ namespace Project1.Models
         [Display(Name = "已報名人數")]
         public int? EnrollmentCount { get; set; } // 報名人數
 
-        [Display(Name = "上課時間")]
+        [Display(Name = "課程建立時間")]
         public DateTime CreatedAt { get; set; } // 課程建立時間
 
-        [Display(Name = "最後報名期限")]
+        [Display(Name = "課程編輯時間")]
         public DateTime UpdatedAt { get; set; } // 課程最後更新時間
 
         [Display(Name = "點擊")]
@@ -59,5 +59,8 @@ namespace Project1.Models
 
         [Display (Name = "封面圖")]
         public string? ThumbnailUrl { get; set; }
-	}
+
+    
+
+    }
 }

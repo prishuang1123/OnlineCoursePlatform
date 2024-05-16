@@ -6,8 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 using Project1.Data;
 using Project1.Models;
+
 
 
 namespace Project1.Controllers
@@ -23,22 +25,57 @@ namespace Project1.Controllers
             _environment = environment;
         }
 
+        // 辅助方法：根据课程类别ID获取课程类别名称
+        private async Task<string> GetCourseCategoryName(int courseCategoryId)
+        {
+            var courseCategoryName = await _context.CourseCategory
+                .Where(cc => cc.CourseCategoryID == courseCategoryId)
+                .Select(cc => cc.CourseCategoryName)
+                .FirstOrDefaultAsync();
+
+            return courseCategoryName;
+        }
+
+        // 辅助方法：根据位置ID获取位置名称
+        private async Task<string> GetLocationName(int locationId)
+        {
+            var locationName = await _context.Location
+                .Where(l => l.LocationID == locationId)
+                .Select(l => l.LocationName)
+                .FirstOrDefaultAsync();
+
+            return locationName;
+        }
+
         // GET: Trainerrr
         //課程
         public async Task<IActionResult> Index()
         {
+
+
             return View(await _context.Course.ToListAsync());
         }
 
+        // 搜尋動作方法，接收搜尋字串並返回搜尋結果的部分視圖
+        public IActionResult Search(string searchString)
+        {
+            // 從資料庫中獲取所有課程
+            var courses = _context.Course.ToList();
 
-        //訓練師部落格
-		public async Task<IActionResult> Indexblog()
-		{
-			return View(await _context.Course.ToListAsync());
-		}
+            // 如果搜尋字串不為空
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                // 使用 LINQ 查詢，過濾出課程名稱中包含搜尋字串的課程
+                courses = courses.Where(c => c.CourseName.Contains(searchString)).ToList();
+            }
 
-		// GET: Trainerrr/Details/5
-		public async Task<IActionResult> Details(int? id)
+            // 返回包含搜尋結果的部分視圖 "_CourseListPartial"
+            return PartialView("_CourseListPartial", courses);
+        }
+
+
+        // GET: Trainerrr/Details/5
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -51,30 +88,35 @@ namespace Project1.Controllers
             {
                 return NotFound();
             }
-
+            ViewBag.CourseCategoryName = await GetCourseCategoryName(course.CourseCategoryID);
+            ViewBag.LocationName = await GetLocationName(course.LocationID ?? 0); // 使用 0 或其他默认值
             return View(course);
         }
 
         // GET: Trainerrr/Create
+        //訓練師課程新增
         public IActionResult Create()
         {
+            var course = new Course();
+            //// 準備下拉選單的選項
+            ViewBag.CourseCategoryID = new SelectList(_context.CourseCategory, "CourseCategoryID", "CourseCategoryName", course.CourseCategoryID);
+            ViewBag.LocationID = new SelectList(_context.Location, "LocationID", "LocationName", course.LocationID);
+
             return View();
         }
-
         // POST: Trainerrr/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CourseID,CourseName,TrainerID,PetCategory,CourseCategory,CourseType,Description,ApprovalStatus,Price,Location,MaxParticipants,EnrollmentCount,CreatedAt,UpdatedAt,Clicks,ThumbnailUrl")] Course course, IFormFile thumbnailFile)
+        public async Task<IActionResult> Create([Bind("CourseID,CourseName,TrainerID,PetCategory,CourseCategoryID,CourseType,Description,ApprovalStatus,Price,LocationID,MaxParticipants,EnrollmentCount,CreatedAt,UpdatedAt,Clicks,ThumbnailUrl")] Course course, IFormFile thumbnailFile)
         {
             if (ModelState.IsValid)
             {
+                course.CreatedAt = DateTime.Now;
                 if (thumbnailFile != null && thumbnailFile.Length > 0)
                 {
-                    // 將上傳的圖片保存到指定文件夾
                     var uploadsFolder = Path.Combine(_environment.WebRootPath, "img/CourseThumbnail");
-                    // 生成唯一的文件名
                     var uniqueFileName = Guid.NewGuid().ToString() + "_" + thumbnailFile.FileName;
                     var filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
@@ -83,19 +125,45 @@ namespace Project1.Controllers
                         await thumbnailFile.CopyToAsync(fileStream);
                     }
 
-                    // 設置課程的 ThumbnailUrl 屬性為保存的文件路徑
                     course.ThumbnailUrl = "img/CourseThumbnail/" + uniqueFileName;
                 }
+                else
+                {
+                    course.ThumbnailUrl = "img/CourseThumbnail/noimage.jpg";
+                }
 
-                _context.Add(course);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    _context.Add(course);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error saving course: {ex.Message}");
+                }
             }
+            else
+            {
+                foreach (var modelState in ModelState.Values)
+                {
+                    foreach (var error in modelState.Errors)
+                    {
+                        Console.WriteLine($"Validation error: {error.ErrorMessage}");
+                    }
+                }
+            }
+
+            ViewBag.CourseCategoryID = new SelectList(_context.CourseCategory, "CourseCategoryID", "CourseCategoryName", course.CourseCategoryID);
+            ViewBag.LocationID = new SelectList(_context.Location, "LocationID", "LocationName", course.LocationID);
+
             return View(course);
         }
 
+
+
         // GET: Trainerrr/Edit/5
-        [HttpGet] // 添加此行
+        [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -108,15 +176,23 @@ namespace Project1.Controllers
             {
                 return NotFound();
             }
+
+            // 准备下拉选项
+            ViewBag.CourseCategoryID = new SelectList(_context.CourseCategory, "CourseCategoryID", "CourseCategoryName", course.CourseCategoryID);
+            ViewBag.LocationID = new SelectList(_context.Location, "LocationID", "LocationName", course.LocationID);
+
             return View(course);
         }
+
         // POST: Trainerrr/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Trainerrr/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CourseID,CourseName,TrainerID,PetCategory,CourseCategory,CourseType,Description,ApprovalStatus,Price,DiscountID,Location,MaxParticipants,EnrollmentCount,CreatedAt,UpdatedAt,Clicks,ThumbnailUrl")] Course course, IFormFile thumbnailFile)
+        public async Task<IActionResult> Edit(int id, [Bind("CourseID,CourseName,TrainerID,PetCategory,CourseCategoryID,CourseType,Description,ApprovalStatus,Price,LocationID,MaxParticipants,EnrollmentCount,CreatedAt,UpdatedAt,Clicks,ThumbnailUrl")] Course course, IFormFile thumbnailFile)
         {
+
             if (id != course.CourseID)
             {
                 return NotFound();
@@ -124,13 +200,13 @@ namespace Project1.Controllers
 
             if (ModelState.IsValid)
             {
+                course.UpdatedAt = DateTime.Now;
                 try
                 {
+                    // 如果上传了新的缩略图文件，则保存到指定文件夹并更新缩略图URL
                     if (thumbnailFile != null && thumbnailFile.Length > 0)
                     {
-                        // 将上传的图片保存到指定文件夹
                         var uploadsFolder = Path.Combine(_environment.WebRootPath, "img/CourseThumbnail");
-                        // 生成唯一的文件名
                         var uniqueFileName = Guid.NewGuid().ToString() + "_" + thumbnailFile.FileName;
                         var filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
@@ -139,7 +215,7 @@ namespace Project1.Controllers
                             await thumbnailFile.CopyToAsync(fileStream);
                         }
 
-                        // 设置课程的ThumbnailUrl属性为保存的文件路径
+                        // 更新缩略图URL
                         course.ThumbnailUrl = "img/CourseThumbnail/" + uniqueFileName;
                     }
 
@@ -159,6 +235,11 @@ namespace Project1.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
+            // 如果 ModelState 验证失败，重新加载下拉选项
+            ViewBag.CourseCategoryID = new SelectList(_context.CourseCategory, "CourseCategoryID", "CourseCategoryName", course.CourseCategoryID);
+            ViewBag.LocationID = new SelectList(_context.Location, "LocationID", "LocationName", course.LocationID);
+
             return View(course);
         }
 
@@ -201,6 +282,30 @@ namespace Project1.Controllers
         }
 
 
+        //GET:Trainerrr/GetPicture
+        //public async Task<FileResult> GetPicture(int id)
+        //{
+        //    Course c = await _context.Course.FindAsync(id);
+        //    string? content = c?.ThumbnailUrl;
+        //    return File(content, "image/jpeg");
+
+
+
+        //}
+        public async Task<FileResult> GetPicture(int id)
+        {
+            Course course = await _context.Course.FindAsync(id);
+            if (course == null || string.IsNullOrEmpty(course.ThumbnailUrl))
+            {
+                // 返回預設圖片
+                string defaultPath = Path.Combine(_environment.WebRootPath, "img/CourseThumbnail/noimage.jpg");
+                return PhysicalFile(defaultPath, "image/jpeg");
+            }
+
+            string filePath = Path.Combine(_environment.WebRootPath, course.ThumbnailUrl);
+            return PhysicalFile(filePath, "image/jpeg");
+        }
+
         //----------------------------------------------------------------------------------------------------------------------
         // GET: Trainerrr
         // Trainer 審核首頁
@@ -226,26 +331,26 @@ namespace Project1.Controllers
             return RedirectToAction(nameof(TrainerIndex)); // 返回訓練師列表頁面
         }
         public class Trainerrr
-        { 
+        {
             //文字顏色
             public string GetStatusClass(string status)
-        {
-            
-            if (status == "通過")
             {
-                return "status-pass";
-            }
-            else if (status == "未通過")
-            {
-                return "status-fail";
-            }
-            else
-            {
-                // 如果狀態不是 "通過" 或 "未通過"，返回空字符串或默認類
-                return "";
+
+                if (status == "通過")
+                {
+                    return "status-pass";
+                }
+                else if (status == "未通過")
+                {
+                    return "status-fail";
+                }
+                else
+                {
+                    // 如果狀態不是 "通過" 或 "未通過"，返回空字符串或默認類
+                    return "";
+                }
             }
         }
-}
         // GET: Trainerrr/TrainerDetail檢視/5
         public async Task<IActionResult> TrainerDetails(int? id)
         {
@@ -320,7 +425,42 @@ namespace Project1.Controllers
         {
             return _context.Trainer.Any(e => e.TrainerID == id);
         }
+        //---------------------------------------------------------------------------------------------
+        public async Task<IActionResult> TrainerCourse()
+        {
+            return View(await _context.Course.ToListAsync());
+        }
+
+        //---------------------------顯示部落格首頁------------------------------------------------
+
+        public async Task<IActionResult> Indexblog()
+        {
+            // 取得當前登入的訓練師
+            var currentTrainer = GetCurrentTrainer();
+
+            // 取得該訓練師的所有部落格文章
+            var blogPosts = await _context.Blog.Where(b => b.TrainerID == currentTrainer.TrainerID).ToListAsync();
+
+            // 返回部落格首頁視圖，並傳遞部落格文章列表
+            return View(blogPosts);
+        }
+
+        // 取得當前登入的訓練師
+        private Trainer GetCurrentTrainer()
+        {
+            // 這裡示範一個假設的方法，根據你的身份驗證機制來取得當前登入的訓練師
+            var trainerId = 1; // 假設訓練師ID為1
+            return _context.Trainer.FirstOrDefault(t => t.TrainerID == trainerId);
+        }
+
+        public async Task<JsonResult> GetBlog()
+        {
+            var blogs = await _context.Blog.ToListAsync();
+
+            // 返回 JSON 結果
+            return Json(blogs);
+        }
     }
 }
-
    
+

@@ -27,10 +27,22 @@
                 <input asp-for="PetCategory" class="form-control" />
                 <span asp-validation-for="PetCategory" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="CourseCategoryID" class="control-label"></label>
+                <select asp-for="CourseCategoryID" class="form-control" asp-items="ViewBag.CourseCategoryID"></select>
+            </div>
 @*             <div class="form-group">
-                <label asp-for="CourseCategory" class="control-label"></label>
-                <input asp-for="CourseCategory" class="form-control" />
-                <span asp-validation-for="CourseCategory" class="text-danger"></span>
+                <label asp-for="CourseCategoryID" class="control-label"></label>            
+                <select  asp-for="CourseCategoryID" class="form-control" asp-items="ViewBag.CourseCategoryID"></select>
+            </div>
+          @*   <div class="form-group">
+                <label asp-for="CourseCategoryID" class="control-label"></label>
+                <select asp-for="CourseCategoryID" class="form-control">
+                    <option value="運動">運動</option>
+                    <option value="運動">技能</option>
+                    <option value="運動">陪玩</option>
+                </select>
+                <span asp-validation-for="CourseCategoryID" class="text-danger"></span>
             </div> *@
             <div class="form-group">
                 <label asp-for="CourseType" class="control-label"></label>
@@ -52,6 +64,10 @@
                 <input asp-for="Price" class="form-control" />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="LocationID" class="control-label"></label>
+                <select asp-for="LocationID" class="form-control" asp-items="ViewBag.LocationID"></select>
+            </div>
 @*             <div class="form-group">
                 <label asp-for="Location" class="control-label"></label>
                 <input asp-for="Location" class="form-control" />
@@ -67,7 +83,7 @@
                 <input asp-for="EnrollmentCount" class="form-control" />
                 <span asp-validation-for="EnrollmentCount" class="text-danger"></span>
             </div> *@
-            <div class="form-group">
+           @*  <div class="form-group">
                 <label asp-for="CreatedAt" class="control-label"></label>
                 <input asp-for="CreatedAt" class="form-control" />
                 <span asp-validation-for="CreatedAt" class="text-danger"></span>
@@ -76,17 +92,35 @@
                 <label asp-for="UpdatedAt" class="control-label"></label>
                 <input asp-for="UpdatedAt" class="form-control" />
                 <span asp-validation-for="UpdatedAt" class="text-danger"></span>
-            </div>
+            </div> *@
           @*   <div class="form-group">
                 <label asp-for="Clicks" class="control-label"></label>
                 <input asp-for="Clicks" class="form-control" />
                 <span asp-validation-for="Clicks" class="text-danger"></span>
             </div> *@
             @*   圖片 *@
+            <!-- 隐藏字段存储原始缩略图 URL -->
+            <!-- 显示缩略图 -->
+            <!-- 显示缩略图 -->
             <div class="form-group">
                 <label asp-for="ThumbnailUrl" class="control-label"></label>
+                <!-- 使用局部视图显示当前图片 -->
+                <partial name="_ShowPicturePartialView" />
+                <!-- 文件上传字段 -->
                 <input type="file" name="thumbnailFile" class="form-control" accept="image/*" />
             </div>
+            
+            @* 改 *@
+          @*   <div class="form-group">
+                <label asp-for="ThumbnailUrl" class="control-label"></label>
+                <!-- 使用局部视图显示当前图片 -->
+                <partial name="_ShowPicturePartialView" />
+                <!-- 文件上传字段 -->
+                <input type="file" asp-for="ThumbnailUrl" class="form-control" accept="image/*" />
+            </div> *@
+
+            
+
 
             <div class="form-group">
                 <input type="submit" value="儲存" class="btn btn-primary" />
@@ -99,3 +133,21 @@
     <a asp-action="Index">返回課程首頁</a>
 </div>
 
+@section Scripts {
+    <script>
+        function previewImage(inputFile) {
+            var preview = document.getElementById('thumbnailPreview');
+            // 檢查是否選擇了檔案且支援 FileReader
+            if (inputFile.files && inputFile.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    // 將預覽圖片設置為選擇的圖片
+                    preview.src = e.target.result;
+                    preview.style.display = 'block'; // 顯示圖片預覽
+                };
+                // 讀取圖片檔案
+                reader.readAsDataURL(inputFile.files[0]);
+            }
+        }
+    </script>
+}
