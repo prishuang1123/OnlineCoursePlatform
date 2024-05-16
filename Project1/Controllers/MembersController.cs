@@ -9,6 +9,7 @@ using Project1.Data;
 using Project1.Models;
 using Project1.ViewModels;
 
+
 namespace Project1.Controllers
 {
     public class MembersController : Controller
@@ -37,7 +38,6 @@ namespace Project1.Controllers
                            .FirstOrDefaultAsync(m => m.Email == lvm.Email && m.Phone == lvm.Phone);
                 if (member != null)
                 {
-
                     return RedirectToAction("Index","Home");
                 }
                 
@@ -45,6 +45,8 @@ namespace Project1.Controllers
             ViewBag.failLogin = "帳密錯誤";
             return View(lvm);
         }
+
+        
 
         // GET: Members
         public async Task<IActionResult> Index()

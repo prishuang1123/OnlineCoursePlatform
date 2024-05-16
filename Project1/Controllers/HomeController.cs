@@ -136,6 +136,7 @@ namespace Project1.Controllers
             return View();
         }
 
+
         //�t�κ޲z���s��|��(�Y�a�s��e��)
         public IActionResult MemberVueSPA()
         {

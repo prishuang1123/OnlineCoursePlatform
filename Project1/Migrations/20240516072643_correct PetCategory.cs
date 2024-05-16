@@ -11,13 +11,7 @@ namespace Project1.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_PetCategories",
-                table: "PetCategories");
-
-            migrationBuilder.RenameTable(
-                name: "PetCategories",
-                newName: "PetCategory");
+           
 
             migrationBuilder.AlterColumn<string>(
                 name: "ResidenceArea",
