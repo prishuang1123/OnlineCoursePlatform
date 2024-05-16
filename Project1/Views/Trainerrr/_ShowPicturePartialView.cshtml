@@ -1,0 +1,12 @@
+﻿@model Project1.Models.Course
+
+@if (Model.ThumbnailUrl != null)
+{
+    <!-- 如果缩略图URL不为空，则显示缩略图 -->
+    <img src="@Url.Action("GetPicture", "Trainerrr", new { id = Model.CourseID })" title="@Model.CourseName" style="width:240px;" />
+}
+else
+{
+    <!-- 否则显示默认图片 -->
+    <img src="~/img/CourseThumbnail/noimage.jpg" title="無參考圖案" style="width:200px;height:200px" />
+}

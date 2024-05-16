@@ -1,0 +1,18 @@
+﻿@model Project1.Models.Blog
+
+@{
+    ViewData["Title"] = "Blog Details";
+}
+
+<h2>@Model.Title</h2>
+<p>@Model.Content</p>
+
+@if (!string.IsNullOrEmpty(Model.Image1))
+{
+    <img src="@Url.Content(Model.Image1)" alt="圖片1" />
+}
+
+@if (!string.IsNullOrEmpty(Model.Image2))
+{
+    <img src="@Url.Content(Model.Image2)" alt="圖片2" />
+}
