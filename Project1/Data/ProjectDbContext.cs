@@ -435,7 +435,7 @@ new Course { CourseID = 15, CourseName = "貓咪社交化培訓", TrainerID = 5,
 
         public virtual DbSet<Payment> Payment { get; set; }
 
-        public virtual DbSet<ShoppingCart> ShoppingCart { get; set; }
+        public virtual DbSet<ShoppingCart> Cart { get; set; }
 
         public virtual DbSet<Discount> Discount { get; set; }
 
@@ -452,7 +452,7 @@ new Course { CourseID = 15, CourseName = "貓咪社交化培訓", TrainerID = 5,
 
         public virtual DbSet<Specialization> Specialization { get; set; }
 
-        public virtual DbSet<PetCategory> PetCategories { get; set; }
+        public virtual DbSet<PetCategory> PetCategory { get; set; }
 
         public virtual DbSet<CourseType> CourseType { get; set; }
 

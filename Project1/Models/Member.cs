@@ -31,5 +31,9 @@ namespace Project1.Models
 		public bool? IsAdministrator { get; set; } // 是否為系統管理員，1/0
 
 		public string? Photo { get; set; }
+
+		public string? Account { get; set; }
+
+		public string? Password { get; set; }
     }
 }
