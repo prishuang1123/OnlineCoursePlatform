@@ -66,9 +66,9 @@ namespace Project1.Controllers
 				ShoppingCart cartItem = new ShoppingCart();
 				cartItem.CourseID = courseObj.CourseID;
 				cartItem.Quantity = 1;
-				cartItem.MemberID = 1;
+				cartItem.MemberID = 1; //later with real memberID
 
-                if (ModelState.IsValid)
+				if (ModelState.IsValid)
                 {
                     _db.Cart.Add(cartItem);
                     _db.SaveChanges();
@@ -83,6 +83,34 @@ namespace Project1.Controllers
             }
 			
 			
+		}
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> FollowItem(int? id) //courseID
+		{
+			//add the course into the logged in member's cart-> add a data into cart table
+			Course? courseObj = await _db.Course.Where(u => u.CourseID == id).FirstOrDefaultAsync();
+			if (courseObj != null)
+			{
+				FollowItem followItem = new FollowItem();
+				followItem.CourseID = courseObj.CourseID;
+				followItem.MemberID = 1; //later with real memberID
+
+				if (ModelState.IsValid)
+				{
+					_db.FollowItem.Add(followItem);
+					_db.SaveChanges();
+					TempData["success"] = "加入追蹤清單!!";
+					return RedirectToAction("Index", "Browse");
+				}
+				return RedirectToAction("Index", "Browse");
+			}
+			else
+			{
+				return NotFound();
+			}
+
+
 		}
 	}
 }

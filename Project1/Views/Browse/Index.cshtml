@@ -148,22 +148,29 @@
 										<form asp-action="AddToCart" asp-controller="Browse" asp-route-id="@course.CourseID" method="post" class="button-form social-info">
 											@Html.AntiForgeryToken()
 											<button type="submit" class="lnr">
-												<span class="ti-bag"></span>
+												<span class="lnr ti-bag"></span>
 												<p class="hover-text">加入購物車</p>
 											</button>
 										</form>
-										<a asp-action="" asp-controller="Browse" asp-route-id="@course.CourseID" class="social-info">
+										<form asp-action="FollowItem" asp-controller="Browse" asp-route-id="@course.CourseID" method="post" class="button-form social-info">
+											@Html.AntiForgeryToken()
+											<button type="submit" class="lnr">
+												<span class="lnr lnr-heart"></span>
+												<p class="hover-text">追蹤</p>
+											</button>
+										</form>
+										@* <a asp-action="" asp-controller="Browse" asp-route-id="@course.CourseID" class="social-info">
 											<span class="lnr lnr-heart"></span>
 											<p class="hover-text">追蹤</p>
-										</a>
+										</a> *@
 										@* <a href="" class="social-info">
 											<span class="lnr lnr-sync"></span>
 											<p class="hover-text">compare</p>
 										</a> *@
-										<a asp-action="" asp-controller="" asp-route-id="@course.CourseID" class="social-info">
+										@* <a asp-action="" asp-controller="" asp-route-id="@course.CourseID" class="social-info">
 											<span class="lnr lnr-move"></span>
 											<p class="hover-text">商品詳情</p>
-										</a>
+										</a> *@
 									</div>
 								</div>
 							</div>

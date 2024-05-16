@@ -444,8 +444,9 @@ new Course { CourseID = 15, CourseName = "貓咪社交化培訓", TrainerID = 5,
         public virtual DbSet<CourseCategory> CourseCategory { get; set; }
 
         public virtual DbSet<Images> Images { get; set; }
+		public virtual DbSet<FollowItem> FollowItem { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("Server=(localdb)\\ProjectModels;Database=ProjectDb;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True");
         }
