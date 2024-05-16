@@ -125,6 +125,27 @@ namespace Project1.Controllers
             return View();
         }
 
+        //系統管理員編輯會員測試畫面
+        public IActionResult Member()
+        {
+            return View();
+        }
+        //註冊畫面
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        //系統管理員編輯會員(即地編輯畫面)
+        public IActionResult MemberVueSPA()
+        {
+            return View();
+        }
+
+        
+
+
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

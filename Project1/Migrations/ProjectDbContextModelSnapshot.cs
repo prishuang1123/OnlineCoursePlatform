@@ -866,17 +866,18 @@ namespace Project1.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MemberID"));
 
-                    b.Property<DateTime>("Birthday")
+                    b.Property<DateTime?>("Birthday")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsAdministrator")
+                    b.Property<bool?>("IsAdministrator")
+                        .IsRequired()
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsTrainer")
+                    b.Property<bool?>("IsTrainer")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
@@ -890,11 +891,11 @@ namespace Project1.Migrations
                     b.Property<string>("Photo")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("RegistrationDate")
+                    b.Property<DateTime?>("RegistrationDate")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ResidenceArea")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("MemberID");
