@@ -125,18 +125,18 @@ namespace Project1.Controllers
             return View();
         }
 
-        //¨t²ÎºÞ²z­û½s¿è·|­û´ú¸Õµe­±
+        //ï¿½tï¿½ÎºÞ²zï¿½ï¿½ï¿½sï¿½ï¿½|ï¿½ï¿½ï¿½ï¿½ï¿½Õµeï¿½ï¿½
         public IActionResult Member()
         {
             return View();
         }
-        //µù¥Uµe­±
+        //ï¿½ï¿½ï¿½Uï¿½eï¿½ï¿½
         public IActionResult Register()
         {
             return View();
         }
 
-        //¨t²ÎºÞ²z­û½s¿è·|­û(§Y¦a½s¿èµe­±)
+        //ï¿½tï¿½ÎºÞ²zï¿½ï¿½ï¿½sï¿½ï¿½|ï¿½ï¿½(ï¿½Yï¿½aï¿½sï¿½ï¿½eï¿½ï¿½)
         public IActionResult MemberVueSPA()
         {
             return View();
