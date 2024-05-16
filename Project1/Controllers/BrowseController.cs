@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol;
 using Project1.Data;
 using Project1.Models;
+using Project1.ViewModels;
 
 namespace Project1.Controllers
 {
@@ -111,6 +112,25 @@ namespace Project1.Controllers
 			}
 
 
+		}
+
+		public async Task<JsonResult> CategoryNumber()
+		{
+			var categoryNum = _db.Course.GroupBy(c => c.CourseCategoryID)
+		.Select(cn => new
+		{
+			CourseCategoryID = cn.Key,
+			TotalNum = cn.Count(),
+			CategoryName = (_db.CourseCategory.FirstOrDefault(c => c.CourseCategoryID == cn.Key)).CourseCategoryName
+		});
+
+			//var categoryNumList = new List<object>();
+			//foreach (var categoryObj in categoryNum)
+			//{
+			//	categoryNumList.Add(categoryObj);
+			//}
+
+			return Json(categoryNum);
 		}
 	}
 }

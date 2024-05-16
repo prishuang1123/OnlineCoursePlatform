@@ -28,19 +28,14 @@
 		<div class="col-xl-3 col-lg-4 col-md-5">
 			<div class="sidebar-categories">
 				<div class="head">課程類別</div>
-				<ul class="main-categories">
-					@foreach (var category in Model.categoryList)
-					{
-						
-						<li class="main-nav-list">
-							<a data-toggle="collapse" href="#" aria-expanded="false" aria-controls="@category.CourseCategoryName">
+				<ul id="app" class="main-categories">
+					<li v-for="(item, index) in categoryNumber" :key="index" class="main-nav-list">
+						<a data-toggle="collapse" href="#" aria-expanded="false" aria-controls="">
 								<span class="lnr lnr-arrow-right"></span>
-								@category.CourseCategoryName
-								<span class="number">(53)</span>
+							{{ item.CategoryName }}
+							<span class="number">({{ item.TotalNum }})</span>
 							</a>
 						</li>
-					}
-					
 				</ul>
 			</div>
 			<div class="sidebar-filter mt-50">
@@ -159,10 +154,6 @@
 												<p class="hover-text">追蹤</p>
 											</button>
 										</form>
-										@* <a asp-action="" asp-controller="Browse" asp-route-id="@course.CourseID" class="social-info">
-											<span class="lnr lnr-heart"></span>
-											<p class="hover-text">追蹤</p>
-										</a> *@
 										@* <a href="" class="social-info">
 											<span class="lnr lnr-sync"></span>
 											<p class="hover-text">compare</p>
@@ -408,8 +399,30 @@
 		</div>
 	</div>
 </div>
-	
 
 
+	@section Scripts {
+		<script>
+			var vueApp = {
+				data() {
+					return {
+						categoryNumber: []
+					}
+				},
+				mounted() {
+					var url = "https://localhost:7177/Browse/CategoryNumber";
+					axios.get(url).then(response => {
+						this.categoryNumber = response.data;
+					}).catch(error => {
+						alert(error);
+					});
 
-	
+				}
+			}
+
+			var app = Vue.createApp(vueApp).mount("#app");
+
+
+		</script>
+
+	}
