@@ -17,19 +17,23 @@ namespace Project1.Models
 		[Required]
 		public string Phone { get; set; } // 會員手機號碼
 
-		public DateTime Birthday { get; set; } // 會員生日
+		public DateTime? Birthday { get; set; } // 會員生日
 
 		[Required]
-		public DateTime RegistrationDate { get; set; } // 會員註冊日期
+		public DateTime? RegistrationDate { get; set; } // 會員註冊日期
 
-		public string ResidenceArea { get; set; } // 會員居住區域
-
-		[Required]
-		public bool IsTrainer { get; set; } // 是否為訓練師，1/0
+		public string? ResidenceArea { get; set; } // 會員居住區域
 
 		[Required]
-		public bool IsAdministrator { get; set; } // 是否為系統管理員，1/0
+		public bool? IsTrainer { get; set; } // 是否為訓練師，1/0
+
+		[Required]
+		public bool? IsAdministrator { get; set; } // 是否為系統管理員，1/0
 
 		public string? Photo { get; set; }
+
+		public string? Account { get; set; }
+
+		public string? Password { get; set; }
     }
 }

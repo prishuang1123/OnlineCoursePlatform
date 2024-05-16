@@ -26,14 +26,14 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.PetCategory)
-        </dd> *@
-@*         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CourseCategory)
-        </dt> *@
-@*         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CourseCategory)
-        </dd> *@
-@*         <dt class = "col-sm-2">
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CourseCategoryID)
+        </dt>
+        <dd class="col-sm-10">
+            @ViewBag.CourseCategoryName
+        </dd>
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.CourseType)
         </dt>
         <dd class = "col-sm-10">
@@ -57,12 +57,18 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Price)
         </dd>
-@*         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Location)
-        </dt> *@
-@*         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Location)
-        </dd> *@
+         <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.LocationID)
+        </dt>
+        <dd class = "col-sm-10">
+            @ViewBag.LocationName
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.LocationID)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.LocationID)
+        </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.MaxParticipants)
         </dt>
@@ -92,6 +98,12 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Clicks)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ThumbnailUrl)
+        </dt>
+        <dd class="col-sm-10">
+            <partial name="_ShowPicturePartialView" />
         </dd>
     </dl>
 </div>

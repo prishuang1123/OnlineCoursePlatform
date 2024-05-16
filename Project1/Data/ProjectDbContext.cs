@@ -17,6 +17,11 @@ namespace Project1.Data
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Member>()
+        .Property(b => b.IsTrainer)
+        .IsRequired(false); // 設定為允許null
+
+
             modelBuilder.Entity<ShoppingCart>().HasData(
                 new ShoppingCart { CartID = 1, CourseID = 1, Quantity = 1, CreatedAt = DateTime.UtcNow }
                 );
@@ -446,7 +451,15 @@ new Course { CourseID = 15, CourseName = "貓咪社交化培訓", TrainerID = 5,
         public virtual DbSet<Images> Images { get; set; }
 		public virtual DbSet<FollowItem> FollowItem { get; set; }
 
-		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public virtual DbSet<Specialization> Specialization { get; set; }
+
+        public virtual DbSet<PetCategory> PetCategory { get; set; }
+
+        public virtual DbSet<CourseType> CourseType { get; set; }
+
+
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("Server=(localdb)\\ProjectModels;Database=ProjectDb;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True");
         }

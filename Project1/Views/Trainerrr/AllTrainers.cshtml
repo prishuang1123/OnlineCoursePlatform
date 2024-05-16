@@ -1,33 +1,120 @@
-﻿<section id="app" class="lattest-product-area pb-40 category-list">
-    <div class="container">
-        <div class="row justify-content-center">
-            <h1>訓練師</h1>
-            <div v-for="trainer in trainers" class="col-lg-4 col-md-6 mb-0">
-                <div class="single-product position-relative overflow-hidden">
-                <img :src="trainer.photo" class="img-fluid" alt="Trainer's photo"/>
-                    <div class="product-details text-black">
-                        <h5 class="mb-3 text-white product-title">{{trainer.trainerName}}</h5>
-                        <p class="mb-0">專長:{{trainer.specialization}}</p>
-                        <p class="mb-0">經驗:{{trainer.experience}}</p>
+﻿<div class="container" id="app">
+    <div class="row">
+        <div class="col-xl-3 col-lg-4 col-md-5">
+            <div class="sidebar-categories">
+                <div class="head">篩選訓練師專長</div>
+                <ul class="main-categories">
+                    <li class="main-nav-list">
+                        <a href="#" v-on:click="filterTrainers('所有訓練師')">所有訓練師</a>
+                    </li>
+                    <li class="main-nav-list">
+                        <a href="#" v-on:click="filterTrainers('犬隻行為調教')">犬隻行為調教</a>
+                    </li>
+                    <li class="main-nav-list">
+                        <a href="#" v-on:click="filterTrainers('貓咪行為諮詢')">貓咪行為諮詢</a>
+                    </li>
+                    <li class="main-nav-list">
+                        <a href="#" v-on:click="filterTrainers('犬隻服從訓練')">犬隻服從訓練</a>
+                    </li>
+                    <li class="main-nav-list">
+                        <a href="#" v-on:click="filterTrainers('貓咪基礎訓練')">貓咪基礎訓練</a>
+                    </li>
+                    <li class="main-nav-list">
+                        <a href="#" v-on:click="filterTrainers('貓咪行為矯正')">犬隻行為改善</a>
+                    </li>
+                    <li class="main-nav-list">
+                        <a href="#" v-on:click="filterTrainers('貓咪行為矯正')">貓咪行為矯正</a>
+                    </li>
+                    <li class="main-nav-list">
+                        <a href="#" v-on:click="filterTrainers('犬隻服從訓練')">犬隻服從訓練</a>
+                    </li>
+                    <li class="main-nav-list">
+                        <a href="#" v-on:click="filterTrainers('犬隻基礎訓練')">犬隻基礎訓練</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-xl-9 col-lg-8 col-md-7">
+            <section class="lattest-product-area pb-40 category-list">
+                <div class="row">
+                    <div v-for="(trainer, index) in displayedTrainers" class="col-lg-4 col-md-6">
+                        <div class="single-product position-relative overflow-hidden">
+                            <img :src="trainer.photo" class="img-fluid" alt="Trainer's photo" />
+                            <div class="product-details text-black">
+                                <h5 class="mb-3 product-title">{{trainer.trainerName}}</h5>
+                                <p class="mb-0">專長:{{trainer.specializationName}}</p>
+                                <p class="mb-0">經驗:{{trainer.experience}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <div class="filter-bar d-flex flex-wrap align-items-right">
+                <div class="sorting mr-auto align-right">
+                    <div class="pagination">
+                        <a href="#" class="prev-arrow" @@click="prevPage"><i class="fa fa-long-arrow-left" aria-hidden="true"></i></a>
+                        <a href="#" v-for="page in totalPages" :key="page" :class="{active: currentPage === page}" @@click="changePage(page)">{{ page }}</a>
+                        <a href="#" class="next-arrow" @@click="nextPage"><i class="fa fa-long-arrow-right" aria-hidden="true"></i></a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</section>
+</div>
 
-@section Scripts{
+
+@section Scripts {
     <script>
         var vueApp = {
             data() {
                 return {
                     trainers: [],
+                    originalTrainers: [],
+                    currentPage: 1, // 当前页码
+                    pageSize: 6, // 每页显示的数据条数
                 }
+            },
+            computed: {
+                totalPages() {
+                    return Math.ceil(this.trainers.length / this.pageSize);
+                },
+                displayedTrainers() {
+                    const startIndex = (this.currentPage - 1) * this.pageSize;
+                    const endIndex = startIndex + this.pageSize;
+                    return this.trainers.slice(startIndex, endIndex);
+                }
+            },
+            methods: {
+                changePage(page) {
+                    this.currentPage = page;
+                },
+                nextPage() {
+                    if (this.currentPage < this.totalPages) {
+                        this.currentPage++;
+                    }
+                },
+                prevPage() {
+                    if (this.currentPage > 1) {
+                        this.currentPage--;
+                    }
+                },
+                filterTrainers(specialization) {
+                    if (specialization == "所有訓練師") {
+                        this.trainers = this.originalTrainers;
+                        this.currentPage = 1;
+                    }
+                    else {
+                        this.trainers = this.originalTrainers;
+                        this.trainers = this.trainers.filter(t => t.specializationName == specialization.trim());
+                        this.currentPage = 1;
+                    }
+                },
             },
             mounted() {
                 var url = "https://localhost:7177/Trainerrr/getTrainers";
                 axios.get(url).then(response => {
                     this.trainers = response.data;
+                    this.originalTrainers = this.trainers;
                 }).catch(error => {
                     alert(error);
                 });
