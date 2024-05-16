@@ -1,4 +1,27 @@
 ﻿@model BrowseVM
+<style>
+	.button-form {
+		display: inline-block;
+		border: none;
+		padding: 0;
+		/* margin: 0;
+		text-decoration: none;
+		background: none;
+		color: inherit; */
+		/* cursor: pointer;
+		text-align: center;
+		-webkit-appearance: none;
+		-moz-appearance: none; */
+	}
+
+		.button-form button.lnr {
+			border: none;
+			background: none;
+			color: inherit;
+			/* padding: 0; */
+			/* cursor: pointer; */
+		}
+</style>
 
 <div class="container">
 	<div class="row">
@@ -118,12 +141,18 @@
 										@* <h6 class="l-through">$210.00</h6> *@
 									</div>
 									<div class="prd-bottom">
-
-										<a href="" class="social-info">
+										@* <a asp-action="AddToCart" asp-controller="Browse" asp-route-id="@course.CourseID" class="social-info">
 											<span class="ti-bag"></span>
 											<p class="hover-text">加入購物車</p>
-										</a>
-										<a href="" class="social-info">
+										</a> *@
+										<form asp-action="AddToCart" asp-controller="Browse" asp-route-id="@course.CourseID" method="post" class="button-form social-info">
+											@Html.AntiForgeryToken()
+											<button type="submit" class="lnr">
+												<span class="ti-bag"></span>
+												<p class="hover-text">加入購物車</p>
+											</button>
+										</form>
+										<a asp-action="" asp-controller="Browse" asp-route-id="@course.CourseID" class="social-info">
 											<span class="lnr lnr-heart"></span>
 											<p class="hover-text">追蹤</p>
 										</a>
@@ -131,7 +160,7 @@
 											<span class="lnr lnr-sync"></span>
 											<p class="hover-text">compare</p>
 										</a> *@
-										<a href="" class="social-info">
+										<a asp-action="" asp-controller="" asp-route-id="@course.CourseID" class="social-info">
 											<span class="lnr lnr-move"></span>
 											<p class="hover-text">商品詳情</p>
 										</a>
