@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 using Project1.Data;
 using Project1.Models;
+using Project1.ViewModels;
 
 
 

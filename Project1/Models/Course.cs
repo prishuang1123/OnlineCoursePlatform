@@ -21,14 +21,14 @@ namespace Project1.Models
 
 		[Required]
         [Display(Name = "寵物分類")]
-        public string PetCategory { get; set; } // 寵物分類
+        public int PetCategoryID { get; set; } // 寵物分類
 
 		[Required]
         [Display(Name = "課程分類")]
         public int CourseCategoryID { get; set; } // 課程分類
 
         [Display(Name = "課程類型")]
-        public string? CourseType { get; set; } // 課程類型
+        public int CourseTypeID { get; set; } // 課程類型
 
         [Display(Name = "課程描述")]
         public string? Description { get; set; } // 課程描述

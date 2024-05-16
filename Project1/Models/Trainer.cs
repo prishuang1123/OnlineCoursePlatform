@@ -16,7 +16,7 @@ namespace Project1.Models
         public string TrainerName { get; set; } // 名字
 
         [Display(Name = "專長")]
-        public string Specialization { get; set; } // 專長
+        public int SpecializationID { get; set; } // 專長ID，外鍵
 
         [Display(Name = "經歷")]
         public string Experience { get; set; } // 經歷
