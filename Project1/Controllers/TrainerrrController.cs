@@ -436,6 +436,7 @@ namespace Project1.Controllers
 
         //---------------------------顯示部落格首頁------------------------------------------------
 
+        
         public async Task<IActionResult> Indexblog()
         {
             // 取得當前登入的訓練師
@@ -449,6 +450,7 @@ namespace Project1.Controllers
         }
 
         // 取得當前登入的訓練師
+       //哪個訓練師登入?
         private Trainer GetCurrentTrainer()
         {
             // 這裡示範一個假設的方法，根據你的身份驗證機制來取得當前登入的訓練師
@@ -458,14 +460,47 @@ namespace Project1.Controllers
 
         public async Task<JsonResult> GetBlog()
         {
-            var blogs = await _context.Blog.ToListAsync();
+            // 取得當前登入的訓練師
+            var currentTrainer = GetCurrentTrainer();
+
+            var blogs = await _context.Blog
+                                      .Include(b => b.Trainer)
+                                      .Where(b => b.TrainerID == currentTrainer.TrainerID)
+                                      .ToListAsync();
+
+            var blogPosts = blogs.Select(b => new
+            {
+                b.BlogID,
+                b.TrainerID,
+                b.Title,
+                b.Content,
+                b.Image1,
+                b.Image2,
+                b.PostedDate,
+                TrainerName = b.Trainer.TrainerName
+            }).ToList();
 
             // 返回 JSON 結果
             return Json(blogs);
         }
+
+        //處理發文
+        [HttpPost]
+        public async Task<IActionResult> CreateBlog([FromBody] Blog newBlog)
+        {
+            if (ModelState.IsValid)
+            {
+                newBlog.TrainerID = GetCurrentTrainer().TrainerID; // 設定當前登入的訓練師ID
+                newBlog.PostedDate = DateTime.Now;
+                _context.Blog.Add(newBlog);
+                await _context.SaveChangesAsync();
+                return Ok(newBlog);
+            }
+            return BadRequest(ModelState);
+        }
         //---------------------------------------------------------------------------------------------
-   
-     
+
+
 
     }
 }

@@ -25,5 +25,7 @@ namespace Project1.Models
         public DateTime PostedDate { get; set; }
 
         public DateTime? UpdatedDate { get; set; }
+
+        public Trainer Trainer { get; set; } // 導航屬性
     }
 }

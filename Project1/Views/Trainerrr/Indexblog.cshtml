@@ -1,17 +1,59 @@
 ﻿@section Styles {
-    <style></style>
+    <style>
+        .post-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .post {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            position: relative; /* 使子元素可以絕對定位 */
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+            .post-header img {
+                border-radius: 50%;
+                margin-right: 10px;
+            }
+
+        .post-body img {
+            width: 100%;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .post-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .post-actions {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 5px;
+        }
+    </style>
 }
 
-<div id="app">
-    @* 搜尋篩選介面----stsrt *@
-    <div class="row" style="width:50%;margin-left:auto;margin-right:5px;">
-        <label class="col-lg-4 form-label">篩選關鍵字</label>
-        <input class="col-lg-8 form-control" v-model="filter" placeholder="請輸入篩選關鍵字" @@keyup="filterEmployees" />
-    </div>
-    @* 搜尋篩選介面--end *@
-
-    <div  class="container">
-       @*  編輯貼文區塊*@
+<div id="app" class="container mt-5">
+    <div class="post-container">
+        @* 搜尋篩選介面 *@
+        <div class="row" style="width:50%;margin-left:auto;margin-right:5px;">
+            <label class="col-lg-4 form-label">篩選關鍵字</label>
+            <input class="col-lg-8 form-control" v-model="filter" placeholder="請輸入篩選關鍵字" @@keyup="filterEmployees" />
+        </div>
+        @* 編輯貼文區塊 *@
         <div class="form-group">
             <div class="card mb-3 post-box">
                 <div class="card-body">
@@ -20,48 +62,120 @@
                 </div>
             </div>
         </div>
-        @* 打卡顯示區塊---start*@
-        <div class="form-group">
-            <div class="card mb-3 latest-post">
-                <div class="card-header">
-                    最新部落格文章
+        @* 貼文顯示區塊 *@
+        <div v-for="(post, index) in posts" :key="post.blogID">
+            <div class="post">
+                <div class="post-header">
+                    <img :src="post.image1" alt="Image1" width="50" height="50">
+                    <div>
+                        <h5>{{ post.trainer.trainerName }}</h5>
+                        <P>{{ post.title }}</P> <!-- 確保顯示 TrainerName -->
+                    </div>
                 </div>
-                <div class="card-body">
-                    <div v-for="blog in blogs">
-                      
+                <div class="post-body">
+                    <p>{{ post.content }}</p>
+                    <img v-if="post.image2" :src="post.image2" alt="Post Image2">
+                </div>
+                <div class="post-actions">
+                    <button class="btn btn-primary btn-sm" @@click="editPost(post)">編輯</button>
+                    <button class="btn btn-danger btn-sm" @@click="deletePost(post.trainerID)">刪除</button>
+                </div>
+                <div class="post-footer">
+                    <div class="post-likes">
+                        <button class="btn btn-outline-primary btn-sm" @@click="likePost(post)">
+                            👍 {{ post.likes || 0 }}
+                        </button>
                     </div>
                 </div>
             </div>
+            <hr v-if="index < posts.length - 1">
         </div>
-        @* 打卡顯示區塊-----end*@
     </div>
-    
+
+@* 模態框 *@
+<div class="modal fade" id="postModal" tabindex="-1" role="dialog" aria-labelledby="postModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="postModalLabel">建立貼文</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <textarea class="form-control" v-model="newPostContent" placeholder="在想些什麼？"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                <button type="button" class="btn btn-primary" @@click="createPost">發佈</button>
+            </div>
+        </div>
+    </div>
 </div>
+</div>
+
 
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.8/axios.min.js"
             integrity="sha512-PJa3oQSLWRB7wHZ7GQ/g+qyv6r4mbuhmiDb8BjSFZ8NZ2a42oTtAq5n0ucWAwcQDlikAtkub+tPVCw4np27WCg=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://unpkg.com/vue@3.4.25/dist/vue.global.js"></script>
-<script>
-    var VueApp = {
-        data() {
+    <script>
+        var blogg = "https://localhost:7177/Trainerrr/GetBlog";
+
+        var VueApp = {
+            data() {
                 return {
+                    posts: [],
                     filter: "",
-                    blogs: [ ]
-                }
-         },
-        methods: {
-            showModal: function () { 
-                alert("打卡");
+                    newPostContent: "",
+                    blogs: []
+                };
             },
-            filterEmployees: function () {
+            mounted() {
+                this.fetchPosts();
+            },
+            methods: {
+                fetchPosts() {
+                    axios.get(blogg).then(response => {
+                        this.posts = response.data;
+                    }).catch(error => {
+                        alert(error);
+                    });
+                },
+                showModal() {
+                    $('#postModal').modal('show');
+                },
+                createPost() {
+                    // 發送請求到後端以創建新貼文
+                    axios.post(blogg, {
+                        content: this.newPostContent
+                    }).then(response => {
+                        this.fetchPosts(); // 刷新貼文列表
+                        $('#postModal').modal('hide'); // 隱藏模態框
+                    }).catch(error => {
+                        alert(error);
+                    });
+                },
+                filterEmployees() {
                     alert("搜尋");
+                },
+                editPost(post) {
+                    alert('編輯貼文 ' + post.blogID);
+                },
+                deletePost(postID) {
+                    this.posts = this.posts.filter(post => post.trainerID !== postID);
+                },
+                likePost(post) {
+                    if (!post.likes) {
+                        this.$set(post, 'likes', 0);
+                    }
+                    post.likes++;
+                }
             }
-        }
-    }
-   
-        var app = Vue.createApp(VueApp).mount("#app");
-</script>
+        };
+
+       var app= Vue.createApp(VueApp).mount("#app");
+    </script>
 }
 
