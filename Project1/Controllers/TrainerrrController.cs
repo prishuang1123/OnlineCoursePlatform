@@ -489,9 +489,12 @@ namespace Project1.Controllers
                                 SpecializationName = specializationName 
                             }).ToList(); 
             return Json(trainers);
-
         }
 
+        public IActionResult singleCourse()
+        {
+            return View();
+        }
     }
 }
    
