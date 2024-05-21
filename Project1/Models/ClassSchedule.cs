@@ -11,7 +11,6 @@ namespace Project1.Models
 
         public DateTime Scheduler { get; set; }//讓課日期&時段
             
-        //[ForeignKey("CourseID")]
-        //public virtual Course Course { get; set; }
+       
     }
 }

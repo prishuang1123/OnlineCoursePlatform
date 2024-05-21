@@ -633,20 +633,20 @@
                     <div class="form-group">
                         <label for="publishDateTime">選擇發佈時間:</label>
                         <input type="datetime-local" class="form-control" id="publishDateTime" v-model="publishDateTime">
+                        <button type="button" class="btn btn-primary mt-2" @@click="publishCourse">確定</button>
                     </div>
                     <div class="form-group">
                         <label>已發佈的課堂:</label>
                         <ul>
-                            <li v-for="schedule in publishedSchedules" :key="schedule.classScheduleID">
+                            <li v-for="schedule in publishedSchedules" :key="schedule.schedulerID">
                                 {{ schedule.scheduler | formatDateTime }}
-                                <button class="btn btn-danger btn-sm" @@click="retractPublish(schedule.classScheduleID)">收回發佈</button>
+                                <button class="btn btn-danger btn-sm" @@click="retractPublish(schedule.schedulerID)">收回發佈</button>
                             </li>
                         </ul>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
-                    <button type="button" class="btn btn-primary" @@click="publishCourse">確定</button>
                 </div>
             </div>
         </div>
@@ -954,7 +954,11 @@
                     $('#publishModal').modal('show');
                 },
                 fetchPublishedSchedules(courseID) {
-                    axios.get(`${getPublishedSchedulesUrl}/${courseID}`).then(response => {
+                    axios.get(getPublishedSchedulesUrl, {
+                        params: {
+                            courseID: courseID// 替換為你需要的課程ID
+                        }
+                    }).then(response => {
                         this.publishedSchedules = response.data;
                     }).catch(error => {
                         console.log(error);

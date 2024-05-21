@@ -809,7 +809,7 @@ namespace Project1.Controllers
 
         // 取得已發布課程的時程
         [HttpGet]
-        public async Task<IActionResult> GetPublishedSchedules(int courseID)
+        public async Task<IActionResult> GetPublishedSchedules([FromQuery] int courseID)
         {
             var schedules = await _context.ClassSchedule
                                           .Where(cs => cs.CourseID == courseID)
@@ -822,7 +822,6 @@ namespace Project1.Controllers
 
             return Ok(schedules);
         }
-
 
 
         // 收回發佈
