@@ -26,17 +26,15 @@
 						<li><span>上課地區: {{course.locationName}}</span></li>
 					</ul>
 					<p>{{ course.description }}</p>
-					<div class="product_count">
-						<label for="qty">數量:</label>
-						<input type="text" name="qty" id="sst" maxlength="12" value="1" title="Quantity:" class="input-text qty">
-						<button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
-								class="increase items-count" type="button">
-							<i class="lnr lnr-chevron-up"></i>
-						</button>
-						<button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) && sst > 0 ) result.value--;return false;"
-								class="reduced items-count" type="button">
-							<i class="lnr lnr-chevron-down"></i>
-						</button>
+					<div v-if="sechdules.length > 0" class="single-element-widget mt-30">
+						<h3 class="mb-30">已開放上課時間</h3>
+						<div v-for="sechdule in sechdules" :key="sechdule.sechdulerID" class="switch-wrap d-flex justify-content-between">
+							<p>{{sechdule.sechduler}}</p>
+							<div class="primary-checkbox">
+								<input type="checkbox" id="default-checkbox">
+								<label for="default-checkbox"></label>
+							</div>
+						</div>
 					</div>
 					<div class="card_area d-flex align-items-center">
 						<a class="primary-btn" href="#">加入購物車</a>
@@ -54,13 +52,23 @@
 				return {
 					course: [],// Ensure course is initialized as null
 					scourse :[],
+					sechdules :[],
+					singletime: []
 				}
 			},
 			mounted() {
-				var url = "https://localhost:7177/Trainerrr/getSingleCourse";
-				axios.get(url).then(response => {
+				var url1 = "https://localhost:7177/Trainerrr/getSingleCourse";
+				axios.get(url1).then(response => {
 					this.course = response.data;
 					//this.scourse = this.course.where(x => x.courseID == this.courseId);
+				}).catch(error => {
+					alert(error);
+				});
+				var url2 = "https://localhost:7177/Trainerrr/getClassSechdule"
+				axios.get(url2).then(reponse => {
+					console.log(reponse.data);
+					this.sechdules = reponse.data;	
+					console.log(this.sechdules[0].courseID)
 				}).catch(error => {
 					alert(error);
 				});
