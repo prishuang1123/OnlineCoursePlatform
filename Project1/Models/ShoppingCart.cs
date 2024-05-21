@@ -25,10 +25,13 @@ namespace Project1.Models
         public int? MemberID { get; set; }//會員ID
         // Navigation property
         //public virtual Course Course { get; set; }
+		
+        public int? SchedulerID { get; set; } //上課時間編號
 
         public ShoppingCart()
         {
             this.CreatedAt = DateTime.UtcNow;
         }
-    }
+
+	}
 }

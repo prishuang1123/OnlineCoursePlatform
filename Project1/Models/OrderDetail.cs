@@ -40,10 +40,12 @@ namespace Project1.Models
             this.CreatedAt = DateTime.UtcNow;
         }
 
-        //Navigation properties
-        //public virtual Order Order { get; set; }
-        //public virtual Course Course { get; set; }
-        //public virtual Payment Payment { get; set; }
-        //public virtual Discount Discount { get; set; }
-    }
+		public int? SchedulerID { get; set; } //上課時間編號
+
+		//Navigation properties
+		//public virtual Order Order { get; set; }
+		//public virtual Course Course { get; set; }
+		//public virtual Payment Payment { get; set; }
+		//public virtual Discount Discount { get; set; }
+	}
 }

@@ -95,8 +95,9 @@ new Course { CourseID = 15, CourseName = "貓咪社交化培訓", TrainerID = 5,
                    RegistrationDate = DateTime.Now,
                    ResidenceArea = "臺北市",
                    IsTrainer = false,
-                   IsAdministrator = false
-               },
+                   IsAdministrator = false,
+                   Address = "忠孝東路四段123號5樓"
+			   },
   new Member
   {
       MemberID = 2,
@@ -107,7 +108,8 @@ new Course { CourseID = 15, CourseName = "貓咪社交化培訓", TrainerID = 5,
       RegistrationDate = DateTime.Now,
       ResidenceArea = "新北市",
       IsTrainer = false,
-      IsAdministrator = false
+      IsAdministrator = false,
+	  Address = "和平西路三段45巷9號2樓"
   },
   new Member
   {
@@ -119,7 +121,8 @@ new Course { CourseID = 15, CourseName = "貓咪社交化培訓", TrainerID = 5,
       RegistrationDate = DateTime.Now,
       ResidenceArea = "台中市",
       IsTrainer = false,
-      IsAdministrator = false
+      IsAdministrator = false,
+      Address = "中山北路一段89巷6弄15號"
   },
   new Member
   {
@@ -131,7 +134,8 @@ new Course { CourseID = 15, CourseName = "貓咪社交化培訓", TrainerID = 5,
       RegistrationDate = DateTime.Now,
       ResidenceArea = "高雄市",
       IsTrainer = false,
-      IsAdministrator = false
+      IsAdministrator = false,
+      Address = "民權東路六段78號3樓之1",
   },
   new Member
   {
@@ -143,7 +147,8 @@ new Course { CourseID = 15, CourseName = "貓咪社交化培訓", TrainerID = 5,
       RegistrationDate = DateTime.Now,
       ResidenceArea = "桃園市",
       IsTrainer = false,
-      IsAdministrator = false
+      IsAdministrator = false,
+      Address = "南京東路五段300號12樓"
   },
   new Member
   {
@@ -155,7 +160,8 @@ new Course { CourseID = 15, CourseName = "貓咪社交化培訓", TrainerID = 5,
       RegistrationDate = DateTime.Now,
       ResidenceArea = "台南市",
       IsTrainer = false,
-      IsAdministrator = false
+      IsAdministrator = false,
+      Address = "仁愛路四段101號8樓"
   },
   new Member
   {
@@ -167,7 +173,8 @@ new Course { CourseID = 15, CourseName = "貓咪社交化培訓", TrainerID = 5,
       RegistrationDate = DateTime.Now,
       ResidenceArea = "基隆市",
       IsTrainer = false,
-      IsAdministrator = false
+      IsAdministrator = false,
+      Address = "新生南路二段38號4樓"
   },
   new Member
   {
@@ -179,7 +186,8 @@ new Course { CourseID = 15, CourseName = "貓咪社交化培訓", TrainerID = 5,
       RegistrationDate = DateTime.Now,
       ResidenceArea = "新竹市",
       IsTrainer = false,
-      IsAdministrator = false
+      IsAdministrator = false,
+      Address = "信義路五段220巷16弄2號"
   },
   new Member
   {
@@ -191,7 +199,8 @@ new Course { CourseID = 15, CourseName = "貓咪社交化培訓", TrainerID = 5,
       RegistrationDate = DateTime.Now,
       ResidenceArea = "嘉義市",
       IsTrainer = false,
-      IsAdministrator = false
+      IsAdministrator = false,
+      Address = "敦化南路二段123巷56弄4樓"
   },
   new Member
   {
@@ -203,7 +212,8 @@ new Course { CourseID = 15, CourseName = "貓咪社交化培訓", TrainerID = 5,
       RegistrationDate = DateTime.Now,
       ResidenceArea = "臺北市",
       IsTrainer = false,
-      IsAdministrator = false
+      IsAdministrator = false,
+      Address = "建國北路二段88號7樓"
   }
 
             );

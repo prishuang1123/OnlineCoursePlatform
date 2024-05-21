@@ -35,5 +35,8 @@ namespace Project1.Models
 		public string? Account { get; set; }
 
 		public string? Password { get; set; }
+
+		[Required]
+		public string Address { get; set; }
     }
 }
