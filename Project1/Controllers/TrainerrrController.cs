@@ -773,21 +773,6 @@ namespace Project1.Controllers
 
             return Ok(existingCourse);
         }
-        // 發佈課程
-        [HttpPost]
-        public async Task<IActionResult> PublishCourse([FromBody] ClassSchedule schedule)
-        {
-            if (schedule == null || schedule.CourseID == 0 || schedule.Scheduler == DateTime.MinValue)
-            {
-                return BadRequest("Invalid data.");
-            }
-
-            _context.ClassSchedule.Add(schedule);
-            await _context.SaveChangesAsync();
-
-            return Ok(new { message = "成功發佈課程" });
-        }
-
         //刪除課程
         [HttpDelete]
         public async Task<IActionResult> DeleteCourse(int id)
@@ -807,17 +792,48 @@ namespace Project1.Controllers
         }
 
 
-        //收回發佈
+        // 發佈課程
         [HttpPost]
-        public async Task<IActionResult> RetractPublish(int id)
+        public async Task<IActionResult> PublishCourse([FromBody] ClassSchedule schedule)
         {
-            var classSchedule = await _context.ClassSchedule.FirstOrDefaultAsync(cs => cs.CourseID == id);
+            if (schedule == null || schedule.CourseID == 0 || schedule.Scheduler == DateTime.MinValue)
+            {
+                return BadRequest("Invalid data.");
+            }
+
+            _context.ClassSchedule.Add(schedule);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "成功發佈課程" });
+        }
+
+        // 取得已發布課程的時程
+        [HttpGet]
+        public async Task<IActionResult> GetPublishedSchedules([FromQuery] int courseID)
+        {
+            var schedules = await _context.ClassSchedule
+                                          .Where(cs => cs.CourseID == courseID)
+                                          .ToListAsync();
+
+            if (schedules == null || !schedules.Any())
+            {
+                return NotFound(new { message = "找不到發佈的課程時程" });
+            }
+
+            return Ok(schedules);
+        }
+
+
+        // 收回發佈
+        [HttpPost]
+        public async Task<IActionResult> RetractPublish(int scheduleID)
+        {
+            var classSchedule = await _context.ClassSchedule.FindAsync(scheduleID);
             if (classSchedule == null)
             {
                 return NotFound(new { message = "找不到該課程的發佈記錄" });
             }
 
-            // 檢查是否在課程開始前5天內
             if (classSchedule.Scheduler <= DateTime.Now.AddDays(3))
             {
                 return BadRequest(new { message = "此課程在3天內開課，無法收回發佈" });

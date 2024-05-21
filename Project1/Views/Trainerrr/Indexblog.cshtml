@@ -278,66 +278,6 @@
             font-size: 14px; /* 根據需要調整大小 */
             padding: 0;
         }
-
-        .course-card {
-            position: relative; /* 使子元素可以絕對定位 */
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 10px;
-            margin-bottom: 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-
-            .course-card.published {
-                background-color: rgba(128, 128, 128, 0.5); /* 透明灰色背景 */
-                pointer-events: none; /* 禁用所有子元素的事件 */
-            }
-
-                .course-card.published .course-card-actions button {
-                    pointer-events: auto; /* 使收回发布和检视按钮可用 */
-                }
-
-                .course-card.published .course-delete-button {
-                    pointer-events: all; /* 使刪除按鈕可用 */
-                    cursor: not-allowed; /* 禁用刪除按鈕的樣式 */
-                }
-
-            .course-card .course-delete-button {
-                position: absolute;
-                top: 10px;
-                right: 10px;
-                background: red;
-                color: white;
-                border: none;
-                border-radius: 50%;
-                width: 25px;
-                height: 25px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                cursor: pointer;
-            }
-
-                .course-card .course-delete-button:disabled {
-                    background: grey;
-                    cursor: not-allowed;
-                }
-
-        .published-label {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%); /* 居中对齐 */
-            background: #333;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-weight: bold;
-            z-index: 1; /* 确保标签显示在最前 */
-        }
     </style>
 }
 
@@ -353,9 +293,7 @@
                 <h5>新增課程區域</h5>
                 <button type="button" class="btn btn-success" @@click="showAddCourseModal">新增課程</button>
                 <div class="course-container">
-                    <div v-for="course in courses" :key="course.courseID" :class="['course-card', { 'published': course.isPublished }]">
-                        <!-- 已發佈標籤 -->
-                        <div v-if="course.isPublished" class="published-label">已發佈</div>
+                    <div v-for="course in courses" :key="course.courseID" class="course-card">
                         <input type="checkbox" class="course-checkbox" v-model="selectedCourses" :value="course.courseID">
                         <img :src="course.thumbnailUrl" alt="Course Thumbnail" style="border:1px solid #333">
                         <div class="course-card-details">
@@ -364,14 +302,8 @@
                         </div>
                         <div class="course-card-actions">
                             <button type="button" class="btn btn-primary btn-sm" @@click="viewCourseDetails(course.courseID)">檢視</button>
-                            <!-- 發佈/收回發佈按鈕 -->
-                            <button v-if="!course.isPublished" type="button" class="btn btn-primary btn-sm" @@click="showPublishModal(course.courseID)">發佈</button>
-                            <button v-else type="button" class="btn btn-warning btn-sm" @@click="retractPublish(course.courseID)">收回發佈</button>
+                            <button type="button" class="btn btn-primary btn-sm" @@click="showPublishModal(course.courseID)">發布</button>
                         </div>
-                        <!-- 刪除按鈕 -->
-                        <button type="button" class="btn btn-danger btn-sm course-delete-button" @@click="deleteCourse(course.courseID)" :disabled="course.isPublished">
-                            <i class="bi bi-trash"></i>
-                        </button>
                     </div>
                 </div>
                 <button type="button" class="btn btn-primary mt-3" @@click="publishSelectedCourses">發布</button>
@@ -681,7 +613,7 @@
                     <button type="button" class="btn btn-primary" v-if="isEditing" @@click="saveCourse">確定</button>
                     <button type="button" class="btn btn-secondary" v-if="isEditing" @@click="cancelEdit">取消</button>
                     <button type="button" class="btn btn-primary" v-if="!isEditing" @@click="showPublishModal">發布</button>
-                    
+
                 </div>
             </div>
         </div>
@@ -701,11 +633,20 @@
                     <div class="form-group">
                         <label for="publishDateTime">選擇發佈時間:</label>
                         <input type="datetime-local" class="form-control" id="publishDateTime" v-model="publishDateTime">
+                        <button type="button" class="btn btn-primary mt-2" @@click="publishCourse">確定</button>
+                    </div>
+                    <div class="form-group">
+                        <label>已發佈的課堂:</label>
+                        <ul>
+                            <li v-for="schedule in publishedSchedules" :key="schedule.schedulerID">
+                                {{ schedule.scheduler | formatDateTime }}
+                                <button class="btn btn-danger btn-sm" @@click="retractPublish(schedule.schedulerID)">收回發佈</button>
+                            </li>
+                        </ul>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
-                    <button type="button" class="btn btn-primary" @@click="publishCourse">確定</button>
                 </div>
             </div>
         </div>
@@ -728,8 +669,9 @@
         var getCurrentTrainerInfoUrl = "https://localhost:7177/Trainerrr/GetCurrentTrainerInfo";
         var editCourseUrl = "https://localhost:7177/Trainerrr/EditCourse";
         var publishCourseUrl = "https://localhost:7177/Trainerrr/PublishCourse";
-        var deleteCourseUrl = "https://localhost:7177/Trainerrr/DeleteCourse";
+        var getPublishedSchedulesUrl = "https://localhost:7177/Trainerrr/GetPublishedSchedules";
         var retractPublishUrl = "https://localhost:7177/Trainerrr/RetractPublish";
+
         var VueApp = {
             data() {
                 return {
@@ -772,7 +714,8 @@
                     isEditing: false,
                     publishDateTime: null,
                     editThumbnailPreview: null,
-                    thumbnailPreview: null
+                    thumbnailPreview: null,
+                    publishedSchedules: []
                 };
             },
             mounted() {
@@ -1006,8 +949,49 @@
                     this.isEditing = false;
                 },
                 showPublishModal(courseID) {
-                    this.viewCourse.courseID = courseID; // 儲存當前要發布的課程ID
+                    this.viewCourse.courseID = courseID;
+                    this.fetchPublishedSchedules(courseID);
                     $('#publishModal').modal('show');
+                },
+                fetchPublishedSchedules(courseID) {
+                    axios.get(getPublishedSchedulesUrl, {
+                        params: {
+                            courseID: courseID// 替換為你需要的課程ID
+                        }
+                    }).then(response => {
+                        this.publishedSchedules = response.data;
+                    }).catch(error => {
+                        console.log(error);
+                        alert("無法取得已發佈的課程時間");
+                    });
+                },
+                publishCourse() {
+                    if (!this.viewCourse.courseID || !this.publishDateTime) {
+                        alert("請先選擇課程和發布時間");
+                        return;
+                    }
+
+                    const schedule = {
+                        CourseID: this.viewCourse.courseID,
+                        Scheduler: new Date(this.publishDateTime)
+                    };
+
+                    axios.post(publishCourseUrl, schedule).then(response => {
+                        alert(response.data.message);
+                        this.fetchPublishedSchedules(this.viewCourse.courseID);
+                    }).catch(error => {
+                        console.log(error);
+                        alert("無法發布課程");
+                    });
+                },
+                retractPublish(scheduleID) {
+                    axios.post(`${retractPublishUrl}/${scheduleID}`).then(response => {
+                        alert(response.data.message);
+                        this.fetchPublishedSchedules(this.viewCourse.courseID);
+                    }).catch(error => {
+                        console.log(error);
+                        alert("無法收回發佈");
+                    });
                 },
                 viewCourseDetails(courseID) {
                     this.viewCourse = this.courses.find(course => course.courseID === courseID);
@@ -1047,59 +1031,6 @@
                         alert(error);
                     });
                 },
-                publishCourse() {
-                    if (!this.viewCourse.courseID || !this.publishDateTime) {
-                        alert("請先選擇課程和發布時間");
-                        return;
-                    }
-
-                    const schedule = {
-                        CourseID: this.viewCourse.courseID,
-                        Scheduler: new Date(this.publishDateTime)
-                    };
-                    if (isNaN(schedule.Scheduler.getTime())) {
-                        alert("請選擇有效的發佈時間");
-                        return;
-                    }
-
-                    axios.post(publishCourseUrl, schedule).then(response => {
-                        alert(response.data.message);
-                        $('#publishModal').modal('hide');
-                        this.fetchCourses();
-                    }).catch(error => {
-                        console.log("Error response:", error.response);
-                        alert(error);
-                    });
-                },
-                retractPublish(courseID) {
-                    if (confirm("確定要收回發佈嗎？")) {
-                        axios.post(`${retractPublishUrl}/${courseID}`)
-                            .then(response => {
-                                alert(response.data.message);
-                                this.fetchCourses();
-                            })
-                            .catch(error => {
-                                console.log("Error response:", error.response);
-                                alert("收回發佈失敗：" + error.response.data.message);
-                            });
-                    }
-                },
-                deleteCourse(courseID) {
-                    // 確認刪除操作
-                    if (confirm("確定要刪除此課程嗎？")) {
-                        // 發送刪除請求到後端
-                        axios.delete(`${deleteCourseUrl}/${courseID}`)
-                            .then(response => {
-                                alert("課程已刪除");
-                                // 刷新課程列表
-                                this.fetchCourses();
-                            })
-                            .catch(error => {
-                                console.log("Error response:", error.response);
-                                alert("刪除課程時出現錯誤");
-                            });
-                    }
-                },
                 onEditThumbnailChange(event) {
                     this.viewCourse.thumbnailUrl = event.target.files[0];
                     const file = event.target.files[0];
@@ -1113,8 +1044,17 @@
                     this.editThumbnailPreview = null;
                     document.getElementById('editThumbnailUrl').value = "";
                 }
+            },
+            filters: {
+                formatDateTime(value) {
+                    if (value) {
+                        return new Date(value).toLocaleString();
+                    }
+                    return '';
+                }
             }
         };
+
 
         var app = Vue.createApp(VueApp).mount("#app");
     </script>
