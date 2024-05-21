@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol;
 using Project1.Data;
 using Project1.Models;
 using Project1.ViewModels;
+using System.Collections.Generic;
 
 namespace Project1.Controllers
 {
@@ -11,7 +13,10 @@ namespace Project1.Controllers
     {
 		private readonly ProjectDbContext _db;
 		internal DbSet<Trainer> trainerDbset;
-		public BrowseController(ProjectDbContext db)
+		int? memberId;
+		IEnumerable<ShoppingCart> memberShoppingCart;
+
+        public BrowseController(ProjectDbContext db)
 		{
 			_db = db;
 			trainerDbset = _db.Set<Trainer>();
@@ -40,15 +45,32 @@ namespace Project1.Controllers
         // GET: Browse/Cart/5
         public async Task<IActionResult> ViewCart(int? id) //recieve memberID
 		{
-            //Course course= await _db.Course.Where(u=>u.CourseID==id).FirstOrDefaultAsync();
-            //select the member's cartItems to show all products added to the cart
-            IEnumerable<ShoppingCart>? memberCartItemList=await _db.Cart.Where(u=>u.MemberID == 1).ToListAsync();
+			memberId = id;
+			//Course course= await _db.Course.Where(u=>u.CourseID==id).FirstOrDefaultAsync();
+			//select the member's cartItems to show all products added to the cart
+			
+			memberShoppingCart = await _db.Cart.Where(u => u.MemberID == 1).ToListAsync();
+			IEnumerable<int> courseIds= memberShoppingCart.Select(u => u.CourseID).ToList();
+			List<Course> courseObj=await _db.Course.Where(c=>courseIds.Contains(c.CourseID)).ToListAsync();
+			decimal initSubtotal = 0;
+            foreach (var courseId in courseIds)
+			{
+				initSubtotal += (courseObj.Where(c => c.CourseID == courseId).FirstOrDefault().Price) * (memberShoppingCart.Where(m => m.CourseID == courseId).FirstOrDefault().Quantity);
+            }
+           
+            CartVM? cartVM = new CartVM()
+			{
+                courseList = courseObj,
+				shoppingCartList= memberShoppingCart,
+                subtotal= initSubtotal,
+            };
+			
 			
 
-			if (memberCartItemList != null)
+			if (cartVM != null)
 			{
 				
-				return View(memberCartItemList);
+				return View(cartVM);
 			}
 			else
 			{
@@ -56,6 +78,7 @@ namespace Project1.Controllers
 			}
 
 		}
+
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> AddToCart(int? id) //courseID
@@ -64,19 +87,42 @@ namespace Project1.Controllers
 			Course? courseObj = await _db.Course.Where(u=>u.CourseID == id).FirstOrDefaultAsync();
 			if (courseObj != null)
 			{
-				ShoppingCart cartItem = new ShoppingCart();
-				cartItem.CourseID = courseObj.CourseID;
-				cartItem.Quantity = 1;
-				cartItem.MemberID = 1; //later with real memberID
+				//List<ShoppingCart> shoppingCartList = await _db.Cart.ToListAsync();
+				ShoppingCart cartItem = await _db.Cart.Where(obj=> obj.CourseID==id).FirstOrDefaultAsync();
 
-				if (ModelState.IsValid)
-                {
-                    _db.Cart.Add(cartItem);
-                    _db.SaveChanges();
-                    TempData["success"] = "加入購物車成功!!";
-                    return RedirectToAction("ViewCart", "Browse");
-                }
-                return RedirectToAction("Index", "Browse");
+				if (cartItem==null) 
+				{
+					ShoppingCart newCartItem = new ShoppingCart();
+					newCartItem.CourseID = courseObj.CourseID;
+					newCartItem.Quantity = 1;
+					newCartItem.MemberID = 1; //later with real memberID
+
+					if (ModelState.IsValid)
+					{
+						_db.Cart.Add(newCartItem);
+						_db.SaveChanges();
+						TempData["success"] = "加入購物車成功!!";
+
+						return RedirectToAction("ViewCart", "Browse");
+					}
+					return RedirectToAction("Index", "Browse");
+				}
+				else
+				{
+
+					cartItem.Quantity += 1;
+					
+					if (ModelState.IsValid)
+					{
+						_db.Cart.Update(cartItem);
+						_db.SaveChanges();
+						TempData["success"] = "加入購物車成功!!";
+
+						return RedirectToAction("ViewCart", "Browse");
+					}
+					return RedirectToAction("Index", "Browse");
+				}
+				
             }
 			else
 			{
@@ -93,18 +139,30 @@ namespace Project1.Controllers
 			Course? courseObj = await _db.Course.Where(u => u.CourseID == id).FirstOrDefaultAsync();
 			if (courseObj != null)
 			{
-				FollowItem followItem = new FollowItem();
-				followItem.CourseID = courseObj.CourseID;
-				followItem.MemberID = 1; //later with real memberID
+				//List<ShoppingCart> shoppingCartList = await _db.Cart.ToListAsync();
+				FollowItem followItem = await _db.FollowItem.Where(obj => obj.CourseID == id).FirstOrDefaultAsync();
 
-				if (ModelState.IsValid)
+				if (followItem == null)
 				{
-					_db.FollowItem.Add(followItem);
-					_db.SaveChanges();
-					TempData["success"] = "加入追蹤清單!!";
+					FollowItem newFollowItem = new FollowItem();
+					newFollowItem.CourseID = courseObj.CourseID;
+					newFollowItem.MemberID = 1; //later with real memberID
+
+					if (ModelState.IsValid)
+					{
+						_db.FollowItem.Add(newFollowItem);
+						_db.SaveChanges();
+						TempData["success"] = "成功加入追蹤清單!!";
+						return RedirectToAction("Index", "Browse");
+					}
 					return RedirectToAction("Index", "Browse");
 				}
-				return RedirectToAction("Index", "Browse");
+				else
+				{					
+					TempData["success"] = "商品已在追蹤清單中!!";
+					return RedirectToAction("Index", "Browse");
+				}
+	
 			}
 			else
 			{
@@ -114,23 +172,86 @@ namespace Project1.Controllers
 
 		}
 
-		public async Task<JsonResult> CategoryNumber()
+		[HttpGet]
+		public JsonResult CategoryNumber()
 		{
 			var categoryNum = _db.Course.GroupBy(c => c.CourseCategoryID)
-		.Select(cn => new
-		{
-			CourseCategoryID = cn.Key,
-			TotalNum = cn.Count(),
-			CategoryName = (_db.CourseCategory.FirstOrDefault(c => c.CourseCategoryID == cn.Key)).CourseCategoryName
-		});
+			.Select(cn => new
+			{
+				CourseCategoryID = cn.Key,
+				TotalNum = cn.Count(),
+				CategoryName = (_db.CourseCategory.FirstOrDefault(c => c.CourseCategoryID == cn.Key)).CourseCategoryName
+			});
 
 			//var categoryNumList = new List<object>();
 			//foreach (var categoryObj in categoryNum)
 			//{
 			//	categoryNumList.Add(categoryObj);
 			//}
-
 			return Json(categoryNum);
 		}
-	}
+
+
+        [HttpPost]
+        public IActionResult UpdateQuantity(int quantity, int id)//quantity,cartId
+        {
+			ShoppingCart cartItem = _db.Cart.Where(obj=>obj.CartID==id).FirstOrDefault();
+            cartItem.Quantity= quantity;
+			_db.SaveChanges();
+            //TempData["success"] = "成功更新商品數量!!";
+			Course course = _db.Course.Where(c=>c.CourseID==cartItem.CourseID).FirstOrDefault();
+			
+            decimal totalPrice = (course.Price) * quantity;
+            
+            
+            return Json(new { TotalPrice = totalPrice.ToString("c") });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> UpdateSubtotal()
+        {
+			decimal subtotal = 0;
+            memberShoppingCart = await _db.Cart.Where(u => u.MemberID == 1).ToListAsync();
+            IEnumerable<int> courseIds = memberShoppingCart.Select(u => u.CourseID).ToList();
+            List<Course> courseObj = await _db.Course.Where(c => courseIds.Contains(c.CourseID)).ToListAsync();
+            foreach (var courseId in courseIds)
+            {
+                subtotal += (courseObj.Where(c => c.CourseID == courseId).FirstOrDefault().Price) * (memberShoppingCart.Where(m => m.CourseID == courseId).FirstOrDefault().Quantity);
+            }
+
+            return Json(new { Subtotal = subtotal.ToString("c") });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ValidateDiscountCode(string? discountCode) 
+		{
+			string validationResult = "";
+			double discountPercentage = 0;
+
+            Discount discountObj=await _db.Discount.Where(d=>d.DiscountName == discountCode).FirstOrDefaultAsync();
+			if (discountObj != null)
+			{
+                DateTime now = DateTime.Now;
+                if (discountObj.StartDate < now && now < discountObj.EndDate && discountObj.Active==true)
+				{
+                    discountPercentage = discountObj.DiscountPercentage;
+                    validationResult = "success";
+                }
+				else
+				{
+					discountPercentage = 1;
+                    validationResult = "not applicable";
+                } 
+
+            }
+			else
+			{
+                discountPercentage = 1;
+                validationResult = "failed";
+            }
+
+			return Json(new { validationResult = validationResult, discountPercentage= discountPercentage });
+		}
+
+    }
 }
