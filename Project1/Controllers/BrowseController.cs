@@ -12,21 +12,21 @@ namespace Project1.Controllers
     public class BrowseController : Controller
     {
 		private readonly ProjectDbContext _db;
-		internal DbSet<Trainer> trainerDbset;
+		//internal DbSet<Trainer> trainerDbset;
 		int? memberId;
 		IEnumerable<ShoppingCart> memberShoppingCart;
 
         public BrowseController(ProjectDbContext db)
 		{
 			_db = db;
-			trainerDbset = _db.Set<Trainer>();
+			//trainerDbset = _db.Set<Trainer>();
 		}
 		public async Task<IActionResult> Index()
         {
 			IEnumerable<Course>? courseObjList = await _db.Course.ToListAsync();
 			IEnumerable<CourseCategory>? categoryObjList = await _db.CourseCategory.ToListAsync();
 
-			IQueryable<Trainer> queryTrainer = trainerDbset;
+			//IQueryable<Trainer> queryTrainer = trainerDbset;
 
 			if (courseObjList == null || categoryObjList == null)
 			{
@@ -45,6 +45,10 @@ namespace Project1.Controllers
         // GET: Browse/Cart/5
         public async Task<IActionResult> ViewCart(int? id) //recieve memberID
 		{
+			if (id==null || id == 0)
+			{
+				return RedirectToAction ("Login", "Members");
+			}
 			memberId = id;
 			//Course course= await _db.Course.Where(u=>u.CourseID==id).FirstOrDefaultAsync();
 			//select the member's cartItems to show all products added to the cart
@@ -57,9 +61,10 @@ namespace Project1.Controllers
 			{
 				initSubtotal += (courseObj.Where(c => c.CourseID == courseId).FirstOrDefault().Price) * (memberShoppingCart.Where(m => m.CourseID == courseId).FirstOrDefault().Quantity);
             }
-           
-            CartVM? cartVM = new CartVM()
+
+			CartVM? cartVM = new CartVM()
 			{
+				memberId = (int)memberId,
                 courseList = courseObj,
 				shoppingCartList= memberShoppingCart,
                 subtotal= initSubtotal,
