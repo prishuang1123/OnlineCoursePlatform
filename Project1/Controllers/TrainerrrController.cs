@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Azure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
+using Newtonsoft.Json;
 using Project1.Data;
 using Project1.Models;
 using Project1.ViewModels;
@@ -435,9 +437,7 @@ namespace Project1.Controllers
             return View(await _context.Course.ToListAsync());
         }
 
-        //---------------------------顯示部落格首頁------------------------------------------------
-
-        
+        //---------------------------顯示部落格首頁----------------------------
         public async Task<IActionResult> Indexblog()
         {
             // 取得當前登入的訓練師
@@ -450,15 +450,34 @@ namespace Project1.Controllers
             return View();
         }
 
+
         // 取得當前登入的訓練師
        //哪個訓練師登入?
         private Trainer GetCurrentTrainer()
         {
             // 這裡示範一個假設的方法，根據你的身份驗證機制來取得當前登入的訓練師
-            var trainerId = 1; // 假設訓練師ID為1
+            var trainerId =1 ; // 假設訓練師ID為
             return _context.Trainer.FirstOrDefault(t => t.TrainerID == trainerId);
         }
 
+
+        //[HttpGet("GetCurrentTrainer")]
+        public JsonResult GetCurrentTrainerInfo()
+        {
+            var currentTrainer = GetCurrentTrainer();
+            if (currentTrainer == null)
+            {
+                return Json(new { success = false, message = "Trainer not found" });
+            }
+            return Json(new
+            {
+                success = true,
+                trainerName = currentTrainer.TrainerName,
+                photo = currentTrainer.Photo
+            });
+        }
+
+        //秀出貼文
         public async Task<JsonResult> GetBlog()
         {
             // 取得當前登入的訓練師
@@ -478,7 +497,9 @@ namespace Project1.Controllers
                 b.Image1,
                 b.Image2,
                 b.PostedDate,
-                TrainerName = b.Trainer.TrainerName
+                TrainerName = b.Trainer.TrainerName,
+                TrainerPhoto = b.Trainer.Photo // 包括 Trainer.Photo
+
             }).ToList();
 
             // 返回 JSON 結果
@@ -486,21 +507,332 @@ namespace Project1.Controllers
         }
 
         //處理發文
-        [HttpPost]
-        public async Task<IActionResult> CreateBlog([FromBody] Blog newBlog)
+        //[HttpPost]
+        public async Task<IActionResult> CreatePost([FromForm] string title, [FromForm] string content, [FromForm] IFormFile? image1, [FromForm] IFormFile? image2)
         {
-            if (ModelState.IsValid)
+            var currentTrainer = GetCurrentTrainer();
+            var blogPost = new Blog
             {
-                newBlog.TrainerID = GetCurrentTrainer().TrainerID; // 設定當前登入的訓練師ID
-                newBlog.PostedDate = DateTime.Now;
-                _context.Blog.Add(newBlog);
-                await _context.SaveChangesAsync();
-                return Ok(newBlog);
+                TrainerID = currentTrainer.TrainerID,
+                Title = title,
+                Content = content,
+                PostedDate = DateTime.Now
+            };
+
+            if (image1 != null)
+            {
+                var fileName = Path.GetFileName(image1.FileName);
+                var filePath = Path.Combine("wwwroot/img", fileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await image1.CopyToAsync(stream);
+                }
+                blogPost.Image1 = $"/img/{fileName}";
             }
-            return BadRequest(ModelState);
+            else
+            {
+                blogPost.Image1 = "";
+
+            }
+
+            if (image2 != null)
+            {
+                var fileName = Path.GetFileName(image2.FileName);
+                var filePath = Path.Combine("wwwroot/img", fileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await image2.CopyToAsync(stream);
+                }
+                blogPost.Image2 = $"/img/{fileName}";
+            }
+            else
+            {
+                blogPost.Image2 = "";
+
+            }
+
+            _context.Blog.Add(blogPost);
+            await _context.SaveChangesAsync();
+
+            return Ok(blogPost);
         }
+
+
+
+        //貼文編輯
+        //("EditPost/{id}")
+        [HttpPost]
+        public async Task<IActionResult> EditPost(int id, [FromForm] string title, [FromForm] string content, [FromForm] IFormFile? image1, [FromForm] IFormFile? image2, [FromForm] string deletedImages)
+        {
+            // 查找要編輯的貼文
+            var blogPost = await _context.Blog.FindAsync(id);
+            if (blogPost == null)
+            {
+                return NotFound(); // 如果貼文不存在，返回 404
+            }
+
+            // 更新貼文標題和內容
+            blogPost.Title = title;
+            blogPost.Content = content;
+
+            // 解析被刪除圖片的列表
+            var deletedImagesList = JsonConvert.DeserializeObject<List<string>>(deletedImages);
+
+            // 如果圖片1在被刪除的列表中，刪除圖片並清空對應欄位
+            if (deletedImagesList.Contains(blogPost.Image1))
+            {
+                var filePath = Path.Combine("wwwroot", blogPost.Image1.TrimStart('/'));
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath); // 刪除實際文件
+                }
+                blogPost.Image1 = null; // 清空數據庫中的圖片路徑
+            }
+
+            // 如果圖片2在被刪除的列表中，刪除圖片並清空對應欄位
+            if (deletedImagesList.Contains(blogPost.Image2))
+            {
+                var filePath = Path.Combine("wwwroot", blogPost.Image2.TrimStart('/'));
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath); // 刪除實際文件
+                }
+                blogPost.Image2 = null; // 清空數據庫中的圖片路徑
+            }
+
+            // 如果有新圖片1，保存並更新圖片路徑
+            if (image1 != null)
+            {
+                var fileName = Path.GetFileName(image1.FileName);
+                var filePath = Path.Combine("wwwroot/img", fileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await image1.CopyToAsync(stream); // 保存新圖片
+                }
+                blogPost.Image1 = $"/img/{fileName}"; // 更新數據庫中的圖片路徑
+            }
+            else if (blogPost.Image1 == null)
+            {
+                blogPost.Image1 = ""; // 清空圖片路徑
+            }
+
+            // 如果有新圖片2，保存並更新圖片路徑
+            if (image2 != null)
+            {
+                var fileName = Path.GetFileName(image2.FileName);
+                var filePath = Path.Combine("wwwroot/img", fileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await image2.CopyToAsync(stream); // 保存新圖片
+                }
+                blogPost.Image2 = $"/img/{fileName}"; // 更新數據庫中的圖片路徑
+            }
+            else if (blogPost.Image2 == null)
+            {
+                blogPost.Image2 = ""; // 清空圖片路徑
+            }
+
+            // 保存對數據庫的更改
+            await _context.SaveChangesAsync();
+
+            return Ok(blogPost); // 返回編輯後的貼文信息
+        }
+
+
+
+        // 刪除貼文
+        //[HttpDelete("DeletePost/{id}")]
+        public async Task<IActionResult> DeletePost(int id)
+        {
+            var post = await _context.Blog.FindAsync(id);
+            if (post == null)
+            {
+                return NotFound();
+            }
+
+            _context.Blog.Remove(post);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+
+
+        //課程預覽
+        public async Task<JsonResult> GetCourses()
+        {
+            // 取得當前登入的訓練師
+            var currentTrainer = GetCurrentTrainer();
+
+            var courses = await _context.Course
+                                        .Where(c => c.TrainerID == currentTrainer.TrainerID)
+                                        .ToListAsync();
+
+
+            var classSchedules = await _context.ClassSchedule
+                                     .Where(cs => courses.Select(c => c.CourseID).Contains(cs.CourseID))
+                                     .ToListAsync();
+
+            var courseList = courses.Select(c => new
+            {
+                c.CourseID,
+                c.CourseName,
+                c.Description,
+                c.ThumbnailUrl,
+                c.CourseCategoryID,
+                c.PetCategoryID,
+                c.LocationID,
+                c.CourseTypeID,
+                c.Price,
+                c.MaxParticipants,
+                IsPublished = classSchedules.Any(cs => cs.CourseID == c.CourseID) // 檢查課程是否已發佈
+            }).ToList();
+
+            // 返回 JSON 結果
+            return Json(courseList);
+        }
+
+        // 取得下拉選單資料
+        public JsonResult GetDropdownData()
+        {
+            var petCategories = _context.PetCategory.ToList();
+            var courseCategories = _context.CourseCategory.ToList();
+            var courseTypes = _context.CourseType.ToList();
+            var locations = _context.Location.ToList();
+
+            return Json(new
+            {
+                petCategories,
+                courseCategories,
+                courseTypes,
+                locations
+            });
+        }
+
+
+        // 新增課程
+        [HttpPost]
+        public async Task<IActionResult> CreateCourse([FromForm] Course course, [FromForm] IFormFile? thumbnailUrl)
+        {
+            var currentTrainer = GetCurrentTrainer();
+            course.TrainerID = currentTrainer.TrainerID;
+            course.CreatedAt = DateTime.Now;
+            //course.UpdatedAt = DateTime.Now;
+
+            if (thumbnailUrl != null)
+            {
+                var fileName = Path.GetFileName(thumbnailUrl.FileName);
+                var filePath = Path.Combine("wwwroot/img", fileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await thumbnailUrl.CopyToAsync(stream);
+                }
+                course.ThumbnailUrl = $"/img/{fileName}";
+            }
+
+            _context.Course.Add(course);
+            await _context.SaveChangesAsync();
+
+            return Ok(course);
+        }
+
+
+
+        // 編輯課程
+        [HttpPost]
+        public async Task<IActionResult> EditCourse(int id, [FromForm] Course course, [FromForm] IFormFile? thumbnailUrl)
+        {
+            var existingCourse = await _context.Course.FindAsync(id);
+            if (existingCourse == null)
+            {
+                return NotFound();
+            }
+
+            existingCourse.CourseName = course.CourseName;
+            existingCourse.Description = course.Description;
+            existingCourse.PetCategoryID = course.PetCategoryID;
+            existingCourse.CourseCategoryID = course.CourseCategoryID;
+            existingCourse.CourseTypeID = course.CourseTypeID;
+            existingCourse.LocationID = course.LocationID;
+            existingCourse.Price = course.Price;
+            existingCourse.MaxParticipants = course.MaxParticipants;
+
+            if (thumbnailUrl != null)
+            {
+                var fileName = Path.GetFileName(thumbnailUrl.FileName);
+                var filePath = Path.Combine("wwwroot/img", fileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await thumbnailUrl.CopyToAsync(stream);
+                }
+                existingCourse.ThumbnailUrl = $"/img/{fileName}";
+            }
+
+            _context.Course.Update(existingCourse);
+            await _context.SaveChangesAsync();
+
+            return Ok(existingCourse);
+        }
+        // 發佈課程
+        [HttpPost]
+        public async Task<IActionResult> PublishCourse([FromBody] ClassSchedule schedule)
+        {
+            if (schedule == null || schedule.CourseID == 0 || schedule.Scheduler == DateTime.MinValue)
+            {
+                return BadRequest("Invalid data.");
+            }
+
+            _context.ClassSchedule.Add(schedule);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "成功發佈課程" });
+        }
+
+        //刪除課程
+        [HttpDelete]
+        public async Task<IActionResult> DeleteCourse(int id)
+        {
+            // 查找要刪除的課程
+            var course = await _context.Course.FindAsync(id);
+            if (course == null)
+            {
+                return NotFound(); // 如果課程不存在，返回404
+            }
+
+            // 從數據庫中移除課程
+            _context.Course.Remove(course);
+            await _context.SaveChangesAsync();
+
+            return NoContent(); // 返回204狀態碼，表示成功刪除
+        }
+
+
+        //收回發佈
+        [HttpPost]
+        public async Task<IActionResult> RetractPublish(int id)
+        {
+            var classSchedule = await _context.ClassSchedule.FirstOrDefaultAsync(cs => cs.CourseID == id);
+            if (classSchedule == null)
+            {
+                return NotFound(new { message = "找不到該課程的發佈記錄" });
+            }
+
+            // 檢查是否在課程開始前5天內
+            if (classSchedule.Scheduler <= DateTime.Now.AddDays(3))
+            {
+                return BadRequest(new { message = "此課程在3天內開課，無法收回發佈" });
+            }
+
+            _context.ClassSchedule.Remove(classSchedule);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "課程已收回發佈" });
+        }
+
+
+
         //---------------------------------------------------------------------------------------------
-   
+
         //訓練師總覽頁面
         public IActionResult AllTrainers()
         {
