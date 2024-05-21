@@ -107,7 +107,7 @@
                         <p class="mb-0">{{ item.description }}</p>
                         <p class="mb-0">課程售量: {{ item.totalQuantity }}</p>
                         <div class="prd-bottom mt-3">
-                            <a :href="`/quantity/${item.id}`" class="social-info text-white">
+                            <a class="social-info text-white" asp-controller ="Trainerrr" asp-action="singleCourse">
                                 <span class="lnr lnr-move"></span>
                                 <p class="hover-text">查看詳情</p>
                             </a>

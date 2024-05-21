@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -491,11 +492,57 @@ namespace Project1.Controllers
             return Json(trainers);
         }
 
+        //---------------------------------------------------------------------------------------------------
+
+        //單一課程頁面
         public IActionResult singleCourse()
         {
             return View();
         }
-    }
+
+		public async Task<JsonResult> getSingleCourse()
+		{
+			var courseID = 5;
+
+            //var location = _context.Location;
+
+			var singleCourseQuery = (from c in _context.Course.Where(c => c.CourseID == courseID)
+                                     join loc in _context.Location on c.LocationID equals loc.LocationID
+                                     join ct in _context.CourseType on c.CourseTypeID equals ct.CourseTypeID
+                                     join pc in _context.PetCategory on c.PetCategoryID equals pc.PetCategoryID
+                                     join cc in _context.CourseCategory on c.CourseCategoryID equals cc.CourseCategoryID
+                                     select new CourseViewModel
+									 {
+										 CourseID = c.CourseID,
+										 CourseName = c.CourseName,
+										 TrainerID = c.TrainerID,
+                                         PetCategoryName = pc.PetCategoryName,
+                                         CourseCategoryName = cc.CourseCategoryName,
+                                         CourseTypeName = ct.CourseTypeName,
+                                         Description = c.Description,
+										 Price = c.Price,
+                                         LocationName = loc.LocationName,
+                                         MaxParticipants = c.MaxParticipants,
+										 CreatedAt = c.CreatedAt,
+										 ThumbnailUrl = c.ThumbnailUrl,
+									 });
+
+			var singleCourse = await singleCourseQuery.FirstOrDefaultAsync();
+
+			if (singleCourse == null)
+			{
+				return Json(new { error = "Course not found" });
+			}
+
+			// Log the course details for debugging
+			Console.WriteLine($"Course: {singleCourse.CourseName}, Location: {singleCourse.LocationName}");
+
+			return Json(singleCourse);
+		}
+
+
+
+	}
 }
    
 

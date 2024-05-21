@@ -33,7 +33,6 @@ namespace Project1.Controllers
                 .Select(g => new { CourseID = g.Key, TotalQuantity = g.Sum(x => x.Quantity) }); // 將結果轉換為 List
 
             var courses = (from c in _ProjectDbContext.Course
-                           join cr in _ProjectDbContext.CourseRating on c.CourseID equals cr.CourseID into joined
                            let totalQuantityRecord = quantityTotals.FirstOrDefault(g => g.CourseID == c.CourseID)
                            let totalQuantity = totalQuantityRecord != null ? totalQuantityRecord.TotalQuantity : 0
                            orderby totalQuantity descending
