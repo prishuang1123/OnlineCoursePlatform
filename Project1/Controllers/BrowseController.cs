@@ -101,15 +101,8 @@ namespace Project1.Controllers
 					newCartItem.CourseID = courseObj.CourseID;
 					newCartItem.Quantity = 1;
 					newCartItem.MemberID = 1; //later with real memberID
-
-					if (ModelState.IsValid)
-					{
-						_db.Cart.Add(newCartItem);
-						_db.SaveChanges();
-						TempData["success"] = "加入購物車成功!!";
-
-						return RedirectToAction("ViewCart", "Browse");
-					}
+                    TempData["error"] = "無法加入購物車!";
+                    
 					return RedirectToAction("Index", "Browse");
 				}
 				else
