@@ -12,9 +12,9 @@ namespace Project1.Controllers
     public class BrowseController : Controller
     {
 		private readonly ProjectDbContext _db;
-		//internal DbSet<Trainer> trainerDbset;
-		int? memberId;
-		IEnumerable<ShoppingCart> memberShoppingCart;
+        //internal DbSet<Trainer> trainerDbset;
+        private readonly int? memberId;
+		private readonly IEnumerable<ShoppingCart> memberShoppingCart;
 
         public BrowseController(ProjectDbContext db)
 		{
@@ -195,7 +195,23 @@ namespace Project1.Controllers
 			//}
 			return Json(categoryNum);
 		}
+        [HttpGet]
+        public JsonResult GetClassSchedule()
+        {
+			var classSchedule = memberShoppingCart.GroupBy(c => c.CourseID)
+            .Select(cs => new
+            {
+                CourseID = cs.Key,
+                Quantity = cs.Sum(c => c.Quantity), // Total quantity for the course
+                SelectedSchedule = _db.ClassSchedule
+				.Where(s => s.CourseID == cs.Key)
+				.Select(s => s.Scheduler) // Select the schedule dates
+				.Distinct() // Remove duplicates
+				.ToList(),
+            });
 
+            return Json(classSchedule);
+        }
 
         [HttpPost]
         public IActionResult UpdateQuantity(int quantity, int id)//quantity,cartId

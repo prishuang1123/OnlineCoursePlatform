@@ -17,6 +17,7 @@
                     <thead>
                         <tr>
                             <th scope="col">課程</th>
+                            <th scope="col">日期</th>
                             <th scope="col">金額</th>
                             <th scope="col">數量</th>
                             <th scope="col">總額</th>
@@ -39,20 +40,41 @@
                                     </div>
                                 </td>
                                 <td>
+                                    <div id="@cartItem." class="single-element-widget mt-30">
+                                        <div class="switch-wrap d-flex justify-content-between">
+                                            <p>2024/11/15</p>
+                                            <div class="primary-checkbox mb-0">
+                                                <input type="checkbox" id="default-checkbox1">
+                                                <label for="default-checkbox1"></label>
+                                            </div>
+                                        </div>
+                                        <div class="switch-wrap d-flex justify-content-between">
+                                            <p>2024/11/15</p>
+                                            <div class="primary-checkbox mb-0">
+                                                <input type="checkbox" id="default-checkbox2">
+                                                <label for="default-checkbox2"></label>
+                                            </div>
+                                        </div>
+                                        <h5>2024/11/15</h5>
+                                        <h5>2024/11/15</h5>
+                                        <h5>2024/11/15</h5>
+                                        <h5>2024/11/15</h5>
+                                    </div>
+                                </td>
+                                <td>
                                     <h5 id="price@(cartItem.CartID)">@Model.courseList.Where(c => c.CourseID == cartItem.CourseID).FirstOrDefault().Price.ToString("c")</h5>
                                 </td>
                                 <td>
                                     <div class="product_count">
-                                        <input type="text" name="qty" id="sst@(cartItem.CartID)" maxlength="2" value="@cartItem.Quantity" title="Quantity:"
-                                              class="input-text qty" disabled>
-                                        <button onclick="window.increase('sst@(cartItem.CartID)')"
+                                        <input type="text" name="qty" id="sst@(cartItem.CartID)" maxlength="2" value="@cartItem.Quantity" title="Quantity:" class="input-text qty" disabled>
+                                        @* <button onclick="window.increase('sst@(cartItem.CartID)')"
                                            class="increase items-count" type="button">
                                             <i class="lnr lnr-chevron-up" ></i>
                                         </button>
                                         <button onclick="window.decrease('sst@(cartItem.CartID)')"
                                            class="reduced items-count" type="button">
                                             <i class="lnr lnr-chevron-down"></i>
-                                        </button>
+                                        </button> *@
                                     </div>
                                 </td>
                                 <td>
@@ -151,6 +173,30 @@
 @section Scripts
 {
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <script>
+        const baseUrl = "https://localhost:7177";
+        const vueApp = {
+            data() {
+                return {
+                    classSchedule: [],
+                }
+            },
+            mounted() {
+                const GetClassScheduleUrl = `${baseUrl}/Browse/GetClassSchedule`;
+                axios.get(GetClassScheduleUrl).then(response => {
+                    this.classSchedule = response.data;
+                }).catch(error => {
+                    alert(error);
+                });
+
+            }
+        }
+
+        var app = Vue.createApp(vueApp).mount("#app");
+
+    </script>
 
     <script>
         $(document).ready(function () {
