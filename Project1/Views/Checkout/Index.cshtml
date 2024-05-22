@@ -15,7 +15,7 @@
                             </div> *@
                             <div class="row">
                                 <div class="col-md-6 form-group p_star">
-                                    <input type="text" class="form-control" id="last" name="name" placeholder="姓氏" value="" required>
+                                    <input type="text" class="form-control" id="last" name="name" placeholder="姓氏" value="@Model.Member.Name" required>
                                 </div>
                             </div>
                             @* <div class="col-md-6 form-group p_star">
@@ -28,72 +28,46 @@
                             </div> *@
                             <div class="row">
                                 <div class="col-md-6 form-group p_star">
-                                    <input type="tel" class="form-control" id="number" name="number" placeholder="連絡電話">
+                                    <input type="tel" class="form-control" id="number" name="number" placeholder="連絡電話" value="@Model.Member.Phone">
                                     @* <span class="placeholder" data-placeholder="Phone number"></span> *@
                                 </div>
                                 <div class="col-md-6 form-group p_star">
-                                    <input type="email" class="form-control" id="email" name="compemailany" placeholder="電子信箱" required>
+                                    <input type="email" class="form-control" id="email" name="compemailany" placeholder="電子信箱" value="@Model.Member.Email" required>
                                     @* <span class="placeholder" data-placeholder="Email Address"></span> *@
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12 form-group p_star">
-                                   @*  @foreach(var city in Model.Location) *@
+                                    
                                     <select class="country_select">
-                                        <option value="1">Country</option>
-                                        <option value="2">Country</option>
-                                        <option value="4">Country</option>
+                                    @foreach (var city in Model.Location)
+                                    {
+                                        if (city.LocationName == Model.Member.ResidenceArea)
+                                        {
+                                            <option value="@city.LocationID" selected>@city.LocationName</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@city.LocationID">@city.LocationName</option>
+                                        }
+                                        
+                                    }
                                     </select>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12 form-group p_star">
-                                    <input type="text" class="form-control" id="add1" name="add1">
-                                    <span class="placeholder" data-placeholder="Address line 01"></span>
+                                <input type="text" class="form-control" id="add1" name="add1" placeholder="地址" value="">
+                                    @* <span class="placeholder" data-placeholder="Address line 01"></span> *@
                                 </div>
                             </div>
-                            
-                            
-                            
-                            @* <div class="col-md-12 form-group p_star">
-                                <input type="text" class="form-control" id="add2" name="add2">
-                                <span class="placeholder" data-placeholder="Address line 02"></span>
-                            </div>
-                            <div class="col-md-12 form-group p_star">
-                                <input type="text" class="form-control" id="city" name="city">
-                                <span class="placeholder" data-placeholder="Town/City"></span>
-                            </div>
-                            <div class="col-md-12 form-group p_star">
-                                <select class="country_select">
-                                    <option value="1">District</option>
-                                    <option value="2">District</option>
-                                    <option value="4">District</option>
-                                </select>
-                            </div>
-                            <div class="col-md-12 form-group">
-                                <input type="text" class="form-control" id="zip" name="zip" placeholder="Postcode/ZIP">
-                            </div>
-                            <div class="col-md-12 form-group">
-                                <div class="creat_account">
-                                    <input type="checkbox" id="f-option2" name="selector">
-                                    <label for="f-option2">Create an account?</label>
-                                </div>
-                            </div>
-                            <div class="col-md-12 form-group">
-                                <div class="creat_account">
-                                    <h3>Shipping Details</h3>
-                                    <input type="checkbox" id="f-option3" name="selector">
-                                    <label for="f-option3">Ship to a different address?</label>
-                                </div>
-                                <textarea class="form-control" name="message" id="message" rows="1" placeholder="Order Notes"></textarea>
-                            </div> *@
                         </form>
                     </div>
                     <div class="col-lg-4">
                         <div class="order_box">
                             <h2>Your Order</h2>
                             <ul class="list">
-                                <li><a href="#">Product <span>Total</span></a></li>
+                                <li><a href="#">課程 <span>總額</span></a></li>
                                 <li><a href="#">Fresh Blackberry <span class="middle">x 02</span> <span class="last">$720.00</span></a></li>
                                 <li><a href="#">Fresh Tomatoes <span class="middle">x 02</span> <span class="last">$720.00</span></a></li>
                                 <li><a href="#">Fresh Brocoli <span class="middle">x 02</span> <span class="last">$720.00</span></a></li>

@@ -13,8 +13,8 @@ namespace Project1.Controllers
     {
 		private readonly ProjectDbContext _db;
         //internal DbSet<Trainer> trainerDbset;
-        private readonly int? memberId;
-		private readonly IEnumerable<ShoppingCart> memberShoppingCart;
+        private int? memberId;
+		private IEnumerable<ShoppingCart> memberShoppingCart;
 
         public BrowseController(ProjectDbContext db)
 		{
