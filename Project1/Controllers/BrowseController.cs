@@ -84,7 +84,13 @@ namespace Project1.Controllers
 
 		}
 
-		[HttpPost]
+		
+		private bool OrderExists(int id)
+        {
+            return _db.Order.Any(e => e.OrderID == id);
+        }
+
+        [HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> AddToCart(int? id) //courseID
 		{
@@ -220,7 +226,18 @@ namespace Project1.Controllers
             
             return Json(new { TotalPrice = totalPrice.ToString("c") });
         }
-
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int id)//cartId
+        {
+            ShoppingCart cartItem = _db.Cart.Where(obj => obj.CartID == id).FirstOrDefault();
+            _db.Cart.Remove(cartItem);
+            _db.SaveChanges();
+			int memberId = cartItem.MemberID;
+            TempData["success"] = "商品刪除成功!!";
+			//return RedirectToAction("Index", "Browse");
+			return Json(new { success = true, memberId=});
+		}
         [HttpGet]
         public async Task<IActionResult> UpdateSubtotal()
         {

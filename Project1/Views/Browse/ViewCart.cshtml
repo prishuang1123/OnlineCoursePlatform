@@ -21,13 +21,14 @@
                             <th scope="col">金額</th>
                             <th scope="col">數量</th>
                             <th scope="col">總額</th>
+                            <th scope="col">刪除商品</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach(var cartItem in Model.shoppingCartList)
                         {
                           
-                            <tr>
+                            <tr id="cartItem(@cartItem.CartID)">
                                 <td>
                                     <div class="media">
                                         <input type="text" name="cartId" id="cartId" value="@cartItem.CartID" hidden/>
@@ -83,6 +84,12 @@
                                             (Model.courseList.Where(c => c.CourseID == cartItem.CourseID).FirstOrDefault().Price * cartItem.Quantity).ToString("c")
                                         )
                                     </h5>
+                                </td>
+                                <td>
+                                    <a asp-action="Delete" asp-controller="Browse" asp-route-id="@cartItem.CartID" class="genric-btn primary radius mx-2 px-3">
+                                        <i class="bi bi-trash"></i>
+                                        刪除
+                                    </a>
                                 </td>
                             </tr>
                         }
@@ -272,6 +279,27 @@
                     }
                 });
             };
+            const DeleteCartItem = function (cartId) {
+                $.ajax({
+                    url: `/Browse/Delete/${cartId}`,
+                    type: 'POST',
+                    data: {
+                        cartId=cartId,
+
+                    },
+                    success: function (response) {
+                        if (response.success==true){
+                            RefreshPage();
+                        }
+                    },
+                    error: function (err) {
+                        conosle.log(JSON.stringify(err));
+                    }
+                });
+            };
+            const RefreshPage = function(memberId)
+            {
+            }
 
             window.increase = function (elementId) {
                 var result = document.getElementById(elementId); //quantity
