@@ -885,7 +885,7 @@ namespace Project1.Controllers
 
 		public async Task<JsonResult> getSingleCourse()
 		{
-			var courseID = 5;
+			var courseID = 12;
 
             //var location = _context.Location;
 
@@ -922,6 +922,18 @@ namespace Project1.Controllers
 
 			return Json(singleCourse);
 		}
+
+		public async Task<JsonResult> getClassSechdule()
+		{
+			var courseID = 12;
+
+			var classSechdules = await _context.ClassSchedule
+											   .Where(c => c.CourseID == courseID && c.Scheduler >= DateTime.UtcNow)
+											   .ToListAsync();
+
+			return Json(classSechdules);
+		}
+
 
 
 
