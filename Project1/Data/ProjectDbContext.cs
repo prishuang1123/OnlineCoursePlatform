@@ -22,10 +22,6 @@ namespace Project1.Data
         .IsRequired(false); // 設定為允許null
 
 
-            modelBuilder.Entity<ShoppingCart>().HasData(
-                new ShoppingCart { CartID = 1, CourseID = 1, Quantity = 1, CreatedAt = DateTime.UtcNow }
-                );
-
             modelBuilder.Entity<Order>().HasData(
                 new Order { OrderID = 1, MemberID = 1, OrderDate = DateTime.Now, OrderStatus = "Processing", TotalAmount = 100, CreatedAt = DateTime.Now, },
                 new Order { OrderID = 2, MemberID = 2, OrderDate = DateTime.Now, OrderStatus = "Delivered", TotalAmount = 200, CreatedAt = DateTime.Now },

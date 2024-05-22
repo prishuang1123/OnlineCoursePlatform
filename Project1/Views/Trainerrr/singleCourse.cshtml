@@ -1,80 +1,88 @@
 ﻿<div class="product_image_area">
-	<div class="container">
-		<div id="app" class="row s_product_inner" v-if="course">
-			<div class="col-lg-6">
-				<div class="s_Product_carousel">
-					<div class="single-prd-item">
-						<img :src="course.thumbnailUrl" class="img-fluid" alt="">
-					</div>
-					<div class="single-prd-item">
-						<img :src="course.thumbnailUrl" class="img-fluid" alt="">
-					</div>
-					<div class="single-prd-item">
-						<img :src="course.thumbnailUrl" class="img-fluid" alt="">
-					</div>
-				</div>
-			</div>
-			<div class="col-lg-5 offset-lg-1">
-				<div class="s_product_text">
-					<h3>{{ course.courseName }}</h3>
-					<h2>價格:{{ course.price }}</h2>
-					<ul class="list">
-						<li><span>寵物分類: {{course.petCategoryName}}</span></li>
-						<li><span>課程類別: {{course.courseCategoryName}}</span></li>
-						<li><span>課程類型: {{course.courseTypeName}}</span></li>
-						<li><span>人數上限: {{course.maxParticipants}}</span></li>
-						<li><span>上課地區: {{course.locationName}}</span></li>
-					</ul>
-					<p>{{ course.description }}</p>
-					<div v-if="sechdules.length > 0" class="single-element-widget mt-30">
-						<h3 class="mb-30">已開放上課時間</h3>
-						<div v-for="sechdule in sechdules" :key="sechdule.sechdulerID" class="switch-wrap d-flex justify-content-between">
-							<p>{{sechdule.sechduler}}</p>
-							<div class="primary-checkbox">
-								<input type="checkbox" id="default-checkbox">
-								<label for="default-checkbox"></label>
-							</div>
-						</div>
-					</div>
-					<div class="card_area d-flex align-items-center">
-						<a class="primary-btn" href="#">加入購物車</a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+    <div class="container">
+        <div id="app" class="row s_product_inner" v-if="course">
+            <div class="col-lg-6">
+                <div class="s_Product_carousel">
+                    <div class="single-prd-item">
+                        <img :src="course.thumbnailUrl" class="img-fluid" alt="">
+                    </div>
+                    <div class="single-prd-item">
+                        <img :src="course.thumbnailUrl" class="img-fluid" alt="">
+                    </div>
+                    <div class="single-prd-item">
+                        <img :src="course.thumbnailUrl" class="img-fluid" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5 offset-lg-1">
+                <div class="s_product_text">
+                    <h3>{{ course.courseName }}</h3>
+                    <h2>價格:{{ course.price }}</h2>
+                    <ul class="list">
+                        <li><span>寵物分類: {{course.petCategoryName}}</span></li>
+                        <li><span>課程類別: {{course.courseCategoryName}}</span></li>
+                        <li><span>課程類型: {{course.courseTypeName}}</span></li>
+                        <li><span>人數上限: {{course.maxParticipants}}</span></li>
+                        <li><span>上課地區: {{course.locationName}}</span></li>
+                    </ul>
+                    <p>{{ course.description }}</p>
+                </div>
+                <h3 class="mb-30">已開放上課時間</h3>
+                <div v-if="schedules.length > 0" v-for="(schedule,index) in schedules" :key="schedule.schedulerID">
+                    <div class="single-element-widget mt-30">
+                        <div class="d-flex justify-content-between">
+                            <p>{{schedule.scheduler}}</p>
+                            <div class="primary-checkbox">
+                                <input type="checkbox" :id="'checkbox-' + index">
+                                <label :for="'checkbox-' + index"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card_area d-flex align-items-center">
+                    <a class="primary-btn" href="#">加入購物車</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 @section Scripts {
-	<script>
-		var vueApp = {
-			data() {
-				return {
-					course: [],// Ensure course is initialized as null
-					scourse :[],
-					sechdules :[],
-					singletime: []
-				}
-			},
-			mounted() {
-				var url1 = "https://localhost:7177/Trainerrr/getSingleCourse";
-				axios.get(url1).then(response => {
-					this.course = response.data;
-					//this.scourse = this.course.where(x => x.courseID == this.courseId);
-				}).catch(error => {
-					alert(error);
-				});
-				var url2 = "https://localhost:7177/Trainerrr/getClassSechdule"
-				axios.get(url2).then(reponse => {
-					console.log(reponse.data);
-					this.sechdules = reponse.data;	
-					console.log(this.sechdules[0].courseID)
-				}).catch(error => {
-					alert(error);
-				});
-			}
-		}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
 
-		var app = Vue.createApp(vueApp).mount("#app");
-	</script>
+    <script>
+        var vueApp = {
+            data() {
+                return {
+                    course: [],// Ensure course is initialized as null
+                    scourse: [],
+                    schedules: [],
+                }
+            },
+            mounted() {
+                var url1 = "https://localhost:7177/Trainerrr/getSingleCourse";
+                axios.get(url1).then(response => {
+                    this.course = response.data;
+                    //this.scourse = this.course.where(x => x.courseID == this.courseId);
+                }).catch(error => {
+                    alert(error);
+                });
+                var url2 = "https://localhost:7177/Trainerrr/getClassSechdule"
+                axios.get(url2).then(reponse => {
+                    for (let e of reponse.data) {
+                        this.schedules.push({
+                            schedulerID: e.schedulerID,
+                            scheduler: moment(e.scheduler).format('YYYY/MM/DD'),
+                            courseID: e.courseID
+                        })
+                    }
+
+                }).catch(error => {
+                    alert(error);
+                });
+            }
+        }
+
+        var app = Vue.createApp(vueApp).mount("#app");
+    </script>
 }
