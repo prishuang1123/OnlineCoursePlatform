@@ -807,28 +807,33 @@ namespace Project1.Controllers
             return Ok(new { message = "成功發佈課程" });
         }
 
-        // 取得已發布課程的時程
-        [HttpGet]
-        public async Task<IActionResult> GetPublishedSchedules([FromQuery] int courseID)
+
+        // 获取特定课程的已发布时间表
+        public async Task<JsonResult> GetPublishedSchedules(int courseID)
         {
             var schedules = await _context.ClassSchedule
                                           .Where(cs => cs.CourseID == courseID)
                                           .ToListAsync();
 
-            if (schedules == null || !schedules.Any())
+            var scheduleList = schedules.Select(s => new
             {
-                return NotFound(new { message = "找不到發佈的課程時程" });
-            }
+                s.SchedulerID,
+                s.CourseID,
+                s.Scheduler
+            }).ToList();
 
-            return Ok(schedules);
+            return Json(scheduleList);
         }
+
+
+
 
 
         // 收回發佈
         [HttpPost]
-        public async Task<IActionResult> RetractPublish(int scheduleID)
+        public async Task<IActionResult> RetractPublish(int id)
         {
-            var classSchedule = await _context.ClassSchedule.FindAsync(scheduleID);
+            var classSchedule = await _context.ClassSchedule.FirstOrDefaultAsync(cs => cs.SchedulerID == id);
             if (classSchedule == null)
             {
                 return NotFound(new { message = "找不到該課程的發佈記錄" });
