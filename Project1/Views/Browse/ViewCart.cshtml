@@ -1,4 +1,13 @@
-﻿@model IEnumerable<ShoppingCart>
+﻿@model CartVM
+
+@section Styles
+{
+    <style>
+        #discountButton {
+            border: 0px outset buttonborder;
+        }
+    </style>
+}
 <!--================Cart Area =================-->
 <section class="cart_area">
     <div class="container">
@@ -8,116 +17,79 @@
                     <thead>
                         <tr>
                             <th scope="col">課程</th>
+                            <th scope="col">日期</th>
                             <th scope="col">金額</th>
                             <th scope="col">數量</th>
                             <th scope="col">總額</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach(var cartItem in Model)
+                        @foreach(var cartItem in Model.shoppingCartList)
                         {
+                          
                             <tr>
                                 <td>
                                     <div class="media">
+                                        <input type="text" name="cartId" id="cartId" value="@cartItem.CartID" hidden/>
                                         <div class="d-flex">
-                                            <img src="~/img/cart.jpg" alt="">
+                                            <img src="@Model.courseList.Where(c => c.CourseID == cartItem.CourseID).FirstOrDefault().ThumbnailUrl" alt="">
                                         </div>
                                         <div class="media-body">
-                                            <p>@cartItem.CourseID</p>
+                                            <p>@Model.courseList.Where(c => c.CourseID == cartItem.CourseID).FirstOrDefault().CourseName</p>
                                         </div>
                                     </div>
                                 </td>
                                 <td>
-                                    <h5>price@* @cartItem.Price.ToString("c") *@</h5>
+                                    <div id="@cartItem." class="single-element-widget mt-30">
+                                        <div class="switch-wrap d-flex justify-content-between">
+                                            <p>2024/11/15</p>
+                                            <div class="primary-checkbox mb-0">
+                                                <input type="checkbox" id="default-checkbox1">
+                                                <label for="default-checkbox1"></label>
+                                            </div>
+                                        </div>
+                                        <div class="switch-wrap d-flex justify-content-between">
+                                            <p>2024/11/15</p>
+                                            <div class="primary-checkbox mb-0">
+                                                <input type="checkbox" id="default-checkbox2">
+                                                <label for="default-checkbox2"></label>
+                                            </div>
+                                        </div>
+                                        <h5>2024/11/15</h5>
+                                        <h5>2024/11/15</h5>
+                                        <h5>2024/11/15</h5>
+                                        <h5>2024/11/15</h5>
+                                    </div>
+                                </td>
+                                <td>
+                                    <h5 id="price@(cartItem.CartID)">@Model.courseList.Where(c => c.CourseID == cartItem.CourseID).FirstOrDefault().Price.ToString("c")</h5>
                                 </td>
                                 <td>
                                     <div class="product_count">
-                                        <input type="text" name="qty" id="sst" maxlength="12" value="1" title="Quantity:"
-                                                class="input-text qty">
-                                        <button onclick=""
-                                                class="increase items-count" type="button">
-                                            <i class="lnr lnr-chevron-up"></i>
+                                        <input type="text" name="qty" id="sst@(cartItem.CartID)" maxlength="2" value="@cartItem.Quantity" title="Quantity:" class="input-text qty" disabled>
+                                        @* <button onclick="window.increase('sst@(cartItem.CartID)')"
+                                           class="increase items-count" type="button">
+                                            <i class="lnr lnr-chevron-up" ></i>
                                         </button>
-                                        <button onclick=""
-                                                class="reduced items-count" type="button">
+                                        <button onclick="window.decrease('sst@(cartItem.CartID)')"
+                                           class="reduced items-count" type="button">
                                             <i class="lnr lnr-chevron-down"></i>
-                                        </button>
+                                        </button> *@
                                     </div>
                                 </td>
                                 <td>
-                                    <h5>$720.00</h5>
+                                    <h5 id="totalPrice@(cartItem.CartID)">
+                                        @(
+                                            (Model.courseList.Where(c => c.CourseID == cartItem.CourseID).FirstOrDefault().Price * cartItem.Quantity).ToString("c")
+                                        )
+                                    </h5>
                                 </td>
                             </tr>
                         }
                             
-                        @* 
-                        <tr>
-                            <td>
-                                <div class="media">
-                                    <div class="d-flex">
-                                        <img src="img/cart.jpg" alt="">
-                                    </div>
-                                    <div class="media-body">
-                                        <p>Minimalistic shop for multipurpose use</p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <h5>$360.00</h5>
-                            </td>
-                            <td>
-                                <div class="product_count">
-                                    <input type="text" name="qty" id="sst" maxlength="12" value="1" title="Quantity:"
-                                            class="input-text qty">
-                                    <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
-                                            class="increase items-count" type="button">
-                                        <i class="lnr lnr-chevron-up"></i>
-                                    </button>
-                                    <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
-                                            class="reduced items-count" type="button">
-                                        <i class="lnr lnr-chevron-down"></i>
-                                    </button>
-                                </div>
-                            </td>
-                            <td>
-                                <h5>$720.00</h5>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="media">
-                                    <div class="d-flex">
-                                        <img src="img/cart.jpg" alt="">
-                                    </div>
-                                    <div class="media-body">
-                                        <p>Minimalistic shop for multipurpose use</p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <h5>$360.00</h5>
-                            </td>
-                            <td>
-                                <div class="product_count">
-                                    <input type="text" name="qty" id="sst" maxlength="12" value="1" title="Quantity:"
-                                            class="input-text qty">
-                                    <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
-                                            class="increase items-count" type="button">
-                                        <i class="lnr lnr-chevron-up"></i>
-                                    </button>
-                                    <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
-                                            class="reduced items-count" type="button">
-                                        <i class="lnr lnr-chevron-down"></i>
-                                    </button>
-                                </div>
-                            </td>
-                            <td>
-                                <h5>$720.00</h5>
-                            </td>
-                        </tr> *@
                         <tr class="bottom_button">
                             <td>
-                                <a class="gray_btn" href="#">Update Cart</a>
+                                @* <a class="gray_btn" href="#">Update Cart</a> *@
                             </td>
                             <td>
                             </td>
@@ -125,9 +97,9 @@
                             </td>
                             <td>
                                 <div class="cupon_text d-flex align-items-center">
-                                    <input type="text" placeholder="Coupon Code">
-                                    <a class="primary-btn" href="#">Apply</a>
-                                    <a class="gray_btn" href="#">Close Coupon</a>
+                                    <input id="discountCode" value="" type="text" placeholder="請輸入優惠碼">
+                                    <button id="discountButton" class="primary-btn" onclick="window.discountCode()">使用優惠碼</button>
+                                    @* <a class="gray_btn" href="">Close Coupon</a> *@
                                 </div>
                             </td>
                         </tr>
@@ -137,10 +109,10 @@
                             <td>
                             </td>
                             <td>
-                                <h5>Subtotal</h5>
+                                <h5>總計</h5>
                             </td>
                             <td>
-                                <h5>$2160.00</h5>
+                                <h5 id="subtotal">@(Model.subtotal.ToString("c"))</h5>
                             </td>
                         </tr>
                         <tr class="shipping_area">
@@ -149,10 +121,11 @@
                             <td>
                             </td>
                             <td>
-                                <h5>Shipping</h5>
+                                
+                                <h5></h5>
                             </td>
                             <td>
-                                <div class="shipping_box">
+                                @* <div class="shipping_box">
                                     <ul class="list">
                                         <li><a href="#">Flat Rate: $5.00</a></li>
                                         <li><a href="#">Free Shipping</a></li>
@@ -172,7 +145,7 @@
                                     </select>
                                     <input type="text" placeholder="Postcode/Zipcode">
                                     <a class="gray_btn" href="#">Update Details</a>
-                                </div>
+                                </div> *@
                             </td>
                         </tr>
                         <tr class="out_button_area">
@@ -183,9 +156,9 @@
                             <td>
                             </td>
                             <td>
-                                <div class="checkout_btn_inner d-flex align-items-center">
-                                    <a class="gray_btn" href="#">Continue Shopping</a>
-                                    <a class="primary-btn" href="#">Proceed to checkout</a>
+                                <div class="checkout_btn_inner d-flex align-items-end">
+                                    <a asp-controller="Browse" asp-action="Index" class="gray_btn" >繼續購物</a>
+                                    <a asp-controller="Checkout" asp-action="Index" asp-route-id="1" class="primary-btn" >結帳</a>
                                 </div>
                             </td>
                         </tr>
@@ -199,14 +172,132 @@
 
 @section Scripts
 {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
     <script>
-        $("#sst").change(function () {
-            alert("change");
+        const baseUrl = "https://localhost:7177";
+        const vueApp = {
+            data() {
+                return {
+                    classSchedule: [],
+                }
+            },
+            mounted() {
+                const GetClassScheduleUrl = `${baseUrl}/Browse/GetClassSchedule`;
+                axios.get(GetClassScheduleUrl).then(response => {
+                    this.classSchedule = response.data;
+                }).catch(error => {
+                    alert(error);
+                });
+
+            }
+        }
+
+        var app = Vue.createApp(vueApp).mount("#app");
+
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            const updateDatabase = function (newQuantity, cartId) {
+                $.ajax({
+                    url: '/Browse/UpdateQuantity',
+                    type: 'POST',
+                    data: { 
+                        quantity: newQuantity,
+                        id: cartId,
+                    },
+                    success: function (response) {
+                        var totalPrice = document.getElementById("totalPrice" + cartId);
+                        totalPrice.textContent = response.totalPrice;
+                        updateSubtotal();
+                        
+                    },
+                    error: function (err) {
+                        conosle.log(JSON.stringify(err));
+                    }
+                });
+            };
+
+            const updateSubtotal = function () {
+                $.ajax({
+                    url: '/Browse/UpdateSubtotal',
+                    type: 'GET',
+                    data: {
+                        
+                    },
+                    success: function (response) {
+                        const subtotal = document.getElementById("subtotal");
+                        subtotal.textContent = response.subtotal;
+                        console.log(JSON.stringify(response));
+                    },
+                    error: function (err) {
+                        conosle.log(JSON.stringify(err));
+                    }
+                });
+            };
+
+            const validateDiscountCode = function (discountCode) {
+                $.ajax({
+                    url: '/Browse/ValidateDiscountCode',
+                    type: 'GET',
+                    data: {
+                        discountCode: discountCode,
+                    },
+                    success: function (response) {
+                        const discountCode = document.getElementById("discountCode");
+                        if (response.validationResult == "success") {
+                            alert("成功使用優惠碼!");
+                            // TempData["success"] = "成功使用優惠碼!";
+                            const subtotalValue = parseFloat(document.getElementById("subtotal").textContent.substring(1));
+                            subtotal.textContent = "$" + (subtotalValue * response.discountPercentage).toFixed(2);
+                            const discountButton = document.getElementById("discountButton");
+                            discountButton.setAttribute("disabled", "disabled");
+                        }
+                        else if (response.validationResult == "not applicable") {
+                            alert("此優惠碼不適用");
+                            // TempData["error"] = "此優惠碼不適用";
+                        }
+                        else {
+                            alert("查無優惠碼");
+                            // TempData["error"] = "查無優惠碼";
+                        }
+                       
+                        console.log(JSON.stringify(response));
+
+                    },
+                    error: function (err) {
+                        conosle.log(JSON.stringify(err));
+                    }
+                });
+            };
+
+            window.increase = function (elementId) {
+                var result = document.getElementById(elementId); //quantity
+                result.value = parseInt(result.value) + 1;
+                
+                updateDatabase(parseInt(result.value), parseInt(elementId.substring(3)));
+            }
+            window.decrease = function (elementId) {
+                var result = document.getElementById(elementId);
+                if (parseInt(result.value) <= 1) {
+                    alert("數量不可小於1");
+                    result.value = 1;
+                }
+                else{
+                    result.value = parseInt(result.value) - 1;
+                }
+                updateDatabase(parseInt(result.value), elementId.substring(3));
+            }
+            window.discountCode = function () {
+                // event.preventDefault();
+                var discountCode = document.getElementById('discountCode').value;
+                validateDiscountCode(discountCode);
+            }
         });
-        // var result = document.getElementById('sst'); 
-        // var sst = result.value; 
-        // if (!isNaN(sst)) result.value++; 
-        // return false;
+        
+        
     </script>
     
 }

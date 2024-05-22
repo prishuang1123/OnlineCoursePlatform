@@ -1,4 +1,6 @@
-﻿namespace Project1.Models
+﻿using Project1.Models;
+
+namespace Project1.ViewModels
 {
     public class BrowseVM
     {
@@ -6,5 +8,6 @@
         public Trainer trainer { get; set; }
         public IEnumerable<CourseCategory> categoryList { get; set; }
 
-    }
+
+	}
 }
