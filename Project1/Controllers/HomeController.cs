@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Project1.Data;
@@ -10,18 +12,23 @@ using System.Linq;
 
 namespace Project1.Controllers
 {
-    public class HomeController : Controller
+    //繼承VerifyUserRoles
+    public class HomeController : VerifyUserRoles
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ProjectDbContext _ProjectDbContext;
-
-        public HomeController(ILogger<HomeController> logger, ProjectDbContext ProjectDbConext)
+        
+        //繼承後注入建構函式
+        //關鍵字:Base 呼叫父類的建構式
+        public HomeController(ILogger<HomeController> logger, ProjectDbContext ProjectDbConext, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager):base(userManager,signInManager)
         {
             _logger = logger;
             _ProjectDbContext = ProjectDbConext;
+            
         }
 
-        public IActionResult Index()
+        //GET Home/Index
+        public async Task<IActionResult> Index()
         {
             return View();
         }
@@ -125,27 +132,27 @@ namespace Project1.Controllers
             return View();
         }
 
-        //�t�κ޲z���s��|�����յe��
+        //wayne:後端連接測試
         public IActionResult Member()
         {
             return View();
         }
-        //���U�e��
+
+        //wayne:登入畫面(已改採AspNetIdentity)
         public IActionResult Register()
         {
             return View();
         }
 
-
-        //�t�κ޲z���s��|��(�Y�a�s��e��)
-        public IActionResult MemberVueSPA()
+        //wayne:Member資料表(即時編輯)
+        [Authorize(Roles ="Admin")] //wayne:限制控制器供執行的對象=>管理員
+        public async Task<IActionResult> MemberVueSPA()
         {
+            
             return View();
         }
 
         
-
-
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

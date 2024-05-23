@@ -18,7 +18,7 @@ namespace Project1.Data.Migrations
                 .HasAnnotation("ProductVersion", "3.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
+            //User角色(權限管理)     (命名空間                    .類別)
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -69,7 +69,7 @@ namespace Project1.Data.Migrations
 
                     b.ToTable("AspNetRoleClaims");
                 });
-
+            //User帳號資料
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
                 {
                     b.Property<string>("Id")

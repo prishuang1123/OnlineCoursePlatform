@@ -58,22 +58,37 @@
                                 </ul>
                             </li>
                             <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                            @* 判斷當前用戶的身分 *@
+                            @if (ViewBag.IsAdmin != null && ViewBag.IsAdmin)
+                            {
+                                <li class="nav-item submenu dropdown">
+                                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
+                                        aria-haspopup="true" aria-expanded="false">會員管理</a>
+                                    <ul class="dropdown-menu">
+                                        <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Members" asp-action="Index">會員總覽MVC</a></li>
+                                        <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="MemberVueSPA">會員總覽Vue</a></li>
+                                        <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Members1" asp-action="Create">註冊會員個人資料</a></li>
+								    </ul>
+							    </li>
+                            }
+                            
+                             <li class="nav-item submenu dropdown">
+                               <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
+                                   aria-haspopup="true" aria-expanded="false">會員中心</a>
+                                <ul class="dropdown-menu">
+                                   <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Members1" asp-action="Create">會員中心</a></li>
+                                </ul>
+                             </li>
                             <li class="nav-item submenu dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
-                                   aria-haspopup="true" aria-expanded="false">會員管理</a>
+                                   aria-haspopup="true" aria-expanded="false">權限</a>
                                 <ul class="dropdown-menu">
-                                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Members" asp-action="Index">會員總覽MVC</a></li>
-
-									<li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="MemberVueSPA">會員總覽Vue</a></li>
-								</ul>
-							</li>
-							<li>
-								<a class="nav-link" asp-controller="Members" asp-action="Login">登入</a>
-							</li>
-                            <li>
-                                <a class="nav-link" asp-controller="Members" asp-action="Logout">登出</a>
+                                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="RoleManagement" asp-action="Index">用戶與角色</a></li>
+                                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="RoleManagement" asp-action="Manage">用戶與角色管理</a></li>
+                                </ul>
                             </li>
-							
+                            
+                            
 						</ul>
 						<ul class="nav navbar-nav navbar-right">
 							<li class="nav-item"><a href="#" class="cart"><span class="ti-bag"></span></a></li>
@@ -81,7 +96,8 @@
 								<button class="search"><span class="lnr lnr-magnifier" id="search"></span></button>
 							</li>
 						</ul>
-						
+                        @* PartialTagHelper *@
+                        <partial name="_LoginPartial" />
 					</div>
 				</div>
 			</nav>
