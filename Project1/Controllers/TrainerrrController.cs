@@ -880,16 +880,51 @@ namespace Project1.Controllers
         //單一課程頁面
         public IActionResult singleCourse()
         {
+            //if (id == null)
+            //{
+            //    return Json(new { error = "Invalid course ID" });
+            //}
+
+            //var singleCourseQuery = (from c in _context.Course.Where(c => c.CourseID == id)
+            //                         join loc in _context.Location on c.LocationID equals loc.LocationID
+            //                         join ct in _context.CourseType on c.CourseTypeID equals ct.CourseTypeID
+            //                         join pc in _context.PetCategory on c.PetCategoryID equals pc.PetCategoryID
+            //                         join cc in _context.CourseCategory on c.CourseCategoryID equals cc.CourseCategoryID
+            //                         select new CourseViewModel
+            //                         {
+            //                             CourseID = c.CourseID,
+            //                             CourseName = c.CourseName,
+            //                             TrainerID = c.TrainerID,
+            //                             PetCategoryName = pc.PetCategoryName,
+            //                             CourseCategoryName = cc.CourseCategoryName,
+            //                             CourseTypeName = ct.CourseTypeName,
+            //                             Description = c.Description,
+            //                             Price = c.Price,
+            //                             LocationName = loc.LocationName,
+            //                             MaxParticipants = c.MaxParticipants,
+            //                             CreatedAt = c.CreatedAt,
+            //                             ThumbnailUrl = c.ThumbnailUrl,
+            //                         });
+
+            //var singleCourse = singleCourseQuery;
+
+            //if (singleCourse == null)
+            //{
+            //    return Json(new { error = "Course not found" });
+            //}
+
+
             return View();
         }
 
-		public async Task<JsonResult> getSingleCourse()
+		public async Task<JsonResult> getSingleCourse(int? id)
 		{
-			var courseID = 12;
+			if (id == null)
+			{
+				return Json(new { error = "Invalid course ID" });
+			}
 
-            //var location = _context.Location;
-
-			var singleCourseQuery = (from c in _context.Course.Where(c => c.CourseID == courseID)
+			var singleCourseQuery = (from c in _context.Course.Where(c => c.CourseID == id)
                                      join loc in _context.Location on c.LocationID equals loc.LocationID
                                      join ct in _context.CourseType on c.CourseTypeID equals ct.CourseTypeID
                                      join pc in _context.PetCategory on c.PetCategoryID equals pc.PetCategoryID
@@ -912,32 +947,41 @@ namespace Project1.Controllers
 
 			var singleCourse = await singleCourseQuery.FirstOrDefaultAsync();
 
-			if (singleCourse == null)
-			{
-				return Json(new { error = "Course not found" });
-			}
+            if (singleCourse == null)
+            {
+                return Json(new { error = "Course not found" });
+            }
 
-			// Log the course details for debugging
-			Console.WriteLine($"Course: {singleCourse.CourseName}, Location: {singleCourse.LocationName}");
+            // Log the course details for debugging
+            //Console.WriteLine($"Course: {singleCourse.CourseName}, Location: {singleCourse.LocationName}");
 
-			return Json(singleCourse);
+            return Json(singleCourse);
 		}
 
-		public async Task<JsonResult> getClassSechdule()
-		{
-			var courseID = 12;
+        public async Task<JsonResult> getClassSchedule(int? id)
+        {
+            if (id == null)
+            {
+                return Json(new { message = "Course ID cannot be null" });
+            }
 
-			var classSechdules = await _context.ClassSchedule
-											   .Where(c => c.CourseID == courseID && c.Scheduler >= DateTime.UtcNow)
-											   .ToListAsync();
+            var classSchedules = await _context.ClassSchedule
+                                               .Where(c => c.CourseID == id && c.Scheduler >= DateTime.UtcNow)
+                                               .ToListAsync();
 
-			return Json(classSechdules);
-		}
+            if (classSchedules == null || classSchedules.Count == 0)
+            {
+                return Json(new { message = "No schedules found for the given course ID" });
+            }
+
+            return Json(classSchedules);
+        }
 
 
 
 
-	}
+
+    }
 }
    
 

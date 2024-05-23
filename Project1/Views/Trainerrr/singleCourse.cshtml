@@ -1,87 +1,133 @@
-﻿<div class="product_image_area">
-    <div class="container">
-        <div id="app" class="row s_product_inner" v-if="course">
-            <div class="col-lg-6">
-                <div class="s_Product_carousel">
-                    <div class="single-prd-item">
-                        <img :src="course.thumbnailUrl" class="img-fluid" alt="">
-                    </div>
-                    <div class="single-prd-item">
-                        <img :src="course.thumbnailUrl" class="img-fluid" alt="">
-                    </div>
-                    <div class="single-prd-item">
-                        <img :src="course.thumbnailUrl" class="img-fluid" alt="">
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-5 offset-lg-1">
-                <div class="s_product_text">
-                    <h3>{{ course.courseName }}</h3>
-                    <h2>價格:{{ course.price }}</h2>
-                    <ul class="list">
-                        <li><span>寵物分類: {{course.petCategoryName}}</span></li>
-                        <li><span>課程類別: {{course.courseCategoryName}}</span></li>
-                        <li><span>課程類型: {{course.courseTypeName}}</span></li>
-                        <li><span>人數上限: {{course.maxParticipants}}</span></li>
-                        <li><span>上課地區: {{course.locationName}}</span></li>
-                    </ul>
-                    <p>{{ course.description }}</p>
-                </div>
-                <h3 class="mb-30">已開放上課時間</h3>
-                <div v-if="schedules.length > 0" v-for="(schedule,index) in schedules" :key="schedule.schedulerID">
-                    <div class="single-element-widget mt-30">
-                        <div class="d-flex justify-content-between">
-                            <p>{{schedule.scheduler}}</p>
-                            <div class="primary-checkbox">
-                                <input type="checkbox" :id="'checkbox-' + index">
-                                <label :for="'checkbox-' + index"></label>
-                            </div>
+﻿   <div class="product_image_area">
+        <div class="container">
+            <div id="app" class="row s_product_inner">
+                <div class="col-lg-6" v-if="course">
+                    <div class="s_Product_carousel">
+                        <div class="single-prd-item">
+                            <img :src="course.thumbnailUrl" class="img-fluid" alt="">
+                        </div>
+                        <div class="single-prd-item">
+                            <img :src="course.thumbnailUrl" class="img-fluid" alt="">
+                        </div>
+                        <div class="single-prd-item">
+                            <img :src="course.thumbnailUrl" class="img-fluid" alt="">
                         </div>
                     </div>
                 </div>
-                <div class="card_area d-flex align-items-center">
-                    <a class="primary-btn" href="#">加入購物車</a>
+                <div class="col-lg-5 offset-lg-1">
+                    <div class="s_product_text">
+                        <h3> {{course.courseName}}</h3>
+                        <h2>價格: {{course.price}}</h2>
+                        <ul class="list">
+                            <li><span>寵物分類: {{course.petCategoryName}}</span></li>
+                            <li><span>課程類別: {{course.courseCategoryName}}</span></li>
+                            <li><span>課程類型: {{course.courseTypeName}}</span></li>
+                            <li><span>人數上限: {{course.maxParticipants}}</span></li>
+                            <li><span>上課地區: {{course.locationName}}</span></li>
+                        </ul>
+                        <p>課程簡介: {{course.description}}</p>
+                    </div>
+                    <h3 class="mb-30">已開放上課時間</h3>
+
+                    <div v-if="schedules.length > 0">
+                        <div v-for="(schedule, index) in schedules" :key="schedule.schedulerID" class="single-element-widget mt-30">
+                            <div class="d-flex justify-content-between">
+                                <p>{{ schedule.scheduler }}</p>
+                                <div class="primary-checkbox">
+                                    <input type="checkbox" :id="'checkbox-' + index" :value="schedule.schedulerID" v-model="selectedSchedules">
+                                    <label :for="'checkbox-' + index"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card_area d-flex align-items-center">
+                        <a class="primary-btn" href="#" @@click.prevent="addToCart">加入購物車</a>
+                    </div>
+
+@*                     <div v-if="schedules.length > 0" v-for="(schedule,index) in schedules" :key="schedule.schedulerID">
+                        <div class="single-element-widget mt-30">
+                            <div class="d-flex justify-content-between">
+                                <p>{{schedule.scheduler}}</p>
+                                <div class="primary-checkbox">
+                                    <input type="checkbox" :id="'checkbox-' + index">
+                                    <label :for="'checkbox-' + index"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card_area d-flex align-items-center">
+                        <a class="primary-btn" href="#" v-on:click="addToCart">加入購物車</a>
+                    </div> *@
                 </div>
             </div>
         </div>
     </div>
-</div>
 
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
-
     <script>
         var vueApp = {
             data() {
                 return {
-                    course: [],// Ensure course is initialized as null
-                    scourse: [],
+                    course: [],
                     schedules: [],
+                    selectedSchedules: [],
+                    
                 }
             },
             mounted() {
-                var url1 = "https://localhost:7177/Trainerrr/getSingleCourse";
-                axios.get(url1).then(response => {
-                    this.course = response.data;
-                    //this.scourse = this.course.where(x => x.courseID == this.courseId);
-                }).catch(error => {
-                    alert(error);
-                });
-                var url2 = "https://localhost:7177/Trainerrr/getClassSechdule"
-                axios.get(url2).then(reponse => {
-                    for (let e of reponse.data) {
-                        this.schedules.push({
-                            schedulerID: e.schedulerID,
-                            scheduler: moment(e.scheduler).format('YYYY/MM/DD'),
-                            courseID: e.courseID
-                        })
-                    }
+                const cid = sessionStorage.getItem("ActID");
+                const url1 = `https://localhost:7177/Trainerrr/getsingleCourse?id=${cid}`;
+                axios.get(url1)
+                    .then(response => {
+                        this.course = response.data;
+                    })
+                    .catch(error => {
+                        alert('Error fetching course data');
+                        console.error(error);
+                    });
 
-                }).catch(error => {
-                    alert(error);
-                });
+                const url2 = `https://localhost:7177/Trainerrr/getClassSchedule?id=${cid}`;
+                axios.get(url2)
+                    .then(response => {
+                        if (response.data.length > 0) {
+                            this.schedules = response.data.map(e => ({
+                                schedulerID: e.schedulerID,
+                                scheduler: moment(e.scheduler).format('YYYY/MM/DD'),
+                                courseID: e.courseID
+                            }));
+                        } else {
+                            this.schedules = "此門課尚未開放上課時段";
+                        }
+                    })
+                    .catch(error => {
+                        alert('Error fetching schedules');
+                        console.error(error);
+                    });
+            },
+            methods: {
+                addToCart() {
+                    if (this.selectedSchedules.length === 0) {
+                        alert('請選擇至少一個時間');
+                        return;
+                    }
+                    const cid = sessionStorage.getItem("ActID");
+                    axios.post('https://localhost:7177/Browse/AddToCart', {
+                        courseID: cid,
+                        selectedSchedules: this.selectedSchedules
+                    })
+                        .then(response => {
+                            alert('加入購物車成功');
+                            // Handle success response
+                        })
+                        .catch(error => {
+                            alert('加入購物車失敗');
+                            console.error(error);
+                        });
+                }
             }
         }
+        
 
         var app = Vue.createApp(vueApp).mount("#app");
     </script>

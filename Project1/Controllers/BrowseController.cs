@@ -84,59 +84,119 @@ namespace Project1.Controllers
 
 		}
 
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> AddToCart(int? id) //courseID
-		{
-			//add the course into the logged in member's cart-> add a data into cart table
-			Course? courseObj = await _db.Course.Where(u=>u.CourseID == id).FirstOrDefaultAsync();
-			if (courseObj != null)
-			{
-				//List<ShoppingCart> shoppingCartList = await _db.Cart.ToListAsync();
-				ShoppingCart cartItem = await _db.Cart.Where(obj=> obj.CourseID==id).FirstOrDefaultAsync();
+        public class AddToCartRequest
+        {
+            public int CourseID { get; set; }
+            public List<int> SelectedSchedules { get; set; }
+        }
 
-				if (cartItem==null) 
-				{
-					ShoppingCart newCartItem = new ShoppingCart();
-					newCartItem.CourseID = courseObj.CourseID;
-					newCartItem.Quantity = 1;
-					newCartItem.MemberID = 1; //later with real memberID
 
-					if (ModelState.IsValid)
-					{
-						_db.Cart.Add(newCartItem);
-						_db.SaveChanges();
-						TempData["success"] = "加入購物車成功!!";
-
-						return RedirectToAction("ViewCart", "Browse");
-					}
-					return RedirectToAction("Index", "Browse");
-				}
-				else
-				{
-
-					cartItem.Quantity += 1;
-					
-					if (ModelState.IsValid)
-					{
-						_db.Cart.Update(cartItem);
-						_db.SaveChanges();
-						TempData["success"] = "加入購物車成功!!";
-
-						return RedirectToAction("ViewCart", "Browse");
-					}
-					return RedirectToAction("Index", "Browse");
-				}
-				
+        [HttpPost]
+        public async Task<IActionResult> AddToCart([FromBody] AddToCartRequest request)
+        {
+            if (request == null || request.SelectedSchedules == null || request.SelectedSchedules.Count == 0)
+            {
+                return BadRequest("No schedules selected");
             }
-			else
-			{
+
+            var courseObj = await _db.Course.FirstOrDefaultAsync(u => u.CourseID == request.CourseID);
+            if (courseObj == null)
+            {
                 return NotFound();
             }
-			
-			
-		}
-		[HttpPost]
+
+            foreach (var scheduleID in request.SelectedSchedules)
+            {
+                //var existingCartItem = await _db.Cart
+                //    .FirstOrDefaultAsync(c => c.CourseID == request.CourseID && c.SchedulerID == scheduleID && c.MemberID == 1); // 使用实际的 MemberID
+
+                    var newCartItem = new ShoppingCart
+                    {
+                        CourseID = request.CourseID,
+                        SchedulerID = scheduleID,
+                        Quantity = 1,
+                        MemberID = 1 // 使用实际的 MemberID
+                    };
+
+                    if (ModelState.IsValid)
+                    {
+                        _db.Cart.Add(newCartItem);
+                    }
+
+                //if (existingCartItem == null)
+                //{
+                //}
+                //else
+                //{
+                //    existingCartItem.Quantity += 1;
+                //    if (ModelState.IsValid)
+                //    {
+                //        _db.Cart.Update(existingCartItem);
+                //    }
+                //}
+            }
+
+            await _db.SaveChangesAsync();
+            TempData["success"] = "加入購物車成功!!";
+
+            return RedirectToAction("ViewCart", "Browse");
+        }
+
+
+
+        //      [HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> AddToCart(int? id) //courseID
+        //{
+        //	//add the course into the logged in member's cart-> add a data into cart table
+        //	Course? courseObj = await _db.Course.Where(u=>u.CourseID == id).FirstOrDefaultAsync();
+        //	if (courseObj != null)
+        //	{
+        //		//List<ShoppingCart> shoppingCartList = await _db.Cart.ToListAsync();
+        //		ShoppingCart cartItem = await _db.Cart.Where(obj=> obj.CourseID==id).FirstOrDefaultAsync();
+
+        //		if (cartItem==null) 
+        //		{
+        //			ShoppingCart newCartItem = new ShoppingCart();
+        //			newCartItem.CourseID = courseObj.CourseID;
+        //			newCartItem.Quantity = 1;
+        //			newCartItem.MemberID = 1; //later with real memberID
+
+
+        //			if (ModelState.IsValid)
+        //			{
+        //				_db.Cart.Add(newCartItem);
+        //				_db.SaveChanges();
+        //				TempData["success"] = "加入購物車成功!!";
+
+        //				return RedirectToAction("ViewCart", "Browse");
+        //			}
+        //			return RedirectToAction("Index", "Browse");
+        //		}
+        //		else
+        //		{
+
+        //			cartItem.Quantity += 1;
+
+        //			if (ModelState.IsValid)
+        //			{
+        //				_db.Cart.Update(cartItem);
+        //				_db.SaveChanges();
+        //				TempData["success"] = "加入購物車成功!!";
+
+        //				return RedirectToAction("ViewCart", "Browse");
+        //			}
+        //			return RedirectToAction("Index", "Browse");
+        //		}
+
+        //          }
+        //	else
+        //	{
+        //              return NotFound();
+        //          }						
+        //}
+
+        [HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> FollowItem(int? id) //courseID
 		{
