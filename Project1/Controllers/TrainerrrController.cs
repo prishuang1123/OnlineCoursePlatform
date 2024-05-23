@@ -456,7 +456,7 @@ namespace Project1.Controllers
         private Trainer GetCurrentTrainer()
         {
             // 這裡示範一個假設的方法，根據你的身份驗證機制來取得當前登入的訓練師
-            var trainerId =1 ; // 假設訓練師ID為
+            var trainerId = 2 ; // 假設訓練師ID為
             return _context.Trainer.FirstOrDefault(t => t.TrainerID == trainerId);
         }
 
