@@ -5,13 +5,14 @@ using Project1.ViewModels;
 
 namespace Project1.Controllers
 {
+    //wayne:該控制器給予Admin權限管制 繼承VerifyUserRoles
     [Authorize(Roles = "Admin")]
-    public class RoleManagementController : Controller
+    public class RoleManagementController : VerifyUserRoles
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        public RoleManagementController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        public RoleManagementController(UserManager<IdentityUser> userManager,SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager): base(userManager, signInManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
