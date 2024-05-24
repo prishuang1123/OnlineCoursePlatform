@@ -808,28 +808,33 @@ namespace Project1.Controllers
             return Ok(new { message = "成功發佈課程" });
         }
 
-        // 取得已發布課程的時程
-        [HttpGet]
-        public async Task<IActionResult> GetPublishedSchedules([FromQuery] int courseID)
+
+        // 获取特定课程的已发布时间表
+        public async Task<JsonResult> GetPublishedSchedules(int courseID)
         {
             var schedules = await _context.ClassSchedule
                                           .Where(cs => cs.CourseID == courseID)
                                           .ToListAsync();
 
-            if (schedules == null || !schedules.Any())
+            var scheduleList = schedules.Select(s => new
             {
-                return NotFound(new { message = "找不到發佈的課程時程" });
-            }
+                s.SchedulerID,
+                s.CourseID,
+                s.Scheduler
+            }).ToList();
 
-            return Ok(schedules);
+            return Json(scheduleList);
         }
+
+
+
 
 
         // 收回發佈
         [HttpPost]
-        public async Task<IActionResult> RetractPublish(int scheduleID)
+        public async Task<IActionResult> RetractPublish(int id)
         {
-            var classSchedule = await _context.ClassSchedule.FindAsync(scheduleID);
+            var classSchedule = await _context.ClassSchedule.FirstOrDefaultAsync(cs => cs.SchedulerID == id);
             if (classSchedule == null)
             {
                 return NotFound(new { message = "找不到該課程的發佈記錄" });
@@ -861,8 +866,8 @@ namespace Project1.Controllers
         {
             var trainers = (from t in _context.Trainer
                             join s in _context.Specialization on t.SpecializationID equals s.SpecializationID into joined
-                            from s in joined.DefaultIfEmpty() 
-                            let specializationName = s != null ? s.SpecializationName : null 
+                            from s in joined.DefaultIfEmpty()
+                            let specializationName = s != null ? s.SpecializationName : null
                             select new TrainerViewModel
                             {
                                 TrainerID = t.TrainerID,
@@ -870,10 +875,49 @@ namespace Project1.Controllers
                                 Experience = t.Experience,
                                 Photo = t.Photo,
                                 Qualifications = t.Qualifications,
-                                SpecializationName = specializationName 
-                            }).ToList(); 
+                                SpecializationName = specializationName
+                            }).ToList();
             return Json(trainers);
         }
+
+        //導向哪位訓練師的部落格
+        public async Task<IActionResult> TrainerBlog(int id)
+        {
+            var trainer = await _context.Trainer.FindAsync(id);
+            if (trainer == null)
+            {
+                return NotFound();
+            }
+
+            var blogs = await _context.Blog.Where(b => b.TrainerID == id).ToListAsync();
+            var courses = await (from c in _context.Course
+                                 where c.TrainerID == id
+                                 join pc in _context.PetCategory on c.PetCategoryID equals pc.PetCategoryID
+                                 join ct in _context.CourseType on c.CourseTypeID equals ct.CourseTypeID
+                                 join l in _context.Location on c.LocationID equals l.LocationID
+                                 select new CourseViewModel
+                                 {
+                                     CourseID = c.CourseID,
+                                     CourseName = c.CourseName,
+                                     Description = c.Description,
+                                     PetCategoryName = pc.PetCategoryName,
+                                     CourseTypeName = ct.CourseTypeName,
+                                     LocationName = l.LocationName,
+                                     Price = c.Price,
+                                     ThumbnailUrl = c.ThumbnailUrl,
+                                     Scheduler= _context.ClassSchedule.Where(cs => cs.CourseID == c.CourseID).Select(cs => cs.Scheduler).ToList()
+                                 }).ToListAsync();
+
+            var viewModel = new TrainerBlogViewModel
+            {
+                Trainer = trainer,
+                Blogs = blogs,
+                Courses = courses
+            };
+
+            return View(viewModel);
+        }
+
 
         //---------------------------------------------------------------------------------------------------
 
