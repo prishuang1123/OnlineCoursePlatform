@@ -42,7 +42,7 @@
                     </div>
                     <div v-else><p>此門課尚未開放上課時段</p></div>
                     <div class="card_area d-flex align-items-center">
-                    <a asp-controller="Trainerrr" asp-action="singleCourse" class="primary-btn" href="#" @@click.prevent="addToCart">加入購物車</a>
+                        <a asp-controller="Browse" asp-action="ViewCart" class="primary-btn" v-on:click.prevent="addToCart">加入購物車</a>
                     </div>
                 </div>
             </div>
@@ -100,14 +100,13 @@
                         courseID: cid,
                         selectedSchedules: this.selectedSchedules
                     })
-                        .then(response => {
-                            alert('加入購物車成功');
-                            // Handle success response
+                        .then(response => {             
                         })
                         .catch(error => {
                             alert('加入購物車失敗');
                             console.error(error);
                         });
+                    window.location.href = '/Browse/ViewCart/1';
                 }
             }
         }

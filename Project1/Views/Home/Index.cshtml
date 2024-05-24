@@ -107,7 +107,7 @@
                         <p class="mb-0">{{ item.description }}</p>
                         <p class="mb-0">課程售量: {{ item.totalQuantity }}</p>
                         <div class="prd-bottom mt-3">
-                            <a class="social-info text-white" asp-controller ="Trainerrr" asp-action="singleCourse">
+                            <a class="social-info text-white" asp-controller="Trainerrr" asp-action="singleCourse" v-on:click="actInfo(item.courseID)">
                                 <span class="lnr lnr-move"></span>
                                 <p class="hover-text">查看詳情</p>
                             </a>
@@ -127,7 +127,7 @@
                         <p class="mb-0">{{ item.description }}</p>
                         <p class="mb-0">課程評分: {{ item.courseAverageRating }}</p>
                         <div class="prd-bottom mt-3">
-                            <a :href="`/average/${item.id}`" class="social-info text-white">
+                            <a class="social-info text-white" asp-controller="Trainerrr" asp-action="singleCourse" v-on:click="actInfo(item.courseID)">
                                 <span class="lnr lnr-move"></span>
                                 <p class="hover-text">查看詳情</p>
                             </a>
@@ -147,7 +147,7 @@
                         <p class="mb-0">{{ item.description }}</p>
                         <p class="mb-0">課程點擊數: {{ item.clicks }}</p>
                         <div class="prd-bottom mt-3">
-                            <a :href="`/clicks/${item.id}`" class="social-info text-white">
+                            <a class="social-info text-white" asp-controller="Trainerrr" asp-action="singleCourse" v-on:click="actInfo(item.courseID)">
                                 <span class="lnr lnr-move"></span>
                                 <p class="hover-text">查看詳情</p>
                             </a>
@@ -190,7 +190,14 @@
                 }).catch(error => {
                     alert(error);
                 })
-            }
+            },
+            methods: {
+                actInfo: function (courseId) {
+                    // const btn = event.target;
+                    // const courseId = btn.getAttribute("btn-id");
+                    sessionStorage.setItem("ActID", courseId);
+                }
+            },
         }
 
         var app = Vue.createApp(VueApp).mount("#app");

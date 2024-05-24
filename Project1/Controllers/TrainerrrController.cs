@@ -880,40 +880,6 @@ namespace Project1.Controllers
         //單一課程頁面
         public IActionResult singleCourse()
         {
-            //if (id == null)
-            //{
-            //    return Json(new { error = "Invalid course ID" });
-            //}
-
-            //var singleCourseQuery = (from c in _context.Course.Where(c => c.CourseID == id)
-            //                         join loc in _context.Location on c.LocationID equals loc.LocationID
-            //                         join ct in _context.CourseType on c.CourseTypeID equals ct.CourseTypeID
-            //                         join pc in _context.PetCategory on c.PetCategoryID equals pc.PetCategoryID
-            //                         join cc in _context.CourseCategory on c.CourseCategoryID equals cc.CourseCategoryID
-            //                         select new CourseViewModel
-            //                         {
-            //                             CourseID = c.CourseID,
-            //                             CourseName = c.CourseName,
-            //                             TrainerID = c.TrainerID,
-            //                             PetCategoryName = pc.PetCategoryName,
-            //                             CourseCategoryName = cc.CourseCategoryName,
-            //                             CourseTypeName = ct.CourseTypeName,
-            //                             Description = c.Description,
-            //                             Price = c.Price,
-            //                             LocationName = loc.LocationName,
-            //                             MaxParticipants = c.MaxParticipants,
-            //                             CreatedAt = c.CreatedAt,
-            //                             ThumbnailUrl = c.ThumbnailUrl,
-            //                         });
-
-            //var singleCourse = singleCourseQuery;
-
-            //if (singleCourse == null)
-            //{
-            //    return Json(new { error = "Course not found" });
-            //}
-
-
             return View();
         }
 

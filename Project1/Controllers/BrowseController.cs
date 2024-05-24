@@ -143,59 +143,6 @@ namespace Project1.Controllers
         }
 
 
-
-        //      [HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> AddToCart(int? id) //courseID
-        //{
-        //	//add the course into the logged in member's cart-> add a data into cart table
-        //	Course? courseObj = await _db.Course.Where(u=>u.CourseID == id).FirstOrDefaultAsync();
-        //	if (courseObj != null)
-        //	{
-        //		//List<ShoppingCart> shoppingCartList = await _db.Cart.ToListAsync();
-        //		ShoppingCart cartItem = await _db.Cart.Where(obj=> obj.CourseID==id).FirstOrDefaultAsync();
-
-        //		if (cartItem==null) 
-        //		{
-        //			ShoppingCart newCartItem = new ShoppingCart();
-        //			newCartItem.CourseID = courseObj.CourseID;
-        //			newCartItem.Quantity = 1;
-        //			newCartItem.MemberID = 1; //later with real memberID
-
-
-        //			if (ModelState.IsValid)
-        //			{
-        //				_db.Cart.Add(newCartItem);
-        //				_db.SaveChanges();
-        //				TempData["success"] = "加入購物車成功!!";
-
-        //				return RedirectToAction("ViewCart", "Browse");
-        //			}
-        //			return RedirectToAction("Index", "Browse");
-        //		}
-        //		else
-        //		{
-
-        //			cartItem.Quantity += 1;
-
-        //			if (ModelState.IsValid)
-        //			{
-        //				_db.Cart.Update(cartItem);
-        //				_db.SaveChanges();
-        //				TempData["success"] = "加入購物車成功!!";
-
-        //				return RedirectToAction("ViewCart", "Browse");
-        //			}
-        //			return RedirectToAction("Index", "Browse");
-        //		}
-
-        //          }
-        //	else
-        //	{
-        //              return NotFound();
-        //          }						
-        //}
-
         [HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> FollowItem(int? id) //courseID

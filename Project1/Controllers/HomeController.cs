@@ -99,6 +99,10 @@ namespace Project1.Controllers
             var courses = _ProjectDbContext.Course.Where(t => t.CourseName.Contains(searchTerm)).ToList();
             var location = _ProjectDbContext.Location.FirstOrDefault(t => t.LocationName.Contains(searchTerm));
             var category = _ProjectDbContext.CourseCategory.FirstOrDefault(t => t.CourseCategoryName.Contains(searchTerm));
+            var specialization = _ProjectDbContext.Specialization.ToList();
+            var petcategory = _ProjectDbContext.PetCategory.ToList();
+            var courseType = _ProjectDbContext.CourseType.ToList();
+            var courseCategory = _ProjectDbContext.CourseCategory.ToList();
             if(location != null)
             {
                 var locationID = location.LocationID;
@@ -113,6 +117,10 @@ namespace Project1.Controllers
             {
                 trainers = trainers,
                 courses = courses,
+                specializations = specialization,
+                petCategories = petcategory,
+                courseTypes = courseType,
+                courseCategories = courseCategory
             };
 
             // 返回部分视图，并将查询结果传递给视图
