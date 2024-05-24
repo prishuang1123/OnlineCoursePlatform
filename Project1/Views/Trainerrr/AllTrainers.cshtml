@@ -1,4 +1,13 @@
-﻿<div class="container" id="app">
+﻿@section Styles {
+
+    <style>
+        
+    </style>
+
+}
+
+
+<div class="container" id="app">
     <div class="row">
         <div class="col-xl-3 col-lg-4 col-md-5">
             <div class="sidebar-categories">
@@ -37,8 +46,8 @@
         <div class="col-xl-9 col-lg-8 col-md-7">
             <section class="lattest-product-area pb-40 category-list">
                 <div class="row">
-                    <div v-for="(trainer, index) in displayedTrainers" class="col-lg-4 col-md-6">
-                        <div class="single-product position-relative overflow-hidden">
+                    <div v-for="(trainer, index) in displayedTrainers" class="col-lg-4 col-md-6" :key="trainer.trainerID">
+                        <div class="single-product position-relative overflow-hidden" @@click="viewTrainerBlog(trainer.trainerID)">
                             <img :src="trainer.photo" class="img-fluid" alt="Trainer's photo" />
                             <div class="product-details text-black">
                                 <h5 class="mb-3 product-title">{{trainer.trainerName}}</h5>
@@ -64,6 +73,10 @@
 
 
 @section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.8/axios.min.js"
+            integrity="sha512-PJa3oQSLWRB7wHZ7GQ/g+qyv6r4mbuhmiDb8BjSFZ8NZ2a42oTtAq5n0ucWAwcQDlikAtkub+tPVCw4np27WCg=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://unpkg.com/vue@3.4.25/dist/vue.global.js"></script>
     <script>
         var vueApp = {
             data() {
@@ -102,17 +115,20 @@
                     if (specialization == "所有訓練師") {
                         this.trainers = this.originalTrainers;
                         this.currentPage = 1;
-                    }
-                    else {
-                        this.trainers = this.originalTrainers;
-                        this.trainers = this.trainers.filter(t => t.specializationName == specialization.trim());
+                    } else {
+                        this.trainers = this.originalTrainers.filter(t => t.specializationName === specialization.trim());
                         this.currentPage = 1;
                     }
                 },
+                viewTrainerBlog(trainerID) {
+                    console.log("Navigating to trainer blog with ID:", trainerID); // Add this line to debug
+                    window.location.href = `/Trainerrr/TrainerBlog/${trainerID}`;
+                }
             },
             mounted() {
                 var url = "https://localhost:7177/Trainerrr/getTrainers";
                 axios.get(url).then(response => {
+                    console.log("Trainers data:", response.data); // Add this line to debug
                     this.trainers = response.data;
                     this.originalTrainers = this.trainers;
                 }).catch(error => {

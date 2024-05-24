@@ -24,5 +24,7 @@
 		public DateTime CreatedAt { get; set; }
 
 		public string? ThumbnailUrl { get; set; }
-	}
+
+		public List<DateTime> Scheduler { get; set; }
+    }
 }

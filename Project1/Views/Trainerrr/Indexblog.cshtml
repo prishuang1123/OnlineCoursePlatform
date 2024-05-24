@@ -162,8 +162,8 @@
         }
 
         .new-course-section {
-            color: green;
-            border: 2px dashed green;
+            color: #856646;
+            border: 1px solid #856646;
             padding: 10px;
             margin-top: 20px;
         }
@@ -307,7 +307,7 @@
                 position: absolute;
                 top: 10px;
                 right: 10px;
-                background: red;
+                background: #DE7548;
                 color: white;
                 border: none;
                 border-radius: 50%;
@@ -324,6 +324,12 @@
                     cursor: not-allowed;
                 }
 
+    .btn-delete {
+        background: #DE7548;
+        color: white;
+    
+    }
+
         .published-label {
             position: absolute;
             top: 50%;
@@ -336,6 +342,25 @@
             font-weight: bold;
             z-index: 1;
         }
+
+        /* 按鈕顏色調整 */
+        .btn-success{
+            color: #fff;
+            background-color: #B99672;
+            border-color: #CCAD8E;       
+        }
+
+        .btn-viewCourse {
+            color: #fff;
+            background-color: #A47546;
+        }
+
+    .showPublishModal{
+        color: #fff;
+        background-color: #C1AA94;
+    
+    }
+
     </style>
 }
 
@@ -346,8 +371,9 @@
             <h4>{{ trainerName }}</h4>
 
             <div class="new-course-section">
-                <h5>新增課程區域</h5>
+               
                 <button type="button" class="btn btn-success" @@click="showAddCourseModal">新增課程</button>
+                <h5 class="">我新增的課程:</h5>
                 <div class="course-container">
                     <div v-for="course in courses" :key="course.courseID" class="course-card">
                         <input type="checkbox" class="course-checkbox" v-model="selectedCourses" :value="course.courseID">
@@ -357,15 +383,15 @@
                             <p>{{ course.description }}</p>
                         </div>
                         <div class="course-card-actions">
-                            <button type="button" class="btn btn-primary btn-sm" @@click="viewCourseDetails(course.courseID)">檢視</button>
-                            <button type="button" class="btn btn-primary btn-sm" @@click="showPublishModal(course.courseID)">發佈</button>
+                            <button type="button" class="btn btn-viewCourse btn-sm" @@click="viewCourseDetails(course.courseID)">檢視</button>
+                            <button type="button" class="btn showPublishModal btn-sm" @@click="showPublishModal(course.courseID)">發佈</button>
                         </div>
                         <button type="button" class="btn btn-danger btn-sm course-delete-button" @@click="deleteCourse(course.courseID)">
                             <i class="bi bi-trash"></i>
                         </button>
                     </div>
                 </div>
-                <button type="button" class="btn btn-primary mt-3" @@click="publishSelectedCourses">發布</button>
+              @*   <button type="button" class="btn btn-primary mt-3" @@click="publishSelectedCourses">發布</button> *@
             </div>
         </div>
 
@@ -379,7 +405,7 @@
                     <div class="card mb-3 post-box">
                         <div class="card-body">
                             <textarea id="postContent" class="form-control" placeholder="來分享有趣的貼文吧..." v-model="newPostContent"></textarea>
-                            <button type="button" @@click="showModal" class="btn btn-primary">建立貼文</button>
+                            <button type="button" @@click="showModal" class="btn btn-success">建立貼文</button>
                         </div>
                     </div>
                 </div>
@@ -666,7 +692,7 @@
                     <button type="button" class="btn btn-primary" v-if="!isEditing" @@click="editCourse">編輯</button>
                     <button type="button" class="btn btn-primary" v-if="isEditing" @@click="saveCourse">確定</button>
                     <button type="button" class="btn btn-secondary" v-if="isEditing" @@click="cancelEdit">取消</button>
-                    <button type="button" class="btn btn-primary" v-if="!isEditing" @@click="showPublishModal">發布</button>
+                   @*  <button type="button" class="btn btn-primary" v-if="!isEditing" @@click="showPublishModal">發布</button> *@
                 </div>
             </div>
         </div>
@@ -687,6 +713,7 @@
                         <label for="publishDateTime">選擇發佈時間:</label>
                         <input type="datetime-local" class="form-control" id="publishDateTime" v-model="publishDateTime">
                     </div>
+
                     <div class="form-group">
                         <label>已發佈的課程:</label>
                         <table class="table">
@@ -702,7 +729,7 @@
                                     <td>{{ viewCourse.courseName }}</td>
                                     <td>{{ new Date(schedule.scheduler).toLocaleString() }}</td>
                                     <td>
-                                        <button type="button" class="btn btn-warning btn-sm" @@click="retractPublish(schedule.schedulerID)">收回發佈</button>
+                                        <button type="button" class="btn btn-delete btn-sm" @@click="retractPublish(schedule.schedulerID)">收回發佈</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -711,7 +738,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
-                    <button type="button" class="btn btn-primary" @@click="publishCourse">確定</button>
+                    <button type="button" class="btn btn-success" @@click="publishCourse">確定</button>
                 </div>
             </div>
         </div>
