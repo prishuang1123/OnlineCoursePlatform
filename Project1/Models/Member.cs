@@ -27,7 +27,7 @@ namespace Project1.Models
 		[Required]
 		public bool? IsTrainer { get; set; } // 是否為訓練師，1/0
 
-		[Required]
+		
 		public bool? IsAdministrator { get; set; } // 是否為系統管理員，1/0
 
 		public string? Photo { get; set; }

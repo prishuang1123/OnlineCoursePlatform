@@ -10,6 +10,7 @@ using Project1.DTO;
 using Project1.Models;
 
 namespace Project1.Controllers
+    //改造MVC控制器
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -120,7 +121,7 @@ namespace Project1.Controllers
             _context.Member.Add(member);
             await _context.SaveChangesAsync();
 
-            return $"員工編號:{member.MemberID}";
+            return $"會員編號:{member.MemberID}";
         }
 
 
