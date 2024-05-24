@@ -19,7 +19,7 @@ namespace Project1.Controllers
         private readonly ProjectDbContext _ProjectDbContext;
         
         //繼承後注入建構函式
-        //關鍵字:Base 呼叫父類的建構式
+        //關鍵字:base 呼叫父類的建構式
         public HomeController(ILogger<HomeController> logger, ProjectDbContext ProjectDbConext, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager):base(userManager,signInManager)
         {
             _logger = logger;
