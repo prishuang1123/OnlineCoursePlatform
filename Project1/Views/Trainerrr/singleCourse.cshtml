@@ -40,24 +40,10 @@
                             </div>
                         </div>
                     </div>
+                    <div v-else><p>此門課尚未開放上課時段</p></div>
                     <div class="card_area d-flex align-items-center">
-                        <a class="primary-btn" href="#" @@click.prevent="addToCart">加入購物車</a>
+                    <a asp-controller="Trainerrr" asp-action="singleCourse" class="primary-btn" href="#" @@click.prevent="addToCart">加入購物車</a>
                     </div>
-
-@*                     <div v-if="schedules.length > 0" v-for="(schedule,index) in schedules" :key="schedule.schedulerID">
-                        <div class="single-element-widget mt-30">
-                            <div class="d-flex justify-content-between">
-                                <p>{{schedule.scheduler}}</p>
-                                <div class="primary-checkbox">
-                                    <input type="checkbox" :id="'checkbox-' + index">
-                                    <label :for="'checkbox-' + index"></label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card_area d-flex align-items-center">
-                        <a class="primary-btn" href="#" v-on:click="addToCart">加入購物車</a>
-                    </div> *@
                 </div>
             </div>
         </div>
@@ -96,9 +82,7 @@
                                 scheduler: moment(e.scheduler).format('YYYY/MM/DD'),
                                 courseID: e.courseID
                             }));
-                        } else {
-                            this.schedules = "此門課尚未開放上課時段";
-                        }
+                         }
                     })
                     .catch(error => {
                         alert('Error fetching schedules');
