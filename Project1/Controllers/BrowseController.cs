@@ -45,10 +45,10 @@ namespace Project1.Controllers
         // GET: Browse/Cart/5
         public async Task<IActionResult> ViewCart(int? id) //recieve memberID
 		{
-			if (id==null || id == 0)
-			{
-				return RedirectToAction ("Login", "Members");
-			}
+			//if (id==null || id == 0)
+			//{
+			//	return RedirectToAction ("Login", "Members");
+			//}
 			memberId = id;
 			//Course course= await _db.Course.Where(u=>u.CourseID==id).FirstOrDefaultAsync();
 			//select the member's cartItems to show all products added to the cart
@@ -56,7 +56,17 @@ namespace Project1.Controllers
 			memberShoppingCart = await _db.Cart.Where(u => u.MemberID == 1).ToListAsync();
 			IEnumerable<int> courseIds= memberShoppingCart.Select(u => u.CourseID).ToList();
 			List<Course> courseObj=await _db.Course.Where(c=>courseIds.Contains(c.CourseID)).ToListAsync();
-			decimal initSubtotal = 0;
+			var courseObjList = memberShoppingCart
+				.GroupBy(c => c.CourseID)
+				.Select(cs => new
+				{
+					CourseID=cs.Key,
+					Quantity=cs.Sum(c => c.Quantity),
+                    CartIdToScheduleDate = cs.Select(c => new { CartID = c.CartID, ScheduleDate = _db.ClassSchedule.Where(s=>s.SchedulerID==c.SchedulerID).FirstOrDefault().Scheduler }).ToArray(),
+
+                });
+
+            decimal initSubtotal = 0;
             foreach (var courseId in courseIds)
 			{
 				initSubtotal += (courseObj.Where(c => c.CourseID == courseId).FirstOrDefault().Price) * (memberShoppingCart.Where(m => m.CourseID == courseId).FirstOrDefault().Quantity);
@@ -205,17 +215,43 @@ namespace Project1.Controllers
         [HttpGet]
         public JsonResult GetClassSchedule()
         {
-			var classSchedule = memberShoppingCart.GroupBy(c => c.CourseID)
+			memberShoppingCart= _db.Cart.Where(u => u.MemberID == 1).ToList(); //member到時候再改
+            var classSchedule = memberShoppingCart
+			.GroupBy(c => c.CourseID)
             .Select(cs => new
             {
                 CourseID = cs.Key,
                 Quantity = cs.Sum(c => c.Quantity), // Total quantity for the course
-                SelectedSchedule = _db.ClassSchedule
-				.Where(s => s.CourseID == cs.Key)
-				.Select(s => s.Scheduler) // Select the schedule dates
-				.Distinct() // Remove duplicates
+                SelectedScheduleId = (from cart in _db.Cart
+                                      where cart.CourseID == cs.Key
+                                      join schedule in _db.ClassSchedule
+                                      on cart.SchedulerID equals schedule.SchedulerID
+                                      select $"{cart.CourseID}-{cart.SchedulerID}").ToList(),
+
+
+                SelectedScheduleDate = (from cart in _db.Cart
+                                        where cart.CourseID == cs.Key
+                                        join schedule in _db.ClassSchedule
+                                        on cart.SchedulerID equals schedule.SchedulerID
+                                        select new { cart.SchedulerID, schedule.Scheduler })
+                            .ToDictionary(x => x.SchedulerID, x => x.Scheduler),
+                
+                AllScheduleId = _db.ClassSchedule
+				.Where(obj=>obj.CourseID== cs.Key)
+				.Select(obj=>obj.SchedulerID)
+				.Distinct()
 				.ToList(),
+                AllScheduleDate = (from schedule in _db.ClassSchedule
+                                        where schedule.CourseID == cs.Key 
+                                        select new { schedule.SchedulerID, schedule.Scheduler })
+                            .ToDictionary(x => x.SchedulerID, x => x.Scheduler),
+                //AllScheduleDate = _db.ClassSchedule
+                //.Where(obj => obj.CourseID == cs.Key)
+                //.Select(obj => obj.Scheduler)
+                //.Distinct()
+                //.ToList(),
             });
+			
 
             return Json(classSchedule);
         }
@@ -234,6 +270,19 @@ namespace Project1.Controllers
             
             return Json(new { TotalPrice = totalPrice.ToString("c") });
         }
+
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public IActionResult Delete(int id)//cartId
+        {
+            ShoppingCart cartItem = _db.Cart.Where(obj => obj.CartID == id).FirstOrDefault();
+            _db.Cart.Remove(cartItem);
+            _db.SaveChanges();
+			int memberId = cartItem.MemberID;
+            TempData["success"] = "商品刪除成功!!";
+			//return RedirectToAction("ViewCart", "Browse", new { id = 1 });
+			return Json(new { success = true, memberId = memberId });
+		}
 
         [HttpGet]
         public async Task<IActionResult> UpdateSubtotal()
@@ -280,6 +329,77 @@ namespace Project1.Controllers
 
 			return Json(new { validationResult = validationResult, discountPercentage= discountPercentage });
 		}
+
+   //     [HttpPost]
+   //     public IActionResult UpdateCartItem(int courseId, int scheduleId, bool isSelected)//update cartItem
+   //     {
+   //         int memberId = _db.Cart.Where(obj => obj.CourseID == courseId).FirstOrDefault().MemberID;
+   //         if (isSelected)
+			//{
+   //             ShoppingCart cartItem = _db.Cart.Where(obj => obj.SchedulerID == scheduleId).FirstOrDefault();
+   //             _db.Remove(cartItem);
+   //             _db.SaveChanges();
+   //         }
+			//else
+			//{
+			//	ShoppingCart newCartItem = new ShoppingCart();
+
+			//	newCartItem.CourseID = courseId;
+			//	newCartItem.SchedulerID = scheduleId;
+   //             newCartItem.MemberID=memberId;
+			//	newCartItem.Quantity=1;
+   //             _db.Add(newCartItem);
+   //             _db.SaveChanges();
+   //         }
+            
+   //         return Json(new { success=true });
+   //     }
+
+        [HttpPost]
+        public IActionResult UpdateCartItem(int courseId, int scheduleId, bool isSelected)
+        {
+            try
+            {
+
+                int memberId = (int)(_db.Cart.FirstOrDefault(obj => obj.CourseID == courseId)?.MemberID);
+
+                if (memberId != null)
+                {
+                    if (isSelected)
+                    {//沒選便有選，加到購物車
+                        ShoppingCart newCartItem = new ShoppingCart();
+                        newCartItem.CourseID = courseId;
+                        newCartItem.SchedulerID = scheduleId;
+                        newCartItem.MemberID = memberId;
+                        newCartItem.Quantity = 1;
+                        _db.Add(newCartItem);
+                        _db.SaveChanges();
+                    }
+                    else
+                    {//有選便沒選，從購物車移出
+                        ShoppingCart cartItem = _db.Cart.FirstOrDefault(obj => obj.SchedulerID == scheduleId);
+                        if (cartItem != null)
+                        {
+                            _db.Remove(cartItem);
+                            _db.SaveChanges();
+                        }
+                        
+                    }
+
+                    return Json(new { success = true });
+                }
+                else
+                {
+                    return Json(new { success = false, error = "Member ID not found." });
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception for debugging purposes
+                Console.WriteLine(ex.Message);
+                return Json(new { success = false, error = ex.Message });
+            }
+        }
 
     }
 }

@@ -12,7 +12,7 @@
 <section class="cart_area">
     <div class="container">
         <div class="cart_inner">
-            <div class="table-responsive">
+            <div id="app" class="table-responsive">
                 <table class="table">
                     <thead>
                         <tr>
@@ -21,68 +21,106 @@
                             <th scope="col">金額</th>
                             <th scope="col">數量</th>
                             <th scope="col">總額</th>
+                            <th scope="col">刪除商品</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach(var cartItem in Model.shoppingCartList)
+
+                        @foreach (var cartItemGroup in Model.shoppingCartList.GroupBy(item => item.CourseID))
                         {
-                          
-                            <tr>
+
+                            <tr id="cartItem@(cartItemGroup.Key)">
                                 <td>
                                     <div class="media">
-                                        <input type="text" name="cartId" id="cartId" value="@cartItem.CartID" hidden/>
                                         <div class="d-flex">
-                                            <img src="@Model.courseList.Where(c => c.CourseID == cartItem.CourseID).FirstOrDefault().ThumbnailUrl" alt="">
+                                            <img src="@Model.courseList.FirstOrDefault(c => c.CourseID == cartItemGroup.Key)?.ThumbnailUrl" alt="~/img/loge1.png">
                                         </div>
                                         <div class="media-body">
-                                            <p>@Model.courseList.Where(c => c.CourseID == cartItem.CourseID).FirstOrDefault().CourseName</p>
+                                            <p>@Model.courseList.FirstOrDefault(c => c.CourseID == cartItemGroup.Key)?.CourseName</p>
                                         </div>
                                     </div>
                                 </td>
                                 <td>
-                                    <div id="@cartItem." class="single-element-widget mt-30">
-                                        <div class="switch-wrap d-flex justify-content-between">
-                                            <p>2024/11/15</p>
-                                            <div class="primary-checkbox mb-0">
-                                                <input type="checkbox" id="default-checkbox1">
-                                                <label for="default-checkbox1"></label>
+                                    <div class="single-element-widget mt-30">
+                                        @* <div v-for="(course, courseIndex) in classSchedule" :key="courseIndex">
+                                            <div v-if="course.courseID == @(cartItemGroup.Key)" class="switch-wrap d-flex justify-content-between">
+                                                <div v-for="(scheduleId, scheduleIndex) in course.allScheduleId" :key="scheduleIndex">
+                                                    <div v-if="isScheduleSelected(scheduleId, course.selectedScheduleId)" class="switch-wrap d-flex justify-content-between">
+                                                        <p>if{{course.allScheduleDate[scheduleId]}}</p>
+                                                        <div class="primary-checkbox mb-0">
+                                                            <input type="checkbox" v-model="course.selectedScheduleId[course.courseID + '-' + scheduleId]" value="course.allScheduleDate[scheduleId]" v-on:change="updateDatabase(course.courseID, scheduleId, true)" />
+                                                            <label for=""></label>
+                                                        </div>
+                                                    </div>
+                                                    <div v-else class="switch-wrap d-flex justify-content-between">
+                                                        <p>else{{course.allScheduleDate[scheduleId]}}</p>
+                                                        <div class="primary-checkbox mb-0">
+                                                            <input type="checkbox" v-model="course.selectedScheduleId[course.courseID + '-' + scheduleId]" value="course.allScheduleDate[scheduleId]" v-on:change="updateDatabase(course.courseID, scheduleId, false)" />
+                                                            <label for=""></label>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="switch-wrap d-flex justify-content-between">
-                                            <p>2024/11/15</p>
-                                            <div class="primary-checkbox mb-0">
-                                                <input type="checkbox" id="default-checkbox2">
-                                                <label for="default-checkbox2"></label>
+                                           
+                                        </div> *@
+                                        <div v-for="(course, courseIndex) in classSchedule" :key="courseIndex">
+                                           @*  <div class="switch-wrap d-flex justify-content-between">
+                                                <p>01. Sample Checkbox</p>
+                                                <div class="primary-checkbox">
+                                                    <input type="checkbox" id="123">
+                                                    <label for="123"></label>
+                                                </div>
+                                            </div> *@
+                                            <div v-if="course.courseID == @(cartItemGroup.Key)" class="switch-wrap d-flex justify-content-between">
+                                                <div v-for="(scheduleId, scheduleIndex) in course.allScheduleId" :key="scheduleIndex">
+                                                    <p>{{ course.allScheduleDate[scheduleId] }}</p>
+                                                    <div class="primary-checkbox">
+                                                        <!-- Unique id for each checkbox -->
+                                                        <input type="checkbox" :id="'checkbox_' + course.courseID + '_' + scheduleId" v-model="course.selectedScheduleId[course.courseID + '-' + scheduleId]" :checked="course.selectedScheduleId.includes(course.courseID + '-' + scheduleId)" />
+                                                        <!-- Use the same unique id in the label's for attribute -->
+                                                        <label :for="'checkbox_' + course.courseID + '_' + scheduleId"></label>
+                                                    </div>
+                                                </div>
                                             </div>
+                                            @* <div v-if="course.courseID == @(cartItemGroup.Key)" class="switch-wrap d-flex justify-content-between">
+                                                <div v-for="(scheduleId, scheduleIndex) in course.allScheduleId" :key="scheduleIndex">
+                                                    <p>{{ course.allScheduleDate[scheduleId] }}</p>
+                                                    <div class="primary-checkbox">
+                                                        <input type="checkbox" :id="'checkbox_' + course.courseID + '_' + scheduleId" v-model="course.selectedScheduleId[course.courseID + '-' + scheduleId]" v-on:change="updateDatabase(course.courseID, scheduleId, !course.selectedScheduleId[course.courseID + '-' + scheduleId])" />
+                                                        <!-- Use the same unique id in the label's for attribute -->
+                                                        <label :for="'checkbox_' + course.courseID + '_' + scheduleId"></label>
+                                                    </div>
+                                                </div>
+                                            </div> *@
                                         </div>
-                                        <h5>2024/11/15</h5>
-                                        <h5>2024/11/15</h5>
-                                        <h5>2024/11/15</h5>
-                                        <h5>2024/11/15</h5>
                                     </div>
                                 </td>
                                 <td>
-                                    <h5 id="price@(cartItem.CartID)">@Model.courseList.Where(c => c.CourseID == cartItem.CourseID).FirstOrDefault().Price.ToString("c")</h5>
+                                    <h5 id="price@(cartItemGroup)">@Model.courseList.Where(c => c.CourseID == cartItemGroup.Key).FirstOrDefault().Price.ToString("c")</h5>
+                                    
                                 </td>
                                 <td>
                                     <div class="product_count">
-                                        <input type="text" name="qty" id="sst@(cartItem.CartID)" maxlength="2" value="@cartItem.Quantity" title="Quantity:" class="input-text qty" disabled>
-                                        @* <button onclick="window.increase('sst@(cartItem.CartID)')"
-                                           class="increase items-count" type="button">
-                                            <i class="lnr lnr-chevron-up" ></i>
-                                        </button>
-                                        <button onclick="window.decrease('sst@(cartItem.CartID)')"
-                                           class="reduced items-count" type="button">
-                                            <i class="lnr lnr-chevron-down"></i>
-                                        </button> *@
+                                        <input type="text" name="qty" id="courseID@(@cartItemGroup.Key)" maxlength="2" value="@cartItemGroup.Sum(c=>c.Quantity)" title="Quantity:" class="input-text qty" disabled>
+                                        
                                     </div>
                                 </td>
                                 <td>
-                                    <h5 id="totalPrice@(cartItem.CartID)">
+                                    <h5 id="totalPrice@(cartItemGroup.Key)">
                                         @(
-                                            (Model.courseList.Where(c => c.CourseID == cartItem.CourseID).FirstOrDefault().Price * cartItem.Quantity).ToString("c")
+                                            (Model.courseList.Where(c => c.CourseID == cartItemGroup.Key).FirstOrDefault().Price * cartItemGroup.Sum(c => c.Quantity)).ToString("c")
                                         )
                                     </h5>
+                                </td>
+                                <td>
+                                    @* <a asp-controller="Browse" asp-action="Delete" asp-route-id="@cartItem.CartID" class="genric-btn primary radius mx-2 px-3">
+                                        <i class="bi bi-trash"></i>
+                                        刪除
+                                    </a> *@
+                                    <button onclick="window.deleteCartItem(@cartItemGroup.Key)" class="genric-btn primary radius mx-2 px-3">
+                                        <i class="bi bi-trash"></i>
+                                        刪除
+                                    </button>
                                 </td>
                             </tr>
                         }
@@ -173,23 +211,86 @@
 @section Scripts
 {
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.2/axios.min.js" integrity="sha512-JSCFHhKDilTRRXe9ak/FJ28dcpOJxzQaCd3Xg8MyF6XFjODhy/YMCM8HW0TFDckNHWUewW+kfvhin43hKtJxAw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     
     <script>
+        
         const baseUrl = "https://localhost:7177";
         const vueApp = {
             data() {
                 return {
+                    courseId: null,
                     classSchedule: [],
                 }
+            },
+            methods: {
+                // isScheduleSelected: function (scheduleId, selectedScheduleId) {
+                //     if (selectedScheduleId.includes(scheduleId)){
+                //         return true
+                //     }
+                // },
+                // updateDatabase: function (courseId, scheduleId, isSelected) {
+                //     const updateUrl = `${baseUrl}/Browse/UpdateCartItem`;
+                //     console.log(courseId, scheduleId, isSelected);
+                //     console.log(typeof (courseId), typeof (scheduleId), typeof (isSelected));
+                //     // Make an AJAX request to update the database
+                //     axios.post(updateUrl, {
+                //         courseId: courseId,
+                //         scheduleId: scheduleId,
+                //         isSelected: isSelected
+                //     })
+                //         .then(response => {
+                //             console.log(JSON.stringify(response.data));
+                //             // Update the checkbox state based on the response
+                //             const updatedCourse = this.classSchedule.find(course => course.courseID === courseId);
+                            
+                //             if (updatedCourse) {
+                //                 if (isSelected) {
+                //                     updatedCourse.selectedScheduleId.push(scheduleId);
+                //                 } else {
+                //                     const index = updatedCourse.selectedScheduleId.indexOf(scheduleId);
+                //                     if (index !== -1) {
+                //                         updatedCourse.selectedScheduleId.splice(index, 1);
+                //                     }
+                //                 }
+                //             }
+                //         })
+                //         .catch(error => {
+                //             // Handle error
+                //             console.error("Error updating database:", error);
+                //         });
+                // },
+                // updateDatabase: function (courseId, scheduleId, isSelected) {
+                //     // Make an AJAX request to update the database
+                //     const updateUrl = `/Browse/UpdateCartItem`; // Update the URL according to your backend API
+                //     axios.post(updateUrl, {                        
+                //         courseId: courseId,
+                //         scheduleId: scheduleId,
+                //         isSelected: isSelected
+                //     })
+                //     .then(response => {
+                //         // Handle successful response, if needed
+                //         console.log("Database updated successfully:", response.data);
+                //     })
+                //     .catch(error => {
+                //         // Handle error
+                //         console.error("Error updating database:", error);
+                //     });
+                // },
+                // GetClassScheduleUrl: function () {
+                    
+                // },
+                
             },
             mounted() {
                 const GetClassScheduleUrl = `${baseUrl}/Browse/GetClassSchedule`;
                 axios.get(GetClassScheduleUrl).then(response => {
                     this.classSchedule = response.data;
+                    console.log(JSON.stringify(this.classSchedule));
                 }).catch(error => {
                     alert(error);
                 });
-
             }
         }
 
@@ -198,7 +299,32 @@
     </script>
 
     <script>
+        $(document).on('change', 'input[type="checkbox"]', function () {
+            // Get course ID and schedule ID from checkbox ID
+            var ids = $(this).attr('id').split('_');
+            var courseID = ids[1];
+            var scheduleId = ids[2];
+            // Trigger AJAX call to update the database
+            $.ajax({
+                type: 'POST',
+                url: '/Browse/UpdateCartItem',
+                data: {
+                    courseId: courseID,
+                    scheduleId: scheduleId,
+                    isSelected: $(this).is(':checked') // Whether checkbox is checked or unchecked
+                },
+                success: function (response) {
+                    // Handle success response
+                    console.log('Database updated successfully');
+                },
+                error: function (xhr, status, error) {
+                    // Handle error response
+                    console.error('Error updating database:', error);
+                }
+            });
+        });
         $(document).ready(function () {
+           
             const updateDatabase = function (newQuantity, cartId) {
                 $.ajax({
                     url: '/Browse/UpdateQuantity',
@@ -271,23 +397,81 @@
                     }
                 });
             };
+            const deleteCartItem = function (cartId) {
+                $.ajax({
+                    url: '/Browse/Delete',
+                    type: 'POST',
+                    data: {
+                        id: cartId,
+                    },
+                    success: function (response) {
+                        if (response.success == true) {
+                            // memberId = response.memberId;
+                            console.log(JSON.stringify(response));
+                            // console.log(`${response.memberId}:${typeof(response.memberId)}`);
+                            console.log("deleted");
+                            refreshViewCartPage(response.memberId);
+                        }
+                        else {
+                            console.log(JSON.stringify(response))
+                            console.log("not deleted");
+                        }
+                    },
+                    error: function (err) {
+                        conosle.log(JSON.stringify(err));
+                    }
+                });
+            };
+    
+            const refreshViewCartPage = function(memberId)
+            {
+                $.ajax({
+                    url: '/Browse/ViewCart',
+                    type: 'GET',
+                    data: {
+                        id: memberId,
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            // Item deleted successfully, redirect to ViewCart
+                            window.location.href = '/Browse/ViewCart?id=' + data.id;
+                            // memberId = response.memberId;
+                            console.log(JSON.stringify(response))
+                            console.log("refresh viewcart!");
 
-            window.increase = function (elementId) {
-                var result = document.getElementById(elementId); //quantity
-                result.value = parseInt(result.value) + 1;
-                
-                updateDatabase(parseInt(result.value), parseInt(elementId.substring(3)));
+                        }
+                        else {
+                            console.log(JSON.stringify(response))
+                            console.log("rereshViewCartPage can't work, id=null");
+                        }
+                    },
+                    error: function (err) {
+                        console.log(JSON.stringify(err));
+                    }
+                });
             }
-            window.decrease = function (elementId) {
-                var result = document.getElementById(elementId);
-                if (parseInt(result.value) <= 1) {
-                    alert("數量不可小於1");
-                    result.value = 1;
-                }
-                else{
-                    result.value = parseInt(result.value) - 1;
-                }
-                updateDatabase(parseInt(result.value), elementId.substring(3));
+
+            // window.increase = function (elementId) {
+            //     var result = document.getElementById(elementId); //quantity
+            //     result.value = parseInt(result.value) + 1;
+                
+            //     updateDatabase(parseInt(result.value), parseInt(elementId.substring(3)));
+            // }
+            // window.decrease = function (elementId) {
+            //     var result = document.getElementById(elementId);
+            //     if (parseInt(result.value) <= 1) {
+            //         alert("數量不可小於1");
+            //         result.value = 1;
+            //     }
+            //     else{
+            //         result.value = parseInt(result.value) - 1;
+            //     }
+            //     updateDatabase(parseInt(result.value), elementId.substring(3));
+            // }
+            window.deleteCartItem = function (cartId) {
+                deleteCartItem(cartId);
+                alert("window.delete triggered");
+                alert(`cartId: ${cartId}, typeof: ${typeof(cartId)}`);
             }
             window.discountCode = function () {
                 // event.preventDefault();

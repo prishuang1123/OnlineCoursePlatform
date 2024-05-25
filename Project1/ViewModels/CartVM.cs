@@ -11,5 +11,6 @@ namespace Project1.ViewModels
 		public int memberId { get; set; }
 		public decimal subtotal { get; set; }
 		public double discountPercentage { get; set; }
+		public Array courseItemArray { get; set; }
 	}
 }
