@@ -397,20 +397,21 @@
                     }
                 });
             };
-            const deleteCartItem = function (cartId) {
+            const deleteCartItem = function (courseId) {
                 $.ajax({
                     url: '/Browse/Delete',
                     type: 'POST',
                     data: {
-                        id: cartId,
+                        id: courseId,
                     },
                     success: function (response) {
                         if (response.success == true) {
                             // memberId = response.memberId;
                             console.log(JSON.stringify(response));
+                            location.reload();
                             // console.log(`${response.memberId}:${typeof(response.memberId)}`);
-                            console.log("deleted");
-                            refreshViewCartPage(response.memberId);
+                            // console.log("deleted");
+                            // refreshViewCartPage(response.memberId);
                         }
                         else {
                             console.log(JSON.stringify(response))
@@ -423,33 +424,33 @@
                 });
             };
     
-            const refreshViewCartPage = function(memberId)
-            {
-                $.ajax({
-                    url: '/Browse/ViewCart',
-                    type: 'GET',
-                    data: {
-                        id: memberId,
-                    },
-                    success: function (response) {
-                        if (response.success) {
-                            // Item deleted successfully, redirect to ViewCart
-                            window.location.href = '/Browse/ViewCart?id=' + data.id;
-                            // memberId = response.memberId;
-                            console.log(JSON.stringify(response))
-                            console.log("refresh viewcart!");
+            // const refreshViewCartPage = function(memberId)
+            // {
+            //     $.ajax({
+            //         url: '/Browse/ViewCart',
+            //         type: 'GET',
+            //         data: {
+            //             id: memberId,
+            //         },
+            //         success: function (response) {
+            //             if (response.success) {
+            //                 // Item deleted successfully, redirect to ViewCart
+            //                 window.location.href = '/Browse/ViewCart/' + data.id;
+            //                 // memberId = response.memberId;
+            //                 console.log(JSON.stringify(response))
+            //                 console.log("refresh viewcart!");
 
-                        }
-                        else {
-                            console.log(JSON.stringify(response))
-                            console.log("rereshViewCartPage can't work, id=null");
-                        }
-                    },
-                    error: function (err) {
-                        console.log(JSON.stringify(err));
-                    }
-                });
-            }
+            //             }
+            //             else {
+            //                 console.log(JSON.stringify(response))
+            //                 console.log("rereshViewCartPage can't work, id=null");
+            //             }
+            //         },
+            //         error: function (err) {
+            //             console.log(JSON.stringify(err));
+            //         }
+            //     });
+            // }
 
             // window.increase = function (elementId) {
             //     var result = document.getElementById(elementId); //quantity

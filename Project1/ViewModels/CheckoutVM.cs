@@ -10,7 +10,7 @@ namespace Project1.ViewModels
         public OrderDetail OrderDetail { get; set; }
         public Payment Payment { get; set; }
         public IEnumerable<Location> Location { get; set; }
-
+        public IEnumerable<ShoppingCart> cartItemList { get; set; }
 
     }
 }

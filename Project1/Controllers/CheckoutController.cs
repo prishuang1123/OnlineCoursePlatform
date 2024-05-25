@@ -21,7 +21,7 @@ namespace Project1.Controllers
             Member memberObj = await _db.Member.Where(obj=>obj.MemberID==id).FirstOrDefaultAsync();
             Discount discountObj = await _db.Discount.Where(obj=>obj.DiscountName==discountCode).FirstOrDefaultAsync();
             IEnumerable<Location> locationList = await _db.Location.ToListAsync();
-
+            IEnumerable<ShoppingCart> cartItemList = await _db.Cart.ToListAsync();
 
             //public Member Member { get; set; }
             //public Discount Discount { get; set; }
@@ -34,7 +34,7 @@ namespace Project1.Controllers
                 Member = memberObj,
                 Discount = discountObj,
                 Location = locationList,
-
+                cartItemList=cartItemList,
             };
             return View(checkoutVM);
         }

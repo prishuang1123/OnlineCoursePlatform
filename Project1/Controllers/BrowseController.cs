@@ -273,12 +273,17 @@ namespace Project1.Controllers
 
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public IActionResult Delete(int id)//cartId
+        public IActionResult Delete(int id)//courseId
         {
-            ShoppingCart cartItem = _db.Cart.Where(obj => obj.CartID == id).FirstOrDefault();
-            _db.Cart.Remove(cartItem);
+            List<ShoppingCart> cartItemList = _db.Cart.Where(obj => obj.CourseID == id).ToList();
+            int memberId = cartItemList.Any() ? cartItemList[0].MemberID : 0;
+            foreach (var cartItem in cartItemList)
+			{
+                _db.Cart.Remove(cartItem);
+                
+            }
             _db.SaveChanges();
-			int memberId = cartItem.MemberID;
+
             TempData["success"] = "商品刪除成功!!";
 			//return RedirectToAction("ViewCart", "Browse", new { id = 1 });
 			return Json(new { success = true, memberId = memberId });
