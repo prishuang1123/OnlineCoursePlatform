@@ -305,6 +305,23 @@
             var courseID = ids[1];
             var scheduleId = ids[2];
             // Trigger AJAX call to update the database
+            const updateSubtotal = function () {
+                $.ajax({
+                    url: '/Browse/UpdateSubtotal',
+                    type: 'GET',
+                    data: {
+
+                    },
+                    success: function (response) {
+                        const subtotal = document.getElementById("subtotal");
+                        subtotal.textContent = response.subtotal;
+                        console.log(JSON.stringify(response));
+                    },
+                    error: function (err) {
+                        conosle.log(JSON.stringify(err));
+                    }
+                });
+            };
             $.ajax({
                 type: 'POST',
                 url: '/Browse/UpdateCartItem',
@@ -315,6 +332,10 @@
                 },
                 success: function (response) {
                     // Handle success response
+                    console.log(JSON.stringify(response))
+                    const totalPrice = document.getElementById("totalPrice" + courseID);
+                    totalPrice.textContent = response.totalPrice;
+                    updateSubtotal();
                     console.log('Database updated successfully');
                 },
                 error: function (xhr, status, error) {

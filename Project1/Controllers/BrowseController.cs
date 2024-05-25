@@ -5,6 +5,7 @@ using NuGet.Protocol;
 using Project1.Data;
 using Project1.Models;
 using Project1.ViewModels;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 
 namespace Project1.Controllers
@@ -365,13 +366,13 @@ namespace Project1.Controllers
         {
             try
             {
-
-                int memberId = (int)(_db.Cart.FirstOrDefault(obj => obj.CourseID == courseId)?.MemberID);
+				
+				int memberId = _db.Cart.Where(obj => obj.CourseID == courseId).FirstOrDefault().MemberID;
 
                 if (memberId != null)
                 {
                     if (isSelected)
-                    {//沒選便有選，加到購物車
+                    {//沒選變有選，加到購物車
                         ShoppingCart newCartItem = new ShoppingCart();
                         newCartItem.CourseID = courseId;
                         newCartItem.SchedulerID = scheduleId;
@@ -381,7 +382,7 @@ namespace Project1.Controllers
                         _db.SaveChanges();
                     }
                     else
-                    {//有選便沒選，從購物車移出
+                    {//有選變沒選，從購物車移出
                         ShoppingCart cartItem = _db.Cart.FirstOrDefault(obj => obj.SchedulerID == scheduleId);
                         if (cartItem != null)
                         {
@@ -390,8 +391,18 @@ namespace Project1.Controllers
                         }
                         
                     }
-
-                    return Json(new { success = true });
+					decimal coursePrice = _db.Course.Where(c => c.CourseID == courseId).FirstOrDefault().Price;
+					decimal totalPrice = 0;
+                    IEnumerable<ShoppingCart> memberShoppingCart = _db.Cart.Where(obj => obj.CourseID == courseId).ToList();
+                    foreach (var cartItem in memberShoppingCart)
+					{
+						if (cartItem.CourseID == courseId)
+						{
+							totalPrice += coursePrice;
+						}
+					}
+						
+                    return Json(new { success = true, TotalPrice=totalPrice});
                 }
                 else
                 {
