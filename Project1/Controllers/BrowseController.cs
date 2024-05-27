@@ -147,6 +147,74 @@ namespace Project1.Controllers
             return RedirectToAction("ViewCart", "Browse");
         }
 
+        public class AddCourseRatingRequest
+        {
+            public int CourseID { get; set; }
+            public int MemberID { get; set; }
+            public int Rating { get; set; }
+            public int TrainerID { get; set; }
+            public string Comment { get; set; }
+            
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddCourseRating([FromBody] AddCourseRatingRequest request)
+        {
+            var hasOrder = await _db.Order
+        .AnyAsync(o => o.MemberID == request.MemberID &&
+                       _db.OrderDetail.Any(od => od.OrderID == o.OrderID && od.CourseID == request.CourseID));
+
+            if (hasOrder == false)
+            {
+                return BadRequest(new { message = "無法新增評論 您尚未體驗過此門課程" });
+            }
+
+            var hasCommented = await _db.CourseRating
+        .AnyAsync(cr => cr.CourseID == request.CourseID && cr.UserID == request.MemberID);
+
+            if (hasCommented)
+            {
+                return BadRequest(new { message = "您已評論過此門課程，無法重複評論" });
+            }
+            var course = await _db.Course.FirstOrDefaultAsync(c => c.CourseID == request.CourseID);
+
+            request.TrainerID = course.TrainerID;
+
+
+            var courseRating = new CourseRating
+            {
+                CourseID = request.CourseID,
+                UserID = request.MemberID,
+                Rating = request.Rating,
+                Comment = request.Comment,
+                TrainerID = request.TrainerID,
+                RatingDate = DateTime.Now
+            };
+
+            _db.CourseRating.Add(courseRating);
+            await _db.SaveChangesAsync();
+
+            return Ok(new { message = "評論新增成功" });
+        }
+
+        public async Task<JsonResult> ViewRating(int? id)
+        {
+            var rating = (from cr in _db.CourseRating
+                          join m in _db.Member on cr.UserID equals m.MemberID
+                          select new CourseRatingViewModel
+                          {
+                              CourseRatingID = cr.CourseRatingID,
+                              CourseID = cr.CourseID,
+                              TrainerID = cr.TrainerID,
+                              UserName = m.Name,
+                              Rating = cr.Rating,
+                              Comment = cr.Comment,
+                              RatingDate = cr.RatingDate,
+                          }
+                         ).Where(c => c.CourseID == id);
+
+            return Json(rating);
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
