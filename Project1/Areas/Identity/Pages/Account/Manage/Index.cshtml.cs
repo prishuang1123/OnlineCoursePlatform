@@ -56,7 +56,9 @@ namespace Project1.Areas.Identity.Pages.Account.Manage
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Phone]
-            [Display(Name = "Phone number")]
+            [Display(Name = "手機號碼")]
+            //使用正則表達式（Regular Expressions）來驗證手機號碼的格式。
+            [RegularExpression(@"^09\d{8}$", ErrorMessage = "手機號碼必須是09開頭的10位數字。")]
             public string PhoneNumber { get; set; }
         }
 
@@ -111,7 +113,7 @@ namespace Project1.Areas.Identity.Pages.Account.Manage
             }
 
             await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Your profile has been updated";
+            StatusMessage = "已更新您的個人資料";
             return RedirectToPage();
         }
     }

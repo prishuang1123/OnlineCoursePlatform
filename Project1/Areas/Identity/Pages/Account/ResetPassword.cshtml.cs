@@ -40,8 +40,8 @@ namespace Project1.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
-            [EmailAddress]
+            [Required(ErrorMessage ="電子郵件為必填欄位")]
+            [EmailAddress(ErrorMessage ="電子郵件格式錯誤")]
             public string Email { get; set; }
 
             /// <summary>
@@ -49,7 +49,7 @@ namespace Project1.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(100, ErrorMessage = "須為6位英數字混合密碼與一個特殊字元，英文需區分大小寫", MinimumLength = 6)]
             [DataType(DataType.Password)]
             public string Password { get; set; }
 
@@ -59,7 +59,7 @@ namespace Project1.Areas.Identity.Pages.Account
             /// </summary>
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Compare("Password", ErrorMessage = "密碼不一致")]
             public string ConfirmPassword { get; set; }
 
             /// <summary>

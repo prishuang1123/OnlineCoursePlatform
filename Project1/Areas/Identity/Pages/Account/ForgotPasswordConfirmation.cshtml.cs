@@ -21,5 +21,7 @@ namespace Project1.Areas.Identity.Pages.Account
         public void OnGet()
         {
         }
+
+
     }
 }

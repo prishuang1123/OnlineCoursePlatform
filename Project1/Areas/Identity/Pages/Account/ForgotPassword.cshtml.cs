@@ -44,8 +44,8 @@ namespace Project1.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
-            [EmailAddress]
+            [Required(ErrorMessage ="電子郵件為必填欄位")]
+            [EmailAddress(ErrorMessage ="電子郵件格式錯誤")]
             public string Email { get; set; }
         }
 
@@ -57,6 +57,7 @@ namespace Project1.Areas.Identity.Pages.Account
                 if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
                 {
                     // Don't reveal that the user does not exist or is not confirmed
+                    // 不透露用戶不存在或未確認的資訊
                     return RedirectToPage("./ForgotPasswordConfirmation");
                 }
 
@@ -72,8 +73,8 @@ namespace Project1.Areas.Identity.Pages.Account
 
                 await _emailSender.SendEmailAsync(
                     Input.Email,
-                    "Reset Password",
-                    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    "重置密碼",
+                     $"請點擊 <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>這裡</a> 來重置您的密碼。");
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }

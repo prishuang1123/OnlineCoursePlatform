@@ -130,7 +130,7 @@ namespace Project1.Areas.Identity.Pages.Account
                 else
                 {
                     //修改預設錯誤
-                    ModelState.AddModelError(string.Empty, "無效的登入嘗試。請檢查您的電子郵件和密碼。");
+                    ModelState.AddModelError(string.Empty, "登入失敗。請檢查您的電子郵件和密碼。");
                     return Page();
                 }
             }

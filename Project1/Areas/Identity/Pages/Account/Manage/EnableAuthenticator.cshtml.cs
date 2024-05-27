@@ -77,10 +77,10 @@ namespace Project1.Areas.Identity.Pages.Account.Manage
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
-            [StringLength(7, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [Required(ErrorMessage ="驗證碼是必填欄位")]
+            [StringLength(7, ErrorMessage = "驗證碼的長度必須至少為 {2} 個字符，最多為 {1} 個字符。", MinimumLength = 6)]
             [DataType(DataType.Text)]
-            [Display(Name = "Verification Code")]
+            [Display(Name = "驗證碼")]
             public string Code { get; set; }
         }
 
@@ -89,7 +89,7 @@ namespace Project1.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"無法載入 ID 為 '{_userManager.GetUserId(User)}' 的用戶。");
             }
 
             await LoadSharedKeyAndQrCodeUriAsync(user);
@@ -102,7 +102,7 @@ namespace Project1.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"無法找到ID為'{_userManager.GetUserId(User)}'的用戶。");
             }
 
             if (!ModelState.IsValid)
@@ -119,16 +119,16 @@ namespace Project1.Areas.Identity.Pages.Account.Manage
 
             if (!is2faTokenValid)
             {
-                ModelState.AddModelError("Input.Code", "Verification code is invalid.");
+                ModelState.AddModelError("Input.Code", "驗證碼無效");
                 await LoadSharedKeyAndQrCodeUriAsync(user);
                 return Page();
             }
 
             await _userManager.SetTwoFactorEnabledAsync(user, true);
             var userId = await _userManager.GetUserIdAsync(user);
-            _logger.LogInformation("User with ID '{UserId}' has enabled 2FA with an authenticator app.", userId);
+            _logger.LogInformation("ID為 '{UserId}' 的用戶已使用身份驗證應用程式啟用2FA。", userId);
 
-            StatusMessage = "Your authenticator app has been verified.";
+            StatusMessage = "您的身份驗證應用程式已驗證。";
 
             if (await _userManager.CountRecoveryCodesAsync(user) == 0)
             {
