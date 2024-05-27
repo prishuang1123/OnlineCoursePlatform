@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Azure;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,7 @@ using static Project1.Controllers.TrainerrrController;
 
 namespace Project1.Controllers
 {
+    //private readonly UserManager<ProjectUser> _UserManager;
     public class TrainerrrController : Controller
     {
         private readonly ProjectDbContext _context;
@@ -457,7 +459,7 @@ namespace Project1.Controllers
         private Trainer GetCurrentTrainer()
         {
             // 這裡示範一個假設的方法，根據你的身份驗證機制來取得當前登入的訓練師
-            var trainerId = 2 ; // 假設訓練師ID為
+            var trainerId = 1 ; // 假設訓練師ID為
             return _context.Trainer.FirstOrDefault(t => t.TrainerID == trainerId);
         }
 
@@ -487,6 +489,7 @@ namespace Project1.Controllers
             var blogs = await _context.Blog
                                       .Include(b => b.Trainer)
                                       .Where(b => b.TrainerID == currentTrainer.TrainerID)
+                                      .OrderByDescending(b => b.PostedDate)
                                       .ToListAsync();
 
             var blogPosts = blogs.Select(b => new
@@ -802,7 +805,34 @@ namespace Project1.Controllers
                 return BadRequest("Invalid data.");
             }
 
-            _context.ClassSchedule.Add(schedule);
+            // 獲取課程所屬的訓練師ID
+            var course = await _context.Course.FindAsync(schedule.CourseID);
+            if (course == null)
+            {
+                return BadRequest("此時段已經有排其課程了.");
+            }
+
+            var trainerId = course.TrainerID;
+
+            // 檢查訓練師在該時段是否已有其他課程
+            var overlappingCourse = await _context.ClassSchedule
+                .Include(cs => cs.Course)
+                .Where(cs => cs.Course.TrainerID == trainerId && cs.Scheduler == schedule.Scheduler)
+                .FirstOrDefaultAsync();
+
+            if (overlappingCourse != null)
+            {
+                return Conflict(new { message = "此時段已經有排其他課程" });
+            }
+
+            // 確保保存時包含時區信息
+            var scheduleWithTimezone = new ClassSchedule
+            {
+                CourseID = schedule.CourseID,
+                Scheduler = schedule.Scheduler.ToUniversalTime() // 保持 UTC 時間
+            };
+
+            _context.ClassSchedule.Add(scheduleWithTimezone);
             await _context.SaveChangesAsync();
 
             return Ok(new { message = "成功發佈課程" });
@@ -820,13 +850,11 @@ namespace Project1.Controllers
             {
                 s.SchedulerID,
                 s.CourseID,
-                s.Scheduler
+                Scheduler = s.Scheduler.ToLocalTime() // 將 UTC 時間轉換回當地時間以顯示
             }).ToList();
 
             return Json(scheduleList);
         }
-
-
 
 
 
@@ -889,7 +917,11 @@ namespace Project1.Controllers
                 return NotFound();
             }
 
-            var blogs = await _context.Blog.Where(b => b.TrainerID == id).ToListAsync();
+            var blogs = await _context.Blog
+                .Where(b => b.TrainerID == id)
+                .OrderByDescending(b => b.PostedDate)  // 根據發文時間排序，最新的在上面
+                .ToListAsync();
+
             var courses = await (from c in _context.Course
                                  where c.TrainerID == id
                                  join pc in _context.PetCategory on c.PetCategoryID equals pc.PetCategoryID
@@ -905,7 +937,7 @@ namespace Project1.Controllers
                                      LocationName = l.LocationName,
                                      Price = c.Price,
                                      ThumbnailUrl = c.ThumbnailUrl,
-                                     Scheduler= _context.ClassSchedule.Where(cs => cs.CourseID == c.CourseID).Select(cs => cs.Scheduler).ToList()
+                                     Scheduler = _context.ClassSchedule.Where(cs => cs.CourseID == c.CourseID).Select(cs => cs.Scheduler).ToList()
                                  }).ToListAsync();
 
             var viewModel = new TrainerBlogViewModel
