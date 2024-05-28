@@ -304,9 +304,9 @@ namespace Project1.Controllers
 
 
         //}
-        public async Task<FileResult> GetPicture(int id)
+        public async Task<FileResult> GetPicture(int? id)
         {
-            Course course = await _context.Course.FindAsync(id);
+            var course = await _context.Course.FindAsync(id);
             if (course == null || string.IsNullOrEmpty(course.ThumbnailUrl))
             {
                 // 返回預設圖片

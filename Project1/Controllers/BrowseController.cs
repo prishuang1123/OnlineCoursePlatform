@@ -120,7 +120,7 @@ namespace Project1.Controllers
             foreach (var scheduleID in request.SelectedSchedules)
             {
                 var existingCartItem = await _db.Cart
-                    .FirstOrDefaultAsync(c => c.CourseID == request.CourseID && c.SchedulerID == scheduleID && c.MemberID == 1); // 使用实际的 MemberID
+                    .FirstOrDefaultAsync(c => c.CourseID == request.CourseID && c.SchedulerID == scheduleID && c.MemberID == request.MemberID); // 使用实际的 MemberID
                 if (existingCartItem != null)
                 {
                     return BadRequest("所選時段已在購物車中 不能重複添加相同的課程和時段");
