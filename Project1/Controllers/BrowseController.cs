@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol;
@@ -9,14 +10,14 @@ using System.Collections.Generic;
 
 namespace Project1.Controllers
 {
-    public class BrowseController : Controller
+    public class BrowseController : VerifyUserRoles
     {
         private readonly ProjectDbContext _db;
         //internal DbSet<Trainer> trainerDbset;
         private int? memberId;
         private IEnumerable<ShoppingCart> memberShoppingCart;
 
-        public BrowseController(ProjectDbContext db)
+        public BrowseController(ProjectDbContext db, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager) : base(userManager, signInManager)
         {
             _db = db;
             //trainerDbset = _db.Set<Trainer>();

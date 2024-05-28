@@ -38,5 +38,7 @@ namespace Project1.Models
 
 		[Required]
 		public string Address { get; set; }
+
+		public string? AspID { get; set; }
     }
 }
