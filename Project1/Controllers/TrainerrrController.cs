@@ -819,15 +819,15 @@ namespace Project1.Controllers
             var trainerId = course.TrainerID;
 
             // 檢查訓練師在該時段是否已有其他課程
-            var overlappingCourse = await _context.ClassSchedule
-                .Include(cs => cs.Course)
-                .Where(cs => cs.Course.TrainerID == trainerId && cs.Scheduler == schedule.Scheduler)
-                .FirstOrDefaultAsync();
+            //var overlappingCourse = await _context.ClassSchedule
+            //    .Include(cs => cs.Course)
+            //    .Where(cs => cs.Course.TrainerID == trainerId && cs.Scheduler == schedule.Scheduler)
+            //    .FirstOrDefaultAsync();
 
-            if (overlappingCourse != null)
-            {
-                return Conflict(new { message = "此時段已經有排其他課程" });
-            }
+            //if (overlappingCourse != null)
+            //{
+            //    return Conflict(new { message = "此時段已經有排其他課程" });
+            //}
 
             // 確保保存時包含時區信息
             var scheduleWithTimezone = new ClassSchedule

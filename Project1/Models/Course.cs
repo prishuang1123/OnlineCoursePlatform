@@ -62,11 +62,6 @@ namespace Project1.Models
         public string? ThumbnailUrl { get; set; }
 
 
-        // 導航屬性
-        public PetCategory PetCategory { get; set; }
-        public CourseCategory CourseCategory { get; set; }
-        public CourseType CourseType { get; set; }
-        public Location Location { get; set; }
 
     }
 }

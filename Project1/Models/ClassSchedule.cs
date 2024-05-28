@@ -11,6 +11,5 @@ namespace Project1.Models
 
         public DateTime Scheduler { get; set; }//讓課日期&時段
 
-        public virtual Course Course { get; set; } // 導航屬性
     }
 }
