@@ -26,7 +26,8 @@
                 <div class="container">
                     <!-- Brand and toggle get grouped for better mobile display -->
                     <a class="navbar-brand logo_h" asp-area="" asp-controller="Home" asp-action="Index">
-                        <h3>寵護動</h3>
+                       
+                        <img src="~/img/logohodom.png" alt="寵護動" style="width:150px; height:80px;" /> @* <h3>寵護動</h3> *@
                     </a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse"
                             data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -52,9 +53,17 @@
                                    aria-haspopup="true" aria-expanded="false">訓練師</a>
                                 <ul class="dropdown-menu">
                                     <li class="nav-item"><a class="nav-link" asp-controller="Trainerrr" asp-action="AllTrainers">訓練師頁面</a></li>
-                                    <li class="nav-item"><a class="nav-link" asp-controller="Trainerrr" asp-action="Indexblog">我的部落格</a></li>
-                                    <li class="nav-item"><a class="nav-link" asp-controller="Trainerrr" asp-action="Index">課程</a></li>
-                                    <li class="nav-item"><a class="nav-link" asp-controller="Trainerrr" asp-action="TrainerIndex">訓練師審核</a></li>
+                                     @* wayne:判斷當前用戶的身分 *@
+                                    @if (ViewBag.IsTrainer != null && ViewBag.IsTrainer)
+                                    { 
+                                        <li class="nav-item"><a class="nav-link" asp-controller="Trainerrr" asp-action="Indexblog">訓練師工作室</a></li>
+                                    }
+                                    @* wayne:判斷當前用戶的身分 *@
+                                    @if (ViewBag.IsAdmin != null && ViewBag.IsAdmin)
+                                    { 
+                                    <li class="nav-item"><a class="nav-link" asp-controller="Trainerrr" asp-action="Index">課程管理</a></li>
+                                        <li class="nav-item"><a class="nav-link" asp-controller="Trainerrr" asp-action="TrainerIndex">訓練師審核</a></li>
+                                    }
                                 </ul>
                             </li>
                             @* <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li> *@
@@ -94,7 +103,11 @@
 
 						</ul>
 						<ul class="nav navbar-nav navbar-right">
-							<li class="nav-item"><a href="#" class="cart"><span class="ti-bag"></span></a></li>
+                            <li class="nav-item">
+                                <a asp-area="" asp-controller="Browse" asp-action="ViewCart" asp-route-id="1" class="cart">
+                                    <span class="ti-bag"></span>
+                                </a>
+                            </li>
 							<li class="nav-item">
 								<button class="search"><span class="lnr lnr-magnifier" id="search"></span></button>
 							</li>
@@ -109,7 +122,7 @@
             <div class="conltainer">
                 <form id="search_form" class="d-flex justify-content-between">
                     <div class="col-lg-8">
-                        <input type="text" class="form-control" id="search_input" placeholder="Search Here">
+                        <input type="text" class="form-control" id="search_input" placeholder="請輸入關鍵字">
                     </div>
                     <div class="col-lg-2">
                         <span class="lnr lnr-cross form-control" id="close_search" title="Close Search"></span>
@@ -284,6 +297,7 @@
             </div>
         </div>
     </footer>
+
     <script src="/js/vendor/jquery-2.2.4.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
             crossorigin="anonymous"></script>
@@ -324,10 +338,31 @@
                     });
                 }, 200); // 设置延迟时间，比如 300 毫秒
             });
+
+            $(document).on('click', '.course_btn', function (event) {
+                const btn = event.target;
+                const courseId = btn.getAttribute("btn-id");
+                sessionStorage.setItem("ActID", courseId);
+            });
         });
 
 
+        // const vueApp = {
+        //     data() {
+        //         return {
 
+        //         }
+        //     },
+        //     methods: {
+        //         actInfo: function (courseId) {
+        //             // const btn = event.target;
+        //             // const courseId = btn.getAttribute("btn-id");
+        //             sessionStorage.setItem("ActID", courseId);
+        //         }
+        //     },
+        // }
+
+        // var app = Vue.createApp(vueApp).mount("#app");
 
         // $.ajax({
         //     url: 'https://localhost:7177/Home/Searchtrainers', // 指定搜索的Action方法

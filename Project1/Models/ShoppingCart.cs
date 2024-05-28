@@ -22,13 +22,16 @@ namespace Project1.Models
         [DataType(DataType.DateTime)]
         public DateTime? ModifiedAt { get; set; }//修改時間
 
-        public int? MemberID { get; set; }//會員ID
+        public int MemberID { get; set; }//會員ID
         // Navigation property
         //public virtual Course Course { get; set; }
+		
+        public int SchedulerID { get; set; } //上課時間編號
 
         public ShoppingCart()
         {
             this.CreatedAt = DateTime.UtcNow;
         }
-    }
+
+	}
 }
