@@ -86,7 +86,7 @@ namespace Project1.Controllers
             Memb.Birthday = memberDTO.Birthday;
             Memb.RegistrationDate = memberDTO.RegistrationDate;
             Memb.IsTrainer = memberDTO.IsTrainer;
-            Memb.IsAdministrator = memberDTO.IsAdministrator;
+            //Memb.IsAdministrator = memberDTO.IsAdministrator;
             _context.Entry(Memb).State = EntityState.Modified;
 
             try
@@ -116,7 +116,7 @@ namespace Project1.Controllers
                 RegistrationDate = memDTO.RegistrationDate,
                 ResidenceArea = memDTO.ResidenceArea,
                 IsTrainer = memDTO.IsTrainer,
-                IsAdministrator = memDTO.IsAdministrator
+                //IsAdministrator = memDTO.IsAdministrator
             };
             _context.Member.Add(member);
             await _context.SaveChangesAsync();
@@ -161,7 +161,7 @@ namespace Project1.Controllers
                         RegistrationDate = (DateTime)meb.RegistrationDate,
                         ResidenceArea = meb.ResidenceArea,
                         IsTrainer = (bool)meb.IsTrainer,
-                        IsAdministrator = (bool)meb.IsAdministrator
+                        //IsAdministrator = (bool)meb.IsAdministrator
                     });
                     
         }

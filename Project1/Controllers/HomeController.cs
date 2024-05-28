@@ -9,6 +9,7 @@ using Project1.Models;
 using Project1.ViewModels;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 
 namespace Project1.Controllers
 {
@@ -30,6 +31,10 @@ namespace Project1.Controllers
         //GET Home/Index
         public async Task<IActionResult> Index()
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var Mem = _ProjectDbContext.Member.Where(m => m.AspID == userId).FirstOrDefault();
+            var MemID = Mem.MemberID;
+            ViewBag.MemID = MemID;
             return View();
         }
 
@@ -40,7 +45,6 @@ namespace Project1.Controllers
                 .Select(g => new { CourseID = g.Key, TotalQuantity = g.Sum(x => x.Quantity) }); // 將結果轉換為 List
 
             var courses = (from c in _ProjectDbContext.Course
-                           join cr in _ProjectDbContext.CourseRating on c.CourseID equals cr.CourseID into joined
                            let totalQuantityRecord = quantityTotals.FirstOrDefault(g => g.CourseID == c.CourseID)
                            let totalQuantity = totalQuantityRecord != null ? totalQuantityRecord.TotalQuantity : 0
                            orderby totalQuantity descending
@@ -107,6 +111,10 @@ namespace Project1.Controllers
             var courses = _ProjectDbContext.Course.Where(t => t.CourseName.Contains(searchTerm)).ToList();
             var location = _ProjectDbContext.Location.FirstOrDefault(t => t.LocationName.Contains(searchTerm));
             var category = _ProjectDbContext.CourseCategory.FirstOrDefault(t => t.CourseCategoryName.Contains(searchTerm));
+            var specialization = _ProjectDbContext.Specialization.ToList();
+            var petcategory = _ProjectDbContext.PetCategory.ToList();
+            var courseType = _ProjectDbContext.CourseType.ToList();
+            var courseCategory = _ProjectDbContext.CourseCategory.ToList();
             if(location != null)
             {
                 var locationID = location.LocationID;
@@ -121,6 +129,10 @@ namespace Project1.Controllers
             {
                 trainers = trainers,
                 courses = courses,
+                specializations = specialization,
+                petCategories = petcategory,
+                courseTypes = courseType,
+                courseCategories = courseCategory
             };
 
             // 返回部分视图，并将查询结果传递给视图

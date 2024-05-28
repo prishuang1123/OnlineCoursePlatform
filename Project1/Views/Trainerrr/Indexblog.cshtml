@@ -1,67 +1,1237 @@
 ﻿@section Styles {
-    <style></style>
+    <style>
+        /* 設定樣式 */
+        .text-center {
+            width: 400px;
+            margin: 0 auto;
+        }
+
+        .post-container {
+            width: 800px;
+            margin: 0 auto;
+        }
+
+        .post {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            position: relative;
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+            .post-header img {
+                border-radius: 50%;
+                margin-right: 10px;
+            }
+
+        .post-body img {
+            width: 100%;
+            height: 450px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #333;
+        }
+
+        .post-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .post-actions {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 5px;
+        }
+
+        .edit-img-wrapper {
+            position: relative;
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+            .edit-img-wrapper img {
+                width: 100px;
+                height: 100px;
+                object-fit: cover;
+                border-radius: 5px;
+            }
+
+            .edit-img-wrapper .delete-img {
+                position: absolute;
+                top: 5px;
+                right: 5px;
+                background: red;
+                color: white;
+                border: none;
+                border-radius: 50%;
+                width: 20px;
+                height: 20px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+            }
+
+        .new-img-preview {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            margin-left: 10px;
+        }
+
+        .new-img-wrapper {
+            display: flex;
+            align-items: center;
+        }
+
+        .img-wrapper {
+            position: relative;
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .img-preview {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .delete-img {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: red;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .bi-image {
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        .trainer-photo {
+            width: 100%;
+            max-width: 150px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .img-thumbnail {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .content {
+            flex: 3;
+            padding: 20px;
+        }
+
+        .new-course-section {
+            color: #856646;
+            border: 1px solid #856646;
+            padding: 10px;
+            margin-top: 20px;
+        }
+
+        .course-container {
+            max-height: 650px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .course-card img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-right: 15px;
+        }
+
+        .course-card-details {
+            flex: 1;
+        }
+
+        .course-card-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .course-checkbox {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            border: 1px solid #333;
+        }
+
+        .dropdown-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+            .form-group label {
+                width: 100%;
+                margin-bottom: 5px;
+            }
+
+            .form-group:last-child {
+                margin-right: 0;
+            }
+
+        .select-limited-height {
+            max-height: 150px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .image-preview-wrapper {
+            position: relative;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .thumbnail-preview {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .btn-delete-img {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #FF0000;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            padding: 0;
+        }
+
+        .course-card {
+            position: relative;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+            .course-card.published {
+                background-color: rgba(128, 128, 128, 0.5);
+                pointer-events: none;
+            }
+
+                .course-card.published .course-card-actions button {
+                    pointer-events: auto;
+                }
+
+                .course-card.published .course-delete-button {
+                    pointer-events: all;
+                    cursor: not-allowed;
+                }
+
+            .course-card .course-delete-button {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                background: #DE7548;
+                color: white;
+                border: none;
+                border-radius: 50%;
+                width: 25px;
+                height: 25px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+            }
+
+                .course-card .course-delete-button:disabled {
+                    background: grey;
+                    cursor: not-allowed;
+                }
+
+        .btn-delete {
+            background: #DE7548;
+            color: white;
+        }
+
+        .published-label {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #333;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            z-index: 1;
+        }
+
+        /* 按鈕顏色調整 */
+        .btn-success {
+            color: #fff;
+            background-color: #B99672;
+            border-color: #CCAD8E;
+        }
+
+        .btn-viewCourse {
+            color: #fff;
+            background-color: #A47546;
+        }
+
+        .showPublishModal {
+            color: #fff;
+            background-color: #C1AA94;
+            transition: all .3s linear;
+        }
+
+            .showPublishModal:hover {
+                background-color: #A6917C;
+                color: #fff;
+            }
+
+        .btn:active:after {
+            opacity: 1;
+            transition: 0s;
+            box-shadow: 0 0 0 0 #A88256;
+        }
+    </style>
 }
 
-<div id="app">
-    @* 搜尋篩選介面----stsrt *@
-    <div class="row" style="width:50%;margin-left:auto;margin-right:5px;">
-        <label class="col-lg-4 form-label">篩選關鍵字</label>
-        <input class="col-lg-8 form-control" v-model="filter" placeholder="請輸入篩選關鍵字" @@keyup="filterEmployees" />
-    </div>
-    @* 搜尋篩選介面--end *@
+<div id="app" class="container mt-5">
+    <div class="row">
+        <div class="col-md-3 text-center">
+            <img :src="trainerPhoto" alt="訓練師照片" class="img-thumbnail">
+            <h4>{{ trainerName }}</h4>
 
-    <div  class="container">
-       @*  編輯貼文區塊*@
-        <div class="form-group">
-            <div class="card mb-3 post-box">
-                <div class="card-body">
-                    <textarea id="postContent" class="form-control" placeholder="來分享有趣的貼文吧..." v-model="newPostContent"></textarea>
-                    <button type="button" @@click="showModal" class="btn btn-primary">建立貼文</button>
-                </div>
-            </div>
-        </div>
-        @* 打卡顯示區塊---start*@
-        <div class="form-group">
-            <div class="card mb-3 latest-post">
-                <div class="card-header">
-                    最新部落格文章
-                </div>
-                <div class="card-body">
-                    <div v-for="blog in blogs">
-                      
+            <div class="new-course-section">
+                <button type="button" class="btn btn-success" @@click="showAddCourseModal">新增課程</button>
+                <h5 class="">我新增的課程:</h5>
+                <div class="course-container">
+                    <div v-for="course in courses" :key="course.courseID" class="course-card">
+                        <input type="checkbox" class="course-checkbox" v-model="selectedCourses" :value="course.courseID">
+                        <img :src="course.thumbnailUrl" alt="Course Thumbnail" style="border:1px solid #333">
+                        <div class="course-card-details">
+                            <h6>{{ course.courseName }}</h6>
+                            <p>{{ course.description }}</p>
+                        </div>
+                        <div class="course-card-actions">
+                            <button type="button" class="btn btn-viewCourse btn-sm" @@click="viewCourseDetails(course.courseID)">檢視</button>
+                            <button type="button" class="btn showPublishModal btn-sm" @@click="showPublishModal(course.courseID)">發佈</button>
+                        </div>
+                        <button type="button" class="btn btn-danger btn-sm course-delete-button" @@click="deleteCourse(course.courseID)">
+                            <i class="bi bi-trash"></i>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
-        @* 打卡顯示區塊-----end*@
+
+        <div class="col-md-9">
+            <div class="post-container">
+                <div class="row mb-3">
+                    <label class="col-lg-4 form-label">篩選關鍵字</label>
+                    <input class="col-lg-8 form-control" v-model="filter" placeholder="請輸入篩選關鍵字" @@keyup="filterEmployees" />
+                </div>
+                <div class="form-group">
+                    <div class="card mb-3 post-box">
+                        <div class="card-body">
+                            <textarea id="postContent" class="form-control" placeholder="來分享有趣的貼文吧..." v-model="newPostContent"></textarea>
+                            <button type="button" @@click="showModal" class="btn btn-success">建立貼文</button>
+                        </div>
+                    </div>
+                </div>
+                <div v-for="(post, index) in posts" :key="post.blogID">
+                    <div class="post">
+                        <div class="post-header">
+                            <img :src="post.trainer.photo" alt="訓練師照片" width="50" height="50">
+                            <div>
+                                <h4>{{ post.trainer.trainerName }}</h4>
+                                <p>{{ new Date(post.postedDate).toLocaleString() }}</p>
+                            </div>
+                            <div class="post-actions">
+                                <button class="btn showPublishModal btn-sm" @@click="editPost(post)"><i class="bi bi-pencil-square"></i></button>
+                                <button class="btn showPublishModal btn-sm" @@click="deletePost(post.blogID)"><i class="bi bi-x-square-fill"></i></button>
+                            </div>
+                        </div>
+                        <h5>{{ post.title }}</h5>
+                        <div class="post-body">
+                            <p>{{ post.content }}</p>
+                            <div :id="'carouselExampleControls' + post.blogID" class="carousel slide" data-ride="carousel">
+                                <div class="carousel-inner">
+                                    <div class="carousel-item active" v-if="post.image1">
+                                        <img class="d-block w-100" :src="post.image1" alt="貼文圖片1">
+                                    </div>
+                                    <div class="carousel-item" v-if="post.image2">
+                                        <img class="d-block w-100" :src="post.image2" alt="貼文圖片2">
+                                    </div>
+                                </div>
+                                <a class="carousel-control-prev" :href="'#carouselExampleControls' + post.blogID" role="button" data-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                                <a class="carousel-control-next" :href="'#carouselExampleControls' + post.blogID" role="button" data-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="post-footer">
+                            <div class="post-likes">
+                                <button class="btn btn-outline-primary btn-sm" @@click="likePost(post)">
+                                    👍 {{ post.likes || 0 }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <hr v-if="index < posts.length - 1">
+                </div>
+            </div>
+        </div>
     </div>
-    
+
+    <!-- 新增貼文模態框 -->
+    <div class="modal fade" id="postModal" tabindex="-1" role="dialog" aria-labelledby="postModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="postModalLabel">建立貼文</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="postTitle">標題</label>
+                        <input type="text" class="form-control" id="postTitle" v-model="newPostTitle">
+                    </div>
+                    <div class="form-group">
+                        <label for="postContent">內容</label>
+                        <textarea class="form-control" id="postContent" v-model="newPostContent" placeholder="在想些什麼？"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="postImage1">圖片1</label>
+                        <input type="file" class="form-control" id="postImage1" @@change="onImage1Change">
+                    </div>
+                    <div class="form-group">
+                        <label for="postImage2">圖片2</label>
+                        <input type="file" class="form-control" id="postImage2" @@change="onImage2Change">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                    <button type="button" class="btn btn-primary" @@click="createPost">發布</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 編輯貼文模態框 -->
+    <div class="modal fade" id="editPostModal" tabindex="-1" role="dialog" aria-labelledby="editPostModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editPostModalLabel">編輯貼文</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="editPostTitle">標題</label>
+                        <input type="text" class="form-control" id="editPostTitle" v-model="editPostTitle">
+                    </div>
+                    <div class="form-group">
+                        <label for="editPostContent">內容</label>
+                        <textarea class="form-control" id="editPostContent" v-model="editPostContent"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>現有圖片</label>
+                        <div style="display: flex; align-items: center;">
+                            <div v-if="editPostImage1Url || newEditPostImage1Url" class="img-wrapper">
+                                <img :src="newEditPostImage1Url || editPostImage1Url" alt="編輯圖片1" class="img-preview">
+                                <button class="delete-img" @@click="removeImage(1)">X</button>
+                            </div>
+                            <div v-else class="img-wrapper">
+                                <label for="editPostImage1" class="bi bi-image" style="font-size: 2rem; cursor: pointer;"></label>
+                                <input type="file" class="form-control" id="editPostImage1" @@change="onEditImage1Change" style="display: none;">
+                            </div>
+                            <div v-if="editPostImage2Url || newEditPostImage2Url" class="img-wrapper" style="margin-left: 10px;">
+                                <img :src="newEditPostImage2Url || editPostImage2Url" alt="編輯圖片2" class="img-preview">
+                                <button class="delete-img" @@click="removeImage(2)">X</button>
+                            </div>
+                            <div v-else class="img-wrapper" style="margin-left: 10px;">
+                                <label for="editPostImage2" class="bi bi-image" style="font-size: 2rem; cursor: pointer;"></label>
+                                <input type="file" class="form-control" id="editPostImage2" @@change="onEditImage2Change" style="display: none;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                    <button type="button" class="btn btn-primary" @@click="saveEditPost">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新增課程模態框 -->
+    <div class="modal fade" id="addCourseModal" tabindex="-1" role="dialog" aria-labelledby="addCourseModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addCourseModalLabel">新增課程</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="courseName">課程名稱:</label>
+                        <input type="text" class="form-control" id="courseName" v-model="newCourse.courseName">
+                    </div>
+                    <div class="form-group">
+                        <label for="description">課程描述:</label>
+                        <textarea class="form-control" id="description" v-model="newCourse.description"></textarea>
+                    </div>
+                    <div class="dropdown-row">
+                        <div class="form-group">
+                            <label for="petCategoryID">寵物分類:</label>
+                            <select class="form-control" id="petCategoryID" v-model="newCourse.petCategoryID">
+                                <option v-for="category in petCategories" :value="category.petCategoryID">{{ category.petCategoryName }}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="courseCategoryID">課程分類:</label>
+                            <select class="form-control" id="courseCategoryID" v-model="newCourse.courseCategoryID">
+                                <option v-for="category in courseCategories" :value="category.courseCategoryID">{{ category.courseCategoryName }}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="courseTypeID">課程類型:</label>
+                            <select class="form-control" id="courseTypeID" v-model="newCourse.courseTypeID">
+                                <option v-for="type in courseTypes" :value="type.courseTypeID">{{ type.courseTypeName }}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="locationID">上課地點:</label>
+                            <select class="form-control" id="locationID" v-model="newCourse.locationID">
+                                <option v-for="location in locations" :value="location.locationID">{{ location.locationName }}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="price">價格:</label>
+                        <input type="number" class="form-control" id="price" v-model="newCourse.price">
+                    </div>
+                    <div class="form-group">
+                        <label for="maxParticipants">人數上限:</label>
+                        <input type="number" class="form-control" id="maxParticipants" v-model="newCourse.maxParticipants">
+                    </div>
+                    <div class="form-group">
+                        <label for="thumbnailUrl">封面圖:</label>
+                        <input type="file" class="form-control" id="thumbnailUrl" @@change="onThumbnailChange">
+                        <div v-if="newCourse.thumbnailUrl" class="image-preview-wrapper">
+                            <img :src="thumbnailPreview" class="img-preview" />
+                            <button type="button" class="btn-delete-img" @@click="removeThumbnail">✖</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                    <button type="button" class="btn btn-primary" @@click="createCourse">新增</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 檢視/編輯模態框 -->
+    <div class="modal fade" id="viewEditCourseModal" tabindex="-1" role="dialog" aria-labelledby="viewEditCourseModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="viewEditCourseModalLabel">檢視課程</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div v-if="!isEditing">
+                        <div>
+                            <img :src="viewCourse.thumbnailUrl" alt="封面圖" style="width: 100%;height:353px; border:1px solid #333">
+                        </div>
+                        <p><strong>課程名稱:</strong> {{ viewCourse.courseName }}</p>
+                        <p><strong>課程描述:</strong> {{ viewCourse.description }}</p>
+                        <p><strong>價格:</strong> {{ viewCourse.price }}</p>
+                        <p><strong>上課地點:</strong> {{ viewCourse.locationID }}</p>
+                        <p><strong>寵物分類:</strong> {{ viewCourse.petCategoryID }}</p>
+                        <p><strong>課程分類:</strong> {{ viewCourse.courseCategoryID }}</p>
+                        <p><strong>課程類型:</strong> {{ viewCourse.courseTypeID }}</p>
+                        <p><strong>人數上限:</strong> {{ viewCourse.maxParticipants }}</p>
+                    </div>
+                    <div v-else>
+                        <div class="form-group">
+                            <label for="editCourseName">課程名稱:</label>
+                            <input type="text" class="form-control" id="editCourseName" v-model="viewCourse.courseName">
+                        </div>
+                        <div class="form-group">
+                            <label for="editDescription">課程描述:</label>
+                            <textarea class="form-control" id="editDescription" v-model="viewCourse.description"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="editPrice">價格:</label>
+                            <input type="number" class="form-control" id="editPrice" v-model="viewCourse.price">
+                        </div>
+                        <div class="form-group">
+                            <label for="editLocationID">上課地點:</label>
+                            <select class="form-control" id="editLocationID" v-model="viewCourse.locationID">
+                                <option v-for="location in locations" :value="location.locationID">{{ location.locationName }}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="editPetCategoryID">寵物分類:</label>
+                            <select class="form-control" id="editPetCategoryID" v-model="viewCourse.petCategoryID">
+                                <option v-for="category in petCategories" :value="category.petCategoryID">{{ category.petCategoryName }}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="editCourseCategoryID">課程分類:</label>
+                            <select class="form-control" id="editCourseCategoryID" v-model="viewCourse.courseCategoryID">
+                                <option v-for="category in courseCategories" :value="category.courseCategoryID">{{ category.courseCategoryName }}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="editCourseTypeID">課程類型:</label>
+                            <select class="form-control" id="editCourseTypeID" v-model="viewCourse.courseTypeID">
+                                <option v-for="type in courseTypes" :value="type.courseTypeID">{{ type.courseTypeName }}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="editMaxParticipants">人數上限:</label>
+                            <input type="number" class="form-control" id="editMaxParticipants" v-model="viewCourse.maxParticipants">
+                        </div>
+                        <div class="form-group">
+                            <label for="editThumbnailUrl">封面圖:</label>
+                            <input type="file" class="form-control" id="editThumbnailUrl" @@change="onEditThumbnailChange">
+                            <div v-if="editThumbnailPreview" class="image-preview-wrapper">
+                                <img :src="editThumbnailPreview" class="img-preview" />
+                                <button type="button" class="btn-delete-img" @@click="removeEditThumbnail">✖</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @@click="closeViewEditModal">關閉</button>
+                    <button type="button" class="btn btn-primary" v-if="!isEditing" @@click="editCourse">編輯</button>
+                    <button type="button" class="btn btn-primary" v-if="isEditing" @@click="saveCourse">確定</button>
+                    <button type="button" class="btn btn-secondary" v-if="isEditing" @@click="cancelEdit">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 發布模態框 -->
+    <div class="modal fade" id="publishModal" tabindex="-1" role="dialog" aria-labelledby="publishModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="publishModalLabel">發布課程</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="publishDateTime">選擇發佈時間:</label>
+                        <input type="datetime-local" class="form-control" id="publishDateTime" v-model="publishDateTime" :min="minDateTime">
+                    </div>
+
+                    <div class="form-group">
+                        <label>已發佈的課程:</label>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>課程名稱</th>
+                                    <th>上課時間</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="schedule in validPublishedSchedules" :key="schedule.schedulerID">
+                                    <td>{{ viewCourse.courseName }}</td>
+                                    <td>{{ formatDateTime(schedule.scheduler) }}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-delete btn-sm" @@click="retractPublish(schedule.schedulerID)">收回發佈</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div v-if="publishError" class="alert alert-danger">{{ publishError }}</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                    <button type="button" class="btn btn-success" @@click="publishCourse">確定</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
 
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.8/axios.min.js"
             integrity="sha512-PJa3oQSLWRB7wHZ7GQ/g+qyv6r4mbuhmiDb8BjSFZ8NZ2a42oTtAq5n0ucWAwcQDlikAtkub+tPVCw4np27WCg=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://unpkg.com/vue@3.4.25/dist/vue.global.js"></script>
-<script>
-    var VueApp = {
-        data() {
+    <script>
+        var getBlogUrl = "https://localhost:7177/Trainerrr/GetBlog"; // 部落格
+        var createPostUrl = "https://localhost:7177/Trainerrr/CreatePost"; // 貼文新增
+        var editPostUrl = "https://localhost:7177/Trainerrr/EditPost"; // 編輯貼文
+        var deletePostUrl = "https://localhost:7177/Trainerrr/DeletePost"; // 刪除貼文
+        var getCoursesUrl = "https://localhost:7177/Trainerrr/GetCourses"; // 顯示課程
+        var createCourseUrl = "https://localhost:7177/Trainerrr/CreateCourse"; // 新增課程
+        var getDropdownDataUrl = "https://localhost:7177/Trainerrr/GetDropdownData"; // 課程種類下拉式選單資訊
+        var getCurrentTrainerInfoUrl = "https://localhost:7177/Trainerrr/GetCurrentTrainerInfo"; // 訓練師誰?
+        var editCourseUrl = "https://localhost:7177/Trainerrr/EditCourse"; // 編輯課程
+        var publishCourseUrl = "https://localhost:7177/Trainerrr/PublishCourse"; // 發佈課程
+        var deleteCourseUrl = "https://localhost:7177/Trainerrr/DeleteCourse"; // 刪除課程
+        var retractPublishUrl = "https://localhost:7177/Trainerrr/RetractPublish"; // 收回課程
+        var getPublishedSchedulesUrl = "https://localhost:7177/Trainerrr/GetPublishedSchedules"; // 取得已發佈資訊
+
+        var VueApp = {
+            data() {
                 return {
-                    filter: "",
-                    blogs: [ ]
-                }
-         },
-        methods: {
-            showModal: function () { 
-                alert("打卡");
+                    posts: [], // 貼文資料
+                    filter: "", // 篩選關鍵字
+                    newPostTitle: "", // 新貼文標題
+                    newPostContent: "", // 新貼文內容
+                    newPostImage1: null, // 新貼文圖片1
+                    newPostImage2: null, // 新貼文圖片2
+                    editPostId: null, // 編輯貼文ID
+                    editPostTitle: "", // 編輯貼文標題
+                    editPostContent: "", // 編輯貼文內容
+                    editPostImage1: null, // 編輯貼文圖片1
+                    editPostImage2: null, // 編輯貼文圖片2
+                    editPostImage1Url: null, // 編輯貼文圖片1 URL
+                    editPostImage2Url: null, // 編輯貼文圖片2 URL
+                    newEditPostImage1Url: null, // 新編輯貼文圖片1 URL
+                    newEditPostImage2Url: null, // 新編輯貼文圖片2 URL
+                    deletedImages: [], // 已刪除圖片列表
+                    trainerName: "", // 訓練師名稱
+                    trainerPhoto: "", // 訓練師照片
+                    courses: [], // 課程資料
+                    selectedCourses: [], // 選擇的課程
+                    newCourse: { // 新課程資料
+                        courseName: "",
+                        description: "",
+                        petCategoryID: null,
+                        courseCategoryID: null,
+                        courseTypeID: null,
+                        locationID: null,
+                        price: 0,
+                        maxParticipants: 0,
+                        thumbnailUrl: null
+                    },
+                    viewCourse: {}, // 查看課程詳細信息
+                    petCategories: [], // 寵物分類
+                    courseCategories: [], // 課程分類
+                    courseTypes: [], // 課程類型
+                    locations: [], // 上課地點
+                    isEditing: false, // 編輯狀態
+                    publishDateTime: null, // 發佈時間
+                    publishedSchedules: [], // 已發佈的課程
+                    editThumbnailPreview: null, // 編輯封面圖預覽
+                    thumbnailPreview: null, // 新增封面圖預覽
+                    publishError: null // 發佈錯誤訊息
+                };
             },
-            filterEmployees: function () {
+            mounted() {
+                this.fetchPosts(); // 取得貼文資料
+                this.fetchTrainerInfo(); // 取得訓練師資料
+                this.fetchCourses(); // 取得課程資料
+                this.fetchDropdownData(); // 取得下拉選單資料
+                this.$nextTick(() => {
+                    $('select').niceSelect(); // 初始化niceSelect
+                    $('select').on('change', () => {
+                        this.newCourse.courseCategoryID = $('#courseCategoryID').val();
+                        this.newCourse.petCategoryID = $('#petCategoryID').val();
+                        this.newCourse.locationID = $('#locationID').val();
+                        this.newCourse.courseTypeID = $('#courseTypeID').val();
+                        // 為其他select元素做類似處理
+                    });
+                    // 添加事件監聽器來重置模態框數據
+                    $('#addCourseModal').on('hidden.bs.modal', () => {
+                        this.resetModalData();  // 這將確保所有欄位被重置
+                        // 重新初始化所有下拉選單，確保它們在UI上也顯示為未選狀態
+                        $('select').niceSelect('update');
+                    });
+                });
+            },
+            computed: {
+                // 計算屬性，取得有效的已發佈課程
+                validPublishedSchedules() {
+                    const now = new Date();
+                    return this.publishedSchedules.filter(schedule => new Date(schedule.scheduler) > now);
+                },
+                // 設定日期選擇器的最小日期為今天
+                minDateTime() {
+                    const now = new Date();
+                    return now.toISOString().slice(0, 16);
+                }
+            },
+            methods: {
+                // 獲取貼文
+                fetchPosts() {
+                    axios.get(getBlogUrl).then(response => {
+                        this.posts = response.data;
+                    }).catch(error => {
+                        alert(error);
+                    });
+                },
+                // 獲取訓練師資訊
+                fetchTrainerInfo() {
+                    axios.get(getCurrentTrainerInfoUrl).then(response => {
+                        const trainer = response.data;
+                        if (trainer.success) {
+                            this.trainerName = trainer.trainerName;
+                            this.trainerPhoto = trainer.photo;
+                        } else {
+                            alert(trainer.message);
+                        }
+                    }).catch(error => {
+                        alert(error);
+                    });
+                },
+                // 獲取課程
+                fetchCourses() {
+                    axios.get(getCoursesUrl).then(response => {
+                        this.courses = response.data;
+                    }).catch(error => {
+                        alert(error);
+                    });
+                },
+                // 獲取下拉選單資料
+                fetchDropdownData() {
+                    axios.get(getDropdownDataUrl).then(response => {
+                        this.petCategories = response.data.petCategories;
+                        this.courseCategories = response.data.courseCategories;
+                        this.courseTypes = response.data.courseTypes;
+                        this.locations = response.data.locations;
+                        this.$nextTick(() => {
+                            $('select').niceSelect('update');
+                        });
+                    }).catch(error => {
+                        alert(error);
+                    });
+                },
+                // 顯示新增貼文模態框
+                showModal() {
+                    $('#postModal').modal('show');
+                },
+                // 創建新貼文
+                createPost() {
+                    const formData = new FormData();
+                    formData.append("title", this.newPostTitle);
+                    formData.append("content", this.newPostContent);
+                    formData.append("image1", this.newPostImage1);
+                    formData.append("image2", this.newPostImage2);
+
+                    axios.post(createPostUrl, formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    }).then(response => {
+                        this.fetchPosts();
+                        $('#postModal').modal('hide');
+                    }).catch(error => {
+                        console.log(error);
+                        alert(error);
+                    });
+                },
+                // 編輯貼文
+                editPost(post) {
+                    this.editPostId = post.blogID;
+                    this.editPostTitle = post.title;
+                    this.editPostContent = post.content;
+                    this.editPostImage1 = null;
+                    this.editPostImage2 = null;
+                    this.editPostImage1Url = post.image1;
+                    this.editPostImage2Url = post.image2;
+                    this.newEditPostImage1Url = null;
+                    this.newEditPostImage2Url = null;
+                    this.deletedImages = [];
+                    $('#editPostModal').modal('show');
+                },
+                // 移除貼文圖片
+                removeImage(imageIndex) {
+                    if (imageIndex === 1) {
+                        this.newEditPostImage1Url = null;
+                        this.editPostImage1Url = null;
+                        this.editPostImage1 = null;
+                    } else if (imageIndex === 2) {
+                        this.newEditPostImage2Url = null;
+                        this.editPostImage2Url = null;
+                        this.editPostImage2 = null;
+                    }
+                },
+                // 保存編輯後的貼文
+                saveEditPost() {
+                    let formData = new FormData();
+                    formData.append('title', this.editPostTitle);
+                    formData.append('content', this.editPostContent);
+                    formData.append('image1', this.editPostImage1);
+                    formData.append('image2', this.editPostImage2);
+                    formData.append('deletedImages', JSON.stringify(this.deletedImages));
+
+                    axios.post(`${editPostUrl}/${this.editPostId}`, formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    }).then(response => {
+                        this.fetchPosts();
+                        $('#editPostModal').modal('hide');
+                    }).catch(error => {
+                        alert(error);
+                    });
+                },
+                // 當貼文圖片1變更
+                onImage1Change(event) {
+                    this.newPostImage1 = event.target.files[0];
+                },
+                // 當貼文圖片2變更
+                onImage2Change(event) {
+                    this.newPostImage2 = event.target.files[0];
+                },
+                // 當編輯貼文圖片1變更
+                onEditImage1Change(event) {
+                    this.editPostImage1 = event.target.files[0];
+                    this.newEditPostImage1Url = URL.createObjectURL(this.editPostImage1);
+                },
+                // 當編輯貼文圖片2變更
+                onEditImage2Change(event) {
+                    this.editPostImage2 = event.target.files[0];
+                    this.newEditPostImage2Url = URL.createObjectURL(this.editPostImage2);
+                },
+                // 搜尋貼文
+                filterEmployees() {
                     alert("搜尋");
+                },
+                // 刪除貼文
+                deletePost(postID) {
+                    if (confirm("確定要刪除這篇貼文嗎？")) {
+                        axios.delete(`${deletePostUrl}/${postID}`)
+                            .then(response => {
+                                this.fetchPosts();
+                            })
+                            .catch(error => {
+                                console.error("刪除貼文時出現錯誤!", error);
+                            });
+                    }
+                },
+                // 點讚貼文
+                likePost(post) {
+                    if (!post.likes) {
+                        this.$set(post, 'likes', 0);
+                    }
+                    post.likes++;
+                },
+                // 顯示新增課程模態框
+                showAddCourseModal() {
+                    $('#addCourseModal').modal('show');
+                },
+                // 當課程封面圖變更
+                onThumbnailChange(event) {
+                    this.newCourse.thumbnailUrl = event.target.files[0];
+                    const file = event.target.files[0];
+                    if (file) {
+                        this.newCourse.thumbnailUrl = file;
+                        this.thumbnailPreview = URL.createObjectURL(file);
+                    }
+                },
+                // 移除課程封面圖
+                removeThumbnail() {
+                    this.newCourse.thumbnailUrl = null;
+                    this.thumbnailPreview = null;
+                    document.getElementById('thumbnailUrl').value = "";
+                },
+                // 重置模態框資料
+                resetModalData() {
+                    this.newCourse = {
+                        courseName: "",
+                        description: "",
+                        petCategoryID: null,
+                        courseCategoryID: null,
+                        courseTypeID: null,
+                        locationID: null,
+                        price: 0,
+                        maxParticipants: 0,
+                        thumbnailUrl: null
+                    };
+                    this.thumbnailPreview = null;
+                    document.getElementById('thumbnailUrl').value = "";
+                    $('select').val(null).niceSelect('update');
+                },
+                // 創建新課程
+                createCourse() {
+                    const formData = new FormData();
+                    formData.append("courseName", this.newCourse.courseName);
+                    formData.append("description", this.newCourse.description);
+                    formData.append("petCategoryID", this.newCourse.petCategoryID);
+                    formData.append("courseCategoryID", this.newCourse.courseCategoryID);
+                    formData.append("courseTypeID", this.newCourse.courseTypeID);
+                    formData.append("locationID", this.newCourse.locationID);
+                    formData.append("price", this.newCourse.price);
+                    formData.append("maxParticipants", this.newCourse.maxParticipants);
+                    if (this.newCourse.thumbnailUrl) {
+                        formData.append("thumbnailUrl", this.newCourse.thumbnailUrl);
+                    }
+
+                    axios.post(createCourseUrl, formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    }).then(response => {
+                        this.fetchCourses();
+                        $('#addCourseModal').modal('hide');
+                    }).catch(error => {
+                        console.log(error);
+                        alert(error);
+                    });
+                },
+                // 顯示檢視/編輯課程模態框
+                showViewEditModal() {
+                    $('#viewEditCourseModal').modal('show');
+                },
+                // 關閉檢視/編輯課程模態框
+                closeViewEditModal() {
+                    $('#viewEditCourseModal').modal('hide');
+                    this.isEditing = false;
+                },
+                // 顯示發布課程模態框
+                showPublishModal(courseID) {
+                    this.viewCourse = this.courses.find(course => course.courseID === courseID);
+                    this.fetchPublishedSchedules(courseID);
+                    $('#publishModal').modal('show');
+                },
+                // 檢視課程詳情
+                viewCourseDetails(courseID) {
+                    this.viewCourse = this.courses.find(course => course.courseID === courseID);
+                    this.isEditing = false;
+                    this.showViewEditModal();
+                },
+                // 編輯課程
+                editCourse() {
+                    this.isEditing = true;
+                },
+                // 取消編輯
+                cancelEdit() {
+                    this.isEditing = false;
+                },
+                // 保存編輯後的課程
+                saveCourse() {
+                    const formData = new FormData();
+                    formData.append("courseName", this.viewCourse.courseName);
+                    formData.append("description", this.viewCourse.description);
+                    formData.append("petCategoryID", this.viewCourse.petCategoryID);
+                    formData.append("courseCategoryID", this.viewCourse.courseCategoryID);
+                    formData.append("courseTypeID", this.viewCourse.courseTypeID);
+                    formData.append("locationID", this.viewCourse.locationID);
+                    formData.append("price", this.viewCourse.price);
+                    formData.append("maxParticipants", this.viewCourse.maxParticipants);
+                    if (this.viewCourse.thumbnailUrl) {
+                        formData.append("thumbnailUrl", this.viewCourse.thumbnailUrl);
+                    }
+
+                    axios.post(`${editCourseUrl}/${this.viewCourse.courseID}`, formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    }).then(response => {
+                        this.fetchCourses();
+                        this.isEditing = false;
+                        this.closeViewEditModal();
+                    }).catch(error => {
+                        console.log(error);
+                        alert(error);
+                    });
+                },
+                // 發布課程
+                publishCourse() {
+                    // 重置錯誤訊息
+                    this.publishError = null;
+
+                    // 驗證是否選擇了發佈時間
+                    if (!this.publishDateTime) {
+                        this.publishError = "請選擇發佈時間";
+                        return;
+                    }
+
+                    // 驗證是否選擇了課程
+                    if (!this.viewCourse.courseID) {
+                        this.publishError = "請選擇要發佈的課程";
+                        return;
+                    }
+
+                    // 檢查課程發佈數量是否超過5堂
+                    if (this.validPublishedSchedules.length >= 5) {
+                        this.publishError = "同一門課最多只能發佈五堂課";
+                        return;
+                    }
+
+                    // 檢查時間是否與其他課程重疊
+                    const publishTime = new Date(this.publishDateTime);
+                    const overlappingCourse = this.publishedSchedules.find(schedule => {
+                        const scheduleTime = new Date(schedule.scheduler);
+                        return scheduleTime.toDateString() === publishTime.toDateString() && scheduleTime.getHours() === publishTime.getHours();
+                    });
+
+                    if (overlappingCourse) {
+                        this.publishError = "此時段已排課";
+                        return;
+                    }
+
+                    const schedule = {
+                        CourseID: this.viewCourse.courseID,
+                        Scheduler: publishTime.toISOString()// 確保時間是 ISO 格式
+                    };
+
+                    axios.post(publishCourseUrl, schedule).then(response => {
+                        alert(response.data.message);
+                        this.fetchCourses();
+                        this.fetchPublishedSchedules(this.viewCourse.courseID);
+                        $('#publishModal').modal('hide');
+                    }).catch(error => {
+                        console.log("Error response:", error.response);
+                        this.publishError = "此時段已經有排其它課程了";
+                    });
+                },
+                // 收回已發布的課程
+                retractPublish(scheduleID) {
+                    if (confirm("確定要收回發佈嗎？")) {
+                        axios.post(`${retractPublishUrl}/${scheduleID}`)
+                            .then(response => {
+                                alert(response.data.message);
+                                this.fetchPublishedSchedules(this.viewCourse.courseID);
+                            })
+                            .catch(error => {
+                                console.log("Error response:", error.response);
+                                alert("收回發佈失敗：" + error.response.data.message);
+                            });
+                    }
+                },
+                // 刪除課程
+                deleteCourse(courseID) {
+                    if (confirm("確定要刪除此課程嗎？")) {
+                        axios.delete(`${deleteCourseUrl}/${courseID}`)
+                            .then(response => {
+                                alert("課程已刪除");
+                                this.fetchCourses();
+                            })
+                            .catch(error => {
+                                console.log("Error response:", error.response);
+                                alert("刪除課程時出現錯誤");
+                            });
+                    }
+                },
+                // 當編輯課程封面圖變更
+                onEditThumbnailChange(event) {
+                    this.viewCourse.thumbnailUrl = event.target.files[0];
+                    const file = event.target.files[0];
+                    if (file) {
+                        this.viewCourse.thumbnailUrl = file;
+                        this.editThumbnailPreview = URL.createObjectURL(file);
+                    }
+                },
+                // 移除編輯課程封面圖
+                removeEditThumbnail() {
+                    this.viewCourse.thumbnailUrl = null;
+                    this.editThumbnailPreview = null;
+                    document.getElementById('editThumbnailUrl').value = "";
+                },
+                // 獲取已發布課程時間表
+                fetchPublishedSchedules(courseID) {
+                    axios.get(`${getPublishedSchedulesUrl}?courseID=${courseID}`)
+                        .then(response => {
+                            this.publishedSchedules = response.data;
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        });
+                },
+                // 格式化日期時間顯示
+                formatDateTime(dateTime) {
+                    const date = new Date(dateTime);
+                    const options = {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: false
+                    };
+                    return date.toLocaleString('zh-TW', options);
+                }
             }
-        }
-    }
-   
+        };
+
         var app = Vue.createApp(VueApp).mount("#app");
-</script>
+    </script>
 }
+
+
+
+
 
