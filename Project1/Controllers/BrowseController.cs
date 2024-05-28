@@ -98,6 +98,7 @@ namespace Project1.Controllers
         public class AddToCartRequest
         {
             public int CourseID { get; set; }
+            public int MemberID { get; set; }
             public List<int> SelectedSchedules { get; set; }
         }
 
@@ -131,7 +132,7 @@ namespace Project1.Controllers
                         CourseID = request.CourseID,
                         SchedulerID = scheduleID,
                         Quantity = 1,
-                        MemberID = 1 // 使用实际的 MemberID
+                        MemberID = request.MemberID, // 使用实际的 MemberID
                     };
 
                     if (ModelState.IsValid)

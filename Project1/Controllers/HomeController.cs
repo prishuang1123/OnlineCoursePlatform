@@ -9,6 +9,7 @@ using Project1.Models;
 using Project1.ViewModels;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 
 namespace Project1.Controllers
 {
@@ -30,7 +31,10 @@ namespace Project1.Controllers
         //GET Home/Index
         public async Task<IActionResult> Index()
         {
-
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var Mem = _ProjectDbContext.Member.Where(m => m.AspID == userId).FirstOrDefault();
+            var MemID = Mem.MemberID;
+            ViewBag.MemID = MemID;
             return View();
         }
 

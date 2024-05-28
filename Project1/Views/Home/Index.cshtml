@@ -1,6 +1,10 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+
+@{
+    var MemID = ViewBag.MemID;
+}
 <head>
 
 
@@ -202,6 +206,11 @@
 
         var app = Vue.createApp(VueApp).mount("#app");
 
+        // 获取从后端传递过来的用户ID
+        var MemID = '@MemID';
+        // 将用户ID保存到 sessionStorage
+        sessionStorage.setItem('MemID', MemID);
+        console.log("MemID saved to sessionStorage: " + MemID);
 
     </script>
 

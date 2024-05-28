@@ -182,12 +182,13 @@
                         rating: '',
                         comment: ''
                     },
-                    memberID: 1,
+                    memberID:'',
                     courseRatings:[],
                     
                 }
             },
             mounted() {
+                this.memberID = sessionStorage.getItem("MemID");
                 const cid = sessionStorage.getItem("ActID");
                 const url1 = `https://localhost:7177/Trainerrr/getsingleCourse?id=${cid}`;
                 axios.get(url1)
@@ -236,6 +237,7 @@
                     const cid = sessionStorage.getItem("ActID");
                     axios.post('https://localhost:7177/Browse/AddToCart', {
                         courseID: cid,
+                        memberID: this.memberID,
                         selectedSchedules: this.selectedSchedules
                     })
                         .then(response => {
