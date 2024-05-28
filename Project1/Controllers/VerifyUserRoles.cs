@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Project1.Data;
 //using System.Runtime.CompilerServices;
 
 namespace Project1.Controllers
@@ -8,11 +9,11 @@ namespace Project1.Controllers
     //wayne:VerifyUserRoles 該控制器用來在專案執行時檢查用戶角色 (給需要的控制器來繼承)
     public class VerifyUserRoles : Controller
     {
-        private readonly UserManager<IdentityUser> _userManager;     //管理使用者資料
-        private readonly SignInManager<IdentityUser> _signInManager; //管理使用者登入狀態
+        private readonly UserManager<ProjectUser> _userManager;     //管理使用者資料
+        private readonly SignInManager<ProjectUser> _signInManager; //管理使用者登入狀態
 
         //在建構式中，將這些服務注入到控制器中。
-        public VerifyUserRoles(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        public VerifyUserRoles(UserManager<ProjectUser> userManager, SignInManager<ProjectUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;

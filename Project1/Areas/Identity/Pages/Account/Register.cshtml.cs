@@ -18,22 +18,23 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using Project1.Data;
 
 namespace Project1.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly IUserStore<IdentityUser> _userStore;
-        private readonly IUserEmailStore<IdentityUser> _emailStore;
+        private readonly SignInManager<ProjectUser> _signInManager;
+        private readonly UserManager<ProjectUser> _userManager;
+        private readonly IUserStore<ProjectUser> _userStore;
+        private readonly IUserEmailStore<ProjectUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
 
         public RegisterModel(
-            UserManager<IdentityUser> userManager,
-            IUserStore<IdentityUser> userStore,
-            SignInManager<IdentityUser> signInManager,
+            UserManager<ProjectUser> userManager,
+            IUserStore<ProjectUser> userStore,
+            SignInManager<ProjectUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
         {
@@ -86,7 +87,7 @@ namespace Project1.Areas.Identity.Pages.Account
             [Required(ErrorMessage ="請輸入您的密碼")]
             [StringLength(100, ErrorMessage = "須為6位英數字混合密碼與一個特殊字元，英文需區分大小寫", MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "Password")]
+            [Display(Name = "密碼")]
             public string Password { get; set; }
 
             /// <summary>
@@ -94,9 +95,13 @@ namespace Project1.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
+            [Display(Name = "確認密碼")]
             [Compare("Password", ErrorMessage = "密碼不一致")]
             public string ConfirmPassword { get; set; }
+
+            [Required(ErrorMessage ="使用者名稱為必須填欄位")]
+            [Display(Name = "使用者名稱")]
+            public string UserName { get; set; }
         }
 
 
@@ -114,17 +119,17 @@ namespace Project1.Areas.Identity.Pages.Account
             {
                 var user = CreateUser();
 
-                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
-                await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
-                var result = await _userManager.CreateAsync(user, Input.Password);
+                await _userStore.SetUserNameAsync((ProjectUser)user, Input.UserName, CancellationToken.None);
+                await _emailStore.SetEmailAsync((ProjectUser)user, Input.Email, CancellationToken.None);
+                var result = await _userManager.CreateAsync((ProjectUser)user, Input.Password);
 
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                    await _userManager.AddToRoleAsync(user, "Member");//使用者註冊完成後即是會員身份
-                    var userId = await _userManager.GetUserIdAsync(user);
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    await _userManager.AddToRoleAsync((ProjectUser)user, "Member");//使用者註冊完成後即是會員身份
+                    var userId = await _userManager.GetUserIdAsync((ProjectUser)user);
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync((ProjectUser)user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(
                         "/Account/ConfirmEmail",
@@ -141,7 +146,7 @@ namespace Project1.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        await _signInManager.SignInAsync((ProjectUser)user, isPersistent: false);
                         return LocalRedirect(returnUrl);
                     }
                 }
@@ -159,7 +164,7 @@ namespace Project1.Areas.Identity.Pages.Account
         {
             try
             {
-                return Activator.CreateInstance<IdentityUser>();
+                return Activator.CreateInstance<ProjectUser>();
             }
             catch
             {
@@ -169,13 +174,13 @@ namespace Project1.Areas.Identity.Pages.Account
             }
         }
 
-        private IUserEmailStore<IdentityUser> GetEmailStore()
+        private IUserEmailStore<ProjectUser> GetEmailStore()
         {
             if (!_userManager.SupportsUserEmail)
             {
                 throw new NotSupportedException("The default UI requires a user store with email support.");
             }
-            return (IUserEmailStore<IdentityUser>)_userStore;
+            return (IUserEmailStore<ProjectUser>)_userStore;
         }
     }
 }

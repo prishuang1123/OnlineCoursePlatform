@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Project1.Data;
 using Project1.ViewModels;
 
 namespace Project1.Controllers
@@ -10,10 +11,10 @@ namespace Project1.Controllers
     [Authorize(Roles = "Admin")]
     public class RoleManagementController : VerifyUserRoles
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly UserManager<ProjectUser> _userManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
 
-        public RoleManagementController(UserManager<IdentityUser> userManager,SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager): base(userManager, signInManager)
+        public RoleManagementController(UserManager<ProjectUser> userManager,SignInManager<ProjectUser> signInManager, RoleManager<ApplicationRole> roleManager): base(userManager, signInManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;

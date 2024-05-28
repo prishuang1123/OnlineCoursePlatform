@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-//�������ҥ�ApplicationDbContext���O �޲z(IdentityUser�BIdentityRole���O�����󪺶��X)
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
@@ -20,18 +20,26 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 //wayne:註冊 客製化註冊時的錯誤訊息
 builder.Services.AddScoped<IdentityErrorDescriber, CustomIdentityErrorDescriber>();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddRoles<IdentityRole>() //wayne:建立角色管理服務
-    .AddEntityFrameworkStores<ApplicationDbContext>();
-    
+//builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+//    .AddRoles<IdentityRole>() //wayne:建立角色管理服務
+//    .AddEntityFrameworkStores<ApplicationDbContext>();
+
+//Wayne:註冊客製化後的會員資料與權限                               註冊後需要確認其帳戶（通常是通過電子郵件確認）。
+builder.Services.AddIdentity<ProjectUser, ApplicationRole>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<ApplicationRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders(); //方法註冊一些預設的令牌提供者，用於生成和驗證令牌，例如用於密碼重置、帳戶確認等功能。
+
 
 //wayne:註冊EmailSender類別
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
 
 //wayne:Identity相關設定
-builder.Services.Configure<IdentityOptions>(options => {
+builder.Services.Configure<IdentityOptions>(options =>
+{
     //密碼原則
     options.Password.RequireDigit = true;
     options.Password.RequireLowercase = true;
@@ -49,7 +57,8 @@ builder.Services.Configure<IdentityOptions>(options => {
     options.SignIn.RequireConfirmedEmail = true;
 });
 //Coolie設定
-builder.Services.ConfigureApplicationCookie(options => {
+builder.Services.ConfigureApplicationCookie(options =>
+{
     options.Cookie.HttpOnly = true;
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
     options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
@@ -94,8 +103,8 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var context = services.GetRequiredService<ApplicationDbContext>();
-        var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
-        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+        var userManager = services.GetRequiredService<UserManager<ProjectUser>>();
+        var roleManager = services.GetRequiredService<RoleManager<ApplicationRole>>();
         await SeedData.Initialize(services, userManager, roleManager); // 初始化數據庫並添加角色
     }
     catch (Exception ex)
@@ -106,3 +115,4 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.Run();
+
