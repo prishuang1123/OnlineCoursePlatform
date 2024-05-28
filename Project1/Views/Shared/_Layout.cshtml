@@ -53,9 +53,17 @@
                                    aria-haspopup="true" aria-expanded="false">訓練師</a>
                                 <ul class="dropdown-menu">
                                     <li class="nav-item"><a class="nav-link" asp-controller="Trainerrr" asp-action="AllTrainers">訓練師頁面</a></li>
-                                    <li class="nav-item"><a class="nav-link" asp-controller="Trainerrr" asp-action="Indexblog">我的部落格</a></li>
+                                     @* wayne:判斷當前用戶的身分 *@
+                                    @if (ViewBag.IsTrainer != null && ViewBag.IsTrainer)
+                                    { 
+                                        <li class="nav-item"><a class="nav-link" asp-controller="Trainerrr" asp-action="Indexblog">訓練師工作室</a></li>
+                                    }
+                                    @* wayne:判斷當前用戶的身分 *@
+                                    @if (ViewBag.IsAdmin != null && ViewBag.IsAdmin)
+                                    { 
                                     <li class="nav-item"><a class="nav-link" asp-controller="Trainerrr" asp-action="Index">課程管理</a></li>
-                                    <li class="nav-item"><a class="nav-link" asp-controller="Trainerrr" asp-action="TrainerIndex">訓練師審核</a></li>
+                                        <li class="nav-item"><a class="nav-link" asp-controller="Trainerrr" asp-action="TrainerIndex">訓練師審核</a></li>
+                                    }
                                 </ul>
                             </li>
                             @* <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li> *@

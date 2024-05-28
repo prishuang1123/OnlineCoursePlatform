@@ -23,7 +23,6 @@ builder.Services.AddScoped<IdentityErrorDescriber, CustomIdentityErrorDescriber>
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>() //wayne:建立角色管理服務
     .AddEntityFrameworkStores<ApplicationDbContext>();
-    
 
 //wayne:註冊EmailSender類別
 builder.Services.AddTransient<IEmailSender, EmailSender>();

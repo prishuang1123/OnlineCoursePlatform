@@ -20,17 +20,22 @@ using static Project1.Controllers.TrainerrrController;
 
 namespace Project1.Controllers
 {
-    //private readonly UserManager<ProjectUser> _UserManager;
-    public class TrainerrrController : Controller
+    public class TrainerrrController : VerifyUserRoles
     {
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ProjectDbContext _context;
         private readonly IWebHostEnvironment _environment;
 
-        public TrainerrrController(ProjectDbContext context, IWebHostEnvironment environment)
+        public TrainerrrController(ProjectDbContext context, IWebHostEnvironment environment, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager) : base(userManager, signInManager)
         {
+            _userManager = userManager;
+            _roleManager = roleManager;
             _context = context;
             _environment = environment;
         }
+
+   
 
         // 辅助方法：根据课程类别ID获取课程类别名称
         private async Task<string> GetCourseCategoryName(int courseCategoryId)
@@ -58,8 +63,6 @@ namespace Project1.Controllers
         //課程
         public async Task<IActionResult> Index()
         {
-
-
             return View(await _context.Course.ToListAsync());
         }
 
@@ -454,12 +457,13 @@ namespace Project1.Controllers
         }
 
 
+
         // 取得當前登入的訓練師
        //哪個訓練師登入?
         private Trainer GetCurrentTrainer()
         {
             // 這裡示範一個假設的方法，根據你的身份驗證機制來取得當前登入的訓練師
-            var trainerId = 1 ; // 假設訓練師ID為
+            var trainerId = 6 ; // 假設訓練師ID為
             return _context.Trainer.FirstOrDefault(t => t.TrainerID == trainerId);
         }
 
