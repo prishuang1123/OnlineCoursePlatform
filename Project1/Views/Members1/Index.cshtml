@@ -33,18 +33,18 @@
             <th>
                 @Html.DisplayNameFor(model => model.IsTrainer)
             </th>
-            <th>
+@*             <th>
                 @Html.DisplayNameFor(model => model.IsAdministrator)
-            </th>
+            </th> *@
             <th>
                 @Html.DisplayNameFor(model => model.Photo)
             </th>
-            <th>
+@*             <th>
                 @Html.DisplayNameFor(model => model.Account)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Password)
-            </th>
+            </th> *@
             <th></th>
         </tr>
     </thead>
@@ -72,18 +72,18 @@
             <td>
                 @Html.DisplayFor(modelItem => item.IsTrainer)
             </td>
-            <td>
+@*             <td>
                 @Html.DisplayFor(modelItem => item.IsAdministrator)
-            </td>
+            </td> *@
             <td>
                 @Html.DisplayFor(modelItem => item.Photo)
             </td>
-            <td>
+@*             <td>
                 @Html.DisplayFor(modelItem => item.Account)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Password)
-            </td>
+            </td> *@
             <td>
                 <a asp-action="Edit" asp-route-id="@item.MemberID">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.MemberID">Details</a> |
