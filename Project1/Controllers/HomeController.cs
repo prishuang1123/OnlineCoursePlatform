@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Project1.Data;
@@ -7,22 +10,37 @@ using Project1.Models;
 using Project1.ViewModels;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 
 namespace Project1.Controllers
 {
-    public class HomeController : Controller
+    //繼承VerifyUserRoles
+    public class HomeController : VerifyUserRoles
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ProjectDbContext _ProjectDbContext;
 
-        public HomeController(ILogger<HomeController> logger, ProjectDbContext ProjectDbConext)
+        //繼承後注入建構函式
+        //關鍵字:base 呼叫父類的建構式
+        public HomeController(ILogger<HomeController> logger, ProjectDbContext ProjectDbConext, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager) : base(userManager, signInManager)
         {
             _logger = logger;
             _ProjectDbContext = ProjectDbConext;
+
         }
 
-        public IActionResult Index()
+        //GET Home/Index
+        public async Task<IActionResult> Index()
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId != null)
+            {
+                var Mem = _ProjectDbContext.Member.Where(m => m.AspID == userId).FirstOrDefault();
+                var MemID = Mem.MemberID;
+                var MemName = Mem.Name;
+                ViewBag.MemID = MemID;
+            }
+
             return View();
         }
 
@@ -51,7 +69,7 @@ namespace Project1.Controllers
         }
 
         public async Task<JsonResult> GetAverageRating()
-        { 
+        {
 
             var courses = (from c in _ProjectDbContext.Course
                            join cr in _ProjectDbContext.CourseRating on c.CourseID equals cr.CourseID into joined
@@ -76,7 +94,7 @@ namespace Project1.Controllers
         {
 
             var courses = (from c in _ProjectDbContext.Course
-                           
+
                            orderby c.Clicks descending
                            select new CourseRankViewModel
                            {
@@ -99,12 +117,16 @@ namespace Project1.Controllers
             var courses = _ProjectDbContext.Course.Where(t => t.CourseName.Contains(searchTerm)).ToList();
             var location = _ProjectDbContext.Location.FirstOrDefault(t => t.LocationName.Contains(searchTerm));
             var category = _ProjectDbContext.CourseCategory.FirstOrDefault(t => t.CourseCategoryName.Contains(searchTerm));
-            if(location != null)
+            var specialization = _ProjectDbContext.Specialization.ToList();
+            var petcategory = _ProjectDbContext.PetCategory.ToList();
+            var courseType = _ProjectDbContext.CourseType.ToList();
+            var courseCategory = _ProjectDbContext.CourseCategory.ToList();
+            if (location != null)
             {
                 var locationID = location.LocationID;
                 courses = _ProjectDbContext.Course.Where(t => t.LocationID == locationID).ToList();
             }
-            if(category != null)
+            if (category != null)
             {
                 var categoryID = category.CourseCategoryID;
                 courses = _ProjectDbContext.Course.Where(t => t.CourseCategoryID == categoryID).ToList();
@@ -113,10 +135,33 @@ namespace Project1.Controllers
             {
                 trainers = trainers,
                 courses = courses,
+                specializations = specialization,
+                petCategories = petcategory,
+                courseTypes = courseType,
+                courseCategories = courseCategory
             };
 
             // 返回部分视图，并将查询结果传递给视图
             return PartialView("_SearchResults", viewmodel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> add1Click([FromBody] ClickUpdateRequest request)
+        {
+            var course = await _ProjectDbContext.Course.FindAsync(request.CourseID);
+            if (course == null)
+            {
+                return NotFound();
+            }
+
+            course.Clicks += 1;
+            await _ProjectDbContext.SaveChangesAsync();
+
+            return Ok();
+        }
+        public class ClickUpdateRequest
+        {
+            public int CourseID { get; set; }
         }
 
         public IActionResult Privacy()
@@ -124,24 +169,25 @@ namespace Project1.Controllers
             return View();
         }
 
-        //�t�κ޲z���s��|�����յe��
+        //wayne:後端連接測試
         public IActionResult Member()
         {
             return View();
         }
-        //���U�e��
+
+        //wayne:登入畫面(已改採AspNetIdentity)
         public IActionResult Register()
         {
             return View();
         }
 
-        //�t�κ޲z���s��|��(�Y�a�s��e��)
-        public IActionResult MemberVueSPA()
+        //wayne:Member資料表(即時編輯)
+        [Authorize(Roles = "Admin")] //wayne:限制控制器供執行的對象=>管理員
+        public async Task<IActionResult> MemberVueSPA()
         {
+
             return View();
         }
-
-        
 
 
 

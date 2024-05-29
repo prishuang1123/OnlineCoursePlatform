@@ -1,0 +1,25 @@
+﻿@model IEnumerable<Project1.ViewModels.UserRolesViewModel>
+@* 所有用戶與角色 *@
+<h1>權限管理</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>使用者名稱</th>
+            <th>權限</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.UserName</td>
+                <td>@string.Join(", ", user.Roles)</td>
+                <td>
+                    <a asp-controller="RoleManagement" asp-action="Manage" asp-route-userId="@user.UserId" class="btn btn-primary">Manage Roles</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

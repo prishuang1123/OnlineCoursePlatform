@@ -27,16 +27,12 @@ namespace Project1.Models
 		[Required]
 		public bool? IsTrainer { get; set; } // 是否為訓練師，1/0
 
-		[Required]
-		public bool? IsAdministrator { get; set; } // 是否為系統管理員，1/0
 
 		public string? Photo { get; set; }
 
-		public string? Account { get; set; }
-
-		public string? Password { get; set; }
-
 		[Required]
 		public string Address { get; set; }
+
+		public string? AspID { get; set; }
     }
 }

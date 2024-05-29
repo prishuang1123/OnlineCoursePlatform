@@ -1,6 +1,10 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+
+@{
+    var MemID = ViewBag.MemID;
+}
 <head>
 
 
@@ -47,7 +51,7 @@
                         <div class="row single-slide align-items-center d-flex">
                             <div class="col-lg-5 col-md-6">
                                 <div class="banner-content">
-                                    <h1>Nike New <br>Collection!</h1>
+                                    <h1 style="color:#4D422C; font-family:monospace;">尋找適合的 <br>寵物訓練師</h1>
                                     <p>
                                         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
                                         incididunt ut labore et
@@ -61,7 +65,7 @@
                             </div>
                             <div class="col-lg-7">
                                 <div class="banner-img">
-                                    <img class="img-fluid" src="img/banner/banner-img.png" alt="">
+                                    <img class="img-fluid" src="~/img/banner/banner-img.png" alt="">
                                 </div>
                             </div>
                         </div>
@@ -107,7 +111,7 @@
                         <p class="mb-0">{{ item.description }}</p>
                         <p class="mb-0">課程售量: {{ item.totalQuantity }}</p>
                         <div class="prd-bottom mt-3">
-                            <a class="social-info text-white" asp-controller ="Trainerrr" asp-action="singleCourse">
+                            <a class="social-info text-white" asp-controller="Trainerrr" asp-action="singleCourse" v-on:click="actInfo(item.courseID)">
                                 <span class="lnr lnr-move"></span>
                                 <p class="hover-text">查看詳情</p>
                             </a>
@@ -127,7 +131,7 @@
                         <p class="mb-0">{{ item.description }}</p>
                         <p class="mb-0">課程評分: {{ item.courseAverageRating }}</p>
                         <div class="prd-bottom mt-3">
-                            <a :href="`/average/${item.id}`" class="social-info text-white">
+                            <a class="social-info text-white" asp-controller="Trainerrr" asp-action="singleCourse" v-on:click="actInfo(item.courseID)">
                                 <span class="lnr lnr-move"></span>
                                 <p class="hover-text">查看詳情</p>
                             </a>
@@ -147,7 +151,7 @@
                         <p class="mb-0">{{ item.description }}</p>
                         <p class="mb-0">課程點擊數: {{ item.clicks }}</p>
                         <div class="prd-bottom mt-3">
-                            <a :href="`/clicks/${item.id}`" class="social-info text-white">
+                            <a class="social-info text-white" asp-controller="Trainerrr" asp-action="singleCourse" v-on:click="actInfo(item.courseID)">
                                 <span class="lnr lnr-move"></span>
                                 <p class="hover-text">查看詳情</p>
                             </a>
@@ -190,11 +194,35 @@
                 }).catch(error => {
                     alert(error);
                 })
-            }
+            },
+            methods: {
+                actInfo: function (courseId) {
+                    axios.post('/Home/add1click', { courseID: courseId })
+                        .then(response => {
+                            if (response.status === 200) {
+                                console.log('Click count updated successfully.');
+                                // 这里可以进行进一步操作，例如导航到详情页
+                                window.location.href = `/Trainerrr/singleCourse?courseID=${courseID}`;
+                            } else {
+                                console.error('Failed to update click count.');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                    sessionStorage.setItem("ActID", courseId);
+
+                }
+            },
         }
 
         var app = Vue.createApp(VueApp).mount("#app");
 
+        // 获取从后端传递过来的用户ID
+        var MemID = '@MemID';
+        // 将用户ID保存到 sessionStorage
+        sessionStorage.setItem('MemID', MemID);
+        console.log("MemID saved to sessionStorage: " + MemID);
 
     </script>
 

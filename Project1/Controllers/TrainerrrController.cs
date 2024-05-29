@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Azure;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -19,13 +20,17 @@ using static Project1.Controllers.TrainerrrController;
 
 namespace Project1.Controllers
 {
-    public class TrainerrrController : Controller
+    public class TrainerrrController : VerifyUserRoles
     {
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ProjectDbContext _context;
         private readonly IWebHostEnvironment _environment;
 
-        public TrainerrrController(ProjectDbContext context, IWebHostEnvironment environment)
+        public TrainerrrController(ProjectDbContext context, IWebHostEnvironment environment, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager) : base(userManager, signInManager)
         {
+            _userManager = userManager;
+            _roleManager = roleManager;
             _context = context;
             _environment = environment;
         }
@@ -56,8 +61,6 @@ namespace Project1.Controllers
         //課程
         public async Task<IActionResult> Index()
         {
-
-
             return View(await _context.Course.ToListAsync());
         }
 
@@ -299,9 +302,9 @@ namespace Project1.Controllers
 
 
         //}
-        public async Task<FileResult> GetPicture(int id)
+        public async Task<FileResult> GetPicture(int? id)
         {
-            Course course = await _context.Course.FindAsync(id);
+            var course = _context.Course.Find(id);
             if (course == null || string.IsNullOrEmpty(course.ThumbnailUrl))
             {
                 // 返回預設圖片
@@ -452,12 +455,13 @@ namespace Project1.Controllers
         }
 
 
+
         // 取得當前登入的訓練師
        //哪個訓練師登入?
         private Trainer GetCurrentTrainer()
         {
             // 這裡示範一個假設的方法，根據你的身份驗證機制來取得當前登入的訓練師
-            var trainerId = 2 ; // 假設訓練師ID為
+            var trainerId = 6 ; // 假設訓練師ID為
             return _context.Trainer.FirstOrDefault(t => t.TrainerID == trainerId);
         }
 
@@ -487,6 +491,7 @@ namespace Project1.Controllers
             var blogs = await _context.Blog
                                       .Include(b => b.Trainer)
                                       .Where(b => b.TrainerID == currentTrainer.TrainerID)
+                                      .OrderByDescending(b => b.PostedDate)
                                       .ToListAsync();
 
             var blogPosts = blogs.Select(b => new
@@ -802,34 +807,64 @@ namespace Project1.Controllers
                 return BadRequest("Invalid data.");
             }
 
-            _context.ClassSchedule.Add(schedule);
+            // 獲取課程所屬的訓練師ID
+            var course = await _context.Course.FindAsync(schedule.CourseID);
+            if (course == null)
+            {
+                return BadRequest("此時段已經有排其課程了.");
+            }
+
+            var trainerId = course.TrainerID;
+
+            // 檢查訓練師在該時段是否已有其他課程
+            //var overlappingCourse = await _context.ClassSchedule
+            //    .Include(cs => cs.Course)
+            //    .Where(cs => cs.Course.TrainerID == trainerId && cs.Scheduler == schedule.Scheduler)
+            //    .FirstOrDefaultAsync();
+
+            //if (overlappingCourse != null)
+            //{
+            //    return Conflict(new { message = "此時段已經有排其他課程" });
+            //}
+
+            // 確保保存時包含時區信息
+            var scheduleWithTimezone = new ClassSchedule
+            {
+                CourseID = schedule.CourseID,
+                Scheduler = schedule.Scheduler.ToUniversalTime() // 保持 UTC 時間
+            };
+
+            _context.ClassSchedule.Add(scheduleWithTimezone);
             await _context.SaveChangesAsync();
 
             return Ok(new { message = "成功發佈課程" });
         }
 
-        // 取得已發布課程的時程
-        [HttpGet]
-        public async Task<IActionResult> GetPublishedSchedules([FromQuery] int courseID)
+
+        // 获取特定课程的已发布时间表
+        public async Task<JsonResult> GetPublishedSchedules(int courseID)
         {
             var schedules = await _context.ClassSchedule
                                           .Where(cs => cs.CourseID == courseID)
                                           .ToListAsync();
 
-            if (schedules == null || !schedules.Any())
+            var scheduleList = schedules.Select(s => new
             {
-                return NotFound(new { message = "找不到發佈的課程時程" });
-            }
+                s.SchedulerID,
+                s.CourseID,
+                Scheduler = s.Scheduler.ToLocalTime() // 將 UTC 時間轉換回當地時間以顯示
+            }).ToList();
 
-            return Ok(schedules);
+            return Json(scheduleList);
         }
+
 
 
         // 收回發佈
         [HttpPost]
-        public async Task<IActionResult> RetractPublish(int scheduleID)
+        public async Task<IActionResult> RetractPublish(int id)
         {
-            var classSchedule = await _context.ClassSchedule.FindAsync(scheduleID);
+            var classSchedule = await _context.ClassSchedule.FirstOrDefaultAsync(cs => cs.SchedulerID == id);
             if (classSchedule == null)
             {
                 return NotFound(new { message = "找不到該課程的發佈記錄" });
@@ -861,8 +896,8 @@ namespace Project1.Controllers
         {
             var trainers = (from t in _context.Trainer
                             join s in _context.Specialization on t.SpecializationID equals s.SpecializationID into joined
-                            from s in joined.DefaultIfEmpty() 
-                            let specializationName = s != null ? s.SpecializationName : null 
+                            from s in joined.DefaultIfEmpty()
+                            let specializationName = s != null ? s.SpecializationName : null
                             select new TrainerViewModel
                             {
                                 TrainerID = t.TrainerID,
@@ -870,10 +905,53 @@ namespace Project1.Controllers
                                 Experience = t.Experience,
                                 Photo = t.Photo,
                                 Qualifications = t.Qualifications,
-                                SpecializationName = specializationName 
-                            }).ToList(); 
+                                SpecializationName = specializationName
+                            }).ToList();
             return Json(trainers);
         }
+
+        //導向哪位訓練師的部落格
+        public async Task<IActionResult> TrainerBlog(int id)
+        {
+            var trainer = await _context.Trainer.FindAsync(id);
+            if (trainer == null)
+            {
+                return NotFound();
+            }
+
+            var blogs = await _context.Blog
+                .Where(b => b.TrainerID == id)
+                .OrderByDescending(b => b.PostedDate)  // 根據發文時間排序，最新的在上面
+                .ToListAsync();
+
+            var courses = await (from c in _context.Course
+                                 where c.TrainerID == id
+                                 join pc in _context.PetCategory on c.PetCategoryID equals pc.PetCategoryID
+                                 join ct in _context.CourseType on c.CourseTypeID equals ct.CourseTypeID
+                                 join l in _context.Location on c.LocationID equals l.LocationID
+                                 select new CourseViewModel
+                                 {
+                                     CourseID = c.CourseID,
+                                     CourseName = c.CourseName,
+                                     Description = c.Description,
+                                     PetCategoryName = pc.PetCategoryName,
+                                     CourseTypeName = ct.CourseTypeName,
+                                     LocationName = l.LocationName,
+                                     Price = c.Price,
+                                     ThumbnailUrl = c.ThumbnailUrl,
+                                     Scheduler = _context.ClassSchedule.Where(cs => cs.CourseID == c.CourseID).Select(cs => cs.Scheduler).ToList()
+                                 }).ToListAsync();
+
+            var viewModel = new TrainerBlogViewModel
+            {
+                Trainer = trainer,
+                Blogs = blogs,
+                Courses = courses
+            };
+
+            return View(viewModel);
+        }
+
 
         //---------------------------------------------------------------------------------------------------
 
@@ -883,13 +961,14 @@ namespace Project1.Controllers
             return View();
         }
 
-		public async Task<JsonResult> getSingleCourse()
+		public async Task<JsonResult> getSingleCourse(int? id)
 		{
-			var courseID = 12;
+			if (id == null)
+			{
+				return Json(new { error = "Invalid course ID" });
+			}
 
-            //var location = _context.Location;
-
-			var singleCourseQuery = (from c in _context.Course.Where(c => c.CourseID == courseID)
+			var singleCourseQuery = (from c in _context.Course.Where(c => c.CourseID == id)
                                      join loc in _context.Location on c.LocationID equals loc.LocationID
                                      join ct in _context.CourseType on c.CourseTypeID equals ct.CourseTypeID
                                      join pc in _context.PetCategory on c.PetCategoryID equals pc.PetCategoryID
@@ -912,32 +991,64 @@ namespace Project1.Controllers
 
 			var singleCourse = await singleCourseQuery.FirstOrDefaultAsync();
 
-			if (singleCourse == null)
-			{
-				return Json(new { error = "Course not found" });
-			}
+            if (singleCourse == null)
+            {
+                return Json(new { error = "Course not found" });
+            }
 
-			// Log the course details for debugging
-			Console.WriteLine($"Course: {singleCourse.CourseName}, Location: {singleCourse.LocationName}");
-
-			return Json(singleCourse);
+            return Json(singleCourse);
 		}
 
-		public async Task<JsonResult> getClassSechdule()
-		{
-			var courseID = 12;
+        public async Task<JsonResult> getClassSchedule(int? id)
+        {
+            if (id == null)
+            {
+                return Json(new { message = "Course ID cannot be null" });
+            }
 
-			var classSechdules = await _context.ClassSchedule
-											   .Where(c => c.CourseID == courseID && c.Scheduler >= DateTime.UtcNow)
-											   .ToListAsync();
+            var classSchedules = await _context.ClassSchedule
+                                               .Where(c => c.CourseID == id && c.Scheduler >= DateTime.UtcNow)
+                                               .ToListAsync();
 
-			return Json(classSechdules);
-		}
+            if (classSchedules == null || classSchedules.Count == 0)
+            {
+                return Json(new { message = "No schedules found for the given course ID" });
+            }
+
+            return Json(classSchedules);
+        }
+
+        //全部課程
+        public async Task<JsonResult> getCourses()
+        {
+            var CoursesQuery = (from c in _context.Course
+                                     join loc in _context.Location on c.LocationID equals loc.LocationID
+                                     join ct in _context.CourseType on c.CourseTypeID equals ct.CourseTypeID
+                                     join pc in _context.PetCategory on c.PetCategoryID equals pc.PetCategoryID
+                                     join cc in _context.CourseCategory on c.CourseCategoryID equals cc.CourseCategoryID
+                                     select new CourseViewModel
+                                     {
+                                         CourseID = c.CourseID,
+                                         CourseName = c.CourseName,
+                                         TrainerID = c.TrainerID,
+                                         PetCategoryName = pc.PetCategoryName,
+                                         CourseCategoryName = cc.CourseCategoryName,
+                                         CourseTypeName = ct.CourseTypeName,
+                                         Description = c.Description,
+                                         Price = c.Price,
+                                         LocationName = loc.LocationName,
+                                         MaxParticipants = c.MaxParticipants,
+                                         CreatedAt = c.CreatedAt,
+                                         ThumbnailUrl = c.ThumbnailUrl,
+                                     }).ToList();
+
+
+            return Json(CoursesQuery);
+        }
 
 
 
-
-	}
+    }
 }
    
 

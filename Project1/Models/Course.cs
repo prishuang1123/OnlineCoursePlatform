@@ -5,8 +5,9 @@ namespace Project1.Models
 {
     public class Course
     {
+       
 
-		[Key]
+        [Key]
 		public int CourseID { get; set; } // 課程編號，主鍵
 
 		[Required]
@@ -60,7 +61,7 @@ namespace Project1.Models
         [Display (Name = "封面圖")]
         public string? ThumbnailUrl { get; set; }
 
-    
+
 
     }
 }

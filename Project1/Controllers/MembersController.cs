@@ -9,6 +9,7 @@ using Project1.Data;
 using Project1.Models;
 using Project1.ViewModels;
 
+
 namespace Project1.Controllers
 {
     public class MembersController : Controller
@@ -20,31 +21,32 @@ namespace Project1.Controllers
             _context = context;
         }
 
-        //GET:顯示登入頁面
-        public IActionResult Login()
-        {
-            return View();
-        }
-        //Post:處理登入
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login([Bind("Name", "Email", "Phone")] LoginViewModel lvm)
-        {
+        ////GET:顯示登入頁面
+        //public IActionResult Login()
+        //{
+        //    return View();
+        //}
+        ////Post:處理登入
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Login([Bind("Account", "Password")] LoginViewModel lvm)
+        //{
             
-            if (ModelState.IsValid)
-            {
-                var member = await _context.Member
-                           .FirstOrDefaultAsync(m => m.Email == lvm.Email && m.Phone == lvm.Phone);
-                if (member != null)
-                {
-
-                    return RedirectToAction("Index","Home");
-                }
+        //    if (ModelState.IsValid)
+        //    {
+        //        var member = await _context.Member
+        //                   .FirstOrDefaultAsync(m => m.Account == lvm.Account && m.Password == lvm.Password);
+        //        if (member != null)
+        //        {
+        //            return RedirectToAction("Index","Home");
+        //        }
                 
-            }
-            ViewBag.failLogin = "帳密錯誤";
-            return View(lvm);
-        }
+        //    }
+        //    ViewBag.failLogin = "帳密錯誤";
+        //    return View(lvm);
+        //}
+
+        
 
         // GET: Members
         public async Task<IActionResult> Index()

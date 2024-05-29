@@ -10,6 +10,7 @@ using Project1.DTO;
 using Project1.Models;
 
 namespace Project1.Controllers
+    //改造MVC控制器
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -85,7 +86,7 @@ namespace Project1.Controllers
             Memb.Birthday = memberDTO.Birthday;
             Memb.RegistrationDate = memberDTO.RegistrationDate;
             Memb.IsTrainer = memberDTO.IsTrainer;
-            Memb.IsAdministrator = memberDTO.IsAdministrator;
+            //Memb.IsAdministrator = memberDTO.IsAdministrator;
             _context.Entry(Memb).State = EntityState.Modified;
 
             try
@@ -115,12 +116,12 @@ namespace Project1.Controllers
                 RegistrationDate = memDTO.RegistrationDate,
                 ResidenceArea = memDTO.ResidenceArea,
                 IsTrainer = memDTO.IsTrainer,
-                IsAdministrator = memDTO.IsAdministrator
+                //IsAdministrator = memDTO.IsAdministrator
             };
             _context.Member.Add(member);
             await _context.SaveChangesAsync();
 
-            return $"員工編號:{member.MemberID}";
+            return $"會員編號:{member.MemberID}";
         }
 
 
@@ -160,7 +161,7 @@ namespace Project1.Controllers
                         RegistrationDate = (DateTime)meb.RegistrationDate,
                         ResidenceArea = meb.ResidenceArea,
                         IsTrainer = (bool)meb.IsTrainer,
-                        IsAdministrator = (bool)meb.IsAdministrator
+                        //IsAdministrator = (bool)meb.IsAdministrator
                     });
                     
         }

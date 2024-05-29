@@ -1,6 +1,6 @@
 ﻿@section Styles
 {
-    @* 樣式進不來 *@
+   
     <style>
         thead {
             background-color: maroon;
@@ -13,11 +13,11 @@
             cursor: not-allowed;
         }
 
-        /* select.form-select {
+        select.form-select {
             -webkit-appearance: none !important;
             -moz-appearance: none !important;
             appearance: none !important;
-        } */
+        }
 
         
     </style>
@@ -168,7 +168,7 @@
                     <div class="mb-3">
                         <label class="form-label">居住地</label>
                         @* <input type="text" v-model="residenceArea"></input> *@
-                        <select v-model="residenceArea" class="form-select">
+                        <select v-model="residenceArea" class="form-select" id="CitySelect">
                             <option value="">請選擇縣市</option>
                             <option v-for="city in cities" :value="city">{{ city }}</option>
                         </select>
