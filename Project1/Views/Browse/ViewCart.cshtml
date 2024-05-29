@@ -286,6 +286,9 @@
             mounted() {
                 const GetClassScheduleUrl = `${baseUrl}/Browse/GetClassSchedule`;
                 axios.get(GetClassScheduleUrl).then(response => {
+                    // Clear the existing classSchedule before populating it with new data
+                    this.classSchedule = [];
+
                     this.classSchedule = response.data;
                     console.log(JSON.stringify(this.classSchedule));
                 }).catch(error => {

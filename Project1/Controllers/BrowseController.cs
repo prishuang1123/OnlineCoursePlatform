@@ -295,32 +295,32 @@ namespace Project1.Controllers
             var memberId = member.MemberID;
             memberShoppingCart = _db.Cart.Where(u => u.MemberID == memberId).ToList(); //member到時候再改
             var classSchedule = memberShoppingCart
-            .GroupBy(c => c.CourseID)
+            .GroupBy(c => new { c.MemberID, c.CourseID })
             .Select(cs => new
             {
                 CourseID = cs.Key,
                 Quantity = cs.Sum(c => c.Quantity), // Total quantity for the course
                 SelectedScheduleId = (from cart in _db.Cart
-                                      where cart.CourseID == cs.Key
+                                      where cart.CourseID == cs.Key.CourseID
                                       join schedule in _db.ClassSchedule
                                       on cart.SchedulerID equals schedule.SchedulerID
                                       select $"{cart.CourseID}-{cart.SchedulerID}").ToList(),
 
 
                 SelectedScheduleDate = (from cart in _db.Cart
-                                        where cart.CourseID == cs.Key
+                                        where cart.CourseID == cs.Key.CourseID
                                         join schedule in _db.ClassSchedule
                                         on cart.SchedulerID equals schedule.SchedulerID
                                         select new { cart.SchedulerID, schedule.Scheduler })
                             .ToDictionary(x => x.SchedulerID, x => x.Scheduler),
 
                 AllScheduleId = _db.ClassSchedule
-                .Where(obj => obj.CourseID == cs.Key)
+                .Where(obj => obj.CourseID == cs.Key.CourseID)
                 .Select(obj => obj.SchedulerID)
                 .Distinct()
                 .ToList(),
                 AllScheduleDate = (from schedule in _db.ClassSchedule
-                                   where schedule.CourseID == cs.Key
+                                   where schedule.CourseID == cs.Key.CourseID
                                    select new { schedule.SchedulerID, schedule.Scheduler })
                             .ToDictionary(x => x.SchedulerID, x => x.Scheduler),
                 //AllScheduleDate = _db.ClassSchedule
