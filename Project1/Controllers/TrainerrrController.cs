@@ -1011,7 +1011,7 @@ namespace Project1.Controllers
             var classSchedules = await _context.ClassSchedule
                                                .Where(c => c.CourseID == id && c.Scheduler >= DateTime.UtcNow)
                                                .ToListAsync();
-
+            
             if (classSchedules == null || classSchedules.Count == 0)
             {
                 return Json(new { message = "No schedules found for the given course ID" });
