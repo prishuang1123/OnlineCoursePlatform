@@ -4,6 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
+
 <div class="container">
     <!-- 搜尋結果顯示區域 -->
     <div id="searchResult">
@@ -45,7 +46,7 @@
                 }
             },
             mounted() {
-                var url1 = "https://localhost:7177/Trainerrr/getallCourses"
+                var url1 = "/Trainerrr/getallCourses"
                 axios.get(url1).then(response => {
                     this.courses = response.data;
                 }).catch(error => {

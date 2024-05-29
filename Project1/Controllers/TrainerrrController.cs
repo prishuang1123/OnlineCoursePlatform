@@ -26,13 +26,15 @@ namespace Project1.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ProjectDbContext _context;
         private readonly IWebHostEnvironment _environment;
+        private readonly IConfiguration _Configuration;
 
-        public TrainerrrController(ProjectDbContext context, IWebHostEnvironment environment, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager) : base(userManager, signInManager)
+        public TrainerrrController(ProjectDbContext context, IWebHostEnvironment environment, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration) : base(userManager, signInManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _context = context;
             _environment = environment;
+            _Configuration = configuration;
         }
 
         // 辅助方法：根据课程类别ID获取课程类别名称
@@ -1018,6 +1020,7 @@ namespace Project1.Controllers
             return Json(classSchedules);
         }
 
+        //===================================================================================================
         //全部課程
         public async Task<JsonResult> getallCourses()
         {

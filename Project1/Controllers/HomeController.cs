@@ -19,14 +19,15 @@ namespace Project1.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ProjectDbContext _ProjectDbContext;
+        private readonly IConfiguration _Configuration;
 
         //繼承後注入建構函式
         //關鍵字:base 呼叫父類的建構式
-        public HomeController(ILogger<HomeController> logger, ProjectDbContext ProjectDbConext, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager) : base(userManager, signInManager)
+        public HomeController(ILogger<HomeController> logger, ProjectDbContext ProjectDbConext, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IConfiguration configuration) : base(userManager, signInManager)
         {
             _logger = logger;
             _ProjectDbContext = ProjectDbConext;
-
+            _Configuration = configuration;
         }
 
         //GET Home/Index
@@ -40,6 +41,7 @@ namespace Project1.Controllers
                 var MemName = Mem.Name;
                 ViewBag.MemID = MemID;
             }
+            ViewBag.baseUrl = _Configuration["AppSettings: baseUrl"];
 
             return View();
         }
