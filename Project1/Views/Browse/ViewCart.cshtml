@@ -64,13 +64,6 @@
                                            
                                         </div> *@
                                         <div v-for="(course, courseIndex) in classSchedule" :key="courseIndex">
-                                           @*  <div class="switch-wrap d-flex justify-content-between">
-                                                <p>01. Sample Checkbox</p>
-                                                <div class="primary-checkbox">
-                                                    <input type="checkbox" id="123">
-                                                    <label for="123"></label>
-                                                </div>
-                                            </div> *@
                                             <div v-if="course.courseID == @(cartItemGroup.Key)" class="switch-wrap d-flex justify-content-between">
                                                 <div v-for="(scheduleId, scheduleIndex) in course.allScheduleId" :key="scheduleIndex">
                                                     <p>{{ course.allScheduleDate[scheduleId] }}</p>
@@ -225,62 +218,7 @@
                 }
             },
             methods: {
-                // isScheduleSelected: function (scheduleId, selectedScheduleId) {
-                //     if (selectedScheduleId.includes(scheduleId)){
-                //         return true
-                //     }
-                // },
-                // updateDatabase: function (courseId, scheduleId, isSelected) {
-                //     const updateUrl = `${baseUrl}/Browse/UpdateCartItem`;
-                //     console.log(courseId, scheduleId, isSelected);
-                //     console.log(typeof (courseId), typeof (scheduleId), typeof (isSelected));
-                //     // Make an AJAX request to update the database
-                //     axios.post(updateUrl, {
-                //         courseId: courseId,
-                //         scheduleId: scheduleId,
-                //         isSelected: isSelected
-                //     })
-                //         .then(response => {
-                //             console.log(JSON.stringify(response.data));
-                //             // Update the checkbox state based on the response
-                //             const updatedCourse = this.classSchedule.find(course => course.courseID === courseId);
-                            
-                //             if (updatedCourse) {
-                //                 if (isSelected) {
-                //                     updatedCourse.selectedScheduleId.push(scheduleId);
-                //                 } else {
-                //                     const index = updatedCourse.selectedScheduleId.indexOf(scheduleId);
-                //                     if (index !== -1) {
-                //                         updatedCourse.selectedScheduleId.splice(index, 1);
-                //                     }
-                //                 }
-                //             }
-                //         })
-                //         .catch(error => {
-                //             // Handle error
-                //             console.error("Error updating database:", error);
-                //         });
-                // },
-                // updateDatabase: function (courseId, scheduleId, isSelected) {
-                //     // Make an AJAX request to update the database
-                //     const updateUrl = `/Browse/UpdateCartItem`; // Update the URL according to your backend API
-                //     axios.post(updateUrl, {                        
-                //         courseId: courseId,
-                //         scheduleId: scheduleId,
-                //         isSelected: isSelected
-                //     })
-                //     .then(response => {
-                //         // Handle successful response, if needed
-                //         console.log("Database updated successfully:", response.data);
-                //     })
-                //     .catch(error => {
-                //         // Handle error
-                //         console.error("Error updating database:", error);
-                //     });
-                // },
-                // GetClassScheduleUrl: function () {
-                    
-                // },
+
                 
             },
             mounted() {

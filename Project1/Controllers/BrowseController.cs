@@ -52,18 +52,12 @@ namespace Project1.Controllers
         // GET: Browse/Cart/5
         public async Task<IActionResult> ViewCart() //recieve memberID
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var MemID = 0;
-            if (userId != null)
-            {
-                var Mem = _db.Member.Where(m => m.AspID == userId).FirstOrDefault();
-                MemID = Mem.MemberID;
-            }
+            var memberId = getMemberId(User);
             //if (id==null || id == 0)
             //{
             //	return RedirectToAction ("Login", "Members");
             //}
-            memberId = MemID;
+
             //Course course= await _db.Course.Where(u=>u.CourseID==id).FirstOrDefaultAsync();
             //select the member's cartItems to show all products added to the cart
 
@@ -293,37 +287,37 @@ namespace Project1.Controllers
         [HttpGet]
         public JsonResult GetClassSchedule()
         {
-            var userId = _userManager.GetUserId(User);
-            var member = _db.Member.Where(m => m.AspID == userId).FirstOrDefault();
-            var memberId = member.MemberID;
+            var memberId = getMemberId(User);
             memberShoppingCart = _db.Cart.Where(u => u.MemberID == memberId).ToList(); //member到時候再改
             var classSchedule = memberShoppingCart
-            .GroupBy(c => new { c.MemberID, c.CourseID })
+            .GroupBy(c => c.CourseID)
             .Select(cs => new
             {
                 CourseID = cs.Key,
                 Quantity = cs.Sum(c => c.Quantity), // Total quantity for the course
                 SelectedScheduleId = (from cart in _db.Cart
-                                      where cart.CourseID == cs.Key.CourseID
+                                      where (cart.CourseID == cs.Key &
+                                            cart.MemberID == memberId)
                                       join schedule in _db.ClassSchedule
                                       on cart.SchedulerID equals schedule.SchedulerID
                                       select $"{cart.CourseID}-{cart.SchedulerID}").ToList(),
 
 
                 SelectedScheduleDate = (from cart in _db.Cart
-                                        where cart.CourseID == cs.Key.CourseID
+                                        where (cart.CourseID == cs.Key &
+                                            cart.MemberID == memberId)
                                         join schedule in _db.ClassSchedule
                                         on cart.SchedulerID equals schedule.SchedulerID
                                         select new { cart.SchedulerID, schedule.Scheduler })
                             .ToDictionary(x => x.SchedulerID, x => x.Scheduler),
 
                 AllScheduleId = _db.ClassSchedule
-                .Where(obj => obj.CourseID == cs.Key.CourseID)
+                .Where(obj => obj.CourseID == cs.Key)
                 .Select(obj => obj.SchedulerID)
                 .Distinct()
                 .ToList(),
                 AllScheduleDate = (from schedule in _db.ClassSchedule
-                                   where schedule.CourseID == cs.Key.CourseID
+                                   where schedule.CourseID == cs.Key
                                    select new { schedule.SchedulerID, schedule.Scheduler })
                             .ToDictionary(x => x.SchedulerID, x => x.Scheduler),
                 //AllScheduleDate = _db.ClassSchedule
@@ -369,12 +363,19 @@ namespace Project1.Controllers
             //return RedirectToAction("ViewCart", "Browse", new { id = 1 });
             return Json(new { success = true, memberId = memberId });
         }
-
+        private int getMemberId(ClaimsPrincipal user)
+        {
+            var userId = _userManager.GetUserId(User);
+            var member = _db.Member.Where(m => m.AspID == userId).FirstOrDefault();
+            var memberId = member.MemberID;
+            return memberId;
+        }
         [HttpGet]
         public async Task<IActionResult> UpdateSubtotal()
         {
+            var memberId = getMemberId(User);
             decimal subtotal = 0;
-            memberShoppingCart = await _db.Cart.Where(u => u.MemberID == 1).ToListAsync();
+            memberShoppingCart = await _db.Cart.Where(u => u.MemberID == memberId).ToListAsync();
             IEnumerable<int> courseIds = memberShoppingCart.Select(u => u.CourseID).ToList();
             List<Course> courseObj = await _db.Course.Where(c => courseIds.Contains(c.CourseID)).ToListAsync();
             foreach (var courseId in courseIds)
@@ -446,8 +447,9 @@ namespace Project1.Controllers
         {
             try
             {
-				
-				int memberId = _db.Cart.Where(obj => obj.CourseID == courseId).FirstOrDefault().MemberID;
+                var memberId = getMemberId(User);
+
+
 
                 if (memberId != null)
                 {
