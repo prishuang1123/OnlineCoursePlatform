@@ -48,3 +48,24 @@
         }
     </div>
 </div>
+@section Scripts{
+    <script>
+        var vueApp = {
+            data() {
+                return {
+                    courses:[],
+                }
+            },
+            mounted() {
+                var url1 = "https://localhost:7177/Trainerrr/GetCourses"
+                axios.get(url1).then(response => {
+                    this.courses = response.data;
+                }).catch(error => {
+                    alert(error);
+                });
+            }
+        }
+
+        var app = 
+    </script>
+}

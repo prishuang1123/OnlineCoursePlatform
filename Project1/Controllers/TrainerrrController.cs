@@ -35,8 +35,6 @@ namespace Project1.Controllers
             _environment = environment;
         }
 
-   
-
         // 辅助方法：根据课程类别ID获取课程类别名称
         private async Task<string> GetCourseCategoryName(int courseCategoryId)
         {
@@ -306,7 +304,7 @@ namespace Project1.Controllers
         //}
         public async Task<FileResult> GetPicture(int? id)
         {
-            var course = await _context.Course.FindAsync(id);
+            var course = _context.Course.Find(id);
             if (course == null || string.IsNullOrEmpty(course.ThumbnailUrl))
             {
                 // 返回預設圖片
@@ -998,9 +996,6 @@ namespace Project1.Controllers
                 return Json(new { error = "Course not found" });
             }
 
-            // Log the course details for debugging
-            //Console.WriteLine($"Course: {singleCourse.CourseName}, Location: {singleCourse.LocationName}");
-
             return Json(singleCourse);
 		}
 
@@ -1023,7 +1018,33 @@ namespace Project1.Controllers
             return Json(classSchedules);
         }
 
+        //全部課程
+        public async Task<JsonResult> getCourses()
+        {
+            var CoursesQuery = (from c in _context.Course
+                                     join loc in _context.Location on c.LocationID equals loc.LocationID
+                                     join ct in _context.CourseType on c.CourseTypeID equals ct.CourseTypeID
+                                     join pc in _context.PetCategory on c.PetCategoryID equals pc.PetCategoryID
+                                     join cc in _context.CourseCategory on c.CourseCategoryID equals cc.CourseCategoryID
+                                     select new CourseViewModel
+                                     {
+                                         CourseID = c.CourseID,
+                                         CourseName = c.CourseName,
+                                         TrainerID = c.TrainerID,
+                                         PetCategoryName = pc.PetCategoryName,
+                                         CourseCategoryName = cc.CourseCategoryName,
+                                         CourseTypeName = ct.CourseTypeName,
+                                         Description = c.Description,
+                                         Price = c.Price,
+                                         LocationName = loc.LocationName,
+                                         MaxParticipants = c.MaxParticipants,
+                                         CreatedAt = c.CreatedAt,
+                                         ThumbnailUrl = c.ThumbnailUrl,
+                                     }).ToList();
 
+
+            return Json(CoursesQuery);
+        }
 
 
 

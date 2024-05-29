@@ -15,7 +15,9 @@
 
 		public string? Description { get; set; }
 
-		public decimal Price { get; set; }
+        public string? ApprovalStatus { get; set; }
+
+        public decimal Price { get; set; }
 
 		public string LocationName { get; set; }
 

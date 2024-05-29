@@ -106,7 +106,7 @@
 						</ul>
 						<ul class="nav navbar-nav navbar-right">
                             <li class="nav-item">
-                                <a asp-area="" asp-controller="Browse" asp-action="ViewCart" asp-route-id="1" class="cart">
+                                <a asp-area="" asp-controller="Browse" asp-action="ViewCart">
                                     <span class="ti-bag"></span>
                                 </a>
                             </li>
@@ -346,6 +346,12 @@
                 const courseId = btn.getAttribute("btn-id");
                 sessionStorage.setItem("ActID", courseId);
             });
+
+            // $(document).on('click', '.cart', function (event) {
+            //     const btn = event.target;
+            //     const memID = sessionStorage.getItem("MemID");
+            //     setAttribute("memID", memID);
+            // });
         });
 
 
