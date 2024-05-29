@@ -16,12 +16,22 @@ namespace Project1.Controllers
             _db = db;
 
         }
-        public async Task<IActionResult> Index(int? id, string? discountCode) //memberId, discountObj
+        public async Task<IActionResult> Index(int? id) //memberId
         {
             DbSet<Course> course = _db.Course;
             IEnumerable<ShoppingCart>memberShoppingCart = await _db.Cart.Where(u => u.MemberID == id).ToListAsync();
             Member memberObj = await _db.Member.Where(obj=>obj.MemberID==id).FirstOrDefaultAsync();
-            Discount discountObj = await _db.Discount.Where(obj=>obj.DiscountName==discountCode).FirstOrDefaultAsync();
+            Discount discountObj;
+            if (TempData["DiscountCode"] != null)
+            {
+                discountObj = await _db.Discount.Where(obj => obj.DiscountName == TempData["DiscountCode"]).FirstOrDefaultAsync();
+                TempData.Remove("DiscountCode");
+            }
+            else
+            {
+                discountObj = null;
+            }
+           
             IEnumerable<Location> locationList = await _db.Location.ToListAsync();
             var courseObjList = memberShoppingCart
                 .GroupBy(c => c.CourseID)
@@ -56,7 +66,7 @@ namespace Project1.Controllers
             CheckoutVM checkoutVM = new CheckoutVM()
             {
                 Member = memberObj,
-                Discount = discountObj,
+                Discountobj = discountObj,
                 Location = locationList,
                 cartItemList= memberShoppingCart,
                 courseObjList= courseObjList,
@@ -64,6 +74,13 @@ namespace Project1.Controllers
                 subtotal=initSubtotal,
             };
             return View(checkoutVM);
+        }
+        [HttpPost]
+        public IActionResult StoreDiscountCode(string discountCode)
+        {
+            // Store discountCode in TempData
+            TempData["DiscountCode"] = discountCode;
+            return Json(new { success = true }); // Optionally, return a success response
         }
     }
 }

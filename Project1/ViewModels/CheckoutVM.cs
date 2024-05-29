@@ -6,7 +6,7 @@ namespace Project1.ViewModels
     public class CheckoutVM
     {
         public Member Member { get; set; }
-        public Discount Discount { get; set; }
+        public Discount Discountobj { get; set; }
         public DbSet<Course> course { get; set; }
         public Order Order { get; set; }
         public OrderDetail OrderDetail { get; set; }
