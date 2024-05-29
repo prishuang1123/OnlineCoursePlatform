@@ -81,7 +81,7 @@ namespace Project1.Controllers
             return PartialView("_CourseListPartial", courses);
         }
 
-   
+
 
 
         // GET: Trainerrr/Details/5
@@ -457,11 +457,11 @@ namespace Project1.Controllers
 
 
         // 取得當前登入的訓練師
-       //哪個訓練師登入?
+        //哪個訓練師登入?
         private Trainer GetCurrentTrainer()
         {
             // 這裡示範一個假設的方法，根據你的身份驗證機制來取得當前登入的訓練師
-            var trainerId = 6 ; // 假設訓練師ID為
+            var trainerId = 6; // 假設訓練師ID為
             return _context.Trainer.FirstOrDefault(t => t.TrainerID == trainerId);
         }
 
@@ -961,35 +961,35 @@ namespace Project1.Controllers
             return View();
         }
 
-		public async Task<JsonResult> getSingleCourse(int? id)
-		{
-			if (id == null)
-			{
-				return Json(new { error = "Invalid course ID" });
-			}
+        public async Task<JsonResult> getSingleCourse(int? id)
+        {
+            if (id == null)
+            {
+                return Json(new { error = "Invalid course ID" });
+            }
 
-			var singleCourseQuery = (from c in _context.Course.Where(c => c.CourseID == id)
+            var singleCourseQuery = (from c in _context.Course.Where(c => c.CourseID == id)
                                      join loc in _context.Location on c.LocationID equals loc.LocationID
                                      join ct in _context.CourseType on c.CourseTypeID equals ct.CourseTypeID
                                      join pc in _context.PetCategory on c.PetCategoryID equals pc.PetCategoryID
                                      join cc in _context.CourseCategory on c.CourseCategoryID equals cc.CourseCategoryID
                                      select new CourseViewModel
-									 {
-										 CourseID = c.CourseID,
-										 CourseName = c.CourseName,
-										 TrainerID = c.TrainerID,
+                                     {
+                                         CourseID = c.CourseID,
+                                         CourseName = c.CourseName,
+                                         TrainerID = c.TrainerID,
                                          PetCategoryName = pc.PetCategoryName,
                                          CourseCategoryName = cc.CourseCategoryName,
                                          CourseTypeName = ct.CourseTypeName,
                                          Description = c.Description,
-										 Price = c.Price,
+                                         Price = c.Price,
                                          LocationName = loc.LocationName,
                                          MaxParticipants = c.MaxParticipants,
-										 CreatedAt = c.CreatedAt,
-										 ThumbnailUrl = c.ThumbnailUrl,
-									 });
+                                         CreatedAt = c.CreatedAt,
+                                         ThumbnailUrl = c.ThumbnailUrl,
+                                     });
 
-			var singleCourse = await singleCourseQuery.FirstOrDefaultAsync();
+            var singleCourse = await singleCourseQuery.FirstOrDefaultAsync();
 
             if (singleCourse == null)
             {
@@ -997,7 +997,7 @@ namespace Project1.Controllers
             }
 
             return Json(singleCourse);
-		}
+        }
 
         public async Task<JsonResult> getClassSchedule(int? id)
         {
@@ -1019,36 +1019,58 @@ namespace Project1.Controllers
         }
 
         //全部課程
-        public async Task<JsonResult> getCourses()
+        public async Task<JsonResult> getallCourses()
         {
             var CoursesQuery = (from c in _context.Course
-                                     join loc in _context.Location on c.LocationID equals loc.LocationID
-                                     join ct in _context.CourseType on c.CourseTypeID equals ct.CourseTypeID
-                                     join pc in _context.PetCategory on c.PetCategoryID equals pc.PetCategoryID
-                                     join cc in _context.CourseCategory on c.CourseCategoryID equals cc.CourseCategoryID
-                                     select new CourseViewModel
-                                     {
-                                         CourseID = c.CourseID,
-                                         CourseName = c.CourseName,
-                                         TrainerID = c.TrainerID,
-                                         PetCategoryName = pc.PetCategoryName,
-                                         CourseCategoryName = cc.CourseCategoryName,
-                                         CourseTypeName = ct.CourseTypeName,
-                                         Description = c.Description,
-                                         Price = c.Price,
-                                         LocationName = loc.LocationName,
-                                         MaxParticipants = c.MaxParticipants,
-                                         CreatedAt = c.CreatedAt,
-                                         ThumbnailUrl = c.ThumbnailUrl,
-                                     }).ToList();
+                                join loc in _context.Location on c.LocationID equals loc.LocationID
+                                join ct in _context.CourseType on c.CourseTypeID equals ct.CourseTypeID
+                                join pc in _context.PetCategory on c.PetCategoryID equals pc.PetCategoryID
+                                join cc in _context.CourseCategory on c.CourseCategoryID equals cc.CourseCategoryID
+                                select new CourseViewModel
+                                {
+                                    CourseID = c.CourseID,
+                                    CourseName = c.CourseName,
+                                    TrainerID = c.TrainerID,
+                                    PetCategoryName = pc.PetCategoryName,
+                                    CourseCategoryName = cc.CourseCategoryName,
+                                    CourseTypeName = ct.CourseTypeName,
+                                    Description = c.Description,
+                                    Price = c.Price,
+                                    LocationName = loc.LocationName,
+                                    MaxParticipants = c.MaxParticipants,
+                                    CreatedAt = c.CreatedAt,
+                                    ThumbnailUrl = c.ThumbnailUrl,
+                                    ApprovalStatus = c.ApprovalStatus,
+                                }).ToList();
 
 
             return Json(CoursesQuery);
+        }
+
+        public class UpdateApprovalStatusRequest
+        {
+            public int Id { get; set; }
+            public string ApprovalStatus { get; set; }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateApprovalStatus([FromBody] UpdateApprovalStatusRequest request)
+        {
+            var course = await _context.Course.FindAsync(request.Id);
+            if (course == null)
+            {
+                return NotFound();
+            }
+
+            course.ApprovalStatus = request.ApprovalStatus;
+            await _context.SaveChangesAsync();
+
+            return Ok();
         }
 
 
 
     }
 }
-   
+
 
