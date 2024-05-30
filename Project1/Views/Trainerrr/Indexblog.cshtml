@@ -375,12 +375,24 @@
            /*  cursor: not-allowed; */
         }
 
+        .tooltip {
+            position: relative;
+            background-color: white;
+            border: 1px solid black;
+            padding: 10px;
+            z-index: 1000;
+            display: none;
+            color:black;
+        }
+
+
+
     </style>
 }
 
 <div id="app" class="container mt-5">
     <div class="row">
-        <div class="col-md-3 text-center">
+        <div class="col-md-4 text-center mb-3">
             <img :src="trainerPhoto" alt="訓練師照片" class="img-thumbnail">
             <h4>{{ trainerName }}</h4>
 
@@ -410,9 +422,11 @@
                     </div>
                 </div>
             </div>
+            <div id='calendar' class="mt-3"></div>
+                <div id="tooltip" class="tooltip"></div>
         </div>
 
-        <div class="col-md-9">
+        <div class="col-md-8">
             <div class="post-container">
                 <div class="form-group">
                     <div class="card mb-3 post-box">
@@ -1354,6 +1368,50 @@
         };
 
         var app = Vue.createApp(VueApp).mount("#app");
+
+        const cid = sessionStorage.getItem("ActID");
+        const mid = sessionStorage.getItem("MemID");
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+            var tooltip = document.getElementById('tooltip');
+
+            axios.get(`/Trainerrr/getTrainerSchedule?id=${mid}`).then(response => {
+                const schedules = response.data;
+                const events = schedules.map(schedule => {
+                    return {
+                        allDay: true,
+                        start: schedule.scheduler,
+                        title: "剩" + schedule.enrollmentCount + "名",
+                        display: "Background",
+                        extendedProps: {
+                            courseName: schedule.courseName
+                        }
+                    };
+                });
+
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                    initialView: 'dayGridMonth',
+                    events: events,
+                    eventMouseEnter: function (info) {
+                        console.log('Mouse enter event:', info.event); // 确认事件数据
+                        console.log('Event extendedProps:', info.event.extendedProps);
+                        console.log('Event title:', info.event.title);
+                        tooltip.html = `<strong>Course Name:</strong> ${info.event.extendedProps.courseName}<br><strong>Enrollment Count:</strong> ${info.event.title}`;
+                        tooltip.style.display = 'block';
+                        tooltip.style.left = info.jsEvent.pageX + 'px';
+                        tooltip.style.top = info.jsEvent.pageY + 'px';
+                    },
+                    eventMouseLeave: function (info) {
+                        tooltip.style.display = 'none';
+                    }
+                });
+                calendar.render();
+            }).catch(error => {
+                console.error('API error:', error.response ? error.response.data : error.message);
+                alert(error.response ? error.response.data.message : error.message);
+            });
+        });
     </script>
 }
 
