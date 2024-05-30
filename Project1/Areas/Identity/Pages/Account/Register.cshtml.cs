@@ -99,9 +99,9 @@ namespace Project1.Areas.Identity.Pages.Account
             [Compare("Password", ErrorMessage = "密碼不一致")]
             public string ConfirmPassword { get; set; }
 
-            [Required(ErrorMessage ="使用者名稱為必須填欄位")]
-            [Display(Name = "使用者名稱")]
-            public string UserName { get; set; }
+            //[Required(ErrorMessage ="使用者名稱為必須填欄位")]
+            //[Display(Name = "使用者名稱")]
+            //public string UserName { get; set; }
         }
 
 
@@ -119,7 +119,7 @@ namespace Project1.Areas.Identity.Pages.Account
             {
                 var user = CreateUser();
 
-                await _userStore.SetUserNameAsync((ProjectUser)user, Input.UserName, CancellationToken.None);
+                await _userStore.SetUserNameAsync((ProjectUser)user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync((ProjectUser)user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync((ProjectUser)user, Input.Password);
 
@@ -150,10 +150,20 @@ namespace Project1.Areas.Identity.Pages.Account
                         return LocalRedirect(returnUrl);
                     }
                 }
-                foreach (var error in result.Errors)
+                //wayne:只保留電子郵件錯誤的訊息
+                var emailError = result.Errors.FirstOrDefault(e => e.Code == "DuplicateEmail");
+                if (emailError != null)
                 {
-                    ModelState.AddModelError(string.Empty, error.Description);
+                    ModelState.AddModelError(string.Empty, emailError.Description);
                 }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
+                    
             }
 
             // If we got this far, something failed, redisplay form
@@ -168,8 +178,8 @@ namespace Project1.Areas.Identity.Pages.Account
             }
             catch
             {
-                throw new InvalidOperationException($"Can't create an instance of '{nameof(IdentityUser)}'. " +
-                    $"Ensure that '{nameof(IdentityUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
+                throw new InvalidOperationException($"Can't create an instance of '{nameof(ProjectUser)}'. " +
+                    $"Ensure that '{nameof(ProjectUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
                     $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
             }
         }

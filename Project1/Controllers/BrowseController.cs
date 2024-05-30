@@ -17,7 +17,7 @@ namespace Project1.Controllers
         private int? memberId;
         private IEnumerable<ShoppingCart> memberShoppingCart;
 
-        public BrowseController(ProjectDbContext db, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager) : base(userManager, signInManager)
+        public BrowseController(ProjectDbContext db, UserManager<ProjectUser> userManager, SignInManager<ProjectUser> signInManager) : base(userManager, signInManager)
         {
             _db = db;
             //trainerDbset = _db.Set<Trainer>();

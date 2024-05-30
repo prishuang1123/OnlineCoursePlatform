@@ -20,22 +20,11 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 //wayne:註冊 客製化註冊時的錯誤訊息
 builder.Services.AddScoped<IdentityErrorDescriber, CustomIdentityErrorDescriber>();
 
-<<<<<<< HEAD
-//builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-//    .AddRoles<IdentityRole>() //wayne:建立角色管理服務
-//    .AddEntityFrameworkStores<ApplicationDbContext>();
-
-//Wayne:註冊客製化後的會員資料與權限                               註冊後需要確認其帳戶（通常是通過電子郵件確認）。
-builder.Services.AddIdentity<ProjectUser, ApplicationRole>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddRoles<ApplicationRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddDefaultTokenProviders(); //方法註冊一些預設的令牌提供者，用於生成和驗證令牌，例如用於密碼重置、帳戶確認等功能。
-
-=======
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddRoles<IdentityRole>() //wayne:建立角色管理服務
+builder.Services.AddDefaultIdentity<ProjectUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<ApplicationRole>() //wayne:建立角色管理服務
     .AddEntityFrameworkStores<ApplicationDbContext>();
->>>>>>> main
+
+
 
 //wayne:註冊EmailSender類別
 builder.Services.AddTransient<IEmailSender, EmailSender>();

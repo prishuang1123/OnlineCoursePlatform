@@ -15,18 +15,25 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Project1.Data;
+using Microsoft.EntityFrameworkCore;
+using Project1.Models;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Project1.Areas.Identity.Pages.Account
 {
     public class LoginModel : PageModel
     {
+        private readonly UserManager<ProjectUser> _userManager;
         private readonly SignInManager<ProjectUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly ProjectDbContext _context;
 
-        public LoginModel(SignInManager<ProjectUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<ProjectUser> signInManager, ILogger<LoginModel> logger, UserManager<ProjectUser> user, ProjectDbContext context)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _userManager = user;
+            _context = context;
         }
 
         /// <summary>
@@ -115,8 +122,28 @@ namespace Project1.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: true); //啟用鎖定帳戶功能
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
+                    //_logger.LogInformation("User logged in.");
+                    //return LocalRedirect(returnUrl);
+
+                    //登入成功後重導至Member/EditMemberInfo
+                    //var user = await _userManager.FindByEmailAsync(Input.Email);
+                    //return RedirectToPage("/Member/EditMemberInfo", new { userId = user.Id });
+
+                    var user = await _userManager.FindByNameAsync(Input.Email);
+                    if (user != null)
+                    {
+                        
+                        var memberAspId = await _context.Member.FirstOrDefaultAsync(m => m.AspID == user.Id);
+                        if (memberAspId == null)
+                        {
+                            return RedirectToAction("Create", "Member");
+                        }
+                        else
+                        {
+                            return LocalRedirect(returnUrl);
+                        }
+                    }
+
                 }
                 if (result.RequiresTwoFactor)
                 {

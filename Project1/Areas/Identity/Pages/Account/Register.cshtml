@@ -12,11 +12,11 @@
             @* <h2>建立新帳號</h2> *@
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-            <div class="form-group">
-                <label asp-for="Input.UserName" class="control-label">使用者名稱</label>
-                <input asp-for="Input.UserName" class="form-control" />
-                <span asp-validation-for="Input.UserName" class="text-danger"></span>
-            </div>
+            @* <div class="form-group">
+                <label asp-for="Input.Email" class="control-label">使用者名稱</label>
+                <input asp-for="Input.Email" class="form-control" />
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div> *@
             <div class="form-floating mb-3">
                 <input asp-for="Input.Email" class="form-control" autocomplete="email" aria-required="true" placeholder="name@example.com" />
                 <label asp-for="Input.Email">電子郵件</label>
