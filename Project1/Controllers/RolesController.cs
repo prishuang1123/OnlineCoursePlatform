@@ -34,8 +34,8 @@ public class RolesController : Controller
             var role = new ApplicationRole
             {
                 Name = roleName,
-                DisplayName = displayName,
-                Description = description
+                //DisplayName = displayName,
+                //Description = description
             };
             var result = await _roleManager.CreateAsync(role);
 
@@ -67,7 +67,7 @@ public class RolesController : Controller
 
     // 處理編輯角色的請求
     [HttpPost]
-    public async Task<IActionResult> Edit(string id, string roleName, string displayName, string description)
+    public async Task<IActionResult> Edit(string id, string roleName)
     {
         var role = await _roleManager.FindByIdAsync(id);
         if (role == null)
@@ -76,8 +76,7 @@ public class RolesController : Controller
         }
 
         role.Name = roleName;
-        role.DisplayName = displayName;
-        role.Description = description;
+        
 
         var result = await _roleManager.UpdateAsync(role);
 

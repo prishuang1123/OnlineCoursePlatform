@@ -2,20 +2,26 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Project1.Data;
 using Project1.Models;
+using Project1.ViewModels;
 
 namespace Project1.Controllers
 {
-    public class NewTrainerController : Controller
+    public class NewTrainerController : VerifyUserRoles
     {
+        private readonly UserManager<ProjectUser> _userManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly ProjectDbContext _context;
 
-        public NewTrainerController(ProjectDbContext context)
+        public NewTrainerController(UserManager<ProjectUser> userManager, SignInManager<ProjectUser> signInManager, RoleManager<ApplicationRole> roleManager, ProjectDbContext context) : base(userManager, signInManager)
         {
+            _userManager = userManager;
+            _roleManager = roleManager;
             _context = context;
         }
 
@@ -44,9 +50,26 @@ namespace Project1.Controllers
         }
 
         // GET: NewTrainer/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var member = _context.Member.FirstOrDefault(m => m.AspID == user.Id);
+            if (member == null)
+            {
+                return NotFound("Member not found");
+            }
+
+            var model = new Trainer
+            {
+                MemberID = member.MemberID,
+                TrainerName = member.Name,
+            };
+            return View(model);
         }
 
         // POST: NewTrainer/Create
@@ -58,9 +81,23 @@ namespace Project1.Controllers
         {
             if (ModelState.IsValid)
             {
+                var user = await _userManager.GetUserAsync(User);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+
+                var member = _context.Member.FirstOrDefault(m => m.AspID == user.Id);
+                if (member == null)
+                {
+                    return NotFound("Member not found");
+                }
+
+                trainer.MemberID = member.MemberID;
+
                 _context.Add(trainer);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index","Home");
             }
             return View(trainer);
         }

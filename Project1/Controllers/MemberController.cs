@@ -12,15 +12,17 @@ using Project1.Models;
 namespace Project1.Controllers
 {
     //Wayne:會員註冊後重新導向填寫會員資料
-    public class MemberController : Controller
+    public class MemberController : VerifyUserRoles
     {
         private readonly ProjectDbContext _context;
         private readonly UserManager<ProjectUser> _userManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
 
-        public MemberController(ProjectDbContext context, UserManager<ProjectUser> userManager)
+        public MemberController(UserManager<ProjectUser> userManager, SignInManager<ProjectUser> signInManager, RoleManager<ApplicationRole> roleManager, ProjectDbContext context) : base(userManager, signInManager)
         {
-            _context = context;
             _userManager = userManager;
+            _roleManager = roleManager;
+            _context = context;
         }
 
         // GET: Member
@@ -70,7 +72,7 @@ namespace Project1.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MemberID,Name,Email,Phone,Birthday,RegistrationDate,ResidenceArea,IsTrainer,Photo,Address,AspID")] Member member,IFormFile Photo)
+        public async Task<IActionResult> Create([Bind("MemberID,Name,Email,Phone,Birthday,RegistrationDate,ResidenceArea,IsTrainer,Photo,Address,AspID")] Member member)
         {
             if (ModelState.IsValid)
             {
