@@ -1,26 +1,29 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Project1.Data;
 using Project1.Models;
+using Project1.Utilities;
 using Project1.ViewModels;
 
 namespace Project1.Controllers
 {
-    public class CheckoutController : Controller
+    public class CheckoutController : VerifyUserRoles
     {
         private readonly ProjectDbContext _db;
+        private readonly UserManager<IdentityUser> _userManager;
 
-
-        public CheckoutController(ProjectDbContext db) 
+        public CheckoutController(ProjectDbContext db, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager) :base (userManager, signInManager)
         {
             _db = db;
-
+            _userManager = userManager;
         }
-        public async Task<IActionResult> Index(int? id) //memberId
+        public async Task<IActionResult> Index() //memberId
         {
+            int memberId=Util.getMemberId(_db, _userManager, User);
             DbSet<Course> course = _db.Course;
-            IEnumerable<ShoppingCart>memberShoppingCart = await _db.Cart.Where(u => u.MemberID == id).ToListAsync();
-            Member memberObj = await _db.Member.Where(obj=>obj.MemberID==id).FirstOrDefaultAsync();
+            IEnumerable<ShoppingCart>memberShoppingCart = await _db.Cart.Where(u => u.MemberID == memberId).ToListAsync();
+            Member memberObj = await _db.Member.Where(obj=>obj.MemberID==memberId).FirstOrDefaultAsync();
             Discount discountObj;
             if (TempData["DiscountCode"] != null)
             {
@@ -35,28 +38,13 @@ namespace Project1.Controllers
             IEnumerable<Location> locationList = await _db.Location.ToListAsync();
             var courseObjList = memberShoppingCart
                 .GroupBy(c => c.CourseID)
-                .Select(cs => new ShoppingCart // Assuming ShoppingCart has a constructor
+                .Select(cs => new ShoppingCart 
                 {
                     CourseID = cs.Key,
                     Quantity = cs.Sum(c => c.Quantity),
-                    // Example of setting other properties, adjust as needed
-                    // CartIdToScheduleDate = cs.Select(c => new { CartID = c.CartID, ScheduleDate = _db.ClassSchedule.Where(s => s.SchedulerID == c.SchedulerID).FirstOrDefault().Scheduler }).ToArray(),
-                }).ToList(); // Convert to list
-            //var courseObjList = memberShoppingCart
-            //    .GroupBy(c => c.CourseID)
-            //    .Select(cs => new
-            //    {
-            //        CourseID = cs.Key,
-            //        Quantity = cs.Sum(c => c.Quantity),
-            //        CartIdToScheduleDate = cs.Select(c => new { CartID = c.CartID, ScheduleDate = _db.ClassSchedule.Where(s => s.SchedulerID == c.SchedulerID).FirstOrDefault().Scheduler }).ToArray(),
-
-            //    });
-            //public Member Member { get; set; }
-            //public Discount Discount { get; set; }
-            //public Order Order { get; set; }
-            //public OrderDetail OrderDetail { get; set; }
-            //public Payment Payment { get; set; }
-            //IEnumerable<Location> Location { get; set; }
+                    
+                }).ToList(); 
+           
             decimal initSubtotal = 0;
             foreach(var item in courseObjList)
             {

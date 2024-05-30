@@ -76,10 +76,10 @@
                             }
                             </ul>
                             <ul class="list list_2">
-                            <li><a href="#">總額 <span>@(Model.subtotal).ToString("c")</span></a></li>
-                            <li><a href="#">折扣 <span>@(Model.subtotal - (Math.Round(Model.subtotal * Convert.ToDecimal(Model.Discountobj.DiscountPercentage), 2)))</span></a></li>
-                            <li><a href="#">總計 <span>@(Math.Round(Model.subtotal * Convert.ToDecimal(Model.Discountobj.DiscountPercentage), 2)).ToString("c")</span></a></li>
-                            </ul>
+                            <li><a href="#">總額 <span>@(Model.subtotal.ToString("c"))</span></a></li>
+                            @* <li><a href="#">折扣 <span>@(Model.subtotal - (Math.Round(Model.subtotal * Convert.ToDecimal(Model.Discountobj.DiscountPercentage), 2)))</span></a></li> *@
+                            @* <li><a href="#">總計 <span>@(Math.Round(Model.subtotal * Convert.ToDecimal(Model.Discountobj.DiscountPercentage), 2)).ToString("c")</span></a></li>
+                            </ul> *@
                             <div class="payment_item">
                                 <div class="radion_btn">
                                     <input type="radio" id="f-option5" name="selector">
@@ -114,4 +114,10 @@
         </div>
     </section>
     <!--================End Checkout Area =================-->
-   
+   @section Scripts
+   {
+       <script>
+           const discountCode = sessionStorage.getItem("discountCode");
+           console.log(discountCode);
+       </script>
+   }

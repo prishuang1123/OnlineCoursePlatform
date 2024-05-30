@@ -248,12 +248,13 @@
                         selectedSchedules: this.selectedSchedules
                     })
                         .then(response => {
+                            window.location.href = '/Browse/ViewCart/1';
                         })
                         .catch(error => {
                             alert('所選時段已在購物車中 不能重複添加相同的課程和時段');
                             console.error(error);
                         });
-                    window.location.href = '/Browse/ViewCart/1';
+                    
                 },
                 addComment() {
                     if (!this.memberID) {
