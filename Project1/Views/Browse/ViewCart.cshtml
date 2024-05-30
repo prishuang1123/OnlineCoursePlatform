@@ -75,16 +75,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            @* <div v-if="course.courseID == @(cartItemGroup.Key)" class="switch-wrap d-flex justify-content-between">
-                                                <div v-for="(scheduleId, scheduleIndex) in course.allScheduleId" :key="scheduleIndex">
-                                                    <p>{{ course.allScheduleDate[scheduleId] }}</p>
-                                                    <div class="primary-checkbox">
-                                                        <input type="checkbox" :id="'checkbox_' + course.courseID + '_' + scheduleId" v-model="course.selectedScheduleId[course.courseID + '-' + scheduleId]" v-on:change="updateDatabase(course.courseID, scheduleId, !course.selectedScheduleId[course.courseID + '-' + scheduleId])" />
-                                                        <!-- Use the same unique id in the label's for attribute -->
-                                                        <label :for="'checkbox_' + course.courseID + '_' + scheduleId"></label>
-                                                    </div>
-                                                </div>
-                                            </div> *@
                                         </div>
                                     </div>
                                 </td>
@@ -337,13 +327,14 @@
                         const discountCode = document.getElementById("discountCode");
                         if (response.validationResult == "success") {
                             alert("成功使用優惠碼!");
-                            
+                            sessionStorage.setItem("discountCode", discountCode.textContent);
                             // TempData["success"] = "成功使用優惠碼!";
                             const subtotalValue = parseFloat(document.getElementById("subtotal").textContent.substring(1));
                             subtotal.textContent = "$" + (subtotalValue * response.discountPercentage).toFixed(2);
                             const discountButton = document.getElementById("discountButton");
                             discountButton.setAttribute("disabled", "disabled");
-                            discountValid = true;
+                           
+                            sessionStorage.setItem("discountCode", discountCode.value);
                         }
                         else if (response.validationResult == "not applicable") {
                             alert("此優惠碼不適用");
@@ -443,21 +434,7 @@
                 // event.preventDefault();
                 var discountCode = document.getElementById('discountCode').value;
                 validateDiscountCode(discountCode);
-                if (discountValid == true) {
-                    $.ajax({
-                        url: '/Browse/StoreDiscountCode',
-                        type: 'POST',
-                        data: { discountCode: discountCode },
-                        success: function (response) {
-                            console.log("Successfully stored discount code")
-                            discountValid = false;
-                        },
-                        error: function (xhr, status, error) {
-                            // Optionally handle error
-                        }
-                    });
-                }
-                
+               
             }
         });
         

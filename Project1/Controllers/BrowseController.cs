@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +8,7 @@ using Newtonsoft.Json.Linq;
 using NuGet.Protocol;
 using Project1.Data;
 using Project1.Models;
+using Project1.Utilities;
 using Project1.ViewModels;
 using System.Collections.Frozen;
 using System.Collections.Generic;
@@ -26,7 +28,7 @@ namespace Project1.Controllers
         {
             _db = db;
             _userManager = userManager;
-            //trainerDbset = _db.Set<Trainer>();
+            
         }
         public async Task<IActionResult> Index()
         {
@@ -52,7 +54,7 @@ namespace Project1.Controllers
         // GET: Browse/Cart/5
         public async Task<IActionResult> ViewCart() //recieve memberID
         {
-            var memberId = getMemberId(User);
+            var memberId = Util.getMemberId(_db,_userManager, User);
             //if (id==null || id == 0)
             //{
             //	return RedirectToAction ("Login", "Members");
@@ -287,7 +289,7 @@ namespace Project1.Controllers
         [HttpGet]
         public JsonResult GetClassSchedule()
         {
-            var memberId = getMemberId(User);
+            var memberId = Util.getMemberId(_db, _userManager, User);
             memberShoppingCart = _db.Cart.Where(u => u.MemberID == memberId).ToList(); //member到時候再改
             var classSchedule = memberShoppingCart
             .GroupBy(c => c.CourseID)
@@ -363,17 +365,11 @@ namespace Project1.Controllers
             //return RedirectToAction("ViewCart", "Browse", new { id = 1 });
             return Json(new { success = true, memberId = memberId });
         }
-        private int getMemberId(ClaimsPrincipal user)
-        {
-            var userId = _userManager.GetUserId(User);
-            var member = _db.Member.Where(m => m.AspID == userId).FirstOrDefault();
-            var memberId = member.MemberID;
-            return memberId;
-        }
+   
         [HttpGet]
         public async Task<IActionResult> UpdateSubtotal()
         {
-            var memberId = getMemberId(User);
+            var memberId = Util.getMemberId(_db, _userManager, User);
             decimal subtotal = 0;
             memberShoppingCart = await _db.Cart.Where(u => u.MemberID == memberId).ToListAsync();
             IEnumerable<int> courseIds = memberShoppingCart.Select(u => u.CourseID).ToList();
@@ -447,7 +443,7 @@ namespace Project1.Controllers
         {
             try
             {
-                var memberId = getMemberId(User);
+                var memberId = Util.getMemberId(_db, _userManager, User);
 
 
 
