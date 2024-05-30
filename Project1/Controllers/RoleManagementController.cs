@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Project1.Data;
+using Project1.Models;
 using Project1.ViewModels;
 
 namespace Project1.Controllers
@@ -13,11 +14,13 @@ namespace Project1.Controllers
     {
         private readonly UserManager<ProjectUser> _userManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
+        private readonly ProjectDbContext _context;
 
-        public RoleManagementController(UserManager<ProjectUser> userManager,SignInManager<ProjectUser> signInManager, RoleManager<ApplicationRole> roleManager): base(userManager, signInManager)
+        public RoleManagementController(UserManager<ProjectUser> userManager,SignInManager<ProjectUser> signInManager, RoleManager<ApplicationRole> roleManager, ProjectDbContext context) : base(userManager, signInManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _context = context;
         }
 
         public async Task<IActionResult> Index()
@@ -88,6 +91,23 @@ namespace Project1.Controllers
             {
                 ModelState.AddModelError("", "Failed to remove roles");
                 return View(model);
+            }
+
+            // 更新IsTrainer欄位
+            var member = _context.Member.FirstOrDefault(m => m.AspID == user.Id);
+            if (member != null)
+            {
+                if (selectedRoles.Contains("Trainer"))
+                {
+                    member.IsTrainer = true;
+                }
+                else
+                {
+                    member.IsTrainer = false;
+                }
+
+                _context.Update(member);
+                await _context.SaveChangesAsync();
             }
 
             return RedirectToAction("Index");

@@ -29,6 +29,7 @@ namespace Project1.Models
 		public DateTime? RegistrationDate { get; set; } // 會員註冊日期
 
 		[Required(ErrorMessage ="居住區為必填欄位")]
+		[Display(Name = "居住地區")]
 		public string? ResidenceArea { get; set; } // 會員居住區域
 
 		public bool? IsTrainer { get; set; } // 是否為訓練師，1/0

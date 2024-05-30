@@ -23,11 +23,11 @@ namespace Project1.Controllers
     public class TrainerrrController : VerifyUserRoles
     {
         private readonly UserManager<ProjectUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly ProjectDbContext _context;
         private readonly IWebHostEnvironment _environment;
 
-        public TrainerrrController(ProjectDbContext context, IWebHostEnvironment environment, UserManager<ProjectUser> userManager, SignInManager<ProjectUser> signInManager, RoleManager<IdentityRole> roleManager) : base(userManager, signInManager)
+        public TrainerrrController(ProjectDbContext context, IWebHostEnvironment environment, UserManager<ProjectUser> userManager, SignInManager<ProjectUser> signInManager, RoleManager<ApplicationRole> roleManager) : base(userManager, signInManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;

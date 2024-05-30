@@ -70,7 +70,7 @@ namespace Project1.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MemberID,Name,Email,Phone,Birthday,RegistrationDate,ResidenceArea,IsTrainer,Photo,Address,AspID")] Member member)
+        public async Task<IActionResult> Create([Bind("MemberID,Name,Email,Phone,Birthday,RegistrationDate,ResidenceArea,IsTrainer,Photo,Address,AspID")] Member member,IFormFile Photo)
         {
             if (ModelState.IsValid)
             {
@@ -82,9 +82,19 @@ namespace Project1.Controllers
                 }
                 member.AspID = user.Id;
 
+                //if (Photo != null && Photo.Length > 0)
+                //{
+                //    using (var memoryStream = new MemoryStream())
+                //    {
+                //        await Photo.CopyToAsync(memoryStream);
+                //        member.Photo = memoryStream.ToArray();
+                //    }
+                //}
+
                 _context.Add(member);
                 await _context.SaveChangesAsync();
                 //return RedirectToAction(nameof(Index));
+                //TempData["SuccessMessage"] = "會員加入成功";
                 return RedirectToAction("Index", "Home");
             }
             return View(member);
@@ -93,16 +103,16 @@ namespace Project1.Controllers
         // GET: Member/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
+            //wayne:抓到MemberID
+            var userId = _userManager.GetUserId(User);
+            var member = await _context.Member.FirstOrDefaultAsync(m => m.AspID == userId);
+            //var MemID = Mem.MemberID;
+            //ViewBag.MemID = MemID;
+            if (userId == null)
             {
                 return NotFound();
             }
 
-            var member = await _context.Member.FindAsync(id);
-            if (member == null)
-            {
-                return NotFound();
-            }
             return View(member);
         }
 
@@ -111,32 +121,45 @@ namespace Project1.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MemberID,Name,Email,Phone,Birthday,RegistrationDate,ResidenceArea,IsTrainer,Photo,Address,AspID")] Member member)
+        public async Task<IActionResult> Edit(int id, [Bind("MemberID,Name,Email,Phone,Birthday,RegistrationDate,ResidenceArea,IsTrainer,Photo,Address,AspID")] Member member, IFormFile Photo)
         {
-            if (id != member.MemberID)
+            var userId = _userManager.GetUserId(User);
+            var existingMember = await _context.Member.FirstOrDefaultAsync(m => m.AspID == userId);
+            if (existingMember == null)
             {
                 return NotFound();
             }
+
+            //if (Photo != null && Photo.Length > 0)
+            //{
+            //    using (var memoryStream = new MemoryStream())
+            //    {
+            //        await Photo.CopyToAsync(memoryStream);
+            //        existingMember.Photo = memoryStream.ToArray();
+            //    }
+            //}
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(member);
+                    _context.Update(existingMember);
                     await _context.SaveChangesAsync();
+                    TempData["SuccessMessage"] = "資料更新成功";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!MemberExists(member.MemberID))
+                    if (!MemberExists(existingMember.MemberID))
                     {
                         return NotFound();
                     }
+
                     else
                     {
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Edit));
             }
             return View(member);
         }
@@ -173,6 +196,63 @@ namespace Project1.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+        //[HttpPost]
+        //public async Task<IActionResult> EditProfile(Member member, string Photo)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var userId = _userManager.GetUserId(User); // 抓當前登入的ID
+        //        var existingMember = await _context.Member.FirstOrDefaultAsync(m => m.AspID == userId);
+        //        if (existingMember == null)
+        //        {
+        //            return NotFound();
+        //        }
+
+        //        if (!string.IsNullOrEmpty(Photo))
+        //        {
+        //            existingMember.Photo = Photo;
+        //        }
+
+
+        //        _context.Update(existingMember);
+        //        await _context.SaveChangesAsync();
+
+        //        return RedirectToAction(nameof(Edit));
+        //    }
+
+        //    return View(member);
+        //}
+
+        //[HttpPost]
+        //public async Task<IActionResult> UploadPhoto(IFormFile file)
+        //{
+        //    if (file != null && file.Length > 0)
+        //    {
+        //        var fileExtension = Path.GetExtension(file.FileName);
+        //        var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+
+        //        if (!allowedExtensions.Contains(fileExtension.ToLower()))
+        //        {
+        //            return BadRequest("無效的檔案格式。僅支援 .jpg, .jpeg, .png, .gif 格式。");
+        //        }
+
+        //        var fileName = Guid.NewGuid().ToString() + fileExtension;
+        //        var filePath = Path.Combine("wwwroot/uploads", fileName);
+
+        //        using (var stream = new FileStream(filePath, FileMode.Create))
+        //        {
+        //            await file.CopyToAsync(stream);
+        //        }
+
+        //        return Ok(new { filePath = "/uploads/" + fileName });
+        //    }
+
+        //    return BadRequest("上傳失敗");
+        //}
+
+
+
 
         private bool MemberExists(int id)
         {
