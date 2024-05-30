@@ -11,22 +11,25 @@ using Project1.Models;
 
 namespace Project1.Controllers
 {
-    public class Members1Controller : Controller
+    //Wayne:會員註冊後重新導向填寫會員資料
+    public class MemberController : Controller
     {
         private readonly ProjectDbContext _context;
+        private readonly UserManager<ProjectUser> _userManager;
 
-        public Members1Controller(ProjectDbContext context)
+        public MemberController(ProjectDbContext context, UserManager<ProjectUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
-        // GET: Members1
+        // GET: Member
         public async Task<IActionResult> Index()
         {
             return View(await _context.Member.ToListAsync());
         }
 
-        // GET: Members1/Details/5
+        // GET: Member/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -44,39 +47,50 @@ namespace Project1.Controllers
             return View(member);
         }
 
-        // GET: Members1/Create
+        // GET: Member/Create
         public async Task<IActionResult> Create()
         {
-            //var isAdmin = false;
-            //if (_signInManager.IsSignedIn(User)) // 檢查用戶是否已登錄
-            //{
-            //    var user = await _userManager.GetUserAsync(User); // 獲取當前用戶
-            //    if (user != null)
-            //    {
-            //        isAdmin = await _userManager.IsInRoleAsync(user, "Admin"); // 檢查用戶是否為管理員
-            //    }
-            //}
-            //ViewBag.IsAdmin = isAdmin; // 將結果傳遞到視圖
-            return View();
+            //wayne:取得用戶當前ID
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var model = new Member
+            {
+                AspID = user.Id,
+                Email = user.Email
+            };
+            return View(model);
         }
 
-        // POST: Members1/Create
+        // POST: Member/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MemberID,Name,Email,Phone,Birthday,RegistrationDate,ResidenceArea,IsTrainer,IsAdministrator,Photo,Account,Password")] Member member)
+        public async Task<IActionResult> Create([Bind("MemberID,Name,Email,Phone,Birthday,RegistrationDate,ResidenceArea,IsTrainer,Photo,Address,AspID")] Member member)
         {
             if (ModelState.IsValid)
             {
+                //wayne:確保AspID不會被覆蓋
+                var user = await _userManager.GetUserAsync(User);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+                member.AspID = user.Id;
+
                 _context.Add(member);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                //return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Home");
             }
             return View(member);
         }
 
-        // GET: Members1/Edit/5
+        // GET: Member/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -92,12 +106,12 @@ namespace Project1.Controllers
             return View(member);
         }
 
-        // POST: Members1/Edit/5
+        // POST: Member/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MemberID,Name,Email,Phone,Birthday,RegistrationDate,ResidenceArea,IsTrainer,IsAdministrator,Photo,Account,Password")] Member member)
+        public async Task<IActionResult> Edit(int id, [Bind("MemberID,Name,Email,Phone,Birthday,RegistrationDate,ResidenceArea,IsTrainer,Photo,Address,AspID")] Member member)
         {
             if (id != member.MemberID)
             {
@@ -127,7 +141,7 @@ namespace Project1.Controllers
             return View(member);
         }
 
-        // GET: Members1/Delete/5
+        // GET: Member/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -145,7 +159,7 @@ namespace Project1.Controllers
             return View(member);
         }
 
-        // POST: Members1/Delete/5
+        // POST: Member/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

@@ -24,7 +24,7 @@ namespace Project1.Controllers
         private IEnumerable<ShoppingCart> memberShoppingCart;
         private readonly UserManager<IdentityUser> _userManager;
 
-        public BrowseController(ProjectDbContext db, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager) : base(userManager, signInManager)
+        public BrowseController(ProjectDbContext db, UserManager<ProjectUser> userManager, SignInManager<ProjectUser> signInManager) : base(userManager, signInManager)
         {
             _db = db;
             _userManager = userManager;

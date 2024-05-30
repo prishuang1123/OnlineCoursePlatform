@@ -12,18 +12,19 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Project1.Data;
 
 namespace Project1.Areas.Identity.Pages.Account.Manage
 {
     public class EmailModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<ProjectUser> _userManager;
+        private readonly SignInManager<ProjectUser> _signInManager;
         private readonly IEmailSender _emailSender;
 
         public EmailModel(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager,
+            UserManager<ProjectUser> userManager,
+            SignInManager<ProjectUser> signInManager,
             IEmailSender emailSender)
         {
             _userManager = userManager;
@@ -67,13 +68,13 @@ namespace Project1.Areas.Identity.Pages.Account.Manage
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
-            [EmailAddress]
-            [Display(Name = "New email")]
+            [Required(ErrorMessage = "新電子郵件是必填欄位。")]
+            [EmailAddress(ErrorMessage = "請輸入有效的電子郵件地址。")]
+            [Display(Name = "新電子郵件")]
             public string NewEmail { get; set; }
         }
 
-        private async Task LoadAsync(IdentityUser user)
+        private async Task LoadAsync(ProjectUser user)
         {
             var email = await _userManager.GetEmailAsync(user);
             Email = email;
@@ -91,7 +92,7 @@ namespace Project1.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"無法載入用戶ID '{_userManager.GetUserId(User)}'.");
             }
 
             await LoadAsync(user);
@@ -103,7 +104,7 @@ namespace Project1.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"無法載入用戶ID '{_userManager.GetUserId(User)}'.");
             }
 
             if (!ModelState.IsValid)
@@ -115,6 +116,15 @@ namespace Project1.Areas.Identity.Pages.Account.Manage
             var email = await _userManager.GetEmailAsync(user);
             if (Input.NewEmail != email)
             {
+                //檢查新輸入的電子郵件是否已被使用
+                var existingUser = await _userManager.FindByEmailAsync(Input.NewEmail);
+                if (existingUser != null)
+                {
+                    ModelState.AddModelError(string.Empty, "該電子郵件地址已被使用。");
+                    await LoadAsync(user);
+                    return Page();
+                }
+
                 var userId = await _userManager.GetUserIdAsync(user);
                 var code = await _userManager.GenerateChangeEmailTokenAsync(user, Input.NewEmail);
                 code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
@@ -125,14 +135,14 @@ namespace Project1.Areas.Identity.Pages.Account.Manage
                     protocol: Request.Scheme);
                 await _emailSender.SendEmailAsync(
                     Input.NewEmail,
-                    "Confirm your email",
-                    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    "確認您的電子郵件",
+                    $"請確認您的帳號<a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>點擊這裡</a>.");
 
-                StatusMessage = "Confirmation link to change email sent. Please check your email.";
+                StatusMessage = "驗證郵件已發送。請檢查您的電子郵件。";
                 return RedirectToPage();
             }
 
-            StatusMessage = "Your email is unchanged.";
+            StatusMessage = "您的電子郵件未更改。";
             return RedirectToPage();
         }
 
@@ -141,7 +151,7 @@ namespace Project1.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"無法載入用戶ID '{_userManager.GetUserId(User)}'.");
             }
 
             if (!ModelState.IsValid)
@@ -161,10 +171,10 @@ namespace Project1.Areas.Identity.Pages.Account.Manage
                 protocol: Request.Scheme);
             await _emailSender.SendEmailAsync(
                 email,
-                "Confirm your email",
-                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                "確認您的電子郵件",
+                $"請確認您的帳號<a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>點擊這裡</a>.");
 
-            StatusMessage = "Verification email sent. Please check your email.";
+            StatusMessage = "驗證郵件已發送。請檢查您的電子郵件。";
             return RedirectToPage();
         }
     }

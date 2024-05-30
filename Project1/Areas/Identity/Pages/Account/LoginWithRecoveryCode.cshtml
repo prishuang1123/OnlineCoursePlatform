@@ -1,25 +1,24 @@
 ﻿@page
 @model LoginWithRecoveryCodeModel
 @{
-    ViewData["Title"] = "Recovery code verification";
+    ViewData["Title"] = "恢復碼驗證";
 }
 
 <h1>@ViewData["Title"]</h1>
 <hr />
 <p>
-    You have requested to log in with a recovery code. This login will not be remembered until you provide
-    an authenticator app code at log in or disable 2FA and log in again.
+    您已請求使用恢復碼登入。此次登入將不會被記住，除非您在登入時提供身份驗證應用程式碼，或是禁用雙因素身份驗證後再次登入。
 </p>
 <div class="row">
     <div class="col-md-4">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
             <div class="form-floating mb-3">
-                <input asp-for="Input.RecoveryCode" class="form-control" autocomplete="off" placeholder="RecoveryCode" />
+                <input asp-for="Input.RecoveryCode" class="form-control" autocomplete="off" placeholder="請輸入您的恢復碼" />
                 <label asp-for="Input.RecoveryCode" class="form-label"></label>
                 <span asp-validation-for="Input.RecoveryCode" class="text-danger"></span>
             </div>
-            <button type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
+            <button type="submit" class="w-100 btn btn-lg btn-primary">登入</button>
         </form>
     </div>
 </div>

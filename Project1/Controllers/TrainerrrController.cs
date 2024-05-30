@@ -23,7 +23,7 @@ namespace Project1.Controllers
 {
     public class TrainerrrController : VerifyUserRoles
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ProjectUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ProjectDbContext _context;
         private readonly IWebHostEnvironment _environment;

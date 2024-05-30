@@ -34,15 +34,22 @@ namespace Project1.Controllers
         public async Task<IActionResult> Index()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (userId != null)
+            if(userId != null)
             {
                 var Mem = _ProjectDbContext.Member.Where(m => m.AspID == userId).FirstOrDefault();
-                var MemID = Mem.MemberID;
-                var MemName = Mem.Name;
-                ViewBag.MemID = MemID;
+                if(Mem == null)
+                {
+                    return RedirectToAction("Create", "Member");
+                    
+                }
+                    var MemID = Mem.MemberID;
+                    ViewBag.MemID = MemID;
             }
-            ViewBag.baseUrl = _Configuration["AppSettings: baseUrl"];
-
+            else
+            {
+                ViewBag.MemID = "Not Logged In";
+            }
+            
             return View();
         }
 

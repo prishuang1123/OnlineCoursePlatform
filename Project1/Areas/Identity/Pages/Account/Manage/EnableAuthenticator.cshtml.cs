@@ -13,19 +13,20 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Project1.Data;
 
 namespace Project1.Areas.Identity.Pages.Account.Manage
 {
     public class EnableAuthenticatorModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ProjectUser> _userManager;
         private readonly ILogger<EnableAuthenticatorModel> _logger;
         private readonly UrlEncoder _urlEncoder;
 
         private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
 
         public EnableAuthenticatorModel(
-            UserManager<IdentityUser> userManager,
+            UserManager<ProjectUser> userManager,
             ILogger<EnableAuthenticatorModel> logger,
             UrlEncoder urlEncoder)
         {
@@ -77,10 +78,10 @@ namespace Project1.Areas.Identity.Pages.Account.Manage
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
-            [StringLength(7, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [Required(ErrorMessage ="驗證碼是必填欄位")]
+            [StringLength(7, ErrorMessage = "驗證碼的長度必須至少為 {2} 個字符，最多為 {1} 個字符。", MinimumLength = 6)]
             [DataType(DataType.Text)]
-            [Display(Name = "Verification Code")]
+            [Display(Name = "驗證碼")]
             public string Code { get; set; }
         }
 
@@ -89,7 +90,7 @@ namespace Project1.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"無法載入 ID 為 '{_userManager.GetUserId(User)}' 的用戶。");
             }
 
             await LoadSharedKeyAndQrCodeUriAsync(user);
@@ -102,7 +103,7 @@ namespace Project1.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"無法找到ID為'{_userManager.GetUserId(User)}'的用戶。");
             }
 
             if (!ModelState.IsValid)
@@ -119,16 +120,16 @@ namespace Project1.Areas.Identity.Pages.Account.Manage
 
             if (!is2faTokenValid)
             {
-                ModelState.AddModelError("Input.Code", "Verification code is invalid.");
+                ModelState.AddModelError("Input.Code", "驗證碼無效");
                 await LoadSharedKeyAndQrCodeUriAsync(user);
                 return Page();
             }
 
             await _userManager.SetTwoFactorEnabledAsync(user, true);
             var userId = await _userManager.GetUserIdAsync(user);
-            _logger.LogInformation("User with ID '{UserId}' has enabled 2FA with an authenticator app.", userId);
+            _logger.LogInformation("ID為 '{UserId}' 的用戶已使用身份驗證應用程式啟用2FA。", userId);
 
-            StatusMessage = "Your authenticator app has been verified.";
+            StatusMessage = "您的身份驗證應用程式已驗證。";
 
             if (await _userManager.CountRecoveryCodesAsync(user) == 0)
             {
@@ -142,7 +143,7 @@ namespace Project1.Areas.Identity.Pages.Account.Manage
             }
         }
 
-        private async Task LoadSharedKeyAndQrCodeUriAsync(IdentityUser user)
+        private async Task LoadSharedKeyAndQrCodeUriAsync(ProjectUser user)
         {
             // Load the authenticator key & QR code URI to display on the form
             var unformattedKey = await _userManager.GetAuthenticatorKeyAsync(user);
