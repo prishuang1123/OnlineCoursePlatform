@@ -65,48 +65,56 @@
                     </div>
                     <div class="col-lg-4">
                         <div class="order_box">
-                            <h2>您的訂單</h2>
-                            <ul class="list">
-                                <li><a href="#">課程 <span>總額</span></a></li>
-                            @foreach(var courseObj in Model.courseObjList)
-                            {
-                                <li><a href="#">@Model.course.Where(c => c.CourseID == courseObj.CourseID).FirstOrDefault().CourseName<span class="middle">x @courseObj.Quantity</span> <span class="last">@(
-                                                (Model.course.Where(c => c.CourseID == courseObj.CourseID).FirstOrDefault().Price * @courseObj.Quantity).ToString("c")
-                                )</span></a></li>
-                            }
-                            </ul>
-                            <ul class="list list_2">
-                            <li><a href="#">總額 <span>@(Model.subtotal.ToString("c"))</span></a></li>
-                            @* <li><a href="#">折扣 <span>@(Model.subtotal - (Math.Round(Model.subtotal * Convert.ToDecimal(Model.Discountobj.DiscountPercentage), 2)))</span></a></li> *@
-                            @* <li><a href="#">總計 <span>@(Math.Round(Model.subtotal * Convert.ToDecimal(Model.Discountobj.DiscountPercentage), 2)).ToString("c")</span></a></li>
-                            </ul> *@
-                            <div class="payment_item">
-                                <div class="radion_btn">
-                                    <input type="radio" id="f-option5" name="selector">
-                                    <label for="f-option5">信用卡</label>
-                                    <div class="check"></div>
+                            <form id="order_form">
+                                <h2>您的訂單</h2>
+                                <ul class="list">
+                                    <li><a href="#">課程 <span>總額</span></a></li>
+                                    @foreach (var courseObj in Model.courseObjList)
+                                    {
+                                        <li>
+                                            <a href="#">
+                                                @Model.course.Where(c => c.CourseID == courseObj.CourseID).FirstOrDefault().CourseName<span class="middle">x @courseObj.Quantity</span> <span class="last">
+                                                    @(
+                                                        (Model.course.Where(c => c.CourseID == courseObj.CourseID).FirstOrDefault().Price * @courseObj.Quantity).ToString("c")
+                                                        )
+                                                </span>
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
+                                <ul class="list list_2">
+                                    <li><a href="#">總額 <span>@(Model.subtotal.ToString("c"))</span></a></li>
+                                    @* <li><a href="#">折扣 <span>@(Model.subtotal - (Math.Round(Model.subtotal * Convert.ToDecimal(Model.Discountobj.DiscountPercentage), 2)))</span></a></li>
+                                    <li><a href="#">總計 <span>@(Math.Round(Model.subtotal * Convert.ToDecimal(Model.Discountobj.DiscountPercentage), 2)).ToString("c")</span></a></li> *@
+                                </ul>
+                                <div class="payment_item">
+                                    <div class="radion_btn">
+                                    <input v-model="paymentType" type="radio" id="f-option5" name="selector">
+                                        <label for="f-option5">信用卡</label>
+                                        <div class="check"></div>
+                                    </div>
+                                    <p>
+                                        一次付清，可使用 Visa/Mastercard
+                                    </p>
                                 </div>
-                                <p>
-                                    一次付清，可使用 Visa/Mastercard
-                                </p>
-                            </div>
-                            <div class="payment_item active">
-                                <div class="radion_btn">
-                                    <input type="radio" id="f-option6" name="selector">
-                                    <label for="f-option6">ATM轉帳</label>
-                                    <img src="img/product/card.jpg" alt="">
-                                    <div class="check"></div>
+                                <div class="payment_item active">
+                                    <div class="radion_btn">
+                                        <input v-model="paymentType" type="radio" id="f-option6" name="selector">
+                                        <label for="f-option6">ATM轉帳</label>
+                                        <img src="img/product/card.jpg" alt="">
+                                        <div class="check"></div>
+                                    </div>
+                                    <p>
+                                        ATM轉帳付款
+                                    </p>
                                 </div>
-                                <p>
-                                    ATM轉帳付款
-                                </p>
-                            </div>
-                            <div class="creat_account">
-                                <input type="checkbox" id="f-option4" name="selector">
-                            <label for="f-option4">我已閱讀並同意</label>
-                            <a href="#">服務條款協議及相關細則內所有事項*</a>
-                            </div>
-                            <a class="primary-btn" href="#">前往付款</a>
+                                <div class="creat_account">
+                                    <input type="checkbox" id="f-option4" name="selector">
+                                    <label for="f-option4">我已閱讀並同意</label>
+                                    <a href="#">服務條款協議及相關細則內所有事項*</a>
+                                </div>
+                                <a type="submit" class="primary-btn" asp-controller="Ecpay" asp-action="Index">前往付款</a>
+                            </form>   
                         </div>
                     </div>
                 </div>
@@ -116,8 +124,36 @@
     <!--================End Checkout Area =================-->
    @section Scripts
    {
-       <script>
-           const discountCode = sessionStorage.getItem("discountCode");
-           console.log(discountCode);
-       </script>
+        <script>
+        const baseUrl = "https://localhost:7177";
+        const vueApp = {
+            data() {
+                return {
+                    paymentType: [],
+                    terms&conditions: [],
+                }
+            },
+            methods: {
+                const checkRadioCheckbox = function () {
+                    if (!paymentType.length= 1 && !terms & conditions.length=1) {
+                        
+                    }
+                }
+
+            },
+            mounted() {
+                const sendToPaymentPageUrl = `${baseUrl}/Ecpay/Index`;
+                axios.post(sendToPaymentPageUrl).then(response => {
+                    // Clear the existing classSchedule before populating it with new data
+
+                    console.log(JSON.stringify(response.data));
+                }).catch(error => {
+                    alert(error);
+                });
+            }
+        }
+
+        var app = Vue.createApp(vueApp).mount("#app");
+        </script>
+
    }

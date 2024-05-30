@@ -18,7 +18,7 @@ namespace Project1.Controllers
             _db = db;
             _userManager = userManager;
         }
-        public async Task<IActionResult> Index() //memberId
+        public async Task<IActionResult> Index() 
         {
             int memberId=Util.getMemberId(_db, _userManager, User);
             DbSet<Course> course = _db.Course;
@@ -27,7 +27,7 @@ namespace Project1.Controllers
             Discount discountObj;
             if (TempData["DiscountCode"] != null)
             {
-                discountObj = await _db.Discount.Where(obj => obj.DiscountName == TempData["DiscountCode"]).FirstOrDefaultAsync();
+                discountObj = await _db.Discount.Where(obj => obj.DiscountName == TempData["DiscountCode"].ToString()).FirstOrDefaultAsync();
                 TempData.Remove("DiscountCode");
             }
             else

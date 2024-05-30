@@ -1,9 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Project1.Data;
 using Project1.Models;
+using Project1.Utilities;
 using System.Data;
 using System.Net.Http.Headers;
 using System.Runtime.Intrinsics.Arm;
@@ -13,21 +17,23 @@ using System.Web;
 
 namespace Project1.Controllers
 {
-    public class EcpayController : Controller
+    public class EcpayController : VerifyUserRoles
     {
         //public IActionResult Index()
         //{
         //    return View();
         //}
         private readonly ProjectDbContext _db;
-        public EcpayController(ProjectDbContext db)
+        private readonly UserManager<IdentityUser> _userManager;
+        public EcpayController(ProjectDbContext db, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager):base(userManager, signInManager)
         {
             _db = db;
-
+            _userManager = userManager;
         }
         //step1 : 網頁導入傳值到前端
         public ActionResult Index()
         {
+            
             var orderId = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 20);
             //需填入你的網址
             var website = $"https://titmouse-willing-stud.ngrok-free.app";
@@ -56,6 +62,7 @@ namespace Project1.Controllers
                 };
             //檢查碼
             order["CheckMacValue"] = GetCheckMacValue(order);
+            
             return View(order);
         }
         private string GetCheckMacValue(Dictionary<string, string> order)
@@ -89,13 +96,14 @@ namespace Project1.Controllers
         [Route("Ecpay/AddOrders")]
         public string AddOrders([FromBody]JObject json)
         {
-            
+            int memberId = Util.getMemberId(_db, _userManager, User);
             string num = "0";
             try
             {
+
                 EcpayOrders Orders = new EcpayOrders();
                 Orders.MemberID = json["MerchantID"].ToString();
-                Orders.MerchantTradeNo = (string)json["MerchantTradeNo"];
+                Orders.MerchantTradeNo = json["MerchantTradeNo"].ToString();
                 Orders.RtnCode = 0; //未付款
                 Orders.RtnMsg = "訂單成功尚未付款";
                 Orders.TradeNo = json["MerchantID"].ToString();
@@ -109,12 +117,53 @@ namespace Project1.Controllers
                 {
                     Orders.TradeAmt = 0; // Default value or any other handling you prefer
                 }
+                
                 Orders.PaymentDate = Convert.ToDateTime(json["MerchantTradeDate"]);
-                Orders.PaymentType = (string)json["PaymentType"];
+                Orders.PaymentType = json["PaymentType"].ToString();
                 Orders.PaymentTypeChargeFee = "0";
-                Orders.TradeDate = (string)json["MerchantTradeDate"];
+                Orders.TradeDate = json["MerchantTradeDate"].ToString();
                 Orders.SimulatePaid = 0;
                 _db.EcpayOrders.Add(Orders);
+                _db.SaveChanges();
+
+                //寫入Order
+                IEnumerable < ShoppingCart > cartItemList = _db.Cart.Where(c => c.MemberID == memberId);
+                DbSet<Course> courseList = _db.Course;
+                decimal total = cartItemList
+                    .Join(
+                        _db.Course,
+                        cart => cart.CourseID,
+                        course => course.CourseID,
+                        (cart, course) => course.Price
+                    )
+                    .Sum();
+                Order order = new Order();
+                order.MemberID = memberId;
+                order.OrderDate = DateTime.UtcNow;
+                order.OrderStatus = "未付款";
+                order.TotalAmount = total;
+                order.MerchantTradeNo=Orders.MerchantTradeNo;
+                //order.DiscountID
+                _db.Order.Add(order);
+                _db.SaveChanges();
+
+                //寫入OrderDetail
+                foreach (ShoppingCart cart in cartItemList)
+                {
+                    OrderDetail orderDetail = new OrderDetail();
+                    orderDetail.OrderID = order.OrderID;
+                    orderDetail.CourseID=cart.CourseID;
+                    orderDetail.Quantity = cart.Quantity;
+                    orderDetail.UnitPrice = courseList.Where(c => c.CourseID == cart.CourseID).FirstOrDefault().Price;
+                    orderDetail.SchedulerID = cart.SchedulerID;
+                    _db.OrderDetail.Add(orderDetail);
+                    _db.SaveChanges();
+                }
+                Console.WriteLine("====================================succeeded=================================");
+                foreach (ShoppingCart cart in cartItemList)
+                {
+                    _db.Cart.Remove(cart);
+                }
                 _db.SaveChanges();
                 num = "OK";
             }
@@ -143,6 +192,7 @@ namespace Project1.Controllers
                 if (id["RtnMsg"] == "Succeeded") ecpayOrder.RtnMsg = "已付款";
                 ecpayOrder.PaymentDate = Convert.ToDateTime(id["PaymentDate"]);
                 ecpayOrder.SimulatePaid = int.Parse(id["SimulatePaid"]);
+                _db.Order.Where(o => o.MerchantTradeNo == ecpayOrder.MerchantTradeNo).FirstOrDefault().OrderStatus = "已付款";
                 _db.SaveChanges();
             }
             return View("EcpayView", data);

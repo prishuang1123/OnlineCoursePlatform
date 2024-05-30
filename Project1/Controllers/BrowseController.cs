@@ -396,6 +396,7 @@ namespace Project1.Controllers
                 {
                     discountPercentage = discountObj.DiscountPercentage;
                     validationResult = "success";
+                    TempData["DiscountCode"]=discountObj.DiscountName;
                 }
                 else
                 {
