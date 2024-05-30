@@ -2,10 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
+using Newtonsoft.Json.Linq;
 using NuGet.Protocol;
 using Project1.Data;
 using Project1.Models;
 using Project1.ViewModels;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Security.Claims;
 
@@ -49,18 +52,12 @@ namespace Project1.Controllers
         // GET: Browse/Cart/5
         public async Task<IActionResult> ViewCart() //recieve memberID
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var MemID = 0;
-            if (userId != null)
-            {
-                var Mem = _db.Member.Where(m => m.AspID == userId).FirstOrDefault();
-                MemID = Mem.MemberID;
-            }
+            var memberId = getMemberId(User);
             //if (id==null || id == 0)
             //{
             //	return RedirectToAction ("Login", "Members");
             //}
-            memberId = MemID;
+
             //Course course= await _db.Course.Where(u=>u.CourseID==id).FirstOrDefaultAsync();
             //select the member's cartItems to show all products added to the cart
 
@@ -290,9 +287,7 @@ namespace Project1.Controllers
         [HttpGet]
         public JsonResult GetClassSchedule()
         {
-            var userId = _userManager.GetUserId(User);
-            var member = _db.Member.Where(m => m.AspID == userId).FirstOrDefault();
-            var memberId = member.MemberID;
+            var memberId = getMemberId(User);
             memberShoppingCart = _db.Cart.Where(u => u.MemberID == memberId).ToList(); //member到時候再改
             var classSchedule = memberShoppingCart
             .GroupBy(c => c.CourseID)
@@ -301,14 +296,16 @@ namespace Project1.Controllers
                 CourseID = cs.Key,
                 Quantity = cs.Sum(c => c.Quantity), // Total quantity for the course
                 SelectedScheduleId = (from cart in _db.Cart
-                                      where cart.CourseID == cs.Key
+                                      where (cart.CourseID == cs.Key &
+                                            cart.MemberID == memberId)
                                       join schedule in _db.ClassSchedule
                                       on cart.SchedulerID equals schedule.SchedulerID
                                       select $"{cart.CourseID}-{cart.SchedulerID}").ToList(),
 
 
                 SelectedScheduleDate = (from cart in _db.Cart
-                                        where cart.CourseID == cs.Key
+                                        where (cart.CourseID == cs.Key &
+                                            cart.MemberID == memberId)
                                         join schedule in _db.ClassSchedule
                                         on cart.SchedulerID equals schedule.SchedulerID
                                         select new { cart.SchedulerID, schedule.Scheduler })
@@ -351,22 +348,34 @@ namespace Project1.Controllers
 
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public IActionResult Delete(int id)//cartId
+        public IActionResult Delete(int id)//courseId
         {
-            ShoppingCart cartItem = _db.Cart.Where(obj => obj.CartID == id).FirstOrDefault();
-            _db.Cart.Remove(cartItem);
+            List<ShoppingCart> cartItemList = _db.Cart.Where(obj => obj.CourseID == id).ToList();
+            int memberId = cartItemList.Any() ? cartItemList[0].MemberID : 0;
+            foreach (var cartItem in cartItemList)
+			{
+                _db.Cart.Remove(cartItem);
+                
+            }
             _db.SaveChanges();
-            int memberId = cartItem.MemberID;
+
             TempData["success"] = "商品刪除成功!!";
             //return RedirectToAction("ViewCart", "Browse", new { id = 1 });
             return Json(new { success = true, memberId = memberId });
         }
-
+        private int getMemberId(ClaimsPrincipal user)
+        {
+            var userId = _userManager.GetUserId(User);
+            var member = _db.Member.Where(m => m.AspID == userId).FirstOrDefault();
+            var memberId = member.MemberID;
+            return memberId;
+        }
         [HttpGet]
         public async Task<IActionResult> UpdateSubtotal()
         {
+            var memberId = getMemberId(User);
             decimal subtotal = 0;
-            memberShoppingCart = await _db.Cart.Where(u => u.MemberID == 1).ToListAsync();
+            memberShoppingCart = await _db.Cart.Where(u => u.MemberID == memberId).ToListAsync();
             IEnumerable<int> courseIds = memberShoppingCart.Select(u => u.CourseID).ToList();
             List<Course> courseObj = await _db.Course.Where(c => courseIds.Contains(c.CourseID)).ToListAsync();
             foreach (var courseId in courseIds)
@@ -438,13 +447,14 @@ namespace Project1.Controllers
         {
             try
             {
+                var memberId = getMemberId(User);
 
-                int memberId = (int)(_db.Cart.FirstOrDefault(obj => obj.CourseID == courseId)?.MemberID);
+
 
                 if (memberId != null)
                 {
                     if (isSelected)
-                    {//沒選便有選，加到購物車
+                    {//沒選變有選，加到購物車
                         ShoppingCart newCartItem = new ShoppingCart();
                         newCartItem.CourseID = courseId;
                         newCartItem.SchedulerID = scheduleId;
@@ -454,7 +464,7 @@ namespace Project1.Controllers
                         _db.SaveChanges();
                     }
                     else
-                    {//有選便沒選，從購物車移出
+                    {//有選變沒選，從購物車移出
                         ShoppingCart cartItem = _db.Cart.FirstOrDefault(obj => obj.SchedulerID == scheduleId);
                         if (cartItem != null)
                         {
@@ -463,8 +473,18 @@ namespace Project1.Controllers
                         }
 
                     }
-
-                    return Json(new { success = true });
+					decimal coursePrice = _db.Course.Where(c => c.CourseID == courseId).FirstOrDefault().Price;
+					decimal totalPrice = 0;
+                    IEnumerable<ShoppingCart> memberShoppingCart = _db.Cart.Where(obj => obj.CourseID == courseId).ToList();
+                    foreach (var cartItem in memberShoppingCart)
+					{
+						if (cartItem.CourseID == courseId)
+						{
+							totalPrice += coursePrice;
+						}
+					}
+						
+                    return Json(new { success = true, TotalPrice=totalPrice});
                 }
                 else
                 {
@@ -478,6 +498,6 @@ namespace Project1.Controllers
                 return Json(new { success = false, error = ex.Message });
             }
         }
-
+        
     }
 }

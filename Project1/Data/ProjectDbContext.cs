@@ -463,7 +463,7 @@ new Course { CourseID = 15, CourseName = "貓咪社交化培訓", TrainerID = 5,
 
         public virtual DbSet<CourseType> CourseType { get; set; }
 
-
+        public virtual DbSet<EcpayOrders> EcpayOrders { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

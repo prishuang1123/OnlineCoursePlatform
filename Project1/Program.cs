@@ -15,6 +15,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 builder.Services.AddDbContext<ProjectDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("ProjectDbContext")));
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 //wayne:註冊 客製化註冊時的錯誤訊息
@@ -28,7 +29,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddControllers().AddNewtonsoftJson();//pris:金流串接需要
 //wayne:Identity相關設定
 builder.Services.Configure<IdentityOptions>(options => {
     //密碼原則
