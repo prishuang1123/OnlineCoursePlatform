@@ -189,7 +189,8 @@
             },
             mounted() {
                 this.memberID = sessionStorage.getItem("MemID");
-                const cid = sessionStorage.getItem("ActID");
+                const c = new URLSearchParams(window.location.search).get('id');
+                const cid = sessionStorage.getItem("ActID",c);
                 const url1 = `https://localhost:7177/Trainerrr/getsingleCourse?id=${cid}`;
                 axios.get(url1)
                     .then(response => {

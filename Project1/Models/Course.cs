@@ -61,7 +61,7 @@ namespace Project1.Models
         [Display (Name = "封面圖")]
         public string? ThumbnailUrl { get; set; }
 
-
+        
 
     }
 }
