@@ -1146,7 +1146,8 @@ namespace Project1.Controllers
         {
             try
             {
-                var trainer = await _context.Trainer.FindAsync(id);
+
+                var trainer = await _context.Trainer.Where(t => t.MemberID == id).FirstOrDefaultAsync();
                 if (trainer == null)
                 {
                     return Json(new { message = "Trainer not found" });

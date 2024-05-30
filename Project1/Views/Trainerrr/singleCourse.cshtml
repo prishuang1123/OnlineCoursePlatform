@@ -92,17 +92,6 @@
             color: #888; /* 評論日期文字顏色 */
         }
 
-        .tooltip {
-            position: absolute;
-            display: none;
-            background-color: grey;
-            color:black;
-            border: 1px solid #ccc;
-            padding: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-        }
-
     </style>
 }
 
@@ -122,6 +111,36 @@
                         <img :src="course.thumbnailUrl" class="img-fluid" alt="">
                     </div>
                 </div>
+                <div class="s_product_text">
+                    <h3> {{course.courseName}}</h3>
+                    <h2>價格: {{course.price}}</h2>
+                    <ul class="list">
+                        <li><span>寵物分類: {{course.petCategoryName}}</span></li>
+                        <li><span>課程類別: {{course.courseCategoryName}}</span></li>
+                        <li><span>課程類型: {{course.courseTypeName}}</span></li>
+                        <li><span>人數上限: {{course.maxParticipants}}</span></li>
+                        <li><span>上課地區: {{course.locationName}}</span></li>
+                    </ul>
+                    <p>課程簡介: {{course.description}}</p>
+                </div>
+            </div>
+            <div class="col-lg-5 offset-lg-1">
+                <h3 class="mt-5 mb-30">已開放上課時間</h3>
+                <div v-if="schedules.length > 0">
+                    <div v-for="(schedule, index) in schedules" :key="schedule.schedulerID" class="single-element-widget mt-30">
+                        <div class="d-flex justify-content-between">
+                            <p>{{ schedule.scheduler }}</p>
+                            <div class="primary-checkbox">
+                                <input type="checkbox" :id="'checkbox-' + index" :value="schedule.schedulerID" v-model="selectedSchedules">
+                                <label :for="'checkbox-' + index"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div v-else><p>此門課尚未開放上課時段</p></div>
+                <div class="card_area d-flex align-items-center">
+                    <a asp-controller="Browse" asp-action="ViewCart" class="primary-btn" v-on:click.prevent="addToCart">加入購物車</a>
+                </div>
                 <div class="add_comment_section mt-5">
                     <h3 class="mb-30">添加評論</h3>
                     <div>
@@ -136,39 +155,6 @@
                 </div>
                 <div id="error-message" style="color: red;"></div>
             </div>
-            <div class="col-lg-5 offset-lg-1">
-                <div class="s_product_text">
-                    <h3> {{course.courseName}}</h3>
-                    <h2>價格: {{course.price}}</h2>
-                    <ul class="list">
-                        <li><span>寵物分類: {{course.petCategoryName}}</span></li>
-                        <li><span>課程類別: {{course.courseCategoryName}}</span></li>
-                        <li><span>課程類型: {{course.courseTypeName}}</span></li>
-                        <li><span>人數上限: {{course.maxParticipants}}</span></li>
-                        <li><span>上課地區: {{course.locationName}}</span></li>
-                    </ul>
-                    <p>課程簡介: {{course.description}}</p>
-                </div>
-                <h3 class="mb-30">已開放上課時間</h3>
-
-                <div v-if="schedules.length > 0">
-                    <div v-for="(schedule, index) in schedules" :key="schedule.schedulerID" class="single-element-widget mt-30">
-                        <div class="d-flex justify-content-between">
-                            <p>{{ schedule.scheduler }}</p>
-                            <div class="primary-checkbox">
-                                <input type="checkbox" :id="'checkbox-' + index" :value="schedule.schedulerID" v-model="selectedSchedules">
-                                <label :for="'checkbox-' + index"></label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div v-else><p>此門課尚未開放上課時段</p></div>
-                <div id='calendar'></div>
-                <div id="tooltip" class="tooltip"></div>
-                <div class="card_area d-flex align-items-center">
-                    <a asp-controller="Browse" asp-action="ViewCart" class="primary-btn" v-on:click.prevent="addToCart">加入購物車</a>
-                </div>
-            </div>
             <div class="container">
                 <h3 class="mt-5 mb-4">學生評論</h3>
                 <div class="comment-list">
@@ -181,7 +167,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
@@ -306,45 +291,6 @@
 
 
         var app = Vue.createApp(vueApp).mount("#app");
-
-        const cid = sessionStorage.getItem("ActID");
-
-        document.addEventListener('DOMContentLoaded', function () {
-            var calendarEl = document.getElementById('calendar');
-            var tooltip = document.getElementById('tooltip');
-
-            axios.get(`/Trainerrr/getClassSchedule?id=${cid}`).then(response => {
-                const schedules = response.data;
-                const events = schedules.map(schedule => {
-                    return {
-                        allDay:true,
-                        start: schedule.scheduler,
-                        title: "剩" + schedule.enrollmentCount + "名",
-                        display: "Background",
-                    };
-                });
-                var calendar = new FullCalendar.Calendar(calendarEl, {
-                    eventMouseEnter: function (info) {
-                        console.log('Mouse entered event');
-                        const enrollmentCount = schedules.filter(s => s.courseID === info.event.extendedProps.courseID);
-                        console.log(enrollmentCount);
-                        tooltip.innerHTML = `<strong>剩餘名額:</strong> ${enrollmentCount}位<br>`;
-                        tooltip.style.display = 'block';
-                        tooltip.style.left = info.jsEvent.pageX + 'px';
-                        tooltip.style.top = info.jsEvent.pageY + 'px';
-                    },
-                    eventMouseLeave: function (info) {
-                        tooltip.style.display = 'none';
-                    },
-                    initialView: 'dayGridMonth',
-                    events: events,         
-                });
-                calendar.render();
-            }).catch(error => {
-                console.error('API error:', error.response.data);
-                alert(error.response.data.message);
-            });
-        });
     </script>
 
         </script>

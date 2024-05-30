@@ -1380,12 +1380,14 @@
                 const schedules = response.data;
                 const events = schedules.map(schedule => {
                     return {
+                        url: `/Trainerrr/singleCourse?id=${schedule.courseID}`,
                         allDay: true,
                         start: schedule.scheduler,
                         title: "剩" + schedule.enrollmentCount + "名",
                         display: "Background",
                         extendedProps: {
-                            courseName: schedule.courseName
+                            courseName: schedule.courseName,
+                            courseID: schedule.courseID,
                         }
                     };
                 });
@@ -1393,20 +1395,17 @@
                 var calendar = new FullCalendar.Calendar(calendarEl, {
                     initialView: 'dayGridMonth',
                     events: events,
-                    eventMouseEnter: function (info) {
-                        console.log('Mouse enter event:', info.event); // 确认事件数据
-                        console.log('Event extendedProps:', info.event.extendedProps);
-                        console.log('Event title:', info.event.title);
-                        tooltip.html = `<strong>Course Name:</strong> ${info.event.extendedProps.courseName}<br><strong>Enrollment Count:</strong> ${info.event.title}`;
-                        tooltip.style.display = 'block';
-                        tooltip.style.left = info.jsEvent.pageX + 'px';
-                        tooltip.style.top = info.jsEvent.pageY + 'px';
+                    aspectRatio: 0.8,
+                    selectable: true,
+                    eventClick: function (arg) {
+                        sessionStorage.setItem("ActID", arg.event.extendedProps.courseID);
+                        arg.jsEvent.preventDefault();
+                        window.open(arg.event.url, '_blank', 'width=700,height=600');
+                        
                     },
-                    eventMouseLeave: function (info) {
-                        tooltip.style.display = 'none';
-                    }
                 });
                 calendar.render();
+                // calendar.setOption('height', 700);
             }).catch(error => {
                 console.error('API error:', error.response ? error.response.data : error.message);
                 alert(error.response ? error.response.data.message : error.message);
