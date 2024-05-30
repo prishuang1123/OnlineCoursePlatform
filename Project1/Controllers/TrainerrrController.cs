@@ -1011,7 +1011,24 @@ namespace Project1.Controllers
             var classSchedules = await _context.ClassSchedule
                                                .Where(c => c.CourseID == id && c.Scheduler >= DateTime.UtcNow)
                                                .ToListAsync();
-            
+
+            for(int i = 0; i < classSchedules.Count; i++)
+            {
+                var enrollcount = await _context.OrderDetail.Where(od => od.CourseID == id && od.SchedulerID == classSchedules[i].SchedulerID).CountAsync();
+                var maxparticipants = _context.Course.Where(c => c.CourseID == id).Select(c => c.MaxParticipants).FirstOrDefault();
+                if(enrollcount >= maxparticipants)
+                {
+                    classSchedules.RemoveAt(i);
+                }               
+            }
+
+            for(int i = 0; i < classSchedules.Count; i++)
+            {
+                var enrollcount = await _context.OrderDetail.Where(od => od.CourseID == id && od.SchedulerID == classSchedules[i].SchedulerID).CountAsync();
+                var maxparticipants = _context.Course.Where(c => c.CourseID == id).Select(c => c.MaxParticipants).FirstOrDefault();
+                classSchedules[i].EnrollmentCount = maxparticipants - enrollcount;
+            }
+
             if (classSchedules == null || classSchedules.Count == 0)
             {
                 return Json(new { message = "No schedules found for the given course ID" });
