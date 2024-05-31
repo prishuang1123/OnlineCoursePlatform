@@ -876,20 +876,6 @@
         var retractPublishUrl = "/Trainerrr/RetractPublish"; // 收回課程
         var getPublishedSchedulesUrl = "/Trainerrr/GetPublishedSchedules"; // 取得已發佈資訊
         var GetReservationsUrl = "/Trainerrr/GetReservations";//查看誰預約
-        var getBlogUrl = "https://localhost:7177/Trainerrr/GetBlog"; // 部落格
-        var createPostUrl = "https://localhost:7177/Trainerrr/CreatePost"; // 貼文新增
-        var editPostUrl = "https://localhost:7177/Trainerrr/EditPost"; // 編輯貼文
-        var deletePostUrl = "https://localhost:7177/Trainerrr/DeletePost"; // 刪除貼文
-        var getCoursesUrl = "https://localhost:7177/Trainerrr/GetCourses"; // 顯示課程
-        var createCourseUrl = "https://localhost:7177/Trainerrr/CreateCourse"; // 新增課程
-        var getDropdownDataUrl = "https://localhost:7177/Trainerrr/GetDropdownData"; // 課程種類下拉式選單資訊
-        var getCurrentTrainerInfoUrl = "https://localhost:7177/Trainerrr/GetCurrentTrainerInfo"; // 訓練師誰?
-        var editCourseUrl = "https://localhost:7177/Trainerrr/EditCourse"; // 編輯課程
-        var publishCourseUrl = "https://localhost:7177/Trainerrr/PublishCourse"; // 發佈課程
-        var deleteCourseUrl = "https://localhost:7177/Trainerrr/DeleteCourse"; // 刪除課程
-        var retractPublishUrl = "https://localhost:7177/Trainerrr/RetractPublish"; // 收回課程
-        var getPublishedSchedulesUrl = "https://localhost:7177/Trainerrr/GetPublishedSchedules"; // 取得已發佈資訊
-        var GetReservationsUrl = "https://localhost:7177/Trainerrr/GetReservations";//查看誰預約
         var VueApp = {
             data() {
                 return {
@@ -940,8 +926,7 @@
                     thumbnailPreview: null, // 新增封面圖預覽
                     publishError: null ,// 發佈錯誤訊息
                     reservations: [] // 存儲預約資料
-                    publishError: null, // 發佈錯誤訊息
-                    reservations: [], // 存儲預約資料
+          
 
                 };
             },
@@ -1425,15 +1410,6 @@
                         .catch(error => {
                             console.log(error);
                         });
-                },
-                viewReservations(schedulerID) {
-                    axios.get(`${GetReservationsUrl}?schedulerID=${schedulerID}`).then(response => {
-                        this.reservations = response.data;
-                        $('#viewReservationsModal').modal('show');
-                    }).catch(error => {
-                        console.log(error);
-                        alert("無法取得預約資料");
-                    });
                 },
                 // 格式化日期時間顯示
                 formatDateTime(dateTime) {
