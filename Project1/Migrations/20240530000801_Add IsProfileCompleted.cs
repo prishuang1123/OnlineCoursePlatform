@@ -31,25 +31,25 @@ namespace Project1.Migrations
             //    name: "FK_Course_PetCategory_PetCategoryID",
             //    table: "Course");
 
-            migrationBuilder.DropIndex(
-                name: "IX_Course_CourseCategoryID",
-                table: "Course");
+            //migrationBuilder.DropIndex(
+            //    name: "IX_Course_CourseCategoryID",
+            //    table: "Course");
 
-            migrationBuilder.DropIndex(
-                name: "IX_Course_CourseTypeID",
-                table: "Course");
+            //migrationBuilder.DropIndex(
+            //    name: "IX_Course_CourseTypeID",
+            //    table: "Course");
 
-            migrationBuilder.DropIndex(
-                name: "IX_Course_LocationID",
-                table: "Course");
+            //migrationBuilder.DropIndex(
+            //    name: "IX_Course_LocationID",
+            //    table: "Course");
 
-            migrationBuilder.DropIndex(
-                name: "IX_Course_PetCategoryID",
-                table: "Course");
+            //migrationBuilder.DropIndex(
+            //    name: "IX_Course_PetCategoryID",
+            //    table: "Course");
 
-            migrationBuilder.DropIndex(
-                name: "IX_ClassSchedule_CourseID",
-                table: "ClassSchedule");
+            //migrationBuilder.DropIndex(
+            //    name: "IX_ClassSchedule_CourseID",
+            //    table: "ClassSchedule");
 
             migrationBuilder.AlterColumn<string>(
                 name: "ResidenceArea",

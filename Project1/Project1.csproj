@@ -25,6 +25,8 @@
   <ItemGroup>
     <Compile Remove="Controllers\AddTrainersController.cs" />
     <Compile Remove="Controllers\testController.cs" />
+    <Compile Remove="Data\Migrations\00000000000000_CreateIdentitySchema.cs" />
+    <Compile Remove="Data\Migrations\00000000000000_CreateIdentitySchema.Designer.cs" />
     <Compile Remove="Models\CourseClicksRanking.cs" />
     <Compile Remove="Models\PTDetail.cs" />
   </ItemGroup>

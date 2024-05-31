@@ -19,15 +19,19 @@ namespace Project1.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ProjectDbContext _ProjectDbContext;
+        private readonly UserManager<ProjectUser> _userManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly IConfiguration _Configuration;
 
         //繼承後注入建構函式
         //關鍵字:base 呼叫父類的建構式
-        public HomeController(ILogger<HomeController> logger, ProjectDbContext ProjectDbConext, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IConfiguration configuration) : base(userManager, signInManager)
+        public HomeController(ILogger<HomeController> logger, UserManager<ProjectUser> userManager, SignInManager<ProjectUser> signInManager, RoleManager<ApplicationRole> roleManager, ProjectDbContext ProjectDbConext, IConfiguration configuration):base(userManager, signInManager)
         {
             _logger = logger;
             _ProjectDbContext = ProjectDbConext;
             _Configuration = configuration;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         //GET Home/Index

@@ -11,13 +11,13 @@ namespace Project1.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<bool>(
-                name: "IsAdministrator",
-                table: "Member",
-                type: "bit",
-                nullable: true,
-                oldClrType: typeof(bool),
-                oldType: "bit");
+            //migrationBuilder.AlterColumn<bool>(
+            //    name: "IsAdministrator",
+            //    table: "Member",
+            //    type: "bit",
+            //    nullable: true,
+            //    oldClrType: typeof(bool),
+            //    oldType: "bit");
 
 
             migrationBuilder.UpdateData(
