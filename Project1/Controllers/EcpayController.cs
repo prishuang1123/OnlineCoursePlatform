@@ -8,6 +8,7 @@ using Newtonsoft.Json.Linq;
 using Project1.Data;
 using Project1.Models;
 using Project1.Utilities;
+using Project1.ViewModels;
 using System.Data;
 using System.Net.Http.Headers;
 using System.Runtime.Intrinsics.Arm;
@@ -33,6 +34,7 @@ namespace Project1.Controllers
         //step1 : 網頁導入傳值到前端
         public ActionResult Index()
         {
+            int memberId = Util.getMemberId(_db, _userManager,User);
             
             var orderId = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 20);
             //需填入你的網址
@@ -62,8 +64,23 @@ namespace Project1.Controllers
                 };
             //檢查碼
             order["CheckMacValue"] = GetCheckMacValue(order);
-            
-            return View(order);
+
+            DbSet<Course> course = _db.Course;
+            var courseObjList = _db.Cart.Where(c=>c.MemberID==memberId)
+                .GroupBy(c => c.CourseID)
+                .Select(cs => new ShoppingCart
+                {
+                    CourseID = cs.Key,
+                    Quantity = cs.Sum(c => c.Quantity),
+                    
+                }).ToList();
+            CheckoutVM checkoutVM = new CheckoutVM()
+            {
+                courseObjList = courseObjList,
+                course = course,
+                EcpayOrder = order,
+            };
+            return View(checkoutVM);
         }
         private string GetCheckMacValue(Dictionary<string, string> order)
         {

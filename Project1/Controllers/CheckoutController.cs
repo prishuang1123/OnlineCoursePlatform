@@ -18,21 +18,16 @@ namespace Project1.Controllers
             _db = db;
             _userManager = userManager;
         }
-        public async Task<IActionResult> Index() 
+        public async Task<IActionResult> Index(String code) 
         {
             int memberId=Util.getMemberId(_db, _userManager, User);
             DbSet<Course> course = _db.Course;
             IEnumerable<ShoppingCart>memberShoppingCart = await _db.Cart.Where(u => u.MemberID == memberId).ToListAsync();
             Member memberObj = await _db.Member.Where(obj=>obj.MemberID==memberId).FirstOrDefaultAsync();
-            Discount discountObj;
-            if (TempData["DiscountCode"] != null)
+            double discountPercentage = 1;
+            if (code != null)
             {
-                discountObj = await _db.Discount.Where(obj => obj.DiscountName == TempData["DiscountCode"].ToString()).FirstOrDefaultAsync();
-                TempData.Remove("DiscountCode");
-            }
-            else
-            {
-                discountObj = null;
+                discountPercentage =  _db.Discount.Where(obj => obj.DiscountName == code).FirstOrDefault().DiscountPercentage;
             }
            
             IEnumerable<Location> locationList = await _db.Location.ToListAsync();
@@ -54,7 +49,7 @@ namespace Project1.Controllers
             CheckoutVM checkoutVM = new CheckoutVM()
             {
                 Member = memberObj,
-                Discountobj = discountObj,
+                discountPercentage = discountPercentage,
                 Location = locationList,
                 cartItemList= memberShoppingCart,
                 courseObjList= courseObjList,
@@ -62,12 +57,15 @@ namespace Project1.Controllers
                 subtotal=initSubtotal,
             };
             return View(checkoutVM);
+            TempData["courseObjList"] = courseObjList;
         }
         [HttpPost]
-        public IActionResult StoreDiscountCode(string discountCode)
+        public IActionResult StoreAlreadyUsedDiscountCode(string discountCode)
         {
-            // Store discountCode in TempData
-            TempData["DiscountCode"] = discountCode;
+            Discount discount = _db.Discount.Where(obj => obj.DiscountName == discountCode).FirstOrDefault();
+            discount.DiscountName = "used";
+            _db.Update(discount);
+            _db.SaveChangesAsync();
             return Json(new { success = true }); // Optionally, return a success response
         }
     }

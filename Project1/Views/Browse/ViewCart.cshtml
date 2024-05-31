@@ -137,7 +137,7 @@
                             <td>
                                 <div class="checkout_btn_inner d-flex align-items-end">
                                     <a asp-controller="Browse" asp-action="Index" class="gray_btn" >繼續購物</a>
-                                    <a asp-controller="Checkout" asp-action="Index" class="primary-btn" >結帳</a>
+                                    <a id="checkoutBtn" asp-controller="Checkout" asp-action="Index" class="primary-btn" >結帳</a>
                                 </div>
                             </td>
                         </tr>
@@ -183,7 +183,13 @@
     </script>
 
     <script>
+
         const discountValid=false;
+        const checkoutBtn = document.getElementById("checkoutBtn");
+        checkoutBtn.addEventListener("click", function (event) {
+            let discountCode = document.getElementById("discountCode").value;
+            event.currentTarget.href = `${event.currentTarget.href}?code=${discountCode}`;
+        })
         $(document).on('change', 'input[type="checkbox"]', function () {
             // Get course ID and schedule ID from checkbox ID
             var ids = $(this).attr('id').split('_');
