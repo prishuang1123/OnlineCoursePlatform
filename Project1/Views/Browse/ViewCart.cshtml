@@ -42,27 +42,6 @@
                                 </td>
                                 <td>
                                     <div class="single-element-widget mt-30">
-                                        @* <div v-for="(course, courseIndex) in classSchedule" :key="courseIndex">
-                                            <div v-if="course.courseID == @(cartItemGroup.Key)" class="switch-wrap d-flex justify-content-between">
-                                                <div v-for="(scheduleId, scheduleIndex) in course.allScheduleId" :key="scheduleIndex">
-                                                    <div v-if="isScheduleSelected(scheduleId, course.selectedScheduleId)" class="switch-wrap d-flex justify-content-between">
-                                                        <p>if{{course.allScheduleDate[scheduleId]}}</p>
-                                                        <div class="primary-checkbox mb-0">
-                                                            <input type="checkbox" v-model="course.selectedScheduleId[course.courseID + '-' + scheduleId]" value="course.allScheduleDate[scheduleId]" v-on:change="updateDatabase(course.courseID, scheduleId, true)" />
-                                                            <label for=""></label>
-                                                        </div>
-                                                    </div>
-                                                    <div v-else class="switch-wrap d-flex justify-content-between">
-                                                        <p>else{{course.allScheduleDate[scheduleId]}}</p>
-                                                        <div class="primary-checkbox mb-0">
-                                                            <input type="checkbox" v-model="course.selectedScheduleId[course.courseID + '-' + scheduleId]" value="course.allScheduleDate[scheduleId]" v-on:change="updateDatabase(course.courseID, scheduleId, false)" />
-                                                            <label for=""></label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                           
-                                        </div> *@
                                         <div v-for="(course, courseIndex) in classSchedule" :key="courseIndex">
                                             <div v-if="course.courseID == @(cartItemGroup.Key)" class="switch-wrap d-flex justify-content-between">
                                                 <div v-for="(scheduleId, scheduleIndex) in course.allScheduleId" :key="scheduleIndex">
@@ -146,27 +125,6 @@
                                 <h5></h5>
                             </td>
                             <td>
-                                @* <div class="shipping_box">
-                                    <ul class="list">
-                                        <li><a href="#">Flat Rate: $5.00</a></li>
-                                        <li><a href="#">Free Shipping</a></li>
-                                        <li><a href="#">Flat Rate: $10.00</a></li>
-                                        <li class="active"><a href="#">Local Delivery: $2.00</a></li>
-                                    </ul>
-                                    <h6>Calculate Shipping <i class="fa fa-caret-down" aria-hidden="true"></i></h6>
-                                    <select class="shipping_select">
-                                        <option value="1">Bangladesh</option>
-                                        <option value="2">India</option>
-                                        <option value="4">Pakistan</option>
-                                    </select>
-                                    <select class="shipping_select">
-                                        <option value="1">Select a State</option>
-                                        <option value="2">Select a State</option>
-                                        <option value="4">Select a State</option>
-                                    </select>
-                                    <input type="text" placeholder="Postcode/Zipcode">
-                                    <a class="gray_btn" href="#">Update Details</a>
-                                </div> *@
                             </td>
                         </tr>
                         <tr class="out_button_area">
@@ -179,7 +137,7 @@
                             <td>
                                 <div class="checkout_btn_inner d-flex align-items-end">
                                     <a asp-controller="Browse" asp-action="Index" class="gray_btn" >繼續購物</a>
-                                    <a asp-controller="Checkout" asp-action="Index" asp-route-id="1" asp-route-discountCode="" class="primary-btn" >結帳</a>
+                                    <a id="checkoutBtn" asp-controller="Checkout" asp-action="Index" class="primary-btn" >結帳</a>
                                 </div>
                             </td>
                         </tr>
@@ -192,13 +150,8 @@
 <!--================End Cart Area =================-->
 
 @section Scripts
-{
-@*     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.2/axios.min.js" integrity="sha512-JSCFHhKDilTRRXe9ak/FJ28dcpOJxzQaCd3Xg8MyF6XFjODhy/YMCM8HW0TFDckNHWUewW+kfvhin43hKtJxAw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> *@
-    
+{    
     <script>
-        
         const baseUrl = "https://localhost:7177";
         const vueApp = {
             data() {
@@ -212,7 +165,7 @@
                 
             },
             mounted() {
-                const GetClassScheduleUrl = `${baseUrl}/Browse/GetClassSchedule`;
+                const GetClassScheduleUrl = `/Browse/GetClassSchedule`;
                 axios.get(GetClassScheduleUrl).then(response => {
                     // Clear the existing classSchedule before populating it with new data
                     this.classSchedule = [];
@@ -230,7 +183,13 @@
     </script>
 
     <script>
+
         const discountValid=false;
+        const checkoutBtn = document.getElementById("checkoutBtn");
+        checkoutBtn.addEventListener("click", function (event) {
+            let discountCode = document.getElementById("discountCode").value;
+            event.currentTarget.href = `${event.currentTarget.href}?code=${discountCode}`;
+        })
         $(document).on('change', 'input[type="checkbox"]', function () {
             // Get course ID and schedule ID from checkbox ID
             var ids = $(this).attr('id').split('_');
@@ -335,6 +294,7 @@
                             discountButton.setAttribute("disabled", "disabled");
                            
                             sessionStorage.setItem("discountCode", discountCode.value);
+                            
                         }
                         else if (response.validationResult == "not applicable") {
                             alert("此優惠碼不適用");

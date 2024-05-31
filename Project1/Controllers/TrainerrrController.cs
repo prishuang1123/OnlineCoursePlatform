@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Azure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -23,13 +24,13 @@ namespace Project1.Controllers
 {
     public class TrainerrrController : VerifyUserRoles
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly UserManager<ProjectUser> _userManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly ProjectDbContext _context;
         private readonly IWebHostEnvironment _environment;
         private readonly IConfiguration _Configuration;
 
-        public TrainerrrController(ProjectDbContext context, IWebHostEnvironment environment, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration) : base(userManager, signInManager)
+        public TrainerrrController(ProjectDbContext context, IWebHostEnvironment environment, UserManager<ProjectUser> userManager, SignInManager<ProjectUser> signInManager, RoleManager<ApplicationRole> roleManager, IConfiguration configuration) : base(userManager, signInManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -327,8 +328,26 @@ namespace Project1.Controllers
             return View(await _context.Trainer.ToListAsync());
         }
 
-        // POST: Trainer/ChangeApprovalStatus首頁審核按鈕
+        //// POST: Trainer/ChangeApprovalStatus首頁審核按鈕
+        //[HttpPost]
+        //public async Task<IActionResult> ChangeApprovalStatus(int trainerId, string newStatus)
+        //{
+        //    var trainer = await _context.Trainer.FindAsync(trainerId);
+
+        //    if (trainer == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    trainer.Status = newStatus; // 將訓練師的狀態更新為新的狀態
+        //    await _context.SaveChangesAsync(); // 將變更保存到資料庫
+
+        //    return RedirectToAction(nameof(TrainerIndex)); // 返回訓練師列表頁面
+        //}
+
+        //wayne:給予用戶訓練師權限功能
         [HttpPost]
+        [Authorize(Roles = "Admin")] // 限制只有具有 Admin 角色的用戶可以訪問此方法
         public async Task<IActionResult> ChangeApprovalStatus(int trainerId, string newStatus)
         {
             var trainer = await _context.Trainer.FindAsync(trainerId);
@@ -339,10 +358,51 @@ namespace Project1.Controllers
             }
 
             trainer.Status = newStatus; // 將訓練師的狀態更新為新的狀態
-            await _context.SaveChangesAsync(); // 將變更保存到資料庫
 
+            
+            // 使用 MemberID 查找 Member 記錄
+            var member = await _context.Member.FirstOrDefaultAsync(m => m.MemberID == trainer.MemberID);
+            if (member != null)
+            {
+                    // 使用 AspID 作為 UserId 來查找用戶
+                var user = await _userManager.FindByIdAsync(member.AspID);
+                if (user != null)
+                {
+                    if(newStatus == "通過")
+                    {
+                        var result = await _userManager.AddToRoleAsync(user, "Trainer");
+                        if (!result.Succeeded)
+                        {
+                            member.IsTrainer = true;
+                            _context.Member.Update(member);
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("", "Failed to add user to Trainer role");
+                            return RedirectToAction(nameof(TrainerIndex));
+                        }
+                    }
+                    else if (newStatus == "未通過")
+                    {
+                        var result = await _userManager.RemoveFromRoleAsync(user, "Trainer");
+                        if (result.Succeeded)
+                        {
+                            member.IsTrainer = false;
+                            _context.Member.Update(member);
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("", "Failed to remove user from Trainer role");
+                            return RedirectToAction(nameof(TrainerIndex));
+                        }
+                    }
+                }
+            }
+            
+            await _context.SaveChangesAsync(); // 將變更保存到資料庫
             return RedirectToAction(nameof(TrainerIndex)); // 返回訓練師列表頁面
         }
+
         public class Trainerrr
         {
             //文字顏色

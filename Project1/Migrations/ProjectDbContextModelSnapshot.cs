@@ -152,7 +152,7 @@ namespace Project1.Migrations
                             CourseCategoryID = 1,
                             CourseName = "幼犬初級訓練",
                             CourseTypeID = 1,
-                            CreatedAt = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5907),
+                            CreatedAt = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7756),
                             Description = "教您如何教導您的狗基本指令和技巧，如坐下、待命和走路等等。",
                             EnrollmentCount = 0,
                             LocationID = 1,
@@ -161,7 +161,7 @@ namespace Project1.Migrations
                             Price = 100m,
                             ThumbnailUrl = "/Img/CourseThumbnail/course1.jpg",
                             TrainerID = 1,
-                            UpdatedAt = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5908)
+                            UpdatedAt = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7758)
                         },
                         new
                         {
@@ -171,7 +171,7 @@ namespace Project1.Migrations
                             CourseCategoryID = 2,
                             CourseName = "貓咪玩耍技巧",
                             CourseTypeID = 1,
-                            CreatedAt = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5911),
+                            CreatedAt = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7763),
                             Description = "教您如何培養貓咪的遊戲技巧和互動能力，以及運動與娛樂訓練。",
                             EnrollmentCount = 0,
                             LocationID = 2,
@@ -180,7 +180,7 @@ namespace Project1.Migrations
                             Price = 120m,
                             ThumbnailUrl = "/Img/CourseThumbnail/course3.jpg",
                             TrainerID = 2,
-                            UpdatedAt = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5911)
+                            UpdatedAt = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7764)
                         },
                         new
                         {
@@ -190,7 +190,7 @@ namespace Project1.Migrations
                             CourseCategoryID = 2,
                             CourseName = "狗狗攝食指導",
                             CourseTypeID = 2,
-                            CreatedAt = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5914),
+                            CreatedAt = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7768),
                             Description = "教您如何給予狗狗均衡的飲食和營養，以維持健康和活力。",
                             EnrollmentCount = 0,
                             LocationID = 3,
@@ -199,7 +199,7 @@ namespace Project1.Migrations
                             Price = 90m,
                             ThumbnailUrl = "/Img/CourseThumbnail/course4.jpg",
                             TrainerID = 3,
-                            UpdatedAt = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5914)
+                            UpdatedAt = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7769)
                         },
                         new
                         {
@@ -209,7 +209,7 @@ namespace Project1.Migrations
                             CourseCategoryID = 2,
                             CourseName = "狗狗社交訓練",
                             CourseTypeID = 2,
-                            CreatedAt = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5916),
+                            CreatedAt = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7773),
                             Description = "幫助您的狗與其他狗和人建立友好的關係，減少焦慮和攻擊行為。",
                             EnrollmentCount = 0,
                             LocationID = 4,
@@ -218,7 +218,7 @@ namespace Project1.Migrations
                             Price = 80m,
                             ThumbnailUrl = "/Img/CourseThumbnail/course5.jpg",
                             TrainerID = 4,
-                            UpdatedAt = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5916)
+                            UpdatedAt = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7773)
                         },
                         new
                         {
@@ -228,7 +228,7 @@ namespace Project1.Migrations
                             CourseCategoryID = 1,
                             CourseName = "貓咪基礎訓練",
                             CourseTypeID = 2,
-                            CreatedAt = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5918),
+                            CreatedAt = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7778),
                             Description = "學習如何訓練您的貓咪做到基本的動作，例如使用貓砂盆和對聲音指令的回應。",
                             EnrollmentCount = 0,
                             LocationID = 5,
@@ -237,7 +237,7 @@ namespace Project1.Migrations
                             Price = 110m,
                             ThumbnailUrl = "/Img/CourseThumbnail/course6.jpg",
                             TrainerID = 5,
-                            UpdatedAt = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5919)
+                            UpdatedAt = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7778)
                         },
                         new
                         {
@@ -247,7 +247,7 @@ namespace Project1.Migrations
                             CourseCategoryID = 1,
                             CourseName = "狗狗運動訓練",
                             CourseTypeID = 2,
-                            CreatedAt = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5922),
+                            CreatedAt = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7784),
                             Description = "訓練狗狗進行各種運動，如擲球、跑步和障礙訓練，以增強體力和耐力。",
                             EnrollmentCount = 0,
                             LocationID = 6,
@@ -256,7 +256,7 @@ namespace Project1.Migrations
                             Price = 70m,
                             ThumbnailUrl = "/Img/CourseThumbnail/course1.jpg",
                             TrainerID = 6,
-                            UpdatedAt = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5922)
+                            UpdatedAt = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7785)
                         },
                         new
                         {
@@ -266,7 +266,7 @@ namespace Project1.Migrations
                             CourseCategoryID = 2,
                             CourseName = "貓咪心理療法",
                             CourseTypeID = 2,
-                            CreatedAt = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5924),
+                            CreatedAt = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7789),
                             Description = "介紹貓咪的心理狀態和行為問題，並提供治療和紓解方法。",
                             EnrollmentCount = 0,
                             LocationID = 7,
@@ -275,7 +275,7 @@ namespace Project1.Migrations
                             Price = 100m,
                             ThumbnailUrl = "/Img/CourseThumbnail/course2.jpg",
                             TrainerID = 7,
-                            UpdatedAt = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5924)
+                            UpdatedAt = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7790)
                         },
                         new
                         {
@@ -285,7 +285,7 @@ namespace Project1.Migrations
                             CourseCategoryID = 2,
                             CourseName = "狗狗護理實務",
                             CourseTypeID = 2,
-                            CreatedAt = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5926),
+                            CreatedAt = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7793),
                             Description = "學習如何給予狗狗良好的護理，包括洗澡、梳毛、剪指甲等日常護理技巧。",
                             EnrollmentCount = 0,
                             LocationID = 8,
@@ -294,7 +294,7 @@ namespace Project1.Migrations
                             Price = 130m,
                             ThumbnailUrl = "/Img/CourseThumbnail/course3.jpg",
                             TrainerID = 8,
-                            UpdatedAt = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5927)
+                            UpdatedAt = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7794)
                         },
                         new
                         {
@@ -304,7 +304,7 @@ namespace Project1.Migrations
                             CourseCategoryID = 2,
                             CourseName = "貓咪飲食指導",
                             CourseTypeID = 2,
-                            CreatedAt = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5929),
+                            CreatedAt = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7798),
                             Description = "指導您如何挑選合適的貓咪食品，以及如何處理貓咪的特殊飲食需求。",
                             EnrollmentCount = 0,
                             LocationID = 9,
@@ -313,7 +313,7 @@ namespace Project1.Migrations
                             Price = 95m,
                             ThumbnailUrl = "/Img/CourseThumbnail/course4.jpg",
                             TrainerID = 9,
-                            UpdatedAt = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5929)
+                            UpdatedAt = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7799)
                         },
                         new
                         {
@@ -323,7 +323,7 @@ namespace Project1.Migrations
                             CourseCategoryID = 2,
                             CourseName = "狗狗心理訓練",
                             CourseTypeID = 2,
-                            CreatedAt = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5931),
+                            CreatedAt = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7803),
                             Description = "透過心理學原理，幫助您了解和解決狗狗的行為問題，提高狗狗的心理健康。",
                             EnrollmentCount = 0,
                             LocationID = 15,
@@ -332,7 +332,7 @@ namespace Project1.Migrations
                             Price = 85m,
                             ThumbnailUrl = "/Img/CourseThumbnail/course1.jpg",
                             TrainerID = 10,
-                            UpdatedAt = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5931)
+                            UpdatedAt = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7803)
                         },
                         new
                         {
@@ -342,7 +342,7 @@ namespace Project1.Migrations
                             CourseCategoryID = 2,
                             CourseName = "貓咪攝食指南",
                             CourseTypeID = 1,
-                            CreatedAt = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5933),
+                            CreatedAt = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7808),
                             Description = "提供關於貓咪飲食、營養和餵食方式的專業指導和建議。",
                             EnrollmentCount = 0,
                             LocationID = 10,
@@ -351,7 +351,7 @@ namespace Project1.Migrations
                             Price = 85m,
                             ThumbnailUrl = "/Img/CourseThumbnail/course4.jpg",
                             TrainerID = 1,
-                            UpdatedAt = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5934)
+                            UpdatedAt = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7808)
                         },
                         new
                         {
@@ -361,7 +361,7 @@ namespace Project1.Migrations
                             CourseCategoryID = 2,
                             CourseName = "狗狗訓練工具應用",
                             CourseTypeID = 2,
-                            CreatedAt = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5936),
+                            CreatedAt = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7813),
                             Description = "介紹和示範各種訓練工具的使用方法，如點擊器、項圈和玩具。",
                             EnrollmentCount = 0,
                             LocationID = 11,
@@ -370,7 +370,7 @@ namespace Project1.Migrations
                             Price = 75m,
                             ThumbnailUrl = "/Img/CourseThumbnail/course2.jpg",
                             TrainerID = 2,
-                            UpdatedAt = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5936)
+                            UpdatedAt = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7813)
                         },
                         new
                         {
@@ -380,7 +380,7 @@ namespace Project1.Migrations
                             CourseCategoryID = 2,
                             CourseName = "貓咪健康檢查",
                             CourseTypeID = 2,
-                            CreatedAt = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5938),
+                            CreatedAt = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7817),
                             Description = "教您如何給貓咪進行基本的健康檢查，包括檢查牙齒、耳朵和毛皮。",
                             EnrollmentCount = 0,
                             LocationID = 12,
@@ -389,7 +389,7 @@ namespace Project1.Migrations
                             Price = 80m,
                             ThumbnailUrl = "/Img/CourseThumbnail/course5.jpg",
                             TrainerID = 3,
-                            UpdatedAt = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5938)
+                            UpdatedAt = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7818)
                         },
                         new
                         {
@@ -399,7 +399,7 @@ namespace Project1.Migrations
                             CourseCategoryID = 2,
                             CourseName = "狗狗行為矯正",
                             CourseTypeID = 1,
-                            CreatedAt = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5940),
+                            CreatedAt = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7822),
                             Description = "幫助您了解狗狗的不良行為根源，並提供有效的矯正和改善方法。",
                             EnrollmentCount = 0,
                             LocationID = 13,
@@ -408,7 +408,7 @@ namespace Project1.Migrations
                             Price = 90m,
                             ThumbnailUrl = "/Img/CourseThumbnail/course3.jpg",
                             TrainerID = 4,
-                            UpdatedAt = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5940)
+                            UpdatedAt = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7822)
                         },
                         new
                         {
@@ -418,7 +418,7 @@ namespace Project1.Migrations
                             CourseCategoryID = 2,
                             CourseName = "貓咪社交化培訓",
                             CourseTypeID = 2,
-                            CreatedAt = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5942),
+                            CreatedAt = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7826),
                             Description = "教您如何幫助貓咪建立社交技巧，與其他貓咪和人類和睦相處。",
                             EnrollmentCount = 0,
                             LocationID = 14,
@@ -427,7 +427,7 @@ namespace Project1.Migrations
                             Price = 100m,
                             ThumbnailUrl = "/Img/CourseThumbnail/course1.jpg",
                             TrainerID = 5,
-                            UpdatedAt = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5943)
+                            UpdatedAt = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7827)
                         });
                 });
 
@@ -503,7 +503,7 @@ namespace Project1.Migrations
                             Comment = "好學習",
                             CourseID = 1,
                             Rating = 5,
-                            RatingDate = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5966),
+                            RatingDate = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7898),
                             TrainerID = 1,
                             UserID = 1
                         },
@@ -513,7 +513,7 @@ namespace Project1.Migrations
                             Comment = "好學習",
                             CourseID = 1,
                             Rating = 4,
-                            RatingDate = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5967),
+                            RatingDate = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7901),
                             TrainerID = 1,
                             UserID = 3
                         },
@@ -523,7 +523,7 @@ namespace Project1.Migrations
                             Comment = "好學習",
                             CourseID = 1,
                             Rating = 3,
-                            RatingDate = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5968),
+                            RatingDate = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7903),
                             TrainerID = 1,
                             UserID = 2
                         },
@@ -533,7 +533,7 @@ namespace Project1.Migrations
                             Comment = "好學習",
                             CourseID = 2,
                             Rating = 4,
-                            RatingDate = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5969),
+                            RatingDate = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7906),
                             TrainerID = 1,
                             UserID = 1
                         },
@@ -543,7 +543,7 @@ namespace Project1.Migrations
                             Comment = "好學習",
                             CourseID = 2,
                             Rating = 5,
-                            RatingDate = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5970),
+                            RatingDate = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7908),
                             TrainerID = 1,
                             UserID = 3
                         },
@@ -553,7 +553,7 @@ namespace Project1.Migrations
                             Comment = "好學習",
                             CourseID = 2,
                             Rating = 5,
-                            RatingDate = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5971),
+                            RatingDate = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7910),
                             TrainerID = 1,
                             UserID = 2
                         },
@@ -563,7 +563,7 @@ namespace Project1.Migrations
                             Comment = "好學習",
                             CourseID = 3,
                             Rating = 5,
-                            RatingDate = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5972),
+                            RatingDate = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7913),
                             TrainerID = 1,
                             UserID = 1
                         },
@@ -573,7 +573,7 @@ namespace Project1.Migrations
                             Comment = "好學習",
                             CourseID = 3,
                             Rating = 5,
-                            RatingDate = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5973),
+                            RatingDate = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7915),
                             TrainerID = 1,
                             UserID = 3
                         },
@@ -583,7 +583,7 @@ namespace Project1.Migrations
                             Comment = "好學習",
                             CourseID = 3,
                             Rating = 3,
-                            RatingDate = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5974),
+                            RatingDate = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7916),
                             TrainerID = 1,
                             UserID = 2
                         },
@@ -593,7 +593,7 @@ namespace Project1.Migrations
                             Comment = "好學習",
                             CourseID = 4,
                             Rating = 3,
-                            RatingDate = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5976),
+                            RatingDate = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7918),
                             TrainerID = 1,
                             UserID = 1
                         },
@@ -603,7 +603,7 @@ namespace Project1.Migrations
                             Comment = "好學習",
                             CourseID = 4,
                             Rating = 3,
-                            RatingDate = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5977),
+                            RatingDate = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7920),
                             TrainerID = 1,
                             UserID = 3
                         },
@@ -613,7 +613,7 @@ namespace Project1.Migrations
                             Comment = "好學習",
                             CourseID = 4,
                             Rating = 4,
-                            RatingDate = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5978),
+                            RatingDate = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7922),
                             TrainerID = 1,
                             UserID = 2
                         },
@@ -623,7 +623,7 @@ namespace Project1.Migrations
                             Comment = "好學習",
                             CourseID = 5,
                             Rating = 5,
-                            RatingDate = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5979),
+                            RatingDate = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7924),
                             TrainerID = 1,
                             UserID = 1
                         },
@@ -633,7 +633,7 @@ namespace Project1.Migrations
                             Comment = "好學習",
                             CourseID = 5,
                             Rating = 5,
-                            RatingDate = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5980),
+                            RatingDate = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7926),
                             TrainerID = 1,
                             UserID = 3
                         },
@@ -643,7 +643,7 @@ namespace Project1.Migrations
                             Comment = "好學習",
                             CourseID = 5,
                             Rating = 5,
-                            RatingDate = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5981),
+                            RatingDate = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7928),
                             TrainerID = 1,
                             UserID = 2
                         });
@@ -966,11 +966,15 @@ namespace Project1.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("Birthday")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsProfileCompleted")
+                        .HasColumnType("bit");
 
                     b.Property<bool?>("IsTrainer")
                         .HasColumnType("bit");
@@ -983,14 +987,15 @@ namespace Project1.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Photo")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<byte[]>("Photo")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<DateTime?>("RegistrationDate")
                         .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ResidenceArea")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("MemberID");
@@ -1004,10 +1009,11 @@ namespace Project1.Migrations
                             Address = "忠孝東路四段123號5樓",
                             Birthday = new DateTime(1995, 8, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "wang@example.com",
+                            IsProfileCompleted = false,
                             IsTrainer = false,
                             Name = "林宜萱",
                             Phone = "0987654321",
-                            RegistrationDate = new DateTime(2024, 5, 30, 11, 13, 33, 225, DateTimeKind.Local).AddTicks(6003),
+                            RegistrationDate = new DateTime(2024, 5, 30, 14, 34, 24, 379, DateTimeKind.Local).AddTicks(7991),
                             ResidenceArea = "臺北市"
                         },
                         new
@@ -1016,10 +1022,11 @@ namespace Project1.Migrations
                             Address = "和平西路三段45巷9號2樓",
                             Birthday = new DateTime(1988, 3, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "lin@example.com",
+                            IsProfileCompleted = false,
                             IsTrainer = false,
                             Name = "吳偉昌",
                             Phone = "0912345678",
-                            RegistrationDate = new DateTime(2024, 5, 30, 11, 13, 33, 225, DateTimeKind.Local).AddTicks(6006),
+                            RegistrationDate = new DateTime(2024, 5, 30, 14, 34, 24, 379, DateTimeKind.Local).AddTicks(8006),
                             ResidenceArea = "新北市"
                         },
                         new
@@ -1028,10 +1035,11 @@ namespace Project1.Migrations
                             Address = "中山北路一段89巷6弄15號",
                             Birthday = new DateTime(1992, 11, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "zhang@example.com",
+                            IsProfileCompleted = false,
                             IsTrainer = false,
                             Name = "黃文彥",
                             Phone = "0922334455",
-                            RegistrationDate = new DateTime(2024, 5, 30, 11, 13, 33, 225, DateTimeKind.Local).AddTicks(6008),
+                            RegistrationDate = new DateTime(2024, 5, 30, 14, 34, 24, 379, DateTimeKind.Local).AddTicks(8010),
                             ResidenceArea = "台中市"
                         },
                         new
@@ -1040,10 +1048,11 @@ namespace Project1.Migrations
                             Address = "民權東路六段78號3樓之1",
                             Birthday = new DateTime(1997, 6, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "chen@example.com",
+                            IsProfileCompleted = false,
                             IsTrainer = false,
                             Name = "張明志",
                             Phone = "0955667788",
-                            RegistrationDate = new DateTime(2024, 5, 30, 11, 13, 33, 225, DateTimeKind.Local).AddTicks(6010),
+                            RegistrationDate = new DateTime(2024, 5, 30, 14, 34, 24, 379, DateTimeKind.Local).AddTicks(8015),
                             ResidenceArea = "高雄市"
                         },
                         new
@@ -1052,10 +1061,11 @@ namespace Project1.Migrations
                             Address = "南京東路五段300號12樓",
                             Birthday = new DateTime(1985, 9, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "li@example.com",
+                            IsProfileCompleted = false,
                             IsTrainer = false,
                             Name = "許淑惠",
                             Phone = "0933123456",
-                            RegistrationDate = new DateTime(2024, 5, 30, 11, 13, 33, 225, DateTimeKind.Local).AddTicks(6012),
+                            RegistrationDate = new DateTime(2024, 5, 30, 14, 34, 24, 379, DateTimeKind.Local).AddTicks(8019),
                             ResidenceArea = "桃園市"
                         },
                         new
@@ -1064,10 +1074,11 @@ namespace Project1.Migrations
                             Address = "仁愛路四段101號8樓",
                             Birthday = new DateTime(1980, 12, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "wu@example.com",
+                            IsProfileCompleted = false,
                             IsTrainer = false,
                             Name = "李志明",
                             Phone = "0977889900",
-                            RegistrationDate = new DateTime(2024, 5, 30, 11, 13, 33, 225, DateTimeKind.Local).AddTicks(6026),
+                            RegistrationDate = new DateTime(2024, 5, 30, 14, 34, 24, 379, DateTimeKind.Local).AddTicks(8022),
                             ResidenceArea = "台南市"
                         },
                         new
@@ -1076,10 +1087,11 @@ namespace Project1.Migrations
                             Address = "新生南路二段38號4樓",
                             Birthday = new DateTime(1990, 7, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "xu@example.com",
+                            IsProfileCompleted = false,
                             IsTrainer = false,
                             Name = "徐宜真",
                             Phone = "0911223344",
-                            RegistrationDate = new DateTime(2024, 5, 30, 11, 13, 33, 225, DateTimeKind.Local).AddTicks(6028),
+                            RegistrationDate = new DateTime(2024, 5, 30, 14, 34, 24, 379, DateTimeKind.Local).AddTicks(8026),
                             ResidenceArea = "基隆市"
                         },
                         new
@@ -1088,10 +1100,11 @@ namespace Project1.Migrations
                             Address = "信義路五段220巷16弄2號",
                             Birthday = new DateTime(1983, 2, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "cai@example.com",
+                            IsProfileCompleted = false,
                             IsTrainer = false,
                             Name = "蔡文偉",
                             Phone = "0988777666",
-                            RegistrationDate = new DateTime(2024, 5, 30, 11, 13, 33, 225, DateTimeKind.Local).AddTicks(6029),
+                            RegistrationDate = new DateTime(2024, 5, 30, 14, 34, 24, 379, DateTimeKind.Local).AddTicks(8029),
                             ResidenceArea = "新竹市"
                         },
                         new
@@ -1100,10 +1113,11 @@ namespace Project1.Migrations
                             Address = "敦化南路二段123巷56弄4樓",
                             Birthday = new DateTime(1993, 4, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "qiu@example.com",
+                            IsProfileCompleted = false,
                             IsTrainer = false,
                             Name = "楊宜真",
                             Phone = "0966888999",
-                            RegistrationDate = new DateTime(2024, 5, 30, 11, 13, 33, 225, DateTimeKind.Local).AddTicks(6031),
+                            RegistrationDate = new DateTime(2024, 5, 30, 14, 34, 24, 379, DateTimeKind.Local).AddTicks(8031),
                             ResidenceArea = "嘉義市"
                         },
                         new
@@ -1112,10 +1126,11 @@ namespace Project1.Migrations
                             Address = "建國北路二段88號7樓",
                             Birthday = new DateTime(1998, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "ye@example.com",
+                            IsProfileCompleted = false,
                             IsTrainer = false,
                             Name = "陳志宏",
                             Phone = "0944556677",
-                            RegistrationDate = new DateTime(2024, 5, 30, 11, 13, 33, 225, DateTimeKind.Local).AddTicks(6033),
+                            RegistrationDate = new DateTime(2024, 5, 30, 14, 34, 24, 379, DateTimeKind.Local).AddTicks(8035),
                             ResidenceArea = "臺北市"
                         });
                 });
@@ -1136,6 +1151,9 @@ namespace Project1.Migrations
 
                     b.Property<int>("MemberID")
                         .HasColumnType("int");
+
+                    b.Property<string>("MerchantTradeNo")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
@@ -1158,45 +1176,45 @@ namespace Project1.Migrations
                         new
                         {
                             OrderID = 1,
-                            CreatedAt = new DateTime(2024, 5, 30, 11, 13, 33, 225, DateTimeKind.Local).AddTicks(5791),
+                            CreatedAt = new DateTime(2024, 5, 30, 14, 34, 24, 379, DateTimeKind.Local).AddTicks(6337),
                             MemberID = 1,
-                            OrderDate = new DateTime(2024, 5, 30, 11, 13, 33, 225, DateTimeKind.Local).AddTicks(5779),
+                            OrderDate = new DateTime(2024, 5, 30, 14, 34, 24, 379, DateTimeKind.Local).AddTicks(6315),
                             OrderStatus = "Processing",
                             TotalAmount = 100m
                         },
                         new
                         {
                             OrderID = 2,
-                            CreatedAt = new DateTime(2024, 5, 30, 11, 13, 33, 225, DateTimeKind.Local).AddTicks(5793),
+                            CreatedAt = new DateTime(2024, 5, 30, 14, 34, 24, 379, DateTimeKind.Local).AddTicks(6342),
                             MemberID = 2,
-                            OrderDate = new DateTime(2024, 5, 30, 11, 13, 33, 225, DateTimeKind.Local).AddTicks(5793),
+                            OrderDate = new DateTime(2024, 5, 30, 14, 34, 24, 379, DateTimeKind.Local).AddTicks(6340),
                             OrderStatus = "Delivered",
                             TotalAmount = 200m
                         },
                         new
                         {
                             OrderID = 3,
-                            CreatedAt = new DateTime(2024, 5, 30, 11, 13, 33, 225, DateTimeKind.Local).AddTicks(5795),
+                            CreatedAt = new DateTime(2024, 5, 30, 14, 34, 24, 379, DateTimeKind.Local).AddTicks(6346),
                             MemberID = 3,
-                            OrderDate = new DateTime(2024, 5, 30, 11, 13, 33, 225, DateTimeKind.Local).AddTicks(5794),
+                            OrderDate = new DateTime(2024, 5, 30, 14, 34, 24, 379, DateTimeKind.Local).AddTicks(6344),
                             OrderStatus = "Cancelled",
                             TotalAmount = 300m
                         },
                         new
                         {
                             OrderID = 4,
-                            CreatedAt = new DateTime(2024, 5, 30, 11, 13, 33, 225, DateTimeKind.Local).AddTicks(5796),
+                            CreatedAt = new DateTime(2024, 5, 30, 14, 34, 24, 379, DateTimeKind.Local).AddTicks(6349),
                             MemberID = 4,
-                            OrderDate = new DateTime(2024, 5, 30, 11, 13, 33, 225, DateTimeKind.Local).AddTicks(5796),
+                            OrderDate = new DateTime(2024, 5, 30, 14, 34, 24, 379, DateTimeKind.Local).AddTicks(6348),
                             OrderStatus = "Processing",
                             TotalAmount = 800m
                         },
                         new
                         {
                             OrderID = 5,
-                            CreatedAt = new DateTime(2024, 5, 30, 11, 13, 33, 225, DateTimeKind.Local).AddTicks(5798),
+                            CreatedAt = new DateTime(2024, 5, 30, 14, 34, 24, 379, DateTimeKind.Local).AddTicks(6352),
                             MemberID = 5,
-                            OrderDate = new DateTime(2024, 5, 30, 11, 13, 33, 225, DateTimeKind.Local).AddTicks(5797),
+                            OrderDate = new DateTime(2024, 5, 30, 14, 34, 24, 379, DateTimeKind.Local).AddTicks(6351),
                             OrderStatus = "Shipped",
                             TotalAmount = 1000m
                         });
@@ -1240,7 +1258,7 @@ namespace Project1.Migrations
                         {
                             OrderDetailID = 1,
                             CourseID = 1,
-                            CreatedAt = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5871),
+                            CreatedAt = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7642),
                             OrderID = 1,
                             Quantity = 2,
                             UnitPrice = 100m
@@ -1249,7 +1267,7 @@ namespace Project1.Migrations
                         {
                             OrderDetailID = 2,
                             CourseID = 2,
-                            CreatedAt = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5873),
+                            CreatedAt = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7647),
                             OrderID = 1,
                             Quantity = 4,
                             UnitPrice = 100m
@@ -1258,7 +1276,7 @@ namespace Project1.Migrations
                         {
                             OrderDetailID = 3,
                             CourseID = 3,
-                            CreatedAt = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5874),
+                            CreatedAt = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7650),
                             OrderID = 1,
                             Quantity = 3,
                             UnitPrice = 100m
@@ -1267,7 +1285,7 @@ namespace Project1.Migrations
                         {
                             OrderDetailID = 4,
                             CourseID = 4,
-                            CreatedAt = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5876),
+                            CreatedAt = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7652),
                             OrderID = 2,
                             Quantity = 3,
                             UnitPrice = 100m
@@ -1276,7 +1294,7 @@ namespace Project1.Migrations
                         {
                             OrderDetailID = 5,
                             CourseID = 5,
-                            CreatedAt = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5877),
+                            CreatedAt = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7654),
                             OrderID = 2,
                             Quantity = 3,
                             UnitPrice = 100m
@@ -1285,7 +1303,7 @@ namespace Project1.Migrations
                         {
                             OrderDetailID = 6,
                             CourseID = 3,
-                            CreatedAt = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5878),
+                            CreatedAt = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7657),
                             OrderID = 2,
                             Quantity = 2,
                             UnitPrice = 100m
@@ -1294,7 +1312,7 @@ namespace Project1.Migrations
                         {
                             OrderDetailID = 7,
                             CourseID = 3,
-                            CreatedAt = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5879),
+                            CreatedAt = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7659),
                             OrderID = 3,
                             Quantity = 5,
                             UnitPrice = 100m
@@ -1303,7 +1321,7 @@ namespace Project1.Migrations
                         {
                             OrderDetailID = 8,
                             CourseID = 4,
-                            CreatedAt = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5880),
+                            CreatedAt = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7661),
                             OrderID = 3,
                             Quantity = 7,
                             UnitPrice = 100m
@@ -1312,7 +1330,7 @@ namespace Project1.Migrations
                         {
                             OrderDetailID = 9,
                             CourseID = 2,
-                            CreatedAt = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5881),
+                            CreatedAt = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7663),
                             OrderID = 4,
                             Quantity = 6,
                             UnitPrice = 100m
@@ -1321,7 +1339,7 @@ namespace Project1.Migrations
                         {
                             OrderDetailID = 10,
                             CourseID = 3,
-                            CreatedAt = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5883),
+                            CreatedAt = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7666),
                             OrderID = 4,
                             Quantity = 8,
                             UnitPrice = 100m
@@ -1330,7 +1348,7 @@ namespace Project1.Migrations
                         {
                             OrderDetailID = 11,
                             CourseID = 3,
-                            CreatedAt = new DateTime(2024, 5, 30, 3, 13, 33, 225, DateTimeKind.Utc).AddTicks(5884),
+                            CreatedAt = new DateTime(2024, 5, 30, 6, 34, 24, 379, DateTimeKind.Utc).AddTicks(7668),
                             OrderID = 4,
                             Quantity = 8,
                             UnitPrice = 100m

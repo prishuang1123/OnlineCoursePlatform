@@ -14,7 +14,7 @@
 
         //查詢所有會員
         function GetAllMember() {
-            fetch(`${baseAddress}/api/MembersAPI`, {
+            fetch(`/api/MembersAPI`, {
                 method:"GET",
             }).then(response => {
                 if (response.ok) {
@@ -30,7 +30,7 @@
         //查詢會員
         function GetMemberByID() {
             var MemberID = $("#MemberID").val();
-            fetch(`${baseAddress}/api/MembersAPI/${MemberID}`, {
+            fetch(`/api/MembersAPI/${MemberID}`, {
                 method:"GET",
             }).then(response => {
                 if(response.ok){
@@ -81,7 +81,7 @@
                 "Email":"yyy",
                 "Phone":"zzz",
             }
-            fetch(`${baseAddress}/api/MembersAPI/55`, {
+            fetch(`/api/MembersAPI/55`, {
                 method: "PUT",
                 body: JSON.stringify(data),
                 headers: {
@@ -100,7 +100,7 @@
 
         //刪除會員
         function DeleteMember() {
-            fetch(`${baseAddress}/api/MembersAPI/18`, {
+            fetch(`/api/MembersAPI/18`, {
                 method:"DELETE",
             }).then(response => {
                 if(response.ok){

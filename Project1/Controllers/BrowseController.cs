@@ -22,9 +22,9 @@ namespace Project1.Controllers
         //internal DbSet<Trainer> trainerDbset;
         private int memberId;
         private IEnumerable<ShoppingCart> memberShoppingCart;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ProjectUser> _userManager;
 
-        public BrowseController(ProjectDbContext db, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager) : base(userManager, signInManager)
+        public BrowseController(ProjectDbContext db, UserManager<ProjectUser> userManager, SignInManager<ProjectUser> signInManager) : base(userManager, signInManager)
         {
             _db = db;
             _userManager = userManager;
@@ -54,7 +54,14 @@ namespace Project1.Controllers
         // GET: Browse/Cart/5
         public async Task<IActionResult> ViewCart() //recieve memberID
         {
-            var memberId = Util.getMemberId(_db,_userManager, User);
+            //var memberId = Util.getMemberId(_db,_userManager, User);
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var memberId = 0;
+            if (userId != null)
+            {
+                var Mem = _db.Member.Where(m => m.AspID == userId).FirstOrDefault();
+                memberId = Mem.MemberID;
+            }
             //if (id==null || id == 0)
             //{
             //	return RedirectToAction ("Login", "Members");
@@ -289,7 +296,14 @@ namespace Project1.Controllers
         [HttpGet]
         public JsonResult GetClassSchedule()
         {
-            var memberId = Util.getMemberId(_db, _userManager, User);
+            //var memberId = Util.getMemberId(_db, _userManager, User);
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var memberId = 0;
+            if (userId != null)
+            {
+                var Mem = _db.Member.Where(m => m.AspID == userId).FirstOrDefault();
+                memberId = Mem.MemberID;
+            }
             memberShoppingCart = _db.Cart.Where(u => u.MemberID == memberId).ToList(); //member到時候再改
             var classSchedule = memberShoppingCart
             .GroupBy(c => c.CourseID)
@@ -369,7 +383,14 @@ namespace Project1.Controllers
         [HttpGet]
         public async Task<IActionResult> UpdateSubtotal()
         {
-            var memberId = Util.getMemberId(_db, _userManager, User);
+            //var memberId = Util.getMemberId(_db, _userManager, User);
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var memberId = 0;
+            if (userId != null)
+            {
+                var Mem = _db.Member.Where(m => m.AspID == userId).FirstOrDefault();
+                memberId = Mem.MemberID;
+            }
             decimal subtotal = 0;
             memberShoppingCart = await _db.Cart.Where(u => u.MemberID == memberId).ToListAsync();
             IEnumerable<int> courseIds = memberShoppingCart.Select(u => u.CourseID).ToList();
@@ -396,6 +417,7 @@ namespace Project1.Controllers
                 {
                     discountPercentage = discountObj.DiscountPercentage;
                     validationResult = "success";
+                    TempData["DiscountCode"]=discountObj.DiscountName;
                 }
                 else
                 {
@@ -443,8 +465,14 @@ namespace Project1.Controllers
         {
             try
             {
-                var memberId = Util.getMemberId(_db, _userManager, User);
-
+                //var memberId = Util.getMemberId(_db, _userManager, User);
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var memberId = 0;
+                if (userId != null)
+                {
+                    var Mem = _db.Member.Where(m => m.AspID == userId).FirstOrDefault();
+                    memberId = Mem.MemberID;
+                }
 
 
                 if (memberId != null)
