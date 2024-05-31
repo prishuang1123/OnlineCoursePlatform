@@ -404,7 +404,7 @@
                         <img :src="course.thumbnailUrl" alt="Course Thumbnail" style="border:1px solid #333">
                         <div class="course-card-details">
                             <h6>{{ course.courseName }}</h6>
-                            <p>{{ course.description }}</p>
+                           @*  <p>{{ course.description }}</p> *@
                             <p>{{ course.approvalStatus }}</p>
                         </div>
                         <div class="course-card-actions">
@@ -789,6 +789,7 @@
                                     <td>{{ formatDateTime(schedule.scheduler) }}</td>
                                     <td>
                                         <button type="button" class="btn btn-delete btn-sm" @@click="retractPublish(schedule.schedulerID)">收回發佈</button>
+                                        <button type="button" class="btn btn-viewCourse btn-sm" style="margin-left:10px;" @@click="viewReservations(schedule.schedulerID)">查看預約</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -804,6 +805,44 @@
             </div>
         </div>
     </div>
+
+    <!-- 查看預約模態框 -->
+    <div class="modal fade" id="viewReservationsModal" tabindex="-1" role="dialog" aria-labelledby="viewReservationsModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="viewReservationsModalLabel">查看預約</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>顧客姓名</th>
+                                <th>信箱</th>
+                                <th>電話</th>
+                                <th>堂數</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="reservation in reservations" :key="reservation.memberID">
+                                <td>{{ reservation.name }}</td>
+                                <td>{{ reservation.email }}</td>
+                                <td>{{ reservation.phone }}</td>
+                                <td>{{ reservation.quantity }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 
@@ -813,20 +852,20 @@
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://unpkg.com/vue@3.4.25/dist/vue.global.js"></script>
     <script>
-        var getBlogUrl = "https://localhost:7177/Trainerrr/GetBlog"; // 部落格
-        var createPostUrl = "https://localhost:7177/Trainerrr/CreatePost"; // 貼文新增
-        var editPostUrl = "https://localhost:7177/Trainerrr/EditPost"; // 編輯貼文
-        var deletePostUrl = "https://localhost:7177/Trainerrr/DeletePost"; // 刪除貼文
-        var getCoursesUrl = "https://localhost:7177/Trainerrr/GetCourses"; // 顯示課程
-        var createCourseUrl = "https://localhost:7177/Trainerrr/CreateCourse"; // 新增課程
-        var getDropdownDataUrl = "https://localhost:7177/Trainerrr/GetDropdownData"; // 課程種類下拉式選單資訊
-        var getCurrentTrainerInfoUrl = "https://localhost:7177/Trainerrr/GetCurrentTrainerInfo"; // 訓練師誰?
-        var editCourseUrl = "https://localhost:7177/Trainerrr/EditCourse"; // 編輯課程
-        var publishCourseUrl = "https://localhost:7177/Trainerrr/PublishCourse"; // 發佈課程
-        var deleteCourseUrl = "https://localhost:7177/Trainerrr/DeleteCourse"; // 刪除課程
-        var retractPublishUrl = "https://localhost:7177/Trainerrr/RetractPublish"; // 收回課程
-        var getPublishedSchedulesUrl = "https://localhost:7177/Trainerrr/GetPublishedSchedules"; // 取得已發佈資訊
-
+        var getBlogUrl = "/Trainerrr/GetBlog"; // 部落格
+        var createPostUrl = "/Trainerrr/CreatePost"; // 貼文新增
+        var editPostUrl = "/Trainerrr/EditPost"; // 編輯貼文
+        var deletePostUrl = "/Trainerrr/DeletePost"; // 刪除貼文
+        var getCoursesUrl = "/Trainerrr/GetCourses"; // 顯示課程
+        var createCourseUrl = "/Trainerrr/CreateCourse"; // 新增課程
+        var getDropdownDataUrl = "/Trainerrr/GetDropdownData"; // 課程種類下拉式選單資訊
+        var getCurrentTrainerInfoUrl = "/Trainerrr/GetCurrentTrainerInfo"; // 訓練師誰?
+        var editCourseUrl = "/Trainerrr/EditCourse"; // 編輯課程
+        var publishCourseUrl = "/Trainerrr/PublishCourse"; // 發佈課程
+        var deleteCourseUrl = "/Trainerrr/DeleteCourse"; // 刪除課程
+        var retractPublishUrl = "/Trainerrr/RetractPublish"; // 收回課程
+        var getPublishedSchedulesUrl = "/Trainerrr/GetPublishedSchedules"; // 取得已發佈資訊
+        var GetReservationsUrl = "/Trainerrr/GetReservations";//查看誰預約
         var VueApp = {
             data() {
                 return {
@@ -875,7 +914,8 @@
                     publishedSchedules: [], // 已發佈的課程
                     editThumbnailPreview: null, // 編輯封面圖預覽
                     thumbnailPreview: null, // 新增封面圖預覽
-                    publishError: null // 發佈錯誤訊息
+                    publishError: null ,// 發佈錯誤訊息
+                    reservations: [] // 存儲預約資料
 
                 };
             },
@@ -1325,6 +1365,15 @@
                             console.log("Error response:", error.response);
                             alert("檢查課程時出現錯誤");
                         });
+                },
+                viewReservations(schedulerID) {
+                    axios.get(`${GetReservationsUrl}?schedulerID=${schedulerID}`).then(response => {
+                        this.reservations = response.data;
+                        $('#viewReservationsModal').modal('show');
+                    }).catch(error => {
+                        console.log(error);
+                        alert("無法取得預約資料");
+                    });
                 },
                 // 當編輯課程封面圖變更
                 onEditThumbnailChange(event) {

@@ -900,6 +900,25 @@ namespace Project1.Controllers
         }
 
 
+        //查看誰預約課程
+        public async Task<IActionResult> GetReservations(int schedulerID)
+        {
+            var reservations = await (from od in _context.OrderDetail
+                                      join o in _context.Order on od.OrderID equals o.OrderID
+                                      join m in _context.Member on o.MemberID equals m.MemberID
+                                      where od.SchedulerID == schedulerID && o.OrderStatus == "已付款"
+                                      select new
+                                      {
+                                          m.MemberID,
+                                          m.Name,
+                                          m.Email,
+                                          m.Phone,
+                                          od.Quantity
+                                      }).ToListAsync();
+
+            return Ok(reservations);
+        }
+
 
         //---------------------------------------------------------------------------------------------
 
