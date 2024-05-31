@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Project1.Data;
 
@@ -11,9 +12,11 @@ using Project1.Data;
 namespace Project1.Migrations
 {
     [DbContext(typeof(ProjectDbContext))]
-    partial class ProjectDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240530063426_addMerchantIdToOrder")]
+    partial class addMerchantIdToOrder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -72,9 +75,6 @@ namespace Project1.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SchedulerID"));
 
                     b.Property<int>("CourseID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("EnrollmentCount")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Scheduler")
@@ -966,15 +966,11 @@ namespace Project1.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("Birthday")
-                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsProfileCompleted")
-                        .HasColumnType("bit");
 
                     b.Property<bool?>("IsTrainer")
                         .HasColumnType("bit");
@@ -987,15 +983,14 @@ namespace Project1.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("Photo")
-                        .HasColumnType("varbinary(max)");
+                    b.Property<string>("Photo")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("RegistrationDate")
                         .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ResidenceArea")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("MemberID");
@@ -1009,7 +1004,6 @@ namespace Project1.Migrations
                             Address = "忠孝東路四段123號5樓",
                             Birthday = new DateTime(1995, 8, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "wang@example.com",
-                            IsProfileCompleted = false,
                             IsTrainer = false,
                             Name = "林宜萱",
                             Phone = "0987654321",
@@ -1022,7 +1016,6 @@ namespace Project1.Migrations
                             Address = "和平西路三段45巷9號2樓",
                             Birthday = new DateTime(1988, 3, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "lin@example.com",
-                            IsProfileCompleted = false,
                             IsTrainer = false,
                             Name = "吳偉昌",
                             Phone = "0912345678",
@@ -1035,7 +1028,6 @@ namespace Project1.Migrations
                             Address = "中山北路一段89巷6弄15號",
                             Birthday = new DateTime(1992, 11, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "zhang@example.com",
-                            IsProfileCompleted = false,
                             IsTrainer = false,
                             Name = "黃文彥",
                             Phone = "0922334455",
@@ -1048,7 +1040,6 @@ namespace Project1.Migrations
                             Address = "民權東路六段78號3樓之1",
                             Birthday = new DateTime(1997, 6, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "chen@example.com",
-                            IsProfileCompleted = false,
                             IsTrainer = false,
                             Name = "張明志",
                             Phone = "0955667788",
@@ -1061,7 +1052,6 @@ namespace Project1.Migrations
                             Address = "南京東路五段300號12樓",
                             Birthday = new DateTime(1985, 9, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "li@example.com",
-                            IsProfileCompleted = false,
                             IsTrainer = false,
                             Name = "許淑惠",
                             Phone = "0933123456",
@@ -1074,7 +1064,6 @@ namespace Project1.Migrations
                             Address = "仁愛路四段101號8樓",
                             Birthday = new DateTime(1980, 12, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "wu@example.com",
-                            IsProfileCompleted = false,
                             IsTrainer = false,
                             Name = "李志明",
                             Phone = "0977889900",
@@ -1087,7 +1076,6 @@ namespace Project1.Migrations
                             Address = "新生南路二段38號4樓",
                             Birthday = new DateTime(1990, 7, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "xu@example.com",
-                            IsProfileCompleted = false,
                             IsTrainer = false,
                             Name = "徐宜真",
                             Phone = "0911223344",
@@ -1100,7 +1088,6 @@ namespace Project1.Migrations
                             Address = "信義路五段220巷16弄2號",
                             Birthday = new DateTime(1983, 2, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "cai@example.com",
-                            IsProfileCompleted = false,
                             IsTrainer = false,
                             Name = "蔡文偉",
                             Phone = "0988777666",
@@ -1113,7 +1100,6 @@ namespace Project1.Migrations
                             Address = "敦化南路二段123巷56弄4樓",
                             Birthday = new DateTime(1993, 4, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "qiu@example.com",
-                            IsProfileCompleted = false,
                             IsTrainer = false,
                             Name = "楊宜真",
                             Phone = "0966888999",
@@ -1126,7 +1112,6 @@ namespace Project1.Migrations
                             Address = "建國北路二段88號7樓",
                             Birthday = new DateTime(1998, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "ye@example.com",
-                            IsProfileCompleted = false,
                             IsTrainer = false,
                             Name = "陳志宏",
                             Phone = "0944556677",

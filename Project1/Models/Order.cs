@@ -35,6 +35,7 @@ namespace Project1.Models
         public int? DiscountID { get; set; }
 
         //public ICollection<Payment> Payment { get; set; }
+        public string? MerchantTradeNo { get; set; }
 
         public Order()
         {

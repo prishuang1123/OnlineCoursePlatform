@@ -1,12 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Project1.Models;
+using System.Collections.Generic;
 
 namespace Project1.ViewModels
 {
     public class CheckoutVM
     {
         public Member Member { get; set; }
-        public Discount Discountobj { get; set; }
+        public double discountPercentage { get; set; }
         public DbSet<Course> course { get; set; }
         public Order Order { get; set; }
         public OrderDetail OrderDetail { get; set; }
@@ -15,5 +16,8 @@ namespace Project1.ViewModels
         public IEnumerable<ShoppingCart> cartItemList { get; set; }
         public List<ShoppingCart> courseObjList { get; set; }
         public decimal subtotal { get; set; }
+
+        public Dictionary<string,string> EcpayOrder { get; set; }
+
     }
 }
