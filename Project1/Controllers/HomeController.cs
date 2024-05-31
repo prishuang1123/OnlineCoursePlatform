@@ -44,7 +44,6 @@ namespace Project1.Controllers
                 if(Mem == null)
                 {
                     return RedirectToAction("Create", "Member");
-                    
                 }
                     var MemID = Mem.MemberID;
                     ViewBag.MemID = MemID;

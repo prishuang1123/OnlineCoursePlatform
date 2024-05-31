@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Project1.Data;
 
@@ -11,9 +12,11 @@ using Project1.Data;
 namespace Project1.Migrations
 {
     [DbContext(typeof(ProjectDbContext))]
-    partial class ProjectDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240530151609_updateMemberPhotoType")]
+    partial class updateMemberPhotoType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -72,9 +75,6 @@ namespace Project1.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SchedulerID"));
 
                     b.Property<int>("CourseID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("EnrollmentCount")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Scheduler")
@@ -714,70 +714,6 @@ namespace Project1.Migrations
                     b.HasKey("DiscountID");
 
                     b.ToTable("Discount");
-                });
-
-            modelBuilder.Entity("Project1.Models.EcpayOrders", b =>
-                {
-                    b.Property<string>("MerchantTradeNo")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("MerchantTradeNo");
-
-                    b.Property<string>("MemberID")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("MemberID");
-
-                    b.Property<DateTime?>("PaymentDate")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("PaymentDate");
-
-                    b.Property<string>("PaymentType")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("PaymentType");
-
-                    b.Property<string>("PaymentTypeChargeFee")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("PaymentTypeChargeFee");
-
-                    b.Property<int?>("RtnCode")
-                        .HasColumnType("int")
-                        .HasColumnName("RtnCode");
-
-                    b.Property<string>("RtnMsg")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("RtnMsg");
-
-                    b.Property<int?>("SimulatePaid")
-                        .HasColumnType("int")
-                        .HasColumnName("SimulatePaid");
-
-                    b.Property<int?>("TradeAmt")
-                        .HasColumnType("int")
-                        .HasColumnName("TradeAmt");
-
-                    b.Property<string>("TradeDate")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("TradeDate");
-
-                    b.Property<string>("TradeNo")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("TradeNo");
-
-                    b.HasKey("MerchantTradeNo");
-
-                    b.ToTable("EcpayOrders");
                 });
 
             modelBuilder.Entity("Project1.Models.FollowItem", b =>

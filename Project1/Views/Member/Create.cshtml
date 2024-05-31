@@ -1,16 +1,23 @@
 ﻿@model Project1.Models.Member
 
 @{
-    ViewData["Title"] = "編輯/修改會員資料";
+    ViewData["Title"] = "請填寫會員資料";
 }
 
-<h1>編輯/修改</h1>
+<h1>歡迎加入寵互動</h1>
 
 <h4>會員資料</h4>
 <hr />
+@* @if (TempData["SuccessMessage"] != null)
+{
+    <script>
+        var message = '@Html.Raw(TempData["SuccessMessage"].ToString())';
+        alert(message);
+    </script>
+} *@
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -47,11 +54,11 @@
                 @* <input asp-for="IsTrainer" class="form-control" /> *@
                 @* <span asp-validation-for="IsTrainer" class="text-danger"></span> *@
             @* </div> *@
-            <div class="form-group">
+            @* <div class="form-group">
                 <label asp-for="Photo" class="control-label"></label>
-                <input asp-for="Photo" class="form-control" />
+                <input asp-for="Photo" class="form-control" type="file" />
                 <span asp-validation-for="Photo" class="text-danger"></span>
-            </div>
+            </div> *@
             <div class="form-group">
                 <label asp-for="Address" class="control-label"></label>
                 <input asp-for="Address" class="form-control" />
@@ -75,4 +82,30 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @* <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.js"></script>
+    <script>
+        // 初始化Dropzone
+        Dropzone.autoDiscover = false;
+        var photoDropzone = new Dropzone("#photo-dropzone", {
+            url: "/Member/UploadPhoto",
+            paramName: "file",
+            maxFilesize: 2, // MB
+            acceptedFiles: "image/*",
+            dictDefaultMessage: "拖放圖片到這裡上傳或點擊選擇圖片",
+            addRemoveLinks: true, // 刪除按鈕
+            dictRemoveFile: "删除", // 删除按钮文字
+            init: function() {
+                this.on("success", function(file, response) {
+                    // 在成功上傳後更新隱藏的input框
+                    document.querySelector('input[name="Photo"]').value = response.filePath;
+                });
+                this.on("removedfile", function (file) {
+                    document.querySelector('input[name="Photo"]').value = ""; // 移除路徑
+                });
+                this.on("error", function(file, response) {
+                    console.log(response);
+                });
+            }
+        }); *@
+    </script>
 }
