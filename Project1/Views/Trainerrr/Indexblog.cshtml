@@ -374,6 +374,18 @@
             /*  cursor: not-allowed; */
         }
 
+        .tooltip {
+            position: relative;
+            background-color: white;
+            border: 1px solid black;
+            padding: 10px;
+            z-index: 1000;
+            display: none;
+            color:black;
+        }
+
+
+
         .table td, .table th {
             text-align: center;
         }
@@ -382,7 +394,7 @@
 
 <div id="app" class="container mt-5">
     <div class="row">
-        <div class="col-md-3 text-center">
+        <div class="col-md-4 text-center mb-3">
             <img :src="trainerPhoto" alt="訓練師照片" class="img-thumbnail">
             <h4>{{ trainerName }}</h4>
 
@@ -394,6 +406,7 @@
                         <img :src="course.thumbnailUrl" alt="Course Thumbnail" style="border:1px solid #333">
                         <div class="course-card-details">
                             <h6>{{ course.courseName }}</h6>
+                           @*  <p>{{ course.description }}</p> *@
                             @* <p>{{ course.description }}</p> *@
                             <p>{{ course.approvalStatus }}</p>
                         </div>
@@ -414,9 +427,11 @@
                     </div>
                 </div>
             </div>
+            <div id='calendar' class="mt-3"></div>
+                <div id="tooltip" class="tooltip"></div>
         </div>
 
-        <div class="col-md-9">
+        <div class="col-md-8">
             <div class="post-container">
                 <div class="form-group">
                     <div class="card mb-3 post-box">
@@ -833,6 +848,45 @@
         </div>
     </div>
 
+    <!-- 查看預約模態框 -->
+    <div class="modal fade" id="viewReservationsModal" tabindex="-1" role="dialog" aria-labelledby="viewReservationsModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="viewReservationsModalLabel">查看預約</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>顧客姓名</th>
+                                <th>信箱</th>
+                                <th>電話</th>
+                                <th>堂數</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="reservation in reservations" :key="reservation.memberID">
+                                <td>{{ reservation.name }}</td>
+                                <td>{{ reservation.email }}</td>
+                                <td>{{ reservation.phone }}</td>
+                                <td>{{ reservation.quantity }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
 
 </div>
 
@@ -843,6 +897,20 @@
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://unpkg.com/vue@3.4.25/dist/vue.global.js"></script>
     <script>
+        var getBlogUrl = "/Trainerrr/GetBlog"; // 部落格
+        var createPostUrl = "/Trainerrr/CreatePost"; // 貼文新增
+        var editPostUrl = "/Trainerrr/EditPost"; // 編輯貼文
+        var deletePostUrl = "/Trainerrr/DeletePost"; // 刪除貼文
+        var getCoursesUrl = "/Trainerrr/GetCourses"; // 顯示課程
+        var createCourseUrl = "/Trainerrr/CreateCourse"; // 新增課程
+        var getDropdownDataUrl = "/Trainerrr/GetDropdownData"; // 課程種類下拉式選單資訊
+        var getCurrentTrainerInfoUrl = "/Trainerrr/GetCurrentTrainerInfo"; // 訓練師誰?
+        var editCourseUrl = "/Trainerrr/EditCourse"; // 編輯課程
+        var publishCourseUrl = "/Trainerrr/PublishCourse"; // 發佈課程
+        var deleteCourseUrl = "/Trainerrr/DeleteCourse"; // 刪除課程
+        var retractPublishUrl = "/Trainerrr/RetractPublish"; // 收回課程
+        var getPublishedSchedulesUrl = "/Trainerrr/GetPublishedSchedules"; // 取得已發佈資訊
+        var GetReservationsUrl = "/Trainerrr/GetReservations";//查看誰預約
         var getBlogUrl = "https://localhost:7177/Trainerrr/GetBlog"; // 部落格
         var createPostUrl = "https://localhost:7177/Trainerrr/CreatePost"; // 貼文新增
         var editPostUrl = "https://localhost:7177/Trainerrr/EditPost"; // 編輯貼文
@@ -905,6 +973,8 @@
                     publishedSchedules: [], // 已發佈的課程
                     editThumbnailPreview: null, // 編輯封面圖預覽
                     thumbnailPreview: null, // 新增封面圖預覽
+                    publishError: null ,// 發佈錯誤訊息
+                    reservations: [] // 存儲預約資料
                     publishError: null, // 發佈錯誤訊息
                     reservations: [], // 存儲預約資料
 
@@ -1357,6 +1427,15 @@
                             alert("檢查課程時出現錯誤");
                         });
                 },
+                viewReservations(schedulerID) {
+                    axios.get(`${GetReservationsUrl}?schedulerID=${schedulerID}`).then(response => {
+                        this.reservations = response.data;
+                        $('#viewReservationsModal').modal('show');
+                    }).catch(error => {
+                        console.log(error);
+                        alert("無法取得預約資料");
+                    });
+                },
                 // 當編輯課程封面圖變更
                 onEditThumbnailChange(event) {
                     this.viewCourse.thumbnailUrl = event.target.files[0];
@@ -1408,6 +1487,49 @@
         };
 
         var app = Vue.createApp(VueApp).mount("#app");
+
+        const cid = sessionStorage.getItem("ActID");
+        const mid = sessionStorage.getItem("MemID");
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+            var tooltip = document.getElementById('tooltip');
+
+            axios.get(`/Trainerrr/getTrainerSchedule?id=${mid}`).then(response => {
+                const schedules = response.data;
+                const events = schedules.map(schedule => {
+                    return {
+                        url: `/Trainerrr/singleCourse?id=${schedule.courseID}`,
+                        allDay: true,
+                        start: schedule.scheduler,
+                        title: "剩" + schedule.enrollmentCount + "名",
+                        display: "Background",
+                        extendedProps: {
+                            courseName: schedule.courseName,
+                            courseID: schedule.courseID,
+                        }
+                    };
+                });
+
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                    initialView: 'dayGridMonth',
+                    events: events,
+                    aspectRatio: 0.8,
+                    selectable: true,
+                    eventClick: function (arg) {
+                        sessionStorage.setItem("ActID", arg.event.extendedProps.courseID);
+                        arg.jsEvent.preventDefault();
+                        window.open(arg.event.url, '_blank', 'width=700,height=600');
+                        
+                    },
+                });
+                calendar.render();
+                // calendar.setOption('height', 700);
+            }).catch(error => {
+                console.error('API error:', error.response ? error.response.data : error.message);
+                alert(error.response ? error.response.data.message : error.message);
+            });
+        });
     </script>
 }
 
