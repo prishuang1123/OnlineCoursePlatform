@@ -240,19 +240,19 @@
                                             @if (!string.IsNullOrEmpty(blog.Image1))
                                             {
                                                 <div class="carousel-item active">
-                                                    <img src="@blog.Image1" class="d-block w-100" alt="Blog Image 1" onclick="openImageModal('@blog.Image1')">
+                                                    <img src="@blog.Image1" class="d-block w-100" alt="Blog Image 1" onclick="openImageModal('@blog.Image1', '@blog.Image2')">
                                                 </div>
                                             }
                                             @if (!string.IsNullOrEmpty(blog.Image2))
                                             {
                                                 <div class="carousel-item">
-                                                    <img src="@blog.Image2" class="d-block w-100" alt="Blog Image 2" onclick="openImageModal('@blog.Image2')">
+                                                    <img src="@blog.Image2" class="d-block w-100" alt="Blog Image 2" onclick="openImageModal('@blog.Image1', '@blog.Image2')">
                                                 </div>
                                             }
                                             @if (string.IsNullOrEmpty(blog.Image1) && !string.IsNullOrEmpty(blog.Image2))
                                             {
                                                 <div class="carousel-item active">
-                                                    <img src="@blog.Image2" class="d-block w-100" alt="Blog Image 2" onclick="openImageModal('@blog.Image2')">
+                                                    <img src="@blog.Image2" class="d-block w-100" alt="Blog Image 2" onclick="openImageModal('@blog.Image2', '@blog.Image2')">
                                                 </div>
                                             }
                                         </div>
@@ -361,7 +361,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
                 </div>
                 <div class="modal-body">
-                    <img id="previewImage" src="" class="img-fluid" alt="Preview Image">
+                    <img id="previewImage" src="" class="img-fluid w-100" alt="Preview Image">
                 </div>
             </div>
         </div>
@@ -417,11 +417,28 @@
             sessionStorage.setItem("ActID", courseIdGlobal);
         }
 
-        function openImageModal(imageUrl) {
-            document.getElementById('previewImage').src = imageUrl;
+        var currentImageIndex = 0;
+        var imageUrls = [];
+
+        function openImageModal(imageUrl1, imageUrl2) {
+            imageUrls = [imageUrl1, imageUrl2].filter(url => url !== '');
+            currentImageIndex = 0;
+            document.getElementById('previewImage').src = imageUrls[currentImageIndex];
             var imageModal = new bootstrap.Modal(document.getElementById('imageModal'));
             imageModal.show();
         }
+
+        document.getElementById('imageModal').addEventListener('wheel', function (event) {
+            if (event.deltaY < 0) {
+                // Scroll up
+                currentImageIndex = (currentImageIndex > 0) ? currentImageIndex - 1 : imageUrls.length - 1;
+            } else {
+                // Scroll down
+                currentImageIndex = (currentImageIndex < imageUrls.length - 1) ? currentImageIndex + 1 : 0;
+            }
+            document.getElementById('previewImage').src = imageUrls[currentImageIndex];
+        });
     </script>
 }
+
 

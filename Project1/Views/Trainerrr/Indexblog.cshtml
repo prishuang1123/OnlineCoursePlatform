@@ -325,11 +325,11 @@
             border-color: #CCAD8E;
         }
 
-        .btn-succ:hover{
-            color: #fff;
+            .btn-succ:hover {
+                color: #fff;
                 background-color: #BBA671;
-            border-color: #CCAD8E;
-        }
+                border-color: #CCAD8E;
+            }
 
 
         .btn-viewCourse {
@@ -338,9 +338,8 @@
             border: 1px solid #71623B;
         }
 
-            .btn-viewCourse:hover{
+            .btn-viewCourse:hover {
                 background-color: #B29E6A;
-            
             }
 
         .showPublishModal {
@@ -355,26 +354,29 @@
                 color: #fff;
             }
 
-        .btn:active:after {
+        /* .btn:active:after {
             opacity: 1;
             transition: 0s;
             box-shadow: 0 0 0 0 #A88256;
         }
-
-        .card{
-         min-width:100%;
+ */
+        .card {
+            min-width: 100%;
         }
 
         .modal-footer .review-status {
             flex: 1;
-            text-align: left; 
+            text-align: left;
         }
 
         .disabled-publish-button {
             background-color: #D4C9AF;
-           /*  cursor: not-allowed; */
+            /*  cursor: not-allowed; */
         }
 
+        .table td, .table th {
+            text-align: center;
+        }
     </style>
 }
 
@@ -392,7 +394,7 @@
                         <img :src="course.thumbnailUrl" alt="Course Thumbnail" style="border:1px solid #333">
                         <div class="course-card-details">
                             <h6>{{ course.courseName }}</h6>
-                            <p>{{ course.description }}</p>
+                            @* <p>{{ course.description }}</p> *@
                             <p>{{ course.approvalStatus }}</p>
                         </div>
                         <div class="course-card-actions">
@@ -403,6 +405,8 @@
                                     :disabled="course.approvalStatus !== '通過'">
                                 發佈
                             </button>
+                           @*  <!-- 查看預約按鈕 -->
+                            <button type="button" class="btn btn-primary btn-sm" @@click="viewReservations(course.courseID)">查看預約</button> *@
                         </div>
                         <button type="button" class="btn btn-danger btn-sm course-delete-button" @@click="deleteCourse(course.courseID)">
                             <i class="bi bi-trash"></i>
@@ -733,7 +737,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <p class ="review-status"><strong>審核狀態:</strong> {{ viewCourse.approvalStatus }}</p>
+                    <p class="review-status"><strong>審核狀態:</strong> {{ viewCourse.approvalStatus }}</p>
                     <button type="button" class="btn btn-secondary" @@click="closeViewEditModal">關閉</button>
                     <button type="button" class="btn btn-primary" v-if="!isEditing" @@click="editCourse">編輯</button>
                     <button type="button" class="btn btn-primary" v-if="isEditing" @@click="saveCourse">確定</button>
@@ -775,6 +779,7 @@
                                     <td>{{ formatDateTime(schedule.scheduler) }}</td>
                                     <td>
                                         <button type="button" class="btn btn-delete btn-sm" @@click="retractPublish(schedule.schedulerID)">收回發佈</button>
+                                        <button type="button" class="btn btn-viewCourse btn-sm" style="margin-left:10px;" @@click="viewReservations(schedule.schedulerID)">查看預約</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -790,6 +795,45 @@
             </div>
         </div>
     </div>
+
+    <!-- 查看預約模態框 -->
+    <div class="modal fade" id="viewReservationsModal" tabindex="-1" role="dialog" aria-labelledby="viewReservationsModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="viewReservationsModalLabel">查看預約</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>顧客姓名</th>
+                                <th>信箱</th>
+                                <th>電話</th>
+                                <th>堂數</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="reservation in reservations" :key="reservation.memberID">
+                                <td>{{ reservation.name }}</td>
+                                <td>{{ reservation.email }}</td>
+                                <td>{{ reservation.phone }}</td>
+                                <td>{{ reservation.quantity }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 </div>
 
 
@@ -812,7 +856,7 @@
         var deleteCourseUrl = "https://localhost:7177/Trainerrr/DeleteCourse"; // 刪除課程
         var retractPublishUrl = "https://localhost:7177/Trainerrr/RetractPublish"; // 收回課程
         var getPublishedSchedulesUrl = "https://localhost:7177/Trainerrr/GetPublishedSchedules"; // 取得已發佈資訊
-
+        var GetReservationsUrl = "https://localhost:7177/Trainerrr/GetReservations";//查看誰預約
         var VueApp = {
             data() {
                 return {
@@ -861,7 +905,8 @@
                     publishedSchedules: [], // 已發佈的課程
                     editThumbnailPreview: null, // 編輯封面圖預覽
                     thumbnailPreview: null, // 新增封面圖預覽
-                    publishError: null // 發佈錯誤訊息
+                    publishError: null, // 發佈錯誤訊息
+                    reservations: [], // 存儲預約資料
 
                 };
             },
@@ -1337,6 +1382,15 @@
                             console.log(error);
                         });
                 },
+                viewReservations(schedulerID) {
+                    axios.get(`${GetReservationsUrl}?schedulerID=${schedulerID}`).then(response => {
+                        this.reservations = response.data;
+                        $('#viewReservationsModal').modal('show');
+                    }).catch(error => {
+                        console.log(error);
+                        alert("無法取得預約資料");
+                    });
+                },
                 // 格式化日期時間顯示
                 formatDateTime(dateTime) {
                     const date = new Date(dateTime);
@@ -1356,7 +1410,6 @@
         var app = Vue.createApp(VueApp).mount("#app");
     </script>
 }
-
 
 
 
