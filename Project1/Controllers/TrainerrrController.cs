@@ -919,7 +919,7 @@ namespace Project1.Controllers
         }
 
 
-        // 获取特定课程的已发布时间表
+        // 取特定课程的已發佈时间表
         public async Task<JsonResult> GetPublishedSchedules(int courseID)
         {
             var schedules = await _context.ClassSchedule
@@ -981,24 +981,8 @@ namespace Project1.Controllers
 
 
 
-        //獲取指定課程的預約資料
-        public async Task<IActionResult> GetReservations(int schedulerID)
-        {
-            var reservations = await (from od in _context.OrderDetail
-                                      join o in _context.Order on od.OrderID equals o.OrderID
-                                      join m in _context.Member on o.MemberID equals m.MemberID
-                                      where od.SchedulerID == schedulerID && o.OrderStatus == "已付款"
-                                      select new
-                                      {
-                                          m.MemberID,
-                                          m.Name,
-                                          m.Email,
-                                          m.Phone,
-                                          od.Quantity
-                                      }).ToListAsync();
 
-            return Ok(reservations);
-        }
+    
 
 
         //---------------------------------------------------------------------------------------------
