@@ -11,14 +11,14 @@ namespace Project1.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<byte[]>(
-                name: "Photo",
-                table: "Member",
-                type: "varbinary(max)",
-                nullable: true,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(max)",
-                oldNullable: true);
+            //migrationBuilder.AlterColumn<byte[]>(
+            //    name: "Photo",
+            //    table: "Member",
+            //    type: "varbinary(max)",
+            //    nullable: true,
+            //    oldClrType: typeof(string),
+            //    oldType: "nvarchar(max)",
+            //    oldNullable: true);
 
             migrationBuilder.UpdateData(
                 table: "Course",
