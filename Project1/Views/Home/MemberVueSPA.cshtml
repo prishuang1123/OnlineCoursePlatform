@@ -272,7 +272,7 @@
                         isTrainer : Boolean(memberDTO.isTrainer),
                         // isAdministrator : Boolean(memberDTO.isAdministrator)
                     };
-                    axios.put(`${baseAddress}/api/MembersAPI/${memberDTO.memberID}`, p).then(response => {
+                    axios.put(`/api/MembersAPI/${memberDTO.memberID}`, p).then(response => {
                         alert(response.data);
                         _this.filterMembers(); //修改成功取出新的結果
                     }).catch(err => {
@@ -336,7 +336,7 @@
                     let _this = this;
                     var ret = confirm(`確定要刪除編號為"${memberID}"的資料嗎?`);
                     if (ret == true) {
-                        axios.delete(`${baseAddress}/api/MembersAPI/${memberID}`).then(response => {
+                        axios.delete(`/api/MembersAPI/${memberID}`).then(response => {
                             alert(response.data);
                             _this.filterMembers();//刪除成功取出新的結果
                         }).catch(err => {
@@ -354,7 +354,7 @@
                     p.memberID = isNaN(Number(_this.filter)) ? -1 : Number(_this.filter);
                     p.name = p.email = p.phone = p.residenceArea = _this.filter;
 
-                    axios.post(`${baseAddress}/api/MembersAPI/filter`, p).then(response => {
+                    axios.post(`/api/MembersAPI/filter`, p).then(response => {
                         //alert(JSON.stringify(response.data));
                         //加入Edit屬性，類似viewbag動態語言
                         _this.memberDTOArray = response.data;
@@ -386,7 +386,7 @@
                         // isAdministrator: Boolean(_this.isAdministrator)
                     };
                     // console.log(p);
-                    axios.post(`${baseAddress}/api/MembersAPI`, p).then(response => {
+                    axios.post(`/api/MembersAPI`, p).then(response => {
                         alert(response.data);
                         //新增完成後隱藏頁面
                         $("#insertModal").modal("hide");

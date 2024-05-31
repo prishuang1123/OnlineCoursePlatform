@@ -150,7 +150,7 @@
 
             },
             mounted() {
-                const sendToPaymentPageUrl = `${baseUrl}/Ecpay/Index`;
+                const sendToPaymentPageUrl = `/Ecpay/Index`;
                 axios.post(sendToPaymentPageUrl).then(response => {
                     // Clear the existing classSchedule before populating it with new data
 

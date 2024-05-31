@@ -335,7 +335,7 @@
                     return;
                 }
                 debounceTimeout = setTimeout(function () {
-                    var url = "https://localhost:7177/Home/Searchtrainers";
+                    var url = "/Home/Searchtrainers";
                     // 向服务器发送异步请求
                     axios.get(url, { params: { searchTerm: searchTerm } }).then(response => {
                         $('#search_results_container').html(response.data).show();
