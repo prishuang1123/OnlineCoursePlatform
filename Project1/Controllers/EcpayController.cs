@@ -207,6 +207,7 @@ namespace Project1.Controllers
         [HttpPost]
         public ActionResult PayInfo(IFormCollection id)
         {
+            Console.WriteLine(id);
             var data = new Dictionary<string, string>();
             foreach (string key in id.Keys)
             {

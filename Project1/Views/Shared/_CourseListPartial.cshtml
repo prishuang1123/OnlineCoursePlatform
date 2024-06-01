@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Course>
+
+@foreach (var course in Model)
+{
+    <div class="col-lg-4 col-md-6">
+        <div class="single-product">
+            <img class="img-fluid" src="@course.ThumbnailUrl" alt="">
+            <div class="product-details">
+                <h6>@course.CourseName</h6>
+                <input v-model="courseId" value="@course.CourseID" hidden disabled />
+                <div class="price">
+                    <h6>@course.Price.ToString("c")</h6>
+                </div>
+                <div class="prd-bottom">
+                    <form asp-controller="Trainerrr" asp-action="singleCourse" asp-route-id="@course.CourseID" class="button-form social-info">
+                        <button class="lnr" v-on:click="actInfo(@course.CourseID)">
+                            <span class="lnr ti-bag"></span>
+                            <p class="hover-text">關於這門課</p>
+                        </button>
+                    </form>
+                    <form asp-action="FollowItem" asp-controller="Browse" asp-route-id="@course.CourseID" method="post" class="button-form social-info">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="lnr">
+                            <span class="lnr lnr-heart"></span>
+                            <p class="hover-text">追蹤</p>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+}

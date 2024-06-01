@@ -8,17 +8,17 @@
     <input asp-for="OrderID" hidden />
     <div class="p-3 mt-4">
         <div class="row pb-2">
-            <h2>Edit Order Details</h2>
+            <h2>刪除訂單</h2>
         </div>
     </div>
     <div asp-validation-summary="ModelOnly"></div>
     <div class="mb-3 row p-1">
-        <label asp-for="OrderID" class="p-0" disabled></label>
+        <label asp-for="OrderID" class="p-0" disabled>訂單編號</label>
         <input asp-for="OrderID" type="text" class="form-control" disabled />
         <span asp-validation-for="OrderID" class="text-danger"></span>
     </div>
     <div class="mb-3 row p-1">
-        <label asp-for="MemberID" class="p-0 control-label"></label>
+        <label asp-for="MemberID" class="p-0 control-label">會員編號</label>
         <input asp-for="MemberID" type="text" class="form-control" disabled />
         <span asp-validation-for="MemberID" class="text-danger"></span>
     </div>
@@ -29,7 +29,7 @@
     </div> *@
     <div class="mb-3 row p-1">
         <div>
-            <label asp-for="OrderDate" class="pr-3"></label>
+            <label asp-for="OrderDate" class="pr-3">訂單日期</label>
         </div>
         <div>
             <input asp-for="OrderDate" type="date" class="form-control" disabled />
@@ -38,42 +38,36 @@
     </div>
     <div class="mb-3 row p-1">
         <div>
-            <label asp-for="OrderStatus" class="pr-3"></label>
+            <label asp-for="OrderStatus" class="pr-3">訂單狀態</label>
         </div>
         <div>
-            <select asp-for="OrderStatus" class="form-control pl-3 pr-4" disabled>
-                <option value="Processing">Processing</option>
-                <option value="Shipped">Shipped</option>
-                <option value="Delivered">Delivered</option>
-                <option value="Completed">Completed</option>
-                <option value="Cancelled">Cancelled</option>
-            </select>
+            <input asp-for="OrderStatus" type="text" class="form-control" disabled />
             <span asp-validation-for="OrderStatus" class="text-danger"></span>
         </div>
     </div>
 
     <div class="mb-3 row p-1">
-        <label asp-for="TotalAmount" class="p-0"></label>
+        <label asp-for="TotalAmount" class="p-0">總額</label>
         <input asp-for="TotalAmount" type="text" class="form-control" disabled />
         <span asp-validation-for="TotalAmount" class="text-danger"></span>
     </div>
     <div class="mb-3 row p-1">
-        <label asp-for="CreatedAt" class="p-0"></label>
+        <label asp-for="CreatedAt" class="p-0">訂單創立日期</label>
         <input asp-for="CreatedAt" type="text" class="form-control" disabled />
         <span asp-validation-for="CreatedAt" class="text-danger"></span>
     </div>
     <div class="mb-3 row p-1">
-        <label asp-for="ModifiedAt" class="p-0"></label>
+        <label asp-for="ModifiedAt" class="p-0">訂單修改日期</label>
         <input asp-for="ModifiedAt" type="text" class="form-control" disabled />
         <span asp-validation-for="ModifiedAt" class="text-danger"></span>
     </div>
     <div class="row">
         <div class="col-6 col-md-3">
-            <button type="submit" class="btn btn-outline-danger form-control">Delete</button>
+            <button type="submit" class="btn btn-outline-danger form-control">刪除</button>
         </div>
         <div class="col-6 col-md-3">
             <a asp-controller="Order" asp-action="Index" class="btn btn-outline-secondary form-control">
-                Back to list
+                返回
             </a>
         </div>
     </div>

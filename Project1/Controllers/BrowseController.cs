@@ -12,6 +12,7 @@ using Project1.Utilities;
 using Project1.ViewModels;
 using System.Collections.Frozen;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 using System.Security.Claims;
 
 namespace Project1.Controllers
@@ -49,26 +50,20 @@ namespace Project1.Controllers
 
             return View(browseVM);
         }
-        //public async Task<IActionResult> Index(int categoryId)
-        //{
-        //    IEnumerable<Course>? courseObjList = await _db.Course.ToListAsync();
-        //    IEnumerable<CourseCategory>? categoryObjList = await _db.CourseCategory.ToListAsync();
+        public async Task<IActionResult> GetCourseListPartial(int? Id)
+        {
+            IEnumerable<Course> courseObjList;
+            if (Id == null)
+            {
+                courseObjList = await _db.Course.ToListAsync();
+            }
+            else
+            {
+                courseObjList = await _db.Course.Where(c => c.CourseCategoryID == Id).ToListAsync();
+            }
 
-        //    //IQueryable<Trainer> queryTrainer = trainerDbset;
-
-        //    if (courseObjList == null || categoryObjList == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    BrowseVM? browseVM = new BrowseVM()
-        //    {
-        //        courseList = courseObjList,
-        //        categoryList = categoryObjList,
-
-        //    };
-
-        //    return View(browseVM);
-        //}
+            return PartialView("_CourseListPartial", courseObjList);
+        }
         // GET: Browse/Cart/5
         public async Task<IActionResult> ViewCart() //recieve memberID
         {
@@ -304,6 +299,7 @@ namespace Project1.Controllers
             //}
             return Json(categoryNum);
         }
+
         [HttpGet]
         public JsonResult GetClassSchedule()
         {
@@ -352,26 +348,27 @@ namespace Project1.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateQuantity(int quantity, int id)//quantity,cartId
+        public IActionResult UpdateQuantity(int id)//courseId
         {
-            ShoppingCart cartItem = _db.Cart.Where(obj => obj.CartID == id).FirstOrDefault();
-            cartItem.Quantity = quantity;
+            List<ShoppingCart> cartItemList = _db.Cart.Where(obj => obj.CourseID == id).ToList();
+            int quantity = cartItemList.Count();
             _db.SaveChanges();
             //TempData["success"] = "成功更新商品數量!!";
-            Course course = _db.Course.Where(c => c.CourseID == cartItem.CourseID).FirstOrDefault();
+            //Course course = _db.Course.Where(c => c.CourseID == cartItemList.CourseID).FirstOrDefault();
 
-            decimal totalPrice = (course.Price) * quantity;
+            //decimal totalPrice = (course.Price) * quantity;
 
 
-            return Json(new { TotalPrice = totalPrice.ToString("c") });
+            return Json(new { Quantity = quantity });
         }
 
         [HttpPost]
         //[ValidateAntiForgeryToken]
         public IActionResult Delete(int id)//courseId
         {
+            int memberId = Util.getMemberId(_db, _userManager, User);
             List<ShoppingCart> cartItemList = _db.Cart.Where(obj => obj.CourseID == id).ToList();
-            int memberId = cartItemList.Any() ? cartItemList[0].MemberID : 0;
+            
             foreach (var cartItem in cartItemList)
 			{
                 _db.Cart.Remove(cartItem);
@@ -387,7 +384,7 @@ namespace Project1.Controllers
         [HttpGet]
         public async Task<IActionResult> UpdateSubtotal()
         {
-            var memberId = Util.getMemberId(_db, _userManager, User);
+            int memberId = Util.getMemberId(_db, _userManager, User);
             decimal subtotal = 0;
             memberShoppingCart = await _db.Cart.Where(u => u.MemberID == memberId).ToListAsync();
             IEnumerable<int> courseIds = memberShoppingCart.Select(u => u.CourseID).ToList();

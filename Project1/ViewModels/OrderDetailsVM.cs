@@ -1,4 +1,5 @@
-﻿using Project1.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Project1.Models;
 
 namespace Project1.ViewModels
 {
