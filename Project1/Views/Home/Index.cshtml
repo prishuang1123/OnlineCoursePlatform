@@ -175,21 +175,21 @@
                 }
             },
             mounted() {
-                var url1 = "@ViewBag.baseUrl" + "Home/GetQuantity";
+                var url1 = "/Home/GetQuantity";
                 axios.get(url1).then(response => {
                     this.quantity = response.data;
                 }).catch(error => {
                     alert(error);
                 });
 
-                var url2 = "@ViewBag.baseUrl" + "Home/GetAverageRating";
+                var url2 = "/Home/GetAverageRating";
                 axios.get(url2).then(response => {
                     this.average = response.data;
                 }).catch(error => {
                     alert(error);
                 });
 
-                var url3 = "@ViewBag.baseUrl" + "Home/GetClicks";
+                var url3 = "/Home/GetClicks";
                 axios.get(url3).then(response => {
                     this.clicks = response.data;
                 }).catch(error => {
