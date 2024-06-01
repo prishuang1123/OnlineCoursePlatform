@@ -100,16 +100,8 @@
     <div class="container">
         <div id="app" class="row s_product_inner">
             <div class="col-lg-6" v-if="course">
-                <div class="s_Product_carousel">
-                    <div class="single-prd-item">
+                <div class="single-product">
                         <img :src="course.thumbnailUrl" class="img-fluid" alt="">
-                    </div>
-                    <div class="single-prd-item">
-                        <img :src="course.thumbnailUrl" class="img-fluid" alt="">
-                    </div>
-                    <div class="single-prd-item">
-                        <img :src="course.thumbnailUrl" class="img-fluid" alt="">
-                    </div>
                 </div>
                 <div class="s_product_text">
                     <h3> {{course.courseName}}</h3>
