@@ -35,14 +35,14 @@ namespace Project1.Controllers
         //step1 : 網頁導入傳值到前端
         public ActionResult Index()
         {
-            //int memberId = Util.getMemberId(_db, _userManager,User);
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var memberId = 0;
-            if (userId != null)
-            {
-                var Mem = _db.Member.Where(m => m.AspID == userId).FirstOrDefault();
-                memberId = Mem.MemberID;
-            }
+            int memberId = Util.getMemberId(_db, _userManager, User);
+            //var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            //var memberId = 0;
+            //if (userId != null)
+            //{
+            //    var Mem = _db.Member.Where(m => m.AspID == userId).FirstOrDefault();
+            //    memberId = Mem.MemberID;
+            //}
             var orderId = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 20);
             //需填入你的網址
             var website = $"https://titmouse-willing-stud.ngrok-free.app";
@@ -120,14 +120,14 @@ namespace Project1.Controllers
         [Route("Ecpay/AddOrders")]
         public string AddOrders([FromBody]JObject json)
         {
-            //int memberId = Util.getMemberId(_db, _userManager, User);
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var memberId = 0;
-            if (userId != null)
-            {
-                var Mem = _db.Member.Where(m => m.AspID == userId).FirstOrDefault();
-                memberId = Mem.MemberID;
-            }
+            int memberId = Util.getMemberId(_db, _userManager, User);
+            //var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            //var memberId = 0;
+            //if (userId != null)
+            //{
+            //    var Mem = _db.Member.Where(m => m.AspID == userId).FirstOrDefault();
+            //    memberId = Mem.MemberID;
+            //}
             string num = "0";
             try
             {

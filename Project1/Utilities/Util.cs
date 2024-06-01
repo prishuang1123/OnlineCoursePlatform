@@ -6,12 +6,19 @@ namespace Project1.Utilities
 {
     public class Util
     {
-        public static int getMemberId(ProjectDbContext _db, UserManager<IdentityUser> _userManager, ClaimsPrincipal User)
+        public static int getMemberId(ProjectDbContext _db, UserManager<ProjectUser> _userManager, ClaimsPrincipal User)
         {
-            var userId = _userManager.GetUserId(User);
-            var member = _db.Member.Where(m => m.AspID == userId).FirstOrDefault();
-            var memberId = member.MemberID;
-            return memberId;
+            if (User.Identity.IsAuthenticated)
+            {
+                var userId = _userManager.GetUserId(User);
+                var member = _db.Member.Where(m => m.AspID == userId).FirstOrDefault();
+                var memberId = member.MemberID;
+                return memberId;
+            }
+            else
+            {
+                return 0;
+            }
         }
     }
 }
