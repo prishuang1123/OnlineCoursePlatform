@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -22,9 +23,9 @@ namespace Project1.Controllers
         private readonly ProjectDbContext _db;
         //internal DbSet<Trainer> trainerDbset;
         private IEnumerable<ShoppingCart> memberShoppingCart;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ProjectUser> _userManager;
 
-        public BrowseController(ProjectDbContext db, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager) : base(userManager, signInManager)
+        public BrowseController(ProjectDbContext db, UserManager<ProjectUser> userManager, SignInManager<ProjectUser> signInManager) : base(userManager, signInManager)
         {
             _db = db;
             _userManager = userManager;
@@ -65,13 +66,21 @@ namespace Project1.Controllers
             return PartialView("_CourseListPartial", courseObjList);
         }
         // GET: Browse/Cart/5
-        public async Task<IActionResult> ViewCart() //recieve memberID
+        public async Task<IActionResult> ViewCart() 
         {
-            var memberId = Util.getMemberId(_db,_userManager, User);
-            //if (id==null || id == 0)
+            var memberId = Util.getMemberId(_db, _userManager, User);
+            //var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            //var memberId = 0;
+            //if (userId != null)
             //{
-            //	return RedirectToAction ("Login", "Members");
+            //    var Mem = _db.Member.Where(m => m.AspID == userId).FirstOrDefault();
+            //    memberId = Mem.MemberID;
             //}
+
+            if (memberId == 0)
+            {
+                return RedirectToPage("/Account/Login", new { area = "Identity" });
+            }
 
             //Course course= await _db.Course.Where(u=>u.CourseID==id).FirstOrDefaultAsync();
             //select the member's cartItems to show all products added to the cart
@@ -304,6 +313,13 @@ namespace Project1.Controllers
         public JsonResult GetClassSchedule()
         {
             var memberId = Util.getMemberId(_db, _userManager, User);
+            //var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            //var memberId = 0;
+            //if (userId != null)
+            //{
+            //    var Mem = _db.Member.Where(m => m.AspID == userId).FirstOrDefault();
+            //    memberId = Mem.MemberID;
+            //}
             memberShoppingCart = _db.Cart.Where(u => u.MemberID == memberId).ToList(); //member到時候再改
             var classSchedule = memberShoppingCart
             .GroupBy(c => c.CourseID)
@@ -460,7 +476,13 @@ namespace Project1.Controllers
             try
             {
                 var memberId = Util.getMemberId(_db, _userManager, User);
-
+                //var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                //var memberId = 0;
+                //if (userId != null)
+                //{
+                //    var Mem = _db.Member.Where(m => m.AspID == userId).FirstOrDefault();
+                //    memberId = Mem.MemberID;
+                //}
 
 
                 if (memberId != null)

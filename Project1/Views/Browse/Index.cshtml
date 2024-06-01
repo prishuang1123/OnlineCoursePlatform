@@ -198,15 +198,14 @@
                                 console.error(error);
                             });
                     }
-            },
-            mounted() {
-                const CategoryNumberUrl = `${baseUrl}/Browse/CategoryNumber`;
-                axios.get(CategoryNumberUrl).then(response => {
-                    this.categoryNumber = response.data;
-                    console.log(this.categoryNumber);
-                }).catch(error => {
-                    alert(error);
-                });
+                },
+                mounted() {
+                    const CategoryNumberUrl = `/Browse/CategoryNumber`;
+                    axios.get(CategoryNumberUrl).then(response => {
+                        this.categoryNumber = response.data;
+                    }).catch(error => {
+                        alert(error);
+                    });
 
                 // const AddToCartUrl = `${baseUrl}/Browse/AddToCart`;
                 // axios.post(AddToCartUrl, data.courseId).then(response => {

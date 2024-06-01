@@ -17,8 +17,8 @@ namespace Project1.Models
         public string Content { get; set; }
 
         // 假設圖片以字串形式保存其路徑，你也可以自行修改成符合你的需求的型別
-        public string Image1 { get; set; }
-        public string Image2 { get; set; }
+        public string? Image1 { get; set; }
+        public string? Image2 { get; set; }
         // 你可以繼續增加更多的圖片欄位，依此類推
 
         [Required]

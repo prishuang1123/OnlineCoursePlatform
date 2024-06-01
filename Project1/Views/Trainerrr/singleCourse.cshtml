@@ -1,127 +1,108 @@
-﻿<style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f8f8f8;
-    }
+﻿@section Styles {
 
-    .product_image_area {
-        background-color: #fff;
-        border-radius: 10px;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        padding: 20px;
-        margin-top: 20px;
-    }
-
-        .product_image_area h3 {
-            font-size: 28px;
-            color: #333;
-            margin-bottom: 20px;
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
         }
 
-    .add_comment_section {
-        background-color: #f9f9f9;
-        padding: 20px;
-        border-radius: 5px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-        .add_comment_section h3 {
-            margin-bottom: 20px;
-            font-size: 24px;
-            color: #333;
+        .product_image_area {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-top: 20px;
         }
 
-        .add_comment_section label {
-            font-weight: bold;
-            margin-bottom: 10px;
-            display: block;
-        }
-
-        .add_comment_section input[type="number"],
-        .add_comment_section textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            font-size: 16px;
-        }
-
-        .add_comment_section button {
-            background-color: #C08E5D;
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 18px;
-        }
-
-            .add_comment_section button:hover {
-                background-color: #90663B;
+            .product_image_area h3 {
+                font-size: 28px;
+                color: #333;
+                margin-bottom: 20px;
             }
 
-    .comment-list {
-        max-height: 300px; /* 評論區最大高度 */
-        overflow-y: auto; /* 垂直滾動 */
-        padding: 10px; /* 內邊距 */
-        border: 1px solid #ccc; /* 邊框 */
-        border-radius: 5px; /* 圓角 */
-        background-color: #f9f9f9; /* 背景色 */
-        margin-bottom: 20px; /* 下邊距 */
-    }
-
-    .comment {
-        padding: 10px; /* 評論框內邊距 */
-        border-bottom: 1px solid #ddd; /* 下邊框 */
-        margin-bottom: 10px; /* 下邊距 */
-    }
-
-        .comment:last-child {
-            border-bottom: none; /* 最後一個評論框去掉下邊框 */
+        .add_comment_section {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-    .user-info {
-        font-weight: bold; /* 用戶信息加粗 */
-    }
+            .add_comment_section h3 {
+                margin-bottom: 20px;
+                font-size: 24px;
+                color: #333;
+            }
 
-    .comment-date {
-        font-size: 12px; /* 評論日期字體大小 */
-        color: #888; /* 評論日期文字顏色 */
-    }
-</style>
+            .add_comment_section label {
+                font-weight: bold;
+                margin-bottom: 10px;
+                display: block;
+            }
+
+            .add_comment_section input[type="number"],
+            .add_comment_section textarea {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                margin-bottom: 20px;
+                font-size: 16px;
+            }
+
+            .add_comment_section button {
+                background-color: #C08E5D;
+                color: white;
+                padding: 12px 20px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 18px;
+            }
+
+                .add_comment_section button:hover {
+                    background-color: #90663B;
+                }
+
+        .comment-list {
+            max-height: 300px; /* 評論區最大高度 */
+            overflow-y: auto; /* 垂直滾動 */
+            padding: 10px; /* 內邊距 */
+            border: 1px solid #ccc; /* 邊框 */
+            border-radius: 5px; /* 圓角 */
+            background-color: #f9f9f9; /* 背景色 */
+            margin-bottom: 20px; /* 下邊距 */
+        }
+
+        .comment {
+            padding: 10px; /* 評論框內邊距 */
+            border-bottom: 1px solid #ddd; /* 下邊框 */
+            margin-bottom: 10px; /* 下邊距 */
+        }
+
+            .comment:last-child {
+                border-bottom: none; /* 最後一個評論框去掉下邊框 */
+            }
+
+        .user-info {
+            font-weight: bold; /* 用戶信息加粗 */
+        }
+
+        .comment-date {
+            font-size: 12px; /* 評論日期字體大小 */
+            color: #888; /* 評論日期文字顏色 */
+        }
+
+    </style>
+}
 
 
 <div class="product_image_area">
     <div class="container">
         <div id="app" class="row s_product_inner">
             <div class="col-lg-6" v-if="course">
-                <div class="s_Product_carousel">
-                    <div class="single-prd-item">
+                <div class="single-product">
                         <img :src="course.thumbnailUrl" class="img-fluid" alt="">
-                    </div>
-                    <div class="single-prd-item">
-                        <img :src="course.thumbnailUrl" class="img-fluid" alt="">
-                    </div>
-                    <div class="single-prd-item">
-                        <img :src="course.thumbnailUrl" class="img-fluid" alt="">
-                    </div>
                 </div>
-                <div class="add_comment_section mt-5">
-                    <h3 class="mb-30">添加評論</h3>
-                    <div>
-                        <label for="rating">評分:</label>
-                        <input type="number" v-model="newComment.rating" min="1" max="5" required @@keydown.prevent="checkKey($event)">
-                    </div>
-                    <div>
-                        <label for="comment">評論:</label>
-                        <textarea v-model="newComment.comment" required></textarea>
-                    </div>
-                    <button class="primary-btn" v-on:click.prevent="addComment">提交評論</button>
-                </div>
-                <div id="error-message" style="color: red;"></div>
-            </div>
-            <div class="col-lg-5 offset-lg-1">
                 <div class="s_product_text">
                     <h3> {{course.courseName}}</h3>
                     <h2>價格: {{course.price}}</h2>
@@ -134,8 +115,9 @@
                     </ul>
                     <p>課程簡介: {{course.description}}</p>
                 </div>
-                <h3 class="mb-30">已開放上課時間</h3>
-
+            </div>
+            <div class="col-lg-5 offset-lg-1">
+                <h3 class="mt-5 mb-30">已開放上課時間</h3>
                 <div v-if="schedules.length > 0">
                     <div v-for="(schedule, index) in schedules" :key="schedule.schedulerID" class="single-element-widget mt-30">
                         <div class="d-flex justify-content-between">
@@ -151,6 +133,19 @@
                 <div class="card_area d-flex align-items-center">
                     <a asp-controller="Browse" asp-action="ViewCart" class="primary-btn" v-on:click.prevent="addToCart">加入購物車</a>
                 </div>
+                <div class="add_comment_section mt-5">
+                    <h3 class="mb-30">添加評論</h3>
+                    <div>
+                        <label for="rating">評分:</label>
+                        <input type="number" v-model="newComment.rating" min="1" max="5" required @@keydown.prevent="checkKey($event)">
+                    </div>
+                    <div>
+                        <label for="comment">評論:</label>
+                        <textarea v-model="newComment.comment" required></textarea>
+                    </div>
+                    <button class="primary-btn" v-on:click.prevent="addComment">提交評論</button>
+                </div>
+                <div id="error-message" style="color: red;"></div>
             </div>
             <div class="container">
                 <h3 class="mt-5 mb-4">學生評論</h3>
@@ -164,13 +159,14 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
 
 @section Scripts {
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
+
     <script>
         var vueApp = {
             data() {
@@ -182,15 +178,15 @@
                         rating: '',
                         comment: ''
                     },
-                    memberID:'',
-                    courseRatings:[],
-                    
+                    memberID: '',
+                    courseRatings: [],
+
                 }
             },
             mounted() {
                 this.memberID = sessionStorage.getItem("MemID");
                 const cid = sessionStorage.getItem("ActID");
-                const url1 = `https://localhost:7177/Trainerrr/getsingleCourse?id=${cid}`;
+                const url1 = `/Trainerrr/getsingleCourse?id=${cid}`;
                 axios.get(url1)
                     .then(response => {
                         this.course = response.data;
@@ -200,7 +196,7 @@
                         console.error(error);
                     });
 
-                const url2 = `https://localhost:7177/Trainerrr/getClassSchedule?id=${cid}`;
+                const url2 = `/Trainerrr/getClassSchedule?id=${cid}`;
                 axios.get(url2)
                     .then(response => {
                         if (response.data.length > 0) {
@@ -216,7 +212,7 @@
                         console.error(error);
                     });
 
-                const url3 = `https://localhost:7177/Browse/ViewRating?id=${cid}`;
+                const url3 = `/Browse/ViewRating?id=${cid}`;
                 axios.get(url3).then(response => {
                     if (response.data.length > 0) {
                         this.courseRatings = response.data.map(e => ({
@@ -235,7 +231,7 @@
                         return;
                     }
                     const cid = sessionStorage.getItem("ActID");
-                    axios.post('https://localhost:7177/Browse/AddToCart', {
+                    axios.post('/Browse/AddToCart', {
                         courseID: cid,
                         memberID: this.memberID,
                         selectedSchedules: this.selectedSchedules
@@ -255,7 +251,7 @@
                         return;
                     }
                     const cid = sessionStorage.getItem("ActID");
-                    axios.post('https://localhost:7177/Browse/AddCourseRating', {
+                    axios.post('/Browse/AddCourseRating', {
                         courseID: cid,
                         memberID: this.memberID,
                         rating: this.newComment.rating,
@@ -288,4 +284,6 @@
 
         var app = Vue.createApp(vueApp).mount("#app");
     </script>
+
+        </script>
 }

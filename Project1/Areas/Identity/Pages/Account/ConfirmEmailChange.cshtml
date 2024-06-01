@@ -1,8 +1,23 @@
 ﻿@page
 @model ConfirmEmailChangeModel
 @{
-    ViewData["Title"] = "Confirm email change";
+    ViewData["Title"] = "確認電子郵件更改";
 }
 
 <h1>@ViewData["Title"]</h1>
-<partial name="_StatusMessage" model="Model.StatusMessage" />
+@* <partial name="_StatusMessage" model="Model.StatusMessage" /> *@
+
+@* 在 ConfirmEmailChange.cshtml 中，檢查 Model.StatusMessage 是否有值，如果有，則顯示成功訊息。如果沒有，則顯示錯誤訊息。 *@
+@if (Model.StatusMessage != null)
+{
+    <div class="alert alert-success">
+        @Model.StatusMessage
+    </div>
+}
+else
+{
+    <div class="alert alert-danger">
+        驗證電子郵件時發生錯誤。
+    </div>
+}
+

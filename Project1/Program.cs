@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-//�������ҥ�ApplicationDbContext���O �޲z(IdentityUser�BIdentityRole���O�����󪺶��X)
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
@@ -21,17 +21,22 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 //wayne:註冊 客製化註冊時的錯誤訊息
 builder.Services.AddScoped<IdentityErrorDescriber, CustomIdentityErrorDescriber>();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddRoles<IdentityRole>() //wayne:建立角色管理服務
+builder.Services.AddDefaultIdentity<ProjectUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<ApplicationRole>() //wayne:建立角色管理服務
     .AddEntityFrameworkStores<ApplicationDbContext>();
+
+
 
 //wayne:註冊EmailSender類別
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
+
 builder.Services.AddControllers().AddNewtonsoftJson();//pris:金流串接需要
 //wayne:Identity相關設定
-builder.Services.Configure<IdentityOptions>(options => {
+builder.Services.Configure<IdentityOptions>(options =>
+{
     //密碼原則
     options.Password.RequireDigit = true;
     options.Password.RequireLowercase = true;
@@ -49,7 +54,8 @@ builder.Services.Configure<IdentityOptions>(options => {
     options.SignIn.RequireConfirmedEmail = true;
 });
 //Coolie設定
-builder.Services.ConfigureApplicationCookie(options => {
+builder.Services.ConfigureApplicationCookie(options =>
+{
     options.Cookie.HttpOnly = true;
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
     options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
@@ -94,8 +100,8 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var context = services.GetRequiredService<ApplicationDbContext>();
-        var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
-        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+        var userManager = services.GetRequiredService<UserManager<ProjectUser>>();
+        var roleManager = services.GetRequiredService<RoleManager<ApplicationRole>>();
         await SeedData.Initialize(services, userManager, roleManager); // 初始化數據庫並添加角色
     }
     catch (Exception ex)
@@ -106,3 +112,4 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.Run();
+

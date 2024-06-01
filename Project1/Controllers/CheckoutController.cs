@@ -5,22 +5,30 @@ using Project1.Data;
 using Project1.Models;
 using Project1.Utilities;
 using Project1.ViewModels;
+using System.Security.Claims;
 
 namespace Project1.Controllers
 {
     public class CheckoutController : VerifyUserRoles
     {
         private readonly ProjectDbContext _db;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ProjectUser> _userManager;
 
-        public CheckoutController(ProjectDbContext db, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager) :base (userManager, signInManager)
+        public CheckoutController(ProjectDbContext db, UserManager<ProjectUser> userManager, SignInManager<ProjectUser> signInManager) :base (userManager, signInManager)
         {
             _db = db;
             _userManager = userManager;
         }
         public async Task<IActionResult> Index(String code) 
         {
-            int memberId=Util.getMemberId(_db, _userManager, User);
+            int memberId = Util.getMemberId(_db, _userManager, User);
+            //var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            //var memberId = 0;
+            //if (userId != null)
+            //{
+            //    var Mem = _db.Member.Where(m => m.AspID == userId).FirstOrDefault();
+            //    memberId = Mem.MemberID;
+            //}
             DbSet<Course> course = _db.Course;
             IEnumerable<ShoppingCart>memberShoppingCart = await _db.Cart.Where(u => u.MemberID == memberId).ToListAsync();
             Member memberObj = await _db.Member.Where(obj=>obj.MemberID==memberId).FirstOrDefaultAsync();

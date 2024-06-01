@@ -2,19 +2,24 @@
 
 @section Styles {
     <style>
+        /* 設置教練信息區域的樣式 */
         .trainer-info {
             text-align: center;
-            border: 1px solid #ddd;
+            border: 1px solid #B9A982;
             padding: 20px;
             border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
         }
 
+        /* 設置部落格貼文區域的樣式 */
         .trainer-blogs {
             border: 1px solid #ddd;
             padding: 20px;
             border-radius: 8px;
         }
 
+        /* 設置部落格貼文卡片的樣式 */
         .blog-post {
             margin-bottom: 15px;
             overflow: hidden;
@@ -22,12 +27,14 @@
             flex-direction: column;
         }
 
+            /* 設置部落格貼文卡片標題區域的樣式 */
             .blog-post .card-header {
                 background-color: #fff;
                 border-bottom: 1px solid #ddd;
                 flex-shrink: 0;
             }
 
+            /* 設置部落格貼文卡片內容區域的樣式 */
             .blog-post .card-body {
                 flex-grow: 1;
                 overflow-y: auto;
@@ -36,43 +43,62 @@
                 flex-direction: column;
             }
 
+            /* 設置部落格圖片的樣式 */
             .blog-post .blog-img {
                 flex-grow: 0;
-                max-height: 50%;
+                width: 624px;
                 object-fit: cover;
-                width: 100%;
-                height: auto;
+                border: 1px solid #907821;
+                border-radius: 5px;
             }
 
+        /* 設置課程卡片的樣式 */
         .course-card {
             text-align: center;
         }
 
+            /* 設置課程卡片圖片的樣式 */
             .course-card .card-img-top {
                 width: 100%;
                 height: 300px;
                 object-fit: cover;
             }
 
+        /* 設置輪播控制按鈕的樣式 */
         .carousel-control-prev,
         .carousel-control-next {
             width: 5%;
         }
 
+        /* 設置輪播控制按鈕圖標的樣式 */
         .carousel-control-prev-icon,
         .carousel-control-next-icon {
-            background-color: #A08935; /* 設置箭頭背景色為黑色，可以根據需要修改顏色 */
+            background-color: #A08935;
             border-radius: 50%;
         }
 
-        /* 課程區塊浮動樣式 */
+        /* 課程詳情模態框 */
+        .modal {
+            position: fixed;
+            top: 10%;
+            left: 50%;
+            transform: translate(-50%, 0);
+            z-index: 1050;
+            display: none;
+        }
+
+            .modal.show {
+                display: block;
+            }
+
+        /* 設置課程容器的樣式 */
         .course-container {
             position: fixed;
             bottom: 20px;
             right: 20px;
             width: 90%;
             max-width: 60%;
-            z-index: 9999;
+            z-index: 999;
             background-color: #fff;
             border: 1px solid #ddd;
             border-radius: 8px;
@@ -81,15 +107,18 @@
             padding: 20px;
         }
 
+            /* 設置課程容器顯示時的樣式 */
             .course-container.show {
                 display: block;
             }
 
+        /* 設置關閉按鈕的樣式 */
         .close-button {
             display: flex;
             justify-content: flex-end;
         }
 
+            /* 設置關閉按鈕本身的樣式 */
             .close-button button {
                 background: none;
                 font-size: 24px;
@@ -101,10 +130,28 @@
                 margin-bottom: 10px;
             }
 
+                /* 設置關閉按鈕懸停時的樣式 */
                 .close-button button:hover {
-                    background-color: #a08935; /* 在此處設置懸停時的背景色 */
+                    background-color: #a08935;
                 }
 
+        /* 課程檢視的關閉 */
+        .btn-close {
+            background: none;
+            font-size: 15px;
+            cursor: pointer;
+            color: white;
+            border-radius: 50%;
+            background-color: #C2B174;
+            border: none;
+            margin-bottom: 10px;
+        }
+            /* 設置關閉按鈕懸停時的樣式 */
+            .btn-close button:hover {
+                background-color: #a08935;
+            }
+
+        /* 設置浮動按鈕的樣式 */
         .fab {
             position: fixed;
             bottom: 20px;
@@ -123,82 +170,124 @@
             box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
         }
 
-        .blog-img{
+        /* 設置部落格圖片邊框的樣式 */
+        .blog-img {
             border: 1px solid #907821;
-            border-radius:5px;
+            border-radius: 5px;
         }
+
+        /* 设置 iframe 容器的样式 */
+        .iframe-container {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+            .iframe-container iframe {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                border: none;
+            }
     </style>
 }
 
 <div class="container mt-4">
     <div class="row">
-        <!-- 第一區塊：訓練師資訊 -->
         <div class="col-md-4">
+            <!-- 教練信息區域 -->
             <div class="trainer-info">
-                <img src="@Model.Trainer.Photo" class="img-fluid mb-3" alt="Trainer Photo" />
+                <img src="@Model.Trainer.Photo" class="img-fluid mb-3" alt="Trainer Photo" style="width: 263px; height: 280px;border-radius:50%;" />
                 <h2>@Model.Trainer.TrainerName</h2>
                 <p><strong>經歷:</strong> @Model.Trainer.Experience</p>
                 <p><strong>資格:</strong> @Model.Trainer.Qualifications</p>
             </div>
         </div>
 
-        <!-- 第二區塊：訓練師部落格貼文 -->
         <div class="col-md-8">
+            <!-- 部落格貼文區域 -->
             <div class="trainer-blogs mb-4">
                 <h3>部落格貼文</h3>
-                @foreach (var blog in Model.Blogs.OrderByDescending(b => b.PostedDate))
+                @if (Model.Blogs.Any())
                 {
-                    <div class="blog-post mb-4 card">
-                        <div class="card-header d-flex justify-content-between">
-                            <div class="d-flex align-items-center">
-                                <img src="@Model.Trainer.Photo" class="rounded-circle mr-2" style="width: 50px; height: 50px;" alt="Trainer Photo" />
-                                <div>
-                                    <h5 class="card-title mb-0">@Model.Trainer.TrainerName</h5>
-                                    <small class="text-muted">@blog.PostedDate.ToString("yyyy-MM-dd")</small>
+                    @foreach (var blog in Model.Blogs.OrderByDescending(b => b.PostedDate))
+                    {
+                        <!-- 單個部落格貼文卡片 -->
+                        <div class="blog-post mb-4 card">
+                            <div class="card-header d-flex justify-content-between">
+                                <div class="d-flex align-items-center">
+                                    <img src="@Model.Trainer.Photo" class="rounded-circle mr-2" style="width: 50px; height: 50px;" alt="Trainer Photo" />
+                                    <div>
+                                        <h5 class="card-title mb-0">@Model.Trainer.TrainerName</h5>
+                                        <small class="text-muted">@blog.PostedDate.ToString("yyyy-MM-dd")</small>
+                                    </div>
                                 </div>
                             </div>
-                            <div>
-                                @*   <button class="btn btn-danger btn-sm">隱藏</button> *@
+                            <div class="card-body">
+                                <h4 class="card-title">@blog.Title</h4>
+                                <p class="card-text">@blog.Content</p>
+                                @if (!string.IsNullOrEmpty(blog.Image1) || !string.IsNullOrEmpty(blog.Image2))
+                                {
+                                    <!-- 部落格圖片輪播 -->
+                                    <div id="carouselExampleControls_@blog.BlogID" class="carousel slide" data-bs-ride="carousel">
+                                        <div class="carousel-inner blog-img">
+                                            @if (!string.IsNullOrEmpty(blog.Image1))
+                                            {
+                                                <div class="carousel-item active">
+                                                    <img src="@blog.Image1" class="d-block w-100" alt="Blog Image 1" onclick="openImageModal('@blog.Image1', '@blog.Image2')">
+                                                </div>
+                                            }
+                                            @if (!string.IsNullOrEmpty(blog.Image2))
+                                            {
+                                                <div class="carousel-item">
+                                                    <img src="@blog.Image2" class="d-block w-100" alt="Blog Image 2" onclick="openImageModal('@blog.Image1', '@blog.Image2')">
+                                                </div>
+                                            }
+                                            @if (string.IsNullOrEmpty(blog.Image1) && !string.IsNullOrEmpty(blog.Image2))
+                                            {
+                                                <div class="carousel-item active">
+                                                    <img src="@blog.Image2" class="d-block w-100" alt="Blog Image 2" onclick="openImageModal('@blog.Image2', '@blog.Image2')">
+                                                </div>
+                                            }
+                                        </div>
+                                        <!-- 輪播控制按鈕 -->
+                                        @if (!string.IsNullOrEmpty(blog.Image1) && !string.IsNullOrEmpty(blog.Image2))
+                                        {
+                                            <a class="carousel-control-prev" href="#carouselExampleControls_@blog.BlogID" role="button" data-bs-slide="prev">
+                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                <span class="sr-only">Previous</span>
+                                            </a>
+                                            <a class="carousel-control-next" href="#carouselExampleControls_@blog.BlogID" role="button" data-bs-slide="next">
+                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                <span class="sr-only">Next</span>
+                                            </a>
+                                        }
+                                    </div>
+                                }
                             </div>
                         </div>
-                        <div class="card-body">
-                            <h4 class="card-title">@blog.Title</h4>
-                            <p class="card-text">@blog.Content</p>
-                            <div id="carouselExampleControls_@blog.BlogID" class="carousel slide" data-bs-ride="carousel">
-                                <div class="carousel-inner blog-img">
-                                    @if (!string.IsNullOrEmpty(blog.Image1))
-                                    {
-                                        <div class="carousel-item active">
-                                            <img src="@blog.Image1" class="d-block w-100" style="/* width: 547.61px; */ height: 414.36px;" alt="Blog Image 1">
-                                        </div>
-                                    }
-                                    @if (!string.IsNullOrEmpty(blog.Image2))
-                                    {
-                                        <div class="carousel-item">
-                                            <img src="@blog.Image2" class="d-block w-100" style="/* width: 547.61px; */ height: 414.36px;" alt="Blog Image 2">
-                                        </div>
-                                    }
-                                </div>
-                                <a class="carousel-control-prev" href="#carouselExampleControls_@blog.BlogID" role="button" data-bs-slide="prev">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                    <span class="sr-only">Previous</span>
-                                </a>
-                                <a class="carousel-control-next" href="#carouselExampleControls_@blog.BlogID" role="button" data-bs-slide="next">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                    <span class="sr-only">Next</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+                    }
+                }
+                else
+                {
+                    <p>此無貼文</p>
                 }
             </div>
         </div>
 
-        <!-- 第三區塊：課程 -->
+        <!-- 課程卡片容器 -->
         <div class="course-container" id="courseContainer">
             <div class="close-button">
+                <!-- 關閉按鈕 -->
                 <button onclick="toggleCourseContainer()">&#10006;</button>
             </div>
+            <!-- 課程卡片輪播 -->
             <div id="courseCarousel" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     @for (int i = 0; i < Model.Courses.Count; i += 3)
@@ -214,6 +303,7 @@
                                             <div class="card-body">
                                                 <h5 class="card-title">@course.CourseName</h5>
                                                 <p class="card-text">@course.Description</p>
+                                                <button class="btn btn-primary" onclick="showCourseDetails(@course.CourseID)">查看</button>
                                             </div>
                                         </div>
                                     </div>
@@ -222,6 +312,8 @@
                         </div>
                     }
                 </div>
+
+                <!-- 輪播控制按鈕 -->
                 <a class="carousel-control-prev" href="#courseCarousel" role="button" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span class="sr-only">Previous</span>
@@ -234,25 +326,119 @@
         </div>
     </div>
 
+    <!-- 課程詳情模態框 -->
+    <div class="modal fade" id="courseDetailsModal" tabindex="-1" aria-labelledby="courseDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="courseDetailsModalLabel">課程詳情</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
+                </div>
+                <div class="modal-body">
+                    <img id="courseThumbnail" src="" class="img-fluid mb-3" alt="Course Thumbnail" />
+                    <h2 id="courseName"></h2>
+                    <p id="courseDescription"></p>
+                    <p><strong>寵物分類:</strong> <span id="petCategoryName"></span></p>
+                    <p><strong>課程類型:</strong> <span id="courseTypeName"></span></p>
+                    <p><strong>上課地點:</strong> <span id="locationName"></span></p>
+                    <p><strong>價格:</strong> $<span id="coursePrice"></span></p>
+                    <p><strong>課程時間表:</strong> <span id="courseScheduler"></span></p>
+                </div>
+                <button class="btn btn-primary" onclick="reserveCourse()">預約</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 查看課程的浮動按鈕 -->
     <button class="fab" onclick="toggleCourseContainer()">查看課程</button>
 
-    @section Scripts {
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.8/axios.min.js"
-                integrity="sha512-PJa3oQSLWRB7wHZ7GQ/g+qyv6r4mbuhmiDb8BjSFZ8NZ2a42oTtAq5n0ucWAwcQDlikAtkub+tPVCw4np27WCg=="
-                crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="https://unpkg.com/vue@3.4.25/dist/vue.global.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/js/bootstrap.min.js"></script>
-        <!-- 防止点击箭头时页面跳到顶部 -->
-        <script>
-            function toggleCourseContainer() {
-                var courseContainer = document.getElementById('courseContainer');
-                if (courseContainer.classList.contains('show')) {
-                    courseContainer.classList.remove('show');
-                } else {
-                    courseContainer.classList.add('show');
-                }
+    <!-- 圖片預覽模態框 -->
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imageModalLabel">圖片預覽</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
+                </div>
+                <div class="modal-body">
+                    <img id="previewImage" src="" class="img-fluid w-100" alt="Preview Image">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- 引入 Axios 庫 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.8/axios.min.js"
+            integrity="sha512-PJa3oQSLWRB7wHZ7GQ/g+qyv6r4mbuhmiDb8BjSFZ8NZ2a42oTtAq5n0ucWAwcQDlikAtkub+tPVCw4np27WCg=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- 引入 Bootstrap JS 庫 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        var GetCourseDetailsUrl = "/Trainerrr/GetCourseDetails";
+        var courseIdGlobal; // 添加一个全局变量来存储当前的课程ID
+
+        function toggleCourseContainer() {
+            var courseContainer = document.getElementById('courseContainer');
+            if (courseContainer.classList.contains('show')) {
+                courseContainer.classList.remove('show');
+            } else {
+                courseContainer.classList.add('show');
             }
-        </script>
-    }
-    
+        }
+
+        function showCourseDetails(courseId) {
+            axios.get(`${GetCourseDetailsUrl}/${courseId}`)
+                .then(function (response) {
+                    var course = response.data;
+                    if (course) {
+                        courseIdGlobal = courseId; // 存储当前的课程ID到全局变量中
+                        document.getElementById('courseThumbnail').src = course.thumbnailUrl;
+                        document.getElementById('courseName').textContent = course.courseName;
+                        document.getElementById('courseDescription').textContent = course.description;
+                        document.getElementById('petCategoryName').textContent = course.petCategoryName;
+                        document.getElementById('courseTypeName').textContent = course.courseTypeName;
+                        document.getElementById('locationName').textContent = course.locationName;
+                        document.getElementById('coursePrice').textContent = course.price;
+                        document.getElementById('courseScheduler').textContent = course.scheduler.join(', ');
+                        var courseDetailsModal = new bootstrap.Modal(document.getElementById('courseDetailsModal'));
+                        courseDetailsModal.show();
+                    }
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+        }
+
+        function reserveCourse() {
+            // 使用全局变量中的课程ID跳转到单一课程页面
+            window.location.href = `/Trainerrr/singleCourse/${courseIdGlobal}`;
+            sessionStorage.setItem("ActID", courseIdGlobal);
+        }
+
+        var currentImageIndex = 0;
+        var imageUrls = [];
+
+        function openImageModal(imageUrl1, imageUrl2) {
+            imageUrls = [imageUrl1, imageUrl2].filter(url => url !== '');
+            currentImageIndex = 0;
+            document.getElementById('previewImage').src = imageUrls[currentImageIndex];
+            var imageModal = new bootstrap.Modal(document.getElementById('imageModal'));
+            imageModal.show();
+        }
+
+        document.getElementById('imageModal').addEventListener('wheel', function (event) {
+            if (event.deltaY < 0) {
+                // Scroll up
+                currentImageIndex = (currentImageIndex > 0) ? currentImageIndex - 1 : imageUrls.length - 1;
+            } else {
+                // Scroll down
+                currentImageIndex = (currentImageIndex < imageUrls.length - 1) ? currentImageIndex + 1 : 0;
+            }
+            document.getElementById('previewImage').src = imageUrls[currentImageIndex];
+        });
+    </script>
+}
+
+
