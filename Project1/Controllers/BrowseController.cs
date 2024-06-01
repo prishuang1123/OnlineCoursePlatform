@@ -20,7 +20,6 @@ namespace Project1.Controllers
     {
         private readonly ProjectDbContext _db;
         //internal DbSet<Trainer> trainerDbset;
-        private int memberId;
         private IEnumerable<ShoppingCart> memberShoppingCart;
         private readonly UserManager<IdentityUser> _userManager;
 
@@ -50,7 +49,26 @@ namespace Project1.Controllers
 
             return View(browseVM);
         }
+        //public async Task<IActionResult> Index(int categoryId)
+        //{
+        //    IEnumerable<Course>? courseObjList = await _db.Course.ToListAsync();
+        //    IEnumerable<CourseCategory>? categoryObjList = await _db.CourseCategory.ToListAsync();
 
+        //    //IQueryable<Trainer> queryTrainer = trainerDbset;
+
+        //    if (courseObjList == null || categoryObjList == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    BrowseVM? browseVM = new BrowseVM()
+        //    {
+        //        courseList = courseObjList,
+        //        categoryList = categoryObjList,
+
+        //    };
+
+        //    return View(browseVM);
+        //}
         // GET: Browse/Cart/5
         public async Task<IActionResult> ViewCart() //recieve memberID
         {

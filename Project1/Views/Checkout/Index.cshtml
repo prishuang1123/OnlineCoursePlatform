@@ -92,7 +92,7 @@
                                 </ul>
                                 <div class="payment_item">
                                     <div class="radion_btn">
-                                    <input v-model="paymentType" type="radio" id="f-option5" name="selector">
+                                    <input v-model="paymentType" value="creditCard" type="radio" id="f-option5" name="selector">
                                         <label for="f-option5">信用卡</label>
                                         <div class="check"></div>
                                     </div>
@@ -102,7 +102,7 @@
                                 </div>
                                 <div class="payment_item active">
                                     <div class="radion_btn">
-                                        <input v-model="paymentType" type="radio" id="f-option6" name="selector">
+                                        <input v-model="paymentType" value="ATM" type="radio" id="f-option6" name="selector">
                                         <label for="f-option6">ATM轉帳</label>
                                         <img src="img/product/card.jpg" alt="">
                                         <div class="check"></div>
@@ -112,11 +112,11 @@
                                     </p>
                                 </div>
                                 <div class="creat_account">
-                                <input v-model="termsNConditions" type="checkbox" id="f-option4" name="selector">
+                                <input v-model="termsNConditions" value="termsNConditions" type="checkbox" id="f-option4" name="selector">
                                     <label for="f-option4">我已閱讀並同意</label>
                                     <a href="#">服務條款協議及相關細則內所有事項*</a>
                                 </div>
-                            <a v-on:click="checkRadioCheckbox" type="submit" class="primary-btn">前往付款</a>
+                            <a id="paymentBtn" v-on:click="checkRadioCheckbox" type="submit" asp-controller="Ecpay" asp-action="Index" class="primary-btn">前往付款</a>
                             </form>   
                         </div>
                     </div>
@@ -138,14 +138,18 @@
             },
             methods: {
                 checkRadioCheckbox:function (event) {
-                    alert("hhhhh");
-                    alert(paymentType.length);
-                    alert("hhhhh2");
-                    if (paymentType.length!== 1 && termsNConditions.length!==1) {
-                        
+                    
+                    if (this.paymentType.length === 0 || this.termsNConditions.length !== 1) {
+                        alert("請選擇付款方式及服務條款")
                         event.preventDefault();
-                        
                     }
+                    else {
+                        const queryParams = new URLSearchParams(window.location.search);
+                        const code = queryParams.get('code');
+                        // alert(queryParams);
+                        event.currentTarget.href = `${event.currentTarget.href}?code=${code}&paymentType=${this.paymentType}`;
+                    }
+                    
                 }
 
             },
