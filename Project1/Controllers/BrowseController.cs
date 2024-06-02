@@ -341,7 +341,7 @@ namespace Project1.Controllers
                                         join schedule in _db.ClassSchedule
                                         on cart.SchedulerID equals schedule.SchedulerID
                                         select new { cart.SchedulerID, schedule.Scheduler })
-                            .ToDictionary(x => x.SchedulerID, x => x.Scheduler),
+                            .ToDictionary(x => x.SchedulerID, x => x.Scheduler.ToString("yyyy/MM/dd")),
 
                 AllScheduleId = _db.ClassSchedule
                 .Where(obj => obj.CourseID == cs.Key)
@@ -351,7 +351,7 @@ namespace Project1.Controllers
                 AllScheduleDate = (from schedule in _db.ClassSchedule
                                    where schedule.CourseID == cs.Key
                                    select new { schedule.SchedulerID, schedule.Scheduler })
-                            .ToDictionary(x => x.SchedulerID, x => x.Scheduler),
+                            .ToDictionary(x => x.SchedulerID, x => x.Scheduler.ToString("yyyy/MM/dd")),
                 //AllScheduleDate = _db.ClassSchedule
                 //.Where(obj => obj.CourseID == cs.Key)
                 //.Select(obj => obj.Scheduler)

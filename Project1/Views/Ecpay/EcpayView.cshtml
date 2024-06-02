@@ -13,7 +13,7 @@
     @foreach (var key in @Model.Keys.ToList())
     {
         <label for="@key" hidden>@(key)</label>
-        <input id="@key" type="text" name="@key" value="@Model[key]" disabled hidden/>
+        <input id="@key" type="text" name="@key" value="@Model[key]" readonly hidden/>
         <br />
     }
 </body>
@@ -22,12 +22,11 @@
     <script>        
         $(document).ready(function () {
             let RtnCode = $("#RtnCode").val();
-            if (RtnCode === 1) {
-                $("#result").val(function () {
-                    this.value + " 付款成功!";
-                });
+            if (RtnCode === "1") {
+                $("#result").html("您的訂單已完成，付款成功!")
             } else {
                 $('<div class="alert alert-info" role="alert">付款失敗!</div>').insertAfter($('#result'));
+                console.log(typeof(RtnCode));
             }
         });
     </script>

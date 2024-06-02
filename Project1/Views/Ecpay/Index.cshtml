@@ -74,6 +74,19 @@
 								</p>
 							</td>
 						</tr>
+						<tr>
+							<td>
+								<h4>付款方式</h4>
+							</td>
+							<td>
+								<h5></h5>
+							</td>
+							<td>
+								<p id="paymentType">
+									
+								</p>
+							</td>
+						</tr>
 					</tbody>
 				</table>
 			</div>
@@ -103,6 +116,18 @@
 	<script src="https://cdn.jsdelivr.net/npm/jquery-twzipcode@1.7.14/jquery.twzipcode.min.js"></script>
 	<!-- 自己的 -->
 	<script src="~/js/ecpay.js"></script>
+
+	<script>
+		const queryParams = new URLSearchParams(window.location.search);
+		const paymentType = queryParams.get('paymentType');
+		if (paymentType === "ATM") {
+			document.getElementById('paymentType').innerHTML = "ATM轉帳";
+		}
+		else{
+			document.getElementById('paymentType').innerHTML = "信用卡";
+		}
+		
+	</script>
 }
 
    

@@ -43,14 +43,16 @@
                                 <td>
                                     <div class="single-element-widget mt-30">
                                         <div v-for="(course, courseIndex) in classSchedule" :key="courseIndex">
-                                            <div v-if="course.courseID == @(cartItemGroup.Key)" class="switch-wrap d-flex justify-content-between">
+                                            <div v-if="course.courseID == @(cartItemGroup.Key)">
                                                 <div v-for="(scheduleId, scheduleIndex) in course.allScheduleId" :key="scheduleIndex">
-                                                    <p>{{ course.allScheduleDate[scheduleId] }}</p>
-                                                    <div class="primary-checkbox">
-                                                        <!-- Unique id for each checkbox -->
-                                                        <input type="checkbox" :id="'checkbox_' + course.courseID + '_' + scheduleId" v-model="course.selectedScheduleId[course.courseID + '-' + scheduleId]" :checked="course.selectedScheduleId.includes(course.courseID + '-' + scheduleId)" />
-                                                        <!-- Use the same unique id in the label's for attribute -->
-                                                        <label :for="'checkbox_' + course.courseID + '_' + scheduleId"></label>
+                                                    <div class="switch-wrap d-flex justify-content-between">
+                                                        <p>{{ course.allScheduleDate[scheduleId] }}</p>
+                                                        <div class="primary-checkbox">
+                                                            <!-- Unique id for each checkbox -->
+                                                            <input type="checkbox" :id="'checkbox_' + course.courseID + '_' + scheduleId" v-model="course.selectedScheduleId[course.courseID + '-' + scheduleId]" :checked="course.selectedScheduleId.includes(course.courseID + '-' + scheduleId)" />
+                                                            <!-- Use the same unique id in the label's for attribute -->
+                                                            <label :for="'checkbox_' + course.courseID + '_' + scheduleId"></label>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -150,7 +152,7 @@
 <!--================End Cart Area =================-->
 
 @section Scripts
-{    
+{
     <script>
         const baseUrl = "https://localhost:7177";
         const vueApp = {
