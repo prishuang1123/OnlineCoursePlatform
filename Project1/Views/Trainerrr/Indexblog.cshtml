@@ -407,7 +407,6 @@
                         <div class="course-card-details">
                             <h6>{{ course.courseName }}</h6>
                            @*  <p>{{ course.description }}</p> *@
-                            @* <p>{{ course.description }}</p> *@
                             <p>{{ course.approvalStatus }}</p>
                         </div>
                         <div class="course-card-actions">
@@ -811,8 +810,6 @@
         </div>
     </div>
 
-
-
     <!-- 查看預約模態框 -->
     <div class="modal fade" id="viewReservationsModal" tabindex="-1" role="dialog" aria-labelledby="viewReservationsModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -851,9 +848,10 @@
     </div>
 
 
-</div>
+
 
 </div>
+
 
 
 @section Scripts {
@@ -926,8 +924,7 @@
                     thumbnailPreview: null, // 新增封面圖預覽
                     publishError: null ,// 發佈錯誤訊息
                     reservations: [] // 存儲預約資料
-          
-
+             
                 };
             },
             mounted() {
