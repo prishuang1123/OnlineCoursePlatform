@@ -39,7 +39,7 @@ namespace Project1.Models
 
         public Order()
         {
-            this.CreatedAt = DateTime.UtcNow;
+            this.CreatedAt = DateTime.Now;
 		}
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -12,6 +13,7 @@ using Project1.Utilities;
 using Project1.ViewModels;
 using System.Collections.Frozen;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 using System.Security.Claims;
 
 namespace Project1.Controllers
@@ -20,7 +22,6 @@ namespace Project1.Controllers
     {
         private readonly ProjectDbContext _db;
         //internal DbSet<Trainer> trainerDbset;
-        private int memberId;
         private IEnumerable<ShoppingCart> memberShoppingCart;
         private readonly UserManager<ProjectUser> _userManager;
 
@@ -50,22 +51,36 @@ namespace Project1.Controllers
 
             return View(browseVM);
         }
-
-        // GET: Browse/Cart/5
-        public async Task<IActionResult> ViewCart() //recieve memberID
+        public async Task<IActionResult> GetCourseListPartial(int? Id)
         {
-            //var memberId = Util.getMemberId(_db,_userManager, User);
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var memberId = 0;
-            if (userId != null)
+            IEnumerable<Course> courseObjList;
+            if (Id == null)
             {
-                var Mem = _db.Member.Where(m => m.AspID == userId).FirstOrDefault();
-                memberId = Mem.MemberID;
+                courseObjList = await _db.Course.ToListAsync();
             }
-            //if (id==null || id == 0)
+            else
+            {
+                courseObjList = await _db.Course.Where(c => c.CourseCategoryID == Id).ToListAsync();
+            }
+
+            return PartialView("_CourseListPartial", courseObjList);
+        }
+        // GET: Browse/Cart/5
+        public async Task<IActionResult> ViewCart() 
+        {
+            var memberId = Util.getMemberId(_db, _userManager, User);
+            //var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            //var memberId = 0;
+            //if (userId != null)
             //{
-            //	return RedirectToAction ("Login", "Members");
+            //    var Mem = _db.Member.Where(m => m.AspID == userId).FirstOrDefault();
+            //    memberId = Mem.MemberID;
             //}
+
+            if (memberId == 0)
+            {
+                return RedirectToPage("/Account/Login", new { area = "Identity" });
+            }
 
             //Course course= await _db.Course.Where(u=>u.CourseID==id).FirstOrDefaultAsync();
             //select the member's cartItems to show all products added to the cart
@@ -293,17 +308,18 @@ namespace Project1.Controllers
             //}
             return Json(categoryNum);
         }
+
         [HttpGet]
         public JsonResult GetClassSchedule()
         {
-            //var memberId = Util.getMemberId(_db, _userManager, User);
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var memberId = 0;
-            if (userId != null)
-            {
-                var Mem = _db.Member.Where(m => m.AspID == userId).FirstOrDefault();
-                memberId = Mem.MemberID;
-            }
+            var memberId = Util.getMemberId(_db, _userManager, User);
+            //var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            //var memberId = 0;
+            //if (userId != null)
+            //{
+            //    var Mem = _db.Member.Where(m => m.AspID == userId).FirstOrDefault();
+            //    memberId = Mem.MemberID;
+            //}
             memberShoppingCart = _db.Cart.Where(u => u.MemberID == memberId).ToList(); //member到時候再改
             var classSchedule = memberShoppingCart
             .GroupBy(c => c.CourseID)
@@ -348,26 +364,27 @@ namespace Project1.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateQuantity(int quantity, int id)//quantity,cartId
+        public IActionResult UpdateQuantity(int id)//courseId
         {
-            ShoppingCart cartItem = _db.Cart.Where(obj => obj.CartID == id).FirstOrDefault();
-            cartItem.Quantity = quantity;
+            List<ShoppingCart> cartItemList = _db.Cart.Where(obj => obj.CourseID == id).ToList();
+            int quantity = cartItemList.Count();
             _db.SaveChanges();
             //TempData["success"] = "成功更新商品數量!!";
-            Course course = _db.Course.Where(c => c.CourseID == cartItem.CourseID).FirstOrDefault();
+            //Course course = _db.Course.Where(c => c.CourseID == cartItemList.CourseID).FirstOrDefault();
 
-            decimal totalPrice = (course.Price) * quantity;
+            //decimal totalPrice = (course.Price) * quantity;
 
 
-            return Json(new { TotalPrice = totalPrice.ToString("c") });
+            return Json(new { Quantity = quantity });
         }
 
         [HttpPost]
         //[ValidateAntiForgeryToken]
         public IActionResult Delete(int id)//courseId
         {
+            int memberId = Util.getMemberId(_db, _userManager, User);
             List<ShoppingCart> cartItemList = _db.Cart.Where(obj => obj.CourseID == id).ToList();
-            int memberId = cartItemList.Any() ? cartItemList[0].MemberID : 0;
+            
             foreach (var cartItem in cartItemList)
 			{
                 _db.Cart.Remove(cartItem);
@@ -383,14 +400,7 @@ namespace Project1.Controllers
         [HttpGet]
         public async Task<IActionResult> UpdateSubtotal()
         {
-            //var memberId = Util.getMemberId(_db, _userManager, User);
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var memberId = 0;
-            if (userId != null)
-            {
-                var Mem = _db.Member.Where(m => m.AspID == userId).FirstOrDefault();
-                memberId = Mem.MemberID;
-            }
+            int memberId = Util.getMemberId(_db, _userManager, User);
             decimal subtotal = 0;
             memberShoppingCart = await _db.Cart.Where(u => u.MemberID == memberId).ToListAsync();
             IEnumerable<int> courseIds = memberShoppingCart.Select(u => u.CourseID).ToList();
@@ -465,14 +475,14 @@ namespace Project1.Controllers
         {
             try
             {
-                //var memberId = Util.getMemberId(_db, _userManager, User);
-                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                var memberId = 0;
-                if (userId != null)
-                {
-                    var Mem = _db.Member.Where(m => m.AspID == userId).FirstOrDefault();
-                    memberId = Mem.MemberID;
-                }
+                var memberId = Util.getMemberId(_db, _userManager, User);
+                //var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                //var memberId = 0;
+                //if (userId != null)
+                //{
+                //    var Mem = _db.Member.Where(m => m.AspID == userId).FirstOrDefault();
+                //    memberId = Mem.MemberID;
+                //}
 
 
                 if (memberId != null)

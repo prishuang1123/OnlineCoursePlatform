@@ -1,89 +1,109 @@
 ﻿@* @model System.Collections.Generic.Dictionary<string, string> *@
 @model CheckoutVM
 @{
-    // Layout = null;
+	Layout = "_Layout";
+}
+<!--================Order Details Area =================-->
+<section class="order_details">
+	<div class="container">	
+		<div class="order_details_table">
+			<h2>訂單明細確認</h2>
+			<div class="table-responsive">
+				<table class="table">
+					<thead>
+						<tr>
+							<th scope="col">課程</th>
+							<th scope="col">數量</th>
+							<th scope="col">總額</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var courseObj in Model.courseObjList)
+						{
+							<tr>
+								<td>
+									<p>@Model.course.Where(c => c.CourseID == courseObj.CourseID).FirstOrDefault().CourseName</p>
+								</td>
+								<td>
+									<h5>x @courseObj.Quantity</h5>
+								</td>
+								<td>
+									<p>
+											@(
+												(Model.course.Where(c => c.CourseID == courseObj.CourseID).FirstOrDefault().Price * @courseObj.Quantity).ToString("c")
+											)
+									</p>
+								</td>
+							</tr>
+						}
+						
+						<tr>
+							<td>
+								<h4>總共</h4>
+							</td>
+							<td>
+								<h5></h5>
+							</td>
+							<td>
+								<p>@(Model.subtotal.ToString("c"))</p>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<h4>折扣</h4>
+							</td>
+							<td>
+								<h5></h5>
+							</td>
+							<td>
+								<p>- @(Model.subtotal - (Math.Round(Model.subtotal * Convert.ToDecimal(Model.discountPercentage), 2)))</p>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<h4>總計</h4>
+							</td>
+							<td>
+								<h5></h5>
+							</td>
+							<td>
+								<p>
+									@(
+										Math.Round(Model.subtotal * Convert.ToDecimal(Model.discountPercentage), 2).ToString("c")
+									)
+								</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+<!--================End Order Details Area =================-->
+<br />
+	<form id="form" name="form" method="POST" action="https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5">
+			<div class="checkout_btn_inner d-flex align-items-end">
+				<button type="submit" id="checkoutBtn" class="primary-btn">送出訂單</button>
+			</div>
+		<!--step2 : 收到後端的值印出來-->
+		@foreach (var key in @Model.EcpayOrder.Keys.ToList())
+		{
+			<label hidden>@(key)</label>
+			<input type="text" name="@key" value="@Model.EcpayOrder[key]" hidden/>
+			<br />
+		}
+	</form>
+</section>
+
+@section Scripts
+{
+	<!-- js套件 -->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+	@* <script src="https://code.jquery.com/jquery-3.5.1.js"></script>  *@
+	<script src="https://cdn.jsdelivr.net/npm/jquery-twzipcode@1.7.14/jquery.twzipcode.min.js"></script>
+	<!-- 自己的 -->
+	<script src="~/js/ecpay.js"></script>
 }
 
+   
 
-<body>
-    <div class="container">
-        <div class="billing_details">
-            <div class="row">
-                <div class="col-lg-8">
-                    <h3>帳單寄送資訊</h3>
-                </div>
-                <div class="col-lg-4">
-                    <div class="order_box">
-                        <h1>確認送出訂單</h1>
-                        <form id="order_form">
-                            <ul class="list">
-                                <li><a href="#">課程 <span>總額</span></a></li>
-                                @foreach (var courseObj in Model.courseObjList)
-                                {
-                                    <li>
-                                        <a href="#">
-                                            @Model.course.Where(c => c.CourseID == courseObj.CourseID).FirstOrDefault().CourseName<span class="middle">x @courseObj.Quantity</span> <span class="last">
-                                                @(
-                                                    (Model.course.Where(c => c.CourseID == courseObj.CourseID).FirstOrDefault().Price * @courseObj.Quantity).ToString("c")
-                                                    )
-                                            </span>
-                                        </a>
-                                    </li>
-                                }
-                            </ul>
-                            <ul class="list list_2">
-                                <li><a href="#">總額 <span>@(Model.subtotal.ToString("c"))</span></a></li>
-                                @* <li><a href="#">折扣 <span>@(Model.subtotal - (Math.Round(Model.subtotal * Convert.ToDecimal(Model.Discountobj.DiscountPercentage), 2)))</span></a></li>
-                                <li><a href="#">總計 <span>@(Math.Round(Model.subtotal * Convert.ToDecimal(Model.Discountobj.DiscountPercentage), 2)).ToString("c")</span></a></li> *@
-                            </ul>
-                            <div class="payment_item">
-                                <div class="radion_btn">
-                                    <input v-model="paymentType" type="radio" id="f-option5" name="selector">
-                                    <label for="f-option5">信用卡</label>
-                                    <div class="check"></div>
-                                </div>
-                                <p>
-                                    一次付清，可使用 Visa/Mastercard
-                                </p>
-                            </div>
-                            <div class="payment_item active">
-                                <div class="radion_btn">
-                                    <input v-model="paymentType" type="radio" id="f-option6" name="selector">
-                                    <label for="f-option6">ATM轉帳</label>
-                                    <img src="img/product/card.jpg" alt="">
-                                    <div class="check"></div>
-                                </div>
-                                <p>
-                                    ATM轉帳付款
-                                </p>
-                            </div>
-                            <div class="creat_account">
-                                <input type="checkbox" id="f-option4" name="selector">
-                                <label for="f-option4">我已閱讀並同意</label>
-                                <a href="#">服務條款協議及相關細則內所有事項*</a>
-                            </div>
-                            <a type="submit" class="primary-btn" asp-controller="Ecpay" asp-action="Index">前往付款</a>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-        <form id="form" name="form" method="POST" action="https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5">
-            <!--step2 : 收到後端的值印出來-->
-            @foreach (var key in @Model.EcpayOrder.Keys.ToList())
-            {
-                <label >@(key)</label>
-                <input type="text" name="@key" value="@Model.EcpayOrder[key]" />
-
-                <br />
-            }
-            <button type="submit" id="checkoutBtn" class="primary-btn">送出訂單</button>
-        </form>
-    <!-- js套件 -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery-twzipcode@1.7.14/jquery.twzipcode.min.js"></script>
-    <!-- 自己的 -->
-    <script src="~/js/ecpay.js"></script>
-</body>

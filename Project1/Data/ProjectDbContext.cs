@@ -43,27 +43,27 @@ namespace Project1.Data
 
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Order>().HasData(
-                new Order { OrderID = 1, MemberID = 1, OrderDate = DateTime.Now, OrderStatus = "Processing", TotalAmount = 100, CreatedAt = DateTime.Now, },
-                new Order { OrderID = 2, MemberID = 2, OrderDate = DateTime.Now, OrderStatus = "Delivered", TotalAmount = 200, CreatedAt = DateTime.Now },
-                new Order { OrderID = 3, MemberID = 3, OrderDate = DateTime.Now, OrderStatus = "Cancelled", TotalAmount = 300, CreatedAt = DateTime.Now },
-                new Order { OrderID = 4, MemberID = 4, OrderDate = DateTime.Now, OrderStatus = "Processing", TotalAmount = 800, CreatedAt = DateTime.Now },
-                new Order { OrderID = 5, MemberID = 5, OrderDate = DateTime.Now, OrderStatus = "Shipped", TotalAmount = 1000, CreatedAt = DateTime.Now }
-                );
+            //modelBuilder.Entity<Order>().HasData(
+            //    new Order { OrderID = 1, MemberID = 1, OrderDate = DateTime.Now, OrderStatus = "Processing", TotalAmount = 100, CreatedAt = DateTime.Now, },
+            //    new Order { OrderID = 2, MemberID = 2, OrderDate = DateTime.Now, OrderStatus = "Delivered", TotalAmount = 200, CreatedAt = DateTime.Now },
+            //    new Order { OrderID = 3, MemberID = 3, OrderDate = DateTime.Now, OrderStatus = "Cancelled", TotalAmount = 300, CreatedAt = DateTime.Now },
+            //    new Order { OrderID = 4, MemberID = 4, OrderDate = DateTime.Now, OrderStatus = "Processing", TotalAmount = 800, CreatedAt = DateTime.Now },
+            //    new Order { OrderID = 5, MemberID = 5, OrderDate = DateTime.Now, OrderStatus = "Shipped", TotalAmount = 1000, CreatedAt = DateTime.Now }
+            //    );
 
-            modelBuilder.Entity<OrderDetail>().HasData(
-                new OrderDetail { OrderDetailID = 1, OrderID = 1, CourseID = 1, Quantity = 2, UnitPrice = 100, CreatedAt = DateTime.UtcNow },
-                new OrderDetail { OrderDetailID = 2, OrderID = 1, CourseID = 2, Quantity = 4, UnitPrice = 100, CreatedAt = DateTime.UtcNow },
-                new OrderDetail { OrderDetailID = 3, OrderID = 1, CourseID = 3, Quantity = 3, UnitPrice = 100, CreatedAt = DateTime.UtcNow },
-                new OrderDetail { OrderDetailID = 4, OrderID = 2, CourseID = 4, Quantity = 3, UnitPrice = 100, CreatedAt = DateTime.UtcNow },
-                new OrderDetail { OrderDetailID = 5, OrderID = 2, CourseID = 5, Quantity = 3, UnitPrice = 100, CreatedAt = DateTime.UtcNow },
-                new OrderDetail { OrderDetailID = 6, OrderID = 2, CourseID = 3, Quantity = 2, UnitPrice = 100, CreatedAt = DateTime.UtcNow },
-                new OrderDetail { OrderDetailID = 7, OrderID = 3, CourseID = 3, Quantity = 5, UnitPrice = 100, CreatedAt = DateTime.UtcNow },
-                new OrderDetail { OrderDetailID = 8, OrderID = 3, CourseID = 4, Quantity = 7, UnitPrice = 100, CreatedAt = DateTime.UtcNow },
-                new OrderDetail { OrderDetailID = 9, OrderID = 4, CourseID = 2, Quantity = 6, UnitPrice = 100, CreatedAt = DateTime.UtcNow },
-                new OrderDetail { OrderDetailID = 10, OrderID = 4, CourseID = 3, Quantity = 8, UnitPrice = 100, CreatedAt = DateTime.UtcNow },
-                new OrderDetail { OrderDetailID = 11, OrderID = 4, CourseID = 3, Quantity = 8, UnitPrice = 100, CreatedAt = DateTime.UtcNow }
-                );
+            //modelBuilder.Entity<OrderDetail>().HasData(
+            //    new OrderDetail { OrderDetailID = 1, OrderID = 1, CourseID = 1, Quantity = 2, UnitPrice = 100, CreatedAt = DateTime.UtcNow, SchedulerID=4 },
+            //    new OrderDetail { OrderDetailID = 2, OrderID = 1, CourseID = 1, Quantity = 4, UnitPrice = 100, CreatedAt = DateTime.UtcNow, SchedulerID = 4 },
+            //    new OrderDetail { OrderDetailID = 3, OrderID = 1, CourseID = 1, Quantity = 3, UnitPrice = 100, CreatedAt = DateTime.UtcNow, SchedulerID = 4 },
+            //    new OrderDetail { OrderDetailID = 4, OrderID = 2, CourseID = 2, Quantity = 3, UnitPrice = 100, CreatedAt = DateTime.UtcNow, SchedulerID = 7 },
+            //    new OrderDetail { OrderDetailID = 5, OrderID = 2, CourseID = 2, Quantity = 3, UnitPrice = 100, CreatedAt = DateTime.UtcNow, SchedulerID = 7 },
+            //    new OrderDetail { OrderDetailID = 6, OrderID = 2, CourseID = 2, Quantity = 2, UnitPrice = 100, CreatedAt = DateTime.UtcNow, SchedulerID = 7 },
+            //    new OrderDetail { OrderDetailID = 7, OrderID = 2, CourseID = 3, Quantity = 5, UnitPrice = 100, CreatedAt = DateTime.UtcNow, SchedulerID = 9 },
+            //    new OrderDetail { OrderDetailID = 8, OrderID = 2, CourseID = 3, Quantity = 7, UnitPrice = 100, CreatedAt = DateTime.UtcNow },
+            //    new OrderDetail { OrderDetailID = 9, OrderID = 3, CourseID = 3, Quantity = 6, UnitPrice = 100, CreatedAt = DateTime.UtcNow },
+            //    new OrderDetail { OrderDetailID = 10, OrderID = 3, CourseID = 3, Quantity = 8, UnitPrice = 100, CreatedAt = DateTime.UtcNow },
+            //    new OrderDetail { OrderDetailID = 11, OrderID = 3, CourseID = 3, Quantity = 8, UnitPrice = 100, CreatedAt = DateTime.UtcNow }
+            //    );
 
             modelBuilder.Entity<Course>().HasData(
                new Course { CourseID = 1, CourseName = "幼犬初級訓練", TrainerID = 1, PetCategoryID = 1, CourseCategoryID = 1, CourseTypeID = 1, Description = "教您如何教導您的狗基本指令和技巧，如坐下、待命和走路等等。", ApprovalStatus = "通過", Price = 100, LocationID = 1, MaxParticipants = 1, EnrollmentCount = 0, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Clicks = 21, ThumbnailUrl = "/Img/CourseThumbnail/course1.jpg" },

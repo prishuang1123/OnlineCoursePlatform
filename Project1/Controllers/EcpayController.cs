@@ -33,16 +33,16 @@ namespace Project1.Controllers
             _userManager = userManager;
         }
         //step1 : 網頁導入傳值到前端
-        public ActionResult Index()
+        public ActionResult Index(string code, string paymentType)
         {
-            //int memberId = Util.getMemberId(_db, _userManager,User);
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var memberId = 0;
-            if (userId != null)
-            {
-                var Mem = _db.Member.Where(m => m.AspID == userId).FirstOrDefault();
-                memberId = Mem.MemberID;
-            }
+            int memberId = Util.getMemberId(_db, _userManager, User);
+            //var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            //var memberId = 0;
+            //if (userId != null)
+            //{
+            //    var Mem = _db.Member.Where(m => m.AspID == userId).FirstOrDefault();
+            //    memberId = Mem.MemberID;
+            //}
             var orderId = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 20);
             //需填入你的網址
             var website = $"https://titmouse-willing-stud.ngrok-free.app";
@@ -73,7 +73,7 @@ namespace Project1.Controllers
             order["CheckMacValue"] = GetCheckMacValue(order);
 
             DbSet<Course> course = _db.Course;
-            var courseObjList = _db.Cart.Where(c=>c.MemberID==memberId)
+			var courseObjList = _db.Cart.Where(c=>c.MemberID==memberId)
                 .GroupBy(c => c.CourseID)
                 .Select(cs => new ShoppingCart
                 {
@@ -81,12 +81,24 @@ namespace Project1.Controllers
                     Quantity = cs.Sum(c => c.Quantity),
                     
                 }).ToList();
+			decimal initSubtotal = 0;
+			foreach (var item in courseObjList)
+			{
+				initSubtotal += (item.Quantity) * (_db.Course.Where(c => c.CourseID == item.CourseID).FirstOrDefault().Price);
+			}
+            double discountPercentage = 1;
+            if (code != null)
+            {
+                discountPercentage = _db.Discount.Where(obj => obj.DiscountName == code).FirstOrDefault().DiscountPercentage;
+            }
             CheckoutVM checkoutVM = new CheckoutVM()
             {
                 courseObjList = courseObjList,
                 course = course,
                 EcpayOrder = order,
-            };
+                discountPercentage = discountPercentage,
+                subtotal = initSubtotal,
+			};
             return View(checkoutVM);
         }
         private string GetCheckMacValue(Dictionary<string, string> order)
@@ -120,14 +132,14 @@ namespace Project1.Controllers
         [Route("Ecpay/AddOrders")]
         public string AddOrders([FromBody]JObject json)
         {
-            //int memberId = Util.getMemberId(_db, _userManager, User);
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var memberId = 0;
-            if (userId != null)
-            {
-                var Mem = _db.Member.Where(m => m.AspID == userId).FirstOrDefault();
-                memberId = Mem.MemberID;
-            }
+            int memberId = Util.getMemberId(_db, _userManager, User);
+            //var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            //var memberId = 0;
+            //if (userId != null)
+            //{
+            //    var Mem = _db.Member.Where(m => m.AspID == userId).FirstOrDefault();
+            //    memberId = Mem.MemberID;
+            //}
             string num = "0";
             try
             {
@@ -209,6 +221,7 @@ namespace Project1.Controllers
         [HttpPost]
         public ActionResult PayInfo(IFormCollection id)
         {
+            Console.WriteLine(id);
             var data = new Dictionary<string, string>();
             foreach (string key in id.Keys)
             {
