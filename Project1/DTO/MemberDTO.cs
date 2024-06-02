@@ -12,6 +12,10 @@ namespace Project1.DTO
 		public DateTime RegistrationDate { get; set; }
 		public string? ResidenceArea { get; set; }
 		public bool IsTrainer { get; set; }
-		public bool IsAdministrator { get; set; }
+
+        public string? AspID {  get; set; }
+        public string? Photo {  get; set; }
+		
 	}
+    
 }

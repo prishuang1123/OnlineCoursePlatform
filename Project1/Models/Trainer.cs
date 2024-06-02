@@ -19,13 +19,13 @@ namespace Project1.Models
         public int SpecializationID { get; set; } // 專長ID，外鍵
 
         [Display(Name = "經歷")]
-        public string Experience { get; set; } // 經歷
+        public string? Experience { get; set; } // 經歷
 
         [Display(Name = "資格")]
-        public string Qualifications { get; set; } // 資格
+        public string? Qualifications { get; set; } // 資格
 
         [Display(Name = "審核狀態")]
-        public string Status { get; set; } // 審核狀態，例如 "尚未審核"、"已審核"、"審核未通過"
+        public string? Status { get; set; } // 審核狀態，例如 "尚未審核"、"已審核"、"審核未通過"
 
         [Display(Name = "大頭貼")]
         public string? Photo {  get; set; } //圖片
