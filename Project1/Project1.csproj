@@ -65,6 +65,7 @@
     <Folder Include="Views\Shared\Partials\" />
     <Folder Include="wwwroot\img\MemberPhoto\" />
     <Folder Include="wwwroot\img\CoursePhoto\" />
+    <Folder Include="wwwroot\img\MembersPhoto\" />
     <Folder Include="wwwroot\img\TrainerPhoto\" />
     <Folder Include="wwwroot\uploads\" />
   </ItemGroup>

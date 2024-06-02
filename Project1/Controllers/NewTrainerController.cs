@@ -68,6 +68,7 @@ namespace Project1.Controllers
             {
                 MemberID = member.MemberID,
                 TrainerName = member.Name,
+                Status = "尚未審核" // 設置審核狀態為"尚未審核"
             };
             return View(model);
         }
@@ -129,6 +130,8 @@ namespace Project1.Controllers
             {
                 return NotFound();
             }
+
+           
 
             if (ModelState.IsValid)
             {

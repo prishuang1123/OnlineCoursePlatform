@@ -161,6 +161,8 @@ namespace Project1.Controllers
                         RegistrationDate = (DateTime)meb.RegistrationDate,
                         ResidenceArea = meb.ResidenceArea,
                         IsTrainer = (bool)meb.IsTrainer,
+                        AspID = meb.AspID,
+                        Photo = meb.Photo 
                         //IsAdministrator = (bool)meb.IsAdministrator
                     });
                     

@@ -44,4 +44,5 @@ namespace Project1.Models
 
 		public bool IsProfileCompleted { get; set; } //會員資料是否已填寫完成
     }
+	
 }

@@ -1,12 +1,14 @@
 ﻿@model Project1.Models.Trainer
-
+@inject Project1.Data.ProjectDbContext _context
 @{
     ViewData["Title"] = "Create";
+    var specializations = _context.Specialization.ToList();
 }
 
-<h1>Create</h1>
 
-<h4>Trainer</h4>
+<h1>歡迎成為訓練師</h1>
+
+<h4>訓練師基本資料</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -23,9 +25,21 @@
                 <span asp-validation-for="TrainerName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SpecializationID" class="control-label"></label>
-                <input asp-for="SpecializationID" class="form-control" />
-                <span asp-validation-for="SpecializationID" class="text-danger"></span>
+                <div class="row">
+                    <div class="col-md-4">
+                        <label asp-for="SpecializationID" class="control-label" style="margin-top: 7px;"></label>
+                    </div>
+                    <div class="col-md-8">
+                        <select asp-for="SpecializationID" class="form-control">
+                            <option value="">請選擇專業領域</option>
+                            @foreach (var specialization in specializations)
+                            {
+                                <option value="@specialization.SpecializationID">@specialization.SpecializationName</option>
+                            }
+                        </select>
+                        <span asp-validation-for="SpecializationID" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
             <div class="form-group">
                 <label asp-for="Experience" class="control-label"></label>
@@ -42,20 +56,23 @@
                 <input asp-for="Status" class="form-control" />
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            @* <div class="form-group">
                 <label asp-for="Photo" class="control-label"></label>
                 <input asp-for="Photo" class="form-control" />
                 <span asp-validation-for="Photo" class="text-danger"></span>
-            </div>
+            </div> *@
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="成為訓練師" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
-<div>
+@* <div>
     <a asp-action="Index">Back to List</a>
+</div> *@
+<div>
+    <a asp-controller="Home" asp-action="Index">回首頁</a>
 </div>
 
 @section Scripts {
