@@ -45,7 +45,7 @@ namespace Project1.Controllers
             //}
             var orderId = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 20);
             //需填入你的網址
-            var website = $"https://titmouse-willing-stud.ngrok-free.app";
+            var website = $"https://xpetcare.azurewebsites.net/";
             var order = new Dictionary<string, string>
                 {
                     //綠界需要的參數
