@@ -1,21 +1,26 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Project1.Data;
+using Project1.Models;
 using Project1.ViewModels;
 
 namespace Project1.Controllers
 {
     //wayne:該控制器給予Admin權限管制 繼承VerifyUserRoles
+    //wayne:控制器RoleManagement使管理員具有給予用戶權限的功能
     [Authorize(Roles = "Admin")]
     public class RoleManagementController : VerifyUserRoles
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly UserManager<ProjectUser> _userManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
+        private readonly ProjectDbContext _context;
 
-        public RoleManagementController(UserManager<IdentityUser> userManager,SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager): base(userManager, signInManager)
+        public RoleManagementController(UserManager<ProjectUser> userManager,SignInManager<ProjectUser> signInManager, RoleManager<ApplicationRole> roleManager, ProjectDbContext context) : base(userManager, signInManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _context = context;
         }
 
         public async Task<IActionResult> Index()
@@ -37,6 +42,7 @@ namespace Project1.Controllers
             return View(model);
         }
 
+        //GET RoleManagement/Manage
         public async Task<IActionResult> Manage(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
@@ -60,6 +66,7 @@ namespace Project1.Controllers
             return View(model);
         }
 
+        //Post RoleManagement/Manage
         [HttpPost]
         public async Task<IActionResult> Manage(ManageUserRolesViewModel model)
         {
@@ -84,6 +91,23 @@ namespace Project1.Controllers
             {
                 ModelState.AddModelError("", "Failed to remove roles");
                 return View(model);
+            }
+
+            // 更新IsTrainer欄位
+            var member = _context.Member.FirstOrDefault(m => m.AspID == user.Id);
+            if (member != null)
+            {
+                if (selectedRoles.Contains("Trainer"))
+                {
+                    member.IsTrainer = true;
+                }
+                else
+                {
+                    member.IsTrainer = false;
+                }
+
+                _context.Update(member);
+                await _context.SaveChangesAsync();
             }
 
             return RedirectToAction("Index");

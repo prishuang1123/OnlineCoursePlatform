@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Azure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -22,17 +24,19 @@ namespace Project1.Controllers
 {
     public class TrainerrrController : VerifyUserRoles
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly UserManager<ProjectUser> _userManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly ProjectDbContext _context;
         private readonly IWebHostEnvironment _environment;
+        private readonly IConfiguration _Configuration;
 
-        public TrainerrrController(ProjectDbContext context, IWebHostEnvironment environment, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager) : base(userManager, signInManager)
+        public TrainerrrController(ProjectDbContext context, IWebHostEnvironment environment, UserManager<ProjectUser> userManager, SignInManager<ProjectUser> signInManager, RoleManager<ApplicationRole> roleManager, IConfiguration configuration) : base(userManager, signInManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _context = context;
             _environment = environment;
+            _Configuration = configuration;
         }
 
         // 辅助方法：根据课程类别ID获取课程类别名称
@@ -81,7 +85,7 @@ namespace Project1.Controllers
             return PartialView("_CourseListPartial", courses);
         }
 
-   
+
 
 
         // GET: Trainerrr/Details/5
@@ -324,8 +328,26 @@ namespace Project1.Controllers
             return View(await _context.Trainer.ToListAsync());
         }
 
-        // POST: Trainer/ChangeApprovalStatus首頁審核按鈕
+        //// POST: Trainer/ChangeApprovalStatus首頁審核按鈕
+        //[HttpPost]
+        //public async Task<IActionResult> ChangeApprovalStatus(int trainerId, string newStatus)
+        //{
+        //    var trainer = await _context.Trainer.FindAsync(trainerId);
+
+        //    if (trainer == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    trainer.Status = newStatus; // 將訓練師的狀態更新為新的狀態
+        //    await _context.SaveChangesAsync(); // 將變更保存到資料庫
+
+        //    return RedirectToAction(nameof(TrainerIndex)); // 返回訓練師列表頁面
+        //}
+
+        //wayne:給予用戶訓練師權限功能
         [HttpPost]
+        [Authorize(Roles = "Admin")] // 限制只有具有 Admin 角色的用戶可以訪問此方法
         public async Task<IActionResult> ChangeApprovalStatus(int trainerId, string newStatus)
         {
             var trainer = await _context.Trainer.FindAsync(trainerId);
@@ -336,10 +358,51 @@ namespace Project1.Controllers
             }
 
             trainer.Status = newStatus; // 將訓練師的狀態更新為新的狀態
-            await _context.SaveChangesAsync(); // 將變更保存到資料庫
 
+            
+            // 使用 MemberID 查找 Member 記錄
+            var member = await _context.Member.FirstOrDefaultAsync(m => m.MemberID == trainer.MemberID);
+            if (member != null)
+            {
+                    // 使用 AspID 作為 UserId 來查找用戶
+                var user = await _userManager.FindByIdAsync(member.AspID);
+                if (user != null)
+                {
+                    if(newStatus == "通過")
+                    {
+                        var result = await _userManager.AddToRoleAsync(user, "Trainer");
+                        if (!result.Succeeded)
+                        {
+                            member.IsTrainer = true;
+                            _context.Member.Update(member);
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("", "Failed to add user to Trainer role");
+                            return RedirectToAction(nameof(TrainerIndex));
+                        }
+                    }
+                    else if (newStatus == "未通過")
+                    {
+                        var result = await _userManager.RemoveFromRoleAsync(user, "Trainer");
+                        if (result.Succeeded)
+                        {
+                            member.IsTrainer = false;
+                            _context.Member.Update(member);
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("", "Failed to remove user from Trainer role");
+                            return RedirectToAction(nameof(TrainerIndex));
+                        }
+                    }
+                }
+            }
+            
+            await _context.SaveChangesAsync(); // 將變更保存到資料庫
             return RedirectToAction(nameof(TrainerIndex)); // 返回訓練師列表頁面
         }
+
         public class Trainerrr
         {
             //文字顏色
@@ -447,8 +510,6 @@ namespace Project1.Controllers
             // 取得當前登入的訓練師
             var currentTrainer = GetCurrentTrainer();
 
-            // 取得該訓練師的所有部落格文章
-            //var blogPosts = await _context.Blog.Where(b => b.TrainerID == currentTrainer.TrainerID).ToListAsync();
 
             // 返回部落格首頁視圖，並傳遞部落格文章列表
             return View();
@@ -457,14 +518,26 @@ namespace Project1.Controllers
 
 
         // 取得當前登入的訓練師
-       //哪個訓練師登入?
+        //哪個訓練師登入?
         private Trainer GetCurrentTrainer()
         {
-            // 這裡示範一個假設的方法，根據你的身份驗證機制來取得當前登入的訓練師
-            var trainerId = 6 ; // 假設訓練師ID為
-            return _context.Trainer.FirstOrDefault(t => t.TrainerID == trainerId);
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value; // 取得當前登錄的使用者 ID
+            if (userId == null)
+            {
+                return null; // 如果沒有找到使用者 ID，返回 null
+            }
+
+            var member = _context.Member.FirstOrDefault(m => m.AspID == userId); // 根據 AspID 查找 Member
+            if (member == null)
+            {
+                return null; // 如果沒有找到 Member，返回 null
+            }
+
+            return _context.Trainer.FirstOrDefault(t => t.MemberID == member.MemberID); // 根據 MemberID 查找 Trainer
         }
 
+
+        //訓練師是誰?
 
         //[HttpGet("GetCurrentTrainer")]
         public JsonResult GetCurrentTrainerInfo()
@@ -472,7 +545,7 @@ namespace Project1.Controllers
             var currentTrainer = GetCurrentTrainer();
             if (currentTrainer == null)
             {
-                return Json(new { success = false, message = "Trainer not found" });
+                return Json(new { success = false, message = "請重新登入訓練師" });
             }
             return Json(new
             {
@@ -594,6 +667,10 @@ namespace Project1.Controllers
                 }
                 blogPost.Image1 = null; // 清空數據庫中的圖片路徑
             }
+            //else if (blogPost.Image1 == null)
+            //{
+            //    blogPost.Image1 = ""; // 清空圖片路徑
+            //}
 
             // 如果圖片2在被刪除的列表中，刪除圖片並清空對應欄位
             if (deletedImagesList.Contains(blogPost.Image2))
@@ -605,6 +682,10 @@ namespace Project1.Controllers
                 }
                 blogPost.Image2 = null; // 清空數據庫中的圖片路徑
             }
+            //else if (blogPost.Image2 == null)
+            //{
+            //    blogPost.Image2 = ""; // 清空圖片路徑
+            //}
 
             // 如果有新圖片1，保存並更新圖片路徑
             if (image1 != null)
@@ -672,6 +753,7 @@ namespace Project1.Controllers
 
             var courses = await _context.Course
                                         .Where(c => c.TrainerID == currentTrainer.TrainerID)
+
                                         .ToListAsync();
 
 
@@ -691,6 +773,7 @@ namespace Project1.Controllers
                 c.CourseTypeID,
                 c.Price,
                 c.MaxParticipants,
+                c.ApprovalStatus,
                 IsPublished = classSchedules.Any(cs => cs.CourseID == c.CourseID) // 檢查課程是否已發佈
             }).ToList();
 
@@ -723,7 +806,8 @@ namespace Project1.Controllers
             var currentTrainer = GetCurrentTrainer();
             course.TrainerID = currentTrainer.TrainerID;
             course.CreatedAt = DateTime.Now;
-            //course.UpdatedAt = DateTime.Now;
+            course.ApprovalStatus ="待審核";
+
 
             if (thumbnailUrl != null)
             {
@@ -735,6 +819,11 @@ namespace Project1.Controllers
                 }
                 course.ThumbnailUrl = $"/img/{fileName}";
             }
+            else {
+                course.ThumbnailUrl = $"/img/coursethumbnail/noimage.jpg";
+
+            }
+            
 
             _context.Course.Add(course);
             await _context.SaveChangesAsync();
@@ -802,6 +891,7 @@ namespace Project1.Controllers
         [HttpPost]
         public async Task<IActionResult> PublishCourse([FromBody] ClassSchedule schedule)
         {
+
             if (schedule == null || schedule.CourseID == 0 || schedule.Scheduler == DateTime.MinValue)
             {
                 return BadRequest("Invalid data.");
@@ -816,18 +906,6 @@ namespace Project1.Controllers
 
             var trainerId = course.TrainerID;
 
-            // 檢查訓練師在該時段是否已有其他課程
-            //var overlappingCourse = await _context.ClassSchedule
-            //    .Include(cs => cs.Course)
-            //    .Where(cs => cs.Course.TrainerID == trainerId && cs.Scheduler == schedule.Scheduler)
-            //    .FirstOrDefaultAsync();
-
-            //if (overlappingCourse != null)
-            //{
-            //    return Conflict(new { message = "此時段已經有排其他課程" });
-            //}
-
-            // 確保保存時包含時區信息
             var scheduleWithTimezone = new ClassSchedule
             {
                 CourseID = schedule.CourseID,
@@ -841,7 +919,7 @@ namespace Project1.Controllers
         }
 
 
-        // 获取特定课程的已发布时间表
+        // 取特定课程的已發佈时间表
         public async Task<JsonResult> GetPublishedSchedules(int courseID)
         {
             var schedules = await _context.ClassSchedule
@@ -881,6 +959,30 @@ namespace Project1.Controllers
             return Ok(new { message = "課程已收回發佈" });
         }
 
+
+        //查看誰預約課程
+        public async Task<IActionResult> GetReservations(int schedulerID)
+        {
+            var reservations = await (from od in _context.OrderDetail
+                                      join o in _context.Order on od.OrderID equals o.OrderID
+                                      join m in _context.Member on o.MemberID equals m.MemberID
+                                      where od.SchedulerID == schedulerID && o.OrderStatus == "已付款"
+                                      select new
+                                      {
+                                          m.MemberID,
+                                          m.Name,
+                                          m.Email,
+                                          m.Phone,
+                                          od.Quantity
+                                      }).ToListAsync();
+
+            return Ok(reservations);
+        }
+
+
+
+
+    
 
 
         //---------------------------------------------------------------------------------------------
@@ -953,6 +1055,39 @@ namespace Project1.Controllers
         }
 
 
+        // 取得課程詳細資料
+        public async Task<JsonResult> GetCourseDetails(int id)
+        {
+            var course = await (from c in _context.Course
+                                where c.CourseID == id
+                                join pc in _context.PetCategory on c.PetCategoryID equals pc.PetCategoryID
+                                join ct in _context.CourseType on c.CourseTypeID equals ct.CourseTypeID
+                                join cc in _context.CourseCategory on c.CourseCategoryID equals cc.CourseCategoryID
+                                join l in _context.Location on c.LocationID equals l.LocationID
+                                select new CourseViewModel
+                                {
+                                    TrainerID= c.TrainerID,
+                                    CourseID = c.CourseID,
+                                    CourseName = c.CourseName,
+                                    Description = c.Description,
+                                    CourseCategoryName= cc.CourseCategoryName,
+                                    PetCategoryName = pc.PetCategoryName,
+                                    CourseTypeName = ct.CourseTypeName,
+                                    LocationName = l.LocationName,
+                                    Price = c.Price,
+                                    MaxParticipants= c.MaxParticipants,
+                                    ThumbnailUrl = c.ThumbnailUrl,
+                                    Scheduler = _context.ClassSchedule.Where(cs => cs.CourseID == c.CourseID).Select(cs => cs.Scheduler).ToList()
+                                }).FirstOrDefaultAsync();
+            if (course == null)
+            {
+                return Json(null);
+            }
+            return Json(course);
+        }
+
+
+
         //---------------------------------------------------------------------------------------------------
 
         //單一課程頁面
@@ -961,67 +1096,14 @@ namespace Project1.Controllers
             return View();
         }
 
-		public async Task<JsonResult> getSingleCourse(int? id)
-		{
-			if (id == null)
-			{
-				return Json(new { error = "Invalid course ID" });
-			}
-
-			var singleCourseQuery = (from c in _context.Course.Where(c => c.CourseID == id)
-                                     join loc in _context.Location on c.LocationID equals loc.LocationID
-                                     join ct in _context.CourseType on c.CourseTypeID equals ct.CourseTypeID
-                                     join pc in _context.PetCategory on c.PetCategoryID equals pc.PetCategoryID
-                                     join cc in _context.CourseCategory on c.CourseCategoryID equals cc.CourseCategoryID
-                                     select new CourseViewModel
-									 {
-										 CourseID = c.CourseID,
-										 CourseName = c.CourseName,
-										 TrainerID = c.TrainerID,
-                                         PetCategoryName = pc.PetCategoryName,
-                                         CourseCategoryName = cc.CourseCategoryName,
-                                         CourseTypeName = ct.CourseTypeName,
-                                         Description = c.Description,
-										 Price = c.Price,
-                                         LocationName = loc.LocationName,
-                                         MaxParticipants = c.MaxParticipants,
-										 CreatedAt = c.CreatedAt,
-										 ThumbnailUrl = c.ThumbnailUrl,
-									 });
-
-			var singleCourse = await singleCourseQuery.FirstOrDefaultAsync();
-
-            if (singleCourse == null)
-            {
-                return Json(new { error = "Course not found" });
-            }
-
-            return Json(singleCourse);
-		}
-
-        public async Task<JsonResult> getClassSchedule(int? id)
+        public async Task<JsonResult> getSingleCourse(int? id)
         {
             if (id == null)
             {
-                return Json(new { message = "Course ID cannot be null" });
+                return Json(new { error = "Invalid course ID" });
             }
 
-            var classSchedules = await _context.ClassSchedule
-                                               .Where(c => c.CourseID == id && c.Scheduler >= DateTime.UtcNow)
-                                               .ToListAsync();
-
-            if (classSchedules == null || classSchedules.Count == 0)
-            {
-                return Json(new { message = "No schedules found for the given course ID" });
-            }
-
-            return Json(classSchedules);
-        }
-
-        //全部課程
-        public async Task<JsonResult> getCourses()
-        {
-            var CoursesQuery = (from c in _context.Course
+            var singleCourseQuery = (from c in _context.Course.Where(c => c.CourseID == id)
                                      join loc in _context.Location on c.LocationID equals loc.LocationID
                                      join ct in _context.CourseType on c.CourseTypeID equals ct.CourseTypeID
                                      join pc in _context.PetCategory on c.PetCategoryID equals pc.PetCategoryID
@@ -1040,15 +1122,189 @@ namespace Project1.Controllers
                                          MaxParticipants = c.MaxParticipants,
                                          CreatedAt = c.CreatedAt,
                                          ThumbnailUrl = c.ThumbnailUrl,
-                                     }).ToList();
+                                     });
+
+            var singleCourse = await singleCourseQuery.FirstOrDefaultAsync();
+
+            if (singleCourse == null)
+            {
+                return Json(new { error = "Course not found" });
+            }
+
+            return Json(singleCourse);
+        }
+
+        public async Task<JsonResult> getClassSchedule(int? id)
+        {
+            if (id == null)
+            {
+                return Json(new { message = "Course ID cannot be null" });
+            }
+
+            var classSchedules = await _context.ClassSchedule
+                                               .Where(c => c.CourseID == id && c.Scheduler >= DateTime.UtcNow)
+                                               .ToListAsync();
+
+            for(int i = 0; i < classSchedules.Count; i++)
+            {
+                var enrollcount = await _context.OrderDetail.Where(od => od.CourseID == id && od.SchedulerID == classSchedules[i].SchedulerID).CountAsync();
+                var maxparticipants = _context.Course.Where(c => c.CourseID == id).Select(c => c.MaxParticipants).FirstOrDefault();
+                if(enrollcount >= maxparticipants)
+                {
+                    classSchedules.RemoveAt(i);
+                }               
+            }
+
+            for(int i = 0; i < classSchedules.Count; i++)
+            {
+                var enrollcount = await _context.OrderDetail.Where(od => od.CourseID == id && od.SchedulerID == classSchedules[i].SchedulerID).CountAsync();
+                var maxparticipants = _context.Course.Where(c => c.CourseID == id).Select(c => c.MaxParticipants).FirstOrDefault();
+                classSchedules[i].EnrollmentCount = maxparticipants - enrollcount;
+            }
+
+            if (classSchedules == null || classSchedules.Count == 0)
+            {
+                return Json(new { message = "No schedules found for the given course ID" });
+            }
+
+            return Json(classSchedules);
+        }
+
+        //===================================================================================================
+        //全部課程
+        public async Task<JsonResult> getallCourses()
+        {
+            var CoursesQuery = (from c in _context.Course
+                                join loc in _context.Location on c.LocationID equals loc.LocationID
+                                join ct in _context.CourseType on c.CourseTypeID equals ct.CourseTypeID
+                                join pc in _context.PetCategory on c.PetCategoryID equals pc.PetCategoryID
+                                join cc in _context.CourseCategory on c.CourseCategoryID equals cc.CourseCategoryID
+                                select new CourseViewModel
+                                {
+                                    CourseID = c.CourseID,
+                                    CourseName = c.CourseName,
+                                    TrainerID = c.TrainerID,
+                                    PetCategoryName = pc.PetCategoryName,
+                                    CourseCategoryName = cc.CourseCategoryName,
+                                    CourseTypeName = ct.CourseTypeName,
+                                    Description = c.Description,
+                                    Price = c.Price,
+                                    LocationName = loc.LocationName,
+                                    MaxParticipants = c.MaxParticipants,
+                                    CreatedAt = c.CreatedAt,
+                                    ThumbnailUrl = c.ThumbnailUrl,
+                                    ApprovalStatus = c.ApprovalStatus,
+                                }).ToList();
 
 
             return Json(CoursesQuery);
         }
 
+        //==================================================================================================================
+        //審核功能
+        public class UpdateApprovalStatusRequest
+        {
+            public int Id { get; set; }
+            public string ApprovalStatus { get; set; }
+        }
 
+        [HttpPost]
+        public async Task<IActionResult> UpdateApprovalStatus([FromBody] UpdateApprovalStatusRequest request)
+        {
+            var course = await _context.Course.FindAsync(request.Id);
+            if (course == null)
+            {
+                return NotFound();
+            }
+
+            course.ApprovalStatus = request.ApprovalStatus;
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        //===================================================================================================================
+        //訓練師日歷
+
+        public async Task<JsonResult> GetTrainerSchedule(int id)
+        {
+            try
+            {
+
+                var trainer = await _context.Trainer.Where(t => t.MemberID == id).FirstOrDefaultAsync();
+                if (trainer == null)
+                {
+                    return Json(new { message = "Trainer not found" });
+                }
+
+                var trainerCourses = await _context.Course
+                                                   .Where(c => c.TrainerID == trainer.TrainerID)
+                                                   .ToListAsync();
+
+                var trainerCourseIDs = trainerCourses.Select(tc => tc.CourseID).ToList();
+                var allClassSchedules = new List<ClassScheduleViewModel>();
+
+                foreach (var courseId in trainerCourseIDs)
+                {
+                    var classSchedules = await _context.ClassSchedule
+                                                       .Where(cs => cs.CourseID == courseId && cs.Scheduler >= DateTime.UtcNow)
+                                                       .ToListAsync();
+
+                    foreach (var schedule in classSchedules)
+                    {
+                        var course = trainerCourses.FirstOrDefault(c => c.CourseID == courseId);
+                        if (course != null)
+                        {
+                            var courseType = await _context.CourseType
+                                                           .FirstOrDefaultAsync(ct => ct.CourseTypeID == course.CourseTypeID);
+
+                            var courseCategory = await _context.CourseCategory
+                                                               .FirstOrDefaultAsync(cc => cc.CourseCategoryID == course.CourseCategoryID);
+
+                            allClassSchedules.Add(new ClassScheduleViewModel
+                            {
+                                SchedulerID = schedule.SchedulerID,
+                                Scheduler = schedule.Scheduler,
+                                CourseID = schedule.CourseID,
+                                CourseName = course.CourseName,
+                                CourseTypeName = courseType?.CourseTypeName,
+                                CourseCategoryName = courseCategory?.CourseCategoryName,
+                                EnrollmentCount = 0 // 先初始化为0，后面会更新
+                            });
+                        }
+                    }
+                }
+
+                foreach (var schedule in allClassSchedules)
+                {
+                    var enrollCount = await _context.OrderDetail
+                                                    .Where(od => od.CourseID == schedule.CourseID && od.SchedulerID == schedule.SchedulerID)
+                                                    .CountAsync();
+
+                    var maxParticipants = await _context.Course
+                                                        .Where(c => c.CourseID == schedule.CourseID)
+                                                        .Select(c => c.MaxParticipants)
+                                                        .FirstOrDefaultAsync();
+
+                    schedule.EnrollmentCount = maxParticipants - enrollCount;
+                }
+
+                if (allClassSchedules.Count == 0)
+                {
+                    return Json(new { message = "No schedules found for the given course ID" });
+                }
+
+                return Json(allClassSchedules);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (consider using a logging framework)
+                Console.Error.WriteLine(ex);
+                return Json(new { message = "An error occurred while processing your request", details = ex.Message });
+            }
+        }
 
     }
 }
-   
+
 

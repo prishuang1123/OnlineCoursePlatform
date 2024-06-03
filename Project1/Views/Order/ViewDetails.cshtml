@@ -8,17 +8,17 @@
     <input asp-for="order.OrderID" hidden />
     <div class="p-3 mt-4">
         <div class="row pb-2">
-            <h2>View Order Details</h2>
+            <h2>查看訂單明細</h2>
         </div>
     </div>
     <div asp-validation-summary="ModelOnly"></div>
     <div class="mb-3 row p-1">
-        <label asp-for="order.OrderID" class="p-0" disabled></label>
+        <label asp-for="order.OrderID" class="p-0" disabled>訂單編號</label>
         <input asp-for="order.OrderID" type="text" class="form-control" disabled />
         <span asp-validation-for="order.OrderID" class="text-danger"></span>
     </div>
     <div class="mb-3 row p-1">
-        <label asp-for="order.MemberID" class="p-0 control-label"></label>
+        <label asp-for="order.MemberID" class="p-0 control-label">會員編號</label>
         <input asp-for="order.MemberID" type="text" class="form-control" disabled />
         <span asp-validation-for="order.MemberID" class="text-danger"></span>
     </div>
@@ -29,7 +29,7 @@
     </div> *@
     <div class="mb-3 row p-1">
         <div>
-            <label asp-for="order.OrderDate" class="pr-3"></label>
+            <label asp-for="order.OrderDate" class="pr-3">訂單日期</label>
         </div>
         <div>
             <input asp-for="order.OrderDate" type="date" class="form-control" disabled />
@@ -38,32 +38,26 @@
     </div>
     <div class="mb-3 row p-1">
         <div>
-            <label asp-for="order.OrderStatus" class="pr-3"></label>
+            <label asp-for="order.OrderStatus" class="pr-3">訂單狀態</label>
         </div>
         <div>
-            <select asp-for="order.OrderStatus" class="form-control pl-3 pr-4" disabled>
-                <option value="Processing">Processing</option>
-                <option value="Shipped">Shipped</option>
-                <option value="Delivered">Delivered</option>
-                <option value="Completed">Completed</option>
-                <option value="Cancelled">Cancelled</option>
-            </select>
+            <input asp-for="order.OrderStatus" type="text" class="form-control" disabled />
             <span asp-validation-for="order.OrderStatus" class="text-danger"></span>
         </div>
     </div>
 
     <div class="mb-3 row p-1">
-        <label asp-for="order.TotalAmount" class="p-0"></label>
+        <label asp-for="order.TotalAmount" class="p-0">總額</label>
         <input asp-for="order.TotalAmount" type="text" class="form-control" disabled />
         <span asp-validation-for="order.TotalAmount" class="text-danger"></span>
     </div>
     <div class="mb-3 row p-1">
-        <label asp-for="order.CreatedAt" class="p-0"></label>
+        <label asp-for="order.CreatedAt" class="p-0">訂單創立日期</label>
         <input asp-for="order.CreatedAt" type="text" class="form-control" disabled />
         <span asp-validation-for="order.CreatedAt" class="text-danger"></span>
     </div>
     <div class="mb-3 row p-1">
-        <label asp-for="order.ModifiedAt" class="p-0"></label>
+        <label asp-for="order.ModifiedAt" class="p-0">訂單修改日期</label>
         <input asp-for="order.ModifiedAt" type="text" class="form-control" disabled />
         <span asp-validation-for="order.ModifiedAt" class="text-danger"></span>
     </div>
@@ -71,7 +65,7 @@
 </form>
 <div class="p-3 mt-4">
     <div class="row pb-2">
-        <h3>Order Details for OrderID: @Model.order.OrderID</h3>
+        <h3>訂單明細編號: @Model.order.OrderID</h3>
     </div>
 </div>
 
@@ -79,31 +73,28 @@
     <thead>
         <tr>
             <th>
-                Order Detail ID
+                訂單明細編號
             </th>
             <th>
-                Order ID
+                訂單編號
             </th>
             <th>
-                Course ID
+                課程編號
             </th>
             <th>
-                Payment ID
+                付款編號
             </th>
             <th>
-                Quantity
+                數量
             </th>
             <th>
-                Unit Price
+                單價
             </th>
             <th>
-                Subtotal
+                訂單明細創建日期
             </th>
             <th>
-                CreatedAt
-            </th>
-            <th>
-                ModifiedAt
+                訂單明細修改日期
             </th>
         </tr>
     </thead>
@@ -119,6 +110,9 @@
                 </td>
                 <td>
                     @orderDetail.CourseID
+                </td>
+                <td>
+                    @Model.order.MerchantTradeNo
                 </td>
                 <td>
                     @orderDetail.Quantity
@@ -148,7 +142,7 @@
 <div class="row">
     <div class="col-6 col-md-3 text-right">
         <a asp-controller="Order" asp-action="Index" class="btn btn-outline-secondary form-control">
-            Back to list
+            返回
         </a>
     </div>
 </div>

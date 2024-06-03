@@ -319,56 +319,107 @@
         }
 
         /* 按鈕顏色調整 */
-        .btn-success {
+        .btn-succ {
             color: #fff;
-            background-color: #B99672;
+            background-color: #BDB192;
             border-color: #CCAD8E;
         }
 
+            .btn-succ:hover {
+                color: #fff;
+                background-color: #BBA671;
+                border-color: #CCAD8E;
+            }
+
+
         .btn-viewCourse {
             color: #fff;
-            background-color: #A47546;
+            background-color: #BFAF86;
+            border: 1px solid #71623B;
         }
+
+            .btn-viewCourse:hover {
+                background-color: #B29E6A;
+            }
 
         .showPublishModal {
             color: #fff;
-            background-color: #C1AA94;
+            background-color: #AE9065;
+            border: 1px solid #71623B;
             transition: all .3s linear;
         }
 
             .showPublishModal:hover {
-                background-color: #A6917C;
+                background-color: #B39E69;
                 color: #fff;
             }
 
-        .btn:active:after {
+        /* .btn:active:after {
             opacity: 1;
             transition: 0s;
             box-shadow: 0 0 0 0 #A88256;
+        }
+ */
+        .card {
+            min-width: 100%;
+        }
+
+        .modal-footer .review-status {
+            flex: 1;
+            text-align: left;
+        }
+
+        .disabled-publish-button {
+            background-color: #D4C9AF;
+            /*  cursor: not-allowed; */
+        }
+
+        .tooltip {
+            position: relative;
+            background-color: white;
+            border: 1px solid black;
+            padding: 10px;
+            z-index: 1000;
+            display: none;
+            color:black;
+        }
+
+
+
+        .table td, .table th {
+            text-align: center;
         }
     </style>
 }
 
 <div id="app" class="container mt-5">
     <div class="row">
-        <div class="col-md-3 text-center">
+        <div class="col-md-4 text-center mb-3">
             <img :src="trainerPhoto" alt="訓練師照片" class="img-thumbnail">
             <h4>{{ trainerName }}</h4>
 
             <div class="new-course-section">
-                <button type="button" class="btn btn-success" @@click="showAddCourseModal">新增課程</button>
+                <button type="button" class="btn btn-succ" @@click="showAddCourseModal">新增課程</button>
                 <h5 class="">我新增的課程:</h5>
                 <div class="course-container">
                     <div v-for="course in courses" :key="course.courseID" class="course-card">
-                        <input type="checkbox" class="course-checkbox" v-model="selectedCourses" :value="course.courseID">
                         <img :src="course.thumbnailUrl" alt="Course Thumbnail" style="border:1px solid #333">
                         <div class="course-card-details">
                             <h6>{{ course.courseName }}</h6>
-                            <p>{{ course.description }}</p>
+                           @*  <p>{{ course.description }}</p> *@
+                            @* <p>{{ course.description }}</p> *@
+                            <p>{{ course.approvalStatus }}</p>
                         </div>
                         <div class="course-card-actions">
                             <button type="button" class="btn btn-viewCourse btn-sm" @@click="viewCourseDetails(course.courseID)">檢視</button>
-                            <button type="button" class="btn showPublishModal btn-sm" @@click="showPublishModal(course.courseID)">發佈</button>
+                            <button type="button"
+                                    :class="['btn', 'btn-sm', course.approvalStatus === '通過' ? 'showPublishModal' : 'disabled-publish-button']"
+                                    @@click="checkAndShowPublishModal(course)"
+                                    :disabled="course.approvalStatus !== '通過'">
+                                發佈
+                            </button>
+                           @*  <!-- 查看預約按鈕 -->
+                            <button type="button" class="btn btn-primary btn-sm" @@click="viewReservations(course.courseID)">查看預約</button> *@
                         </div>
                         <button type="button" class="btn btn-danger btn-sm course-delete-button" @@click="deleteCourse(course.courseID)">
                             <i class="bi bi-trash"></i>
@@ -376,19 +427,17 @@
                     </div>
                 </div>
             </div>
+            <div id='calendar' class="mt-3"></div>
+                <div id="tooltip" class="tooltip"></div>
         </div>
 
-        <div class="col-md-9">
+        <div class="col-md-8">
             <div class="post-container">
-                <div class="row mb-3">
-                    <label class="col-lg-4 form-label">篩選關鍵字</label>
-                    <input class="col-lg-8 form-control" v-model="filter" placeholder="請輸入篩選關鍵字" @@keyup="filterEmployees" />
-                </div>
                 <div class="form-group">
                     <div class="card mb-3 post-box">
                         <div class="card-body">
                             <textarea id="postContent" class="form-control" placeholder="來分享有趣的貼文吧..." v-model="newPostContent"></textarea>
-                            <button type="button" @@click="showModal" class="btn btn-success">建立貼文</button>
+                            <button type="button" @@click="showModal" class="btn btn-succ">建立貼文</button>
                         </div>
                     </div>
                 </div>
@@ -410,11 +459,12 @@
                             <p>{{ post.content }}</p>
                             <div :id="'carouselExampleControls' + post.blogID" class="carousel slide" data-ride="carousel">
                                 <div class="carousel-inner">
-                                    <div class="carousel-item active" v-if="post.image1">
-                                        <img class="d-block w-100" :src="post.image1" alt="貼文圖片1">
+                                    <!-- 確保至少一個圖片存在，如果沒有圖片1，直接顯示圖片2 -->
+                                    <div class="carousel-item active" v-if="post.image1 || post.image2">
+                                        <img class="d-block w-100" :src="post.image1 || post.image2" alt="貼文圖片1" @@click="openImageModal(post.image1 || post.image2, post.image2)">
                                     </div>
-                                    <div class="carousel-item" v-if="post.image2">
-                                        <img class="d-block w-100" :src="post.image2" alt="貼文圖片2">
+                                    <div class="carousel-item" v-if="post.image1 && post.image2">
+                                        <img class="d-block w-100" :src="post.image2" alt="貼文圖片2" @@click="openImageModal(post.image1, post.image2)">
                                     </div>
                                 </div>
                                 <a class="carousel-control-prev" :href="'#carouselExampleControls' + post.blogID" role="button" data-slide="prev">
@@ -427,15 +477,7 @@
                                 </a>
                             </div>
                         </div>
-                        <div class="post-footer">
-                            <div class="post-likes">
-                                <button class="btn btn-outline-primary btn-sm" @@click="likePost(post)">
-                                    👍 {{ post.likes || 0 }}
-                                </button>
-                            </div>
-                        </div>
                     </div>
-                    <hr v-if="index < posts.length - 1">
                 </div>
             </div>
         </div>
@@ -460,13 +502,19 @@
                         <label for="postContent">內容</label>
                         <textarea class="form-control" id="postContent" v-model="newPostContent" placeholder="在想些什麼？"></textarea>
                     </div>
-                    <div class="form-group">
-                        <label for="postImage1">圖片1</label>
-                        <input type="file" class="form-control" id="postImage1" @@change="onImage1Change">
-                    </div>
-                    <div class="form-group">
-                        <label for="postImage2">圖片2</label>
-                        <input type="file" class="form-control" id="postImage2" @@change="onImage2Change">
+                    <div class="form-group new-img-wrapper">
+                        <label for="postImage1" :class="{'bi bi-image': true, 'd-none': newPostImage1}"></label>
+                        <input type="file" class="form-control" id="postImage1" @@change="onImage1Change" style="display: none;">
+                        <div v-if="newPostImage1" class="img-wrapper">
+                            <img :src="newPostImage1Url" class="img-preview">
+                            <button class="delete-img" @@click="removeNewImage(1)">X</button>
+                        </div>
+                        <label for="postImage2" :class="{'bi bi-image': true, 'd-none': newPostImage2}" style="margin-left: 10px;"></label>
+                        <input type="file" class="form-control" id="postImage2" @@change="onImage2Change" style="display: none;">
+                        <div v-if="newPostImage2" class="img-wrapper">
+                            <img :src="newPostImage2Url" class="img-preview">
+                            <button class="delete-img" @@click="removeNewImage(2)">X</button>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -525,6 +573,38 @@
             </div>
         </div>
     </div>
+
+    <!-- 圖片預覽模態框 -->
+    <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imageModalLabel">圖片預覽</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="carouselExampleControlsModal" class="carousel slide" data-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="carousel-item" :class="{ active: index === 0 }" v-for="(image, index) in modalImages" :key="index">
+                                <img class="d-block w-100" :src="image" alt="預覽圖片">
+                            </div>
+                        </div>
+                        <a class="carousel-control-prev" href="#carouselExampleControlsModal" role="button" data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselExampleControlsModal" role="button" data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- 新增課程模態框 -->
     <div class="modal fade" id="addCourseModal" tabindex="-1" role="dialog" aria-labelledby="addCourseModalLabel" aria-hidden="true">
@@ -614,10 +694,10 @@
                         <p><strong>課程名稱:</strong> {{ viewCourse.courseName }}</p>
                         <p><strong>課程描述:</strong> {{ viewCourse.description }}</p>
                         <p><strong>價格:</strong> {{ viewCourse.price }}</p>
-                        <p><strong>上課地點:</strong> {{ viewCourse.locationID }}</p>
-                        <p><strong>寵物分類:</strong> {{ viewCourse.petCategoryID }}</p>
-                        <p><strong>課程分類:</strong> {{ viewCourse.courseCategoryID }}</p>
-                        <p><strong>課程類型:</strong> {{ viewCourse.courseTypeID }}</p>
+                        <p><strong>上課地點:</strong> {{ getLocationName(viewCourse.locationID) }}</p>
+                        <p><strong>寵物分類:</strong> {{ getPetCategoryName(viewCourse.petCategoryID) }}</p>
+                        <p><strong>課程分類:</strong> {{ getCourseCategoryName(viewCourse.courseCategoryID) }}</p>
+                        <p><strong>課程類型:</strong> {{ getCourseTypeName(viewCourse.courseTypeID) }}</p>
                         <p><strong>人數上限:</strong> {{ viewCourse.maxParticipants }}</p>
                     </div>
                     <div v-else>
@@ -672,6 +752,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <p class="review-status"><strong>審核狀態:</strong> {{ viewCourse.approvalStatus }}</p>
                     <button type="button" class="btn btn-secondary" @@click="closeViewEditModal">關閉</button>
                     <button type="button" class="btn btn-primary" v-if="!isEditing" @@click="editCourse">編輯</button>
                     <button type="button" class="btn btn-primary" v-if="isEditing" @@click="saveCourse">確定</button>
@@ -713,6 +794,7 @@
                                     <td>{{ formatDateTime(schedule.scheduler) }}</td>
                                     <td>
                                         <button type="button" class="btn btn-delete btn-sm" @@click="retractPublish(schedule.schedulerID)">收回發佈</button>
+                                        <button type="button" class="btn btn-viewCourse btn-sm" style="margin-left:10px;" @@click="viewReservations(schedule.schedulerID)">查看預約</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -723,11 +805,54 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
-                    <button type="button" class="btn btn-success" @@click="publishCourse">確定</button>
+                    <button type="button" class="btn btn-succ" @@click="publishCourse">確定</button>
                 </div>
             </div>
         </div>
     </div>
+
+
+
+    <!-- 查看預約模態框 -->
+    <div class="modal fade" id="viewReservationsModal" tabindex="-1" role="dialog" aria-labelledby="viewReservationsModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="viewReservationsModalLabel">查看預約</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>顧客姓名</th>
+                                <th>信箱</th>
+                                <th>電話</th>
+                                <th>堂數</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="reservation in reservations" :key="reservation.memberID">
+                                <td>{{ reservation.name }}</td>
+                                <td>{{ reservation.email }}</td>
+                                <td>{{ reservation.phone }}</td>
+                                <td>{{ reservation.quantity }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
 </div>
 
 
@@ -737,20 +862,20 @@
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://unpkg.com/vue@3.4.25/dist/vue.global.js"></script>
     <script>
-        var getBlogUrl = "https://localhost:7177/Trainerrr/GetBlog"; // 部落格
-        var createPostUrl = "https://localhost:7177/Trainerrr/CreatePost"; // 貼文新增
-        var editPostUrl = "https://localhost:7177/Trainerrr/EditPost"; // 編輯貼文
-        var deletePostUrl = "https://localhost:7177/Trainerrr/DeletePost"; // 刪除貼文
-        var getCoursesUrl = "https://localhost:7177/Trainerrr/GetCourses"; // 顯示課程
-        var createCourseUrl = "https://localhost:7177/Trainerrr/CreateCourse"; // 新增課程
-        var getDropdownDataUrl = "https://localhost:7177/Trainerrr/GetDropdownData"; // 課程種類下拉式選單資訊
-        var getCurrentTrainerInfoUrl = "https://localhost:7177/Trainerrr/GetCurrentTrainerInfo"; // 訓練師誰?
-        var editCourseUrl = "https://localhost:7177/Trainerrr/EditCourse"; // 編輯課程
-        var publishCourseUrl = "https://localhost:7177/Trainerrr/PublishCourse"; // 發佈課程
-        var deleteCourseUrl = "https://localhost:7177/Trainerrr/DeleteCourse"; // 刪除課程
-        var retractPublishUrl = "https://localhost:7177/Trainerrr/RetractPublish"; // 收回課程
-        var getPublishedSchedulesUrl = "https://localhost:7177/Trainerrr/GetPublishedSchedules"; // 取得已發佈資訊
-
+        var getBlogUrl = "/Trainerrr/GetBlog"; // 部落格
+        var createPostUrl = "/Trainerrr/CreatePost"; // 貼文新增
+        var editPostUrl = "/Trainerrr/EditPost"; // 編輯貼文
+        var deletePostUrl = "/Trainerrr/DeletePost"; // 刪除貼文
+        var getCoursesUrl = "/Trainerrr/GetCourses"; // 顯示課程
+        var createCourseUrl = "/Trainerrr/CreateCourse"; // 新增課程
+        var getDropdownDataUrl = "/Trainerrr/GetDropdownData"; // 課程種類下拉式選單資訊
+        var getCurrentTrainerInfoUrl = "/Trainerrr/GetCurrentTrainerInfo"; // 訓練師誰?
+        var editCourseUrl = "/Trainerrr/EditCourse"; // 編輯課程
+        var publishCourseUrl = "/Trainerrr/PublishCourse"; // 發佈課程
+        var deleteCourseUrl = "/Trainerrr/DeleteCourse"; // 刪除課程
+        var retractPublishUrl = "/Trainerrr/RetractPublish"; // 收回課程
+        var getPublishedSchedulesUrl = "/Trainerrr/GetPublishedSchedules"; // 取得已發佈資訊
+        var GetReservationsUrl = "/Trainerrr/GetReservations";//查看誰預約
         var VueApp = {
             data() {
                 return {
@@ -770,6 +895,10 @@
                     newEditPostImage1Url: null, // 新編輯貼文圖片1 URL
                     newEditPostImage2Url: null, // 新編輯貼文圖片2 URL
                     deletedImages: [], // 已刪除圖片列表
+
+                    posts: [], // 貼文資料
+                    modalImages: [], // 模態框中的圖片
+
                     trainerName: "", // 訓練師名稱
                     trainerPhoto: "", // 訓練師照片
                     courses: [], // 課程資料
@@ -795,7 +924,10 @@
                     publishedSchedules: [], // 已發佈的課程
                     editThumbnailPreview: null, // 編輯封面圖預覽
                     thumbnailPreview: null, // 新增封面圖預覽
-                    publishError: null // 發佈錯誤訊息
+                    publishError: null ,// 發佈錯誤訊息
+                    reservations: [] // 存儲預約資料
+          
+
                 };
             },
             mounted() {
@@ -918,10 +1050,12 @@
                 // 移除貼文圖片
                 removeImage(imageIndex) {
                     if (imageIndex === 1) {
+                        this.deletedImages.push(this.editPostImage1Url); // 將圖片添加到 deletedImages 列表
                         this.newEditPostImage1Url = null;
                         this.editPostImage1Url = null;
                         this.editPostImage1 = null;
                     } else if (imageIndex === 2) {
+                        this.deletedImages.push(this.editPostImage2Url); // 將圖片添加到 deletedImages 列表
                         this.newEditPostImage2Url = null;
                         this.editPostImage2Url = null;
                         this.editPostImage2 = null;
@@ -934,7 +1068,8 @@
                     formData.append('content', this.editPostContent);
                     formData.append('image1', this.editPostImage1);
                     formData.append('image2', this.editPostImage2);
-                    formData.append('deletedImages', JSON.stringify(this.deletedImages));
+                    formData.append('deletedImages', JSON.stringify(this.deletedImages)); // 將 deletedImages 列表添加到請求中
+
 
                     axios.post(`${editPostUrl}/${this.editPostId}`, formData, {
                         headers: {
@@ -950,10 +1085,12 @@
                 // 當貼文圖片1變更
                 onImage1Change(event) {
                     this.newPostImage1 = event.target.files[0];
+                    this.newPostImage1Url = URL.createObjectURL(this.newPostImage1);
                 },
                 // 當貼文圖片2變更
                 onImage2Change(event) {
                     this.newPostImage2 = event.target.files[0];
+                    this.newPostImage2Url = URL.createObjectURL(this.newPostImage2);
                 },
                 // 當編輯貼文圖片1變更
                 onEditImage1Change(event) {
@@ -980,6 +1117,17 @@
                                 console.error("刪除貼文時出現錯誤!", error);
                             });
                     }
+                },
+                // 打開圖片預覽模態框
+                openImageModal(image1, image2) {
+                    this.modalImages = [];
+                    if (image1) {
+                        this.modalImages.push(image1);
+                    }
+                    if (image2) {
+                        this.modalImages.push(image2);
+                    }
+                    $('#imageModal').modal('show');
                 },
                 // 點讚貼文
                 likePost(post) {
@@ -1060,6 +1208,18 @@
                     $('#viewEditCourseModal').modal('hide');
                     this.isEditing = false;
                 },
+                //判斷課程審核是否通過
+                checkAndShowPublishModal(course) {
+                    if (course.approvalStatus !== '通過') {
+                        alert("此課程審核中無法做發佈動作, 請等候管理員審核完畢");
+                    } else {
+                        this.showPublishModal(course.courseID);
+                    }
+                },
+                // 檢查課程是否已經發布
+                isCoursePublished(courseID) {
+                    return this.publishedSchedules.some(schedule => schedule.CourseID === courseID);
+                },
                 // 顯示發布課程模態框
                 showPublishModal(courseID) {
                     this.viewCourse = this.courses.find(course => course.courseID === courseID);
@@ -1107,6 +1267,22 @@
                         console.log(error);
                         alert(error);
                     });
+                },
+                getLocationName(id) {
+                    const location = this.locations.find(loc => loc.locationID === id);
+                    return location ? location.locationName : '';
+                },
+                getPetCategoryName(id) {
+                    const category = this.petCategories.find(cat => cat.petCategoryID === id);
+                    return category ? category.petCategoryName : '';
+                },
+                getCourseCategoryName(id) {
+                    const category = this.courseCategories.find(cat => cat.courseCategoryID === id);
+                    return category ? category.courseCategoryName : '';
+                },
+                getCourseTypeName(id) {
+                    const type = this.courseTypes.find(type => type.courseTypeID === id);
+                    return type ? type.courseTypeName : '';
                 },
                 // 發布課程
                 publishCourse() {
@@ -1174,17 +1350,41 @@
                 },
                 // 刪除課程
                 deleteCourse(courseID) {
-                    if (confirm("確定要刪除此課程嗎？")) {
-                        axios.delete(`${deleteCourseUrl}/${courseID}`)
-                            .then(response => {
-                                alert("課程已刪除");
-                                this.fetchCourses();
-                            })
-                            .catch(error => {
-                                console.log("Error response:", error.response);
-                                alert("刪除課程時出現錯誤");
-                            });
-                    }
+                    axios.get(`${getPublishedSchedulesUrl}?courseID=${courseID}`)
+                        .then(response => {
+                            const now = new Date();
+                            const publishedSchedules = response.data.filter(schedule => new Date(schedule.scheduler) > now);
+
+                            if (publishedSchedules.length > 0) {
+                                alert("此課程有發佈開課不能做刪除動作");
+                                return;
+                            }
+
+                            if (confirm("確定要刪除此課程嗎？")) {
+                                axios.delete(`${deleteCourseUrl}/${courseID}`)
+                                    .then(response => {
+                                        alert("課程已刪除");
+                                        this.fetchCourses();
+                                    })
+                                    .catch(error => {
+                                        console.log("Error response:", error.response);
+                                        alert("刪除課程時出現錯誤");
+                                    });
+                            }
+                        })
+                        .catch(error => {
+                            console.log("Error response:", error.response);
+                            alert("檢查課程時出現錯誤");
+                        });
+                },
+                viewReservations(schedulerID) {
+                    axios.get(`${GetReservationsUrl}?schedulerID=${schedulerID}`).then(response => {
+                        this.reservations = response.data;
+                        $('#viewReservationsModal').modal('show');
+                    }).catch(error => {
+                        console.log(error);
+                        alert("無法取得預約資料");
+                    });
                 },
                 // 當編輯課程封面圖變更
                 onEditThumbnailChange(event) {
@@ -1228,9 +1428,51 @@
         };
 
         var app = Vue.createApp(VueApp).mount("#app");
+
+        const cid = sessionStorage.getItem("ActID");
+        const mid = sessionStorage.getItem("MemID");
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+            var tooltip = document.getElementById('tooltip');
+
+            axios.get(`/Trainerrr/getTrainerSchedule?id=${mid}`).then(response => {
+                const schedules = response.data;
+                const events = schedules.map(schedule => {
+                    return {
+                        url: `/Trainerrr/singleCourse?id=${schedule.courseID}`,
+                        allDay: true,
+                        start: schedule.scheduler,
+                        title: "剩" + schedule.enrollmentCount + "名",
+                        display: "Background",
+                        extendedProps: {
+                            courseName: schedule.courseName,
+                            courseID: schedule.courseID,
+                        }
+                    };
+                });
+
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                    initialView: 'dayGridMonth',
+                    events: events,
+                    aspectRatio: 0.8,
+                    selectable: true,
+                    eventClick: function (arg) {
+                        sessionStorage.setItem("ActID", arg.event.extendedProps.courseID);
+                        arg.jsEvent.preventDefault();
+                        window.open(arg.event.url, '_blank', 'width=700,height=600');
+                        
+                    },
+                });
+                calendar.render();
+                // calendar.setOption('height', 700);
+            }).catch(error => {
+                console.error('API error:', error.response ? error.response.data : error.message);
+                alert(error.response ? error.response.data.message : error.message);
+            });
+        });
     </script>
 }
-
 
 
 

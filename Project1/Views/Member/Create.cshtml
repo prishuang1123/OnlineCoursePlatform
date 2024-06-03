@@ -1,0 +1,111 @@
+﻿@model Project1.Models.Member
+
+@{
+    ViewData["Title"] = "請填寫會員資料";
+}
+
+<h1>歡迎加入寵互動</h1>
+
+<h4>會員資料</h4>
+<hr />
+@* @if (TempData["SuccessMessage"] != null)
+{
+    <script>
+        var message = '@Html.Raw(TempData["SuccessMessage"].ToString())';
+        alert(message);
+    </script>
+} *@
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Phone" class="control-label"></label>
+                <input asp-for="Phone" class="form-control" />
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Birthday" class="control-label"></label>
+                <input asp-for="Birthday" class="form-control" />
+                <span asp-validation-for="Birthday" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RegistrationDate" class="control-label"></label>
+                <input asp-for="RegistrationDate" class="form-control" />
+                <span asp-validation-for="RegistrationDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ResidenceArea" class="control-label"></label>
+                <input asp-for="ResidenceArea" class="form-control" />
+                <span asp-validation-for="ResidenceArea" class="text-danger"></span>
+            </div>
+            @* <div class="form-group"> *@
+                @* <label asp-for="IsTrainer" class="control-label"></label> *@
+                @* <input asp-for="IsTrainer" class="form-control" /> *@
+                @* <span asp-validation-for="IsTrainer" class="text-danger"></span> *@
+            @* </div> *@
+            <div class="form-group">
+                <label asp-for="Photo" class="control-label"></label>
+                <input class="form-control" type="file" id="Photo"/>
+                <span asp-validation-for="Photo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Address" class="control-label"></label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            @* <div class="form-group"> *@
+                @* <label asp-for="AspID" class="control-label"></label> *@
+                @* <input asp-for="AspID" class="form-control" /> *@
+                @* <span asp-validation-for="AspID" class="text-danger"></span> *@
+            @* </div> *@
+            <div class="form-group">
+                <input type="submit" value="儲存" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-controller="Home" asp-action="Index">回首頁</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @* <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.js"></script>
+    <script>
+        // 初始化Dropzone
+        Dropzone.autoDiscover = false;
+        var photoDropzone = new Dropzone("#photo-dropzone", {
+            url: "/Member/UploadPhoto",
+            paramName: "file",
+            maxFilesize: 2, // MB
+            acceptedFiles: "image/*",
+            dictDefaultMessage: "拖放圖片到這裡上傳或點擊選擇圖片",
+            addRemoveLinks: true, // 刪除按鈕
+            dictRemoveFile: "删除", // 删除按钮文字
+            init: function() {
+                this.on("success", function(file, response) {
+                    // 在成功上傳後更新隱藏的input框
+                    document.querySelector('input[name="Photo"]').value = response.filePath;
+                });
+                this.on("removedfile", function (file) {
+                    document.querySelector('input[name="Photo"]').value = ""; // 移除路徑
+                });
+                this.on("error", function(file, response) {
+                    console.log(response);
+                });
+            }
+        }); *@
+    </script>
+}

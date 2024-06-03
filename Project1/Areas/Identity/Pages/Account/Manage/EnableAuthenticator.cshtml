@@ -1,45 +1,57 @@
 ﻿@page
 @model EnableAuthenticatorModel
 @{
-    ViewData["Title"] = "Configure authenticator app";
+    ViewData["Title"] = "下載身份驗證應用程式";
     ViewData["ActivePage"] = ManageNavPages.TwoFactorAuthentication;
 }
 
 <partial name="_StatusMessage" for="StatusMessage" />
 <h3>@ViewData["Title"]</h3>
 <div>
-    <p>To use an authenticator app go through the following steps:</p>
+    <p>要使用身份驗證應用程式，請按照以下步驟進行：</p>
     <ol class="list">
         <li>
             <p>
-                Download a two-factor authenticator app like Microsoft Authenticator for
-                <a href="https://go.microsoft.com/fwlink/?Linkid=825072">Android</a> and
-                <a href="https://go.microsoft.com/fwlink/?Linkid=825073">iOS</a> or
-                Google Authenticator for
-                <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&amp;hl=en">Android</a> and
-                <a href="https://itunes.apple.com/us/app/google-authenticator/id388497605?mt=8">iOS</a>.
+                下載一個雙因素身份驗證應用程式，用於以下操作：
             </p>
-        </li>
+            <ul>
+                <li>
+                    <strong>Microsoft Authenticator</strong>:
+                    <a href="https://go.microsoft.com/fwlink/?Linkid=825072">Android</a> 和
+                    <a href="https://go.microsoft.com/fwlink/?Linkid=825073">iOS</a>
+                </li>
+                <li>
+                    <strong>Google Authenticator</strong>:
+                    <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&amp;hl=en">Android</a> 和
+                    <a href="https://itunes.apple.com/us/app/google-authenticator/id388497605?mt=8">iOS</a>
+                </li>
+            </ul>
+        </li></br>
         <li>
-            <p>Scan the QR Code or enter this key <kbd>@Model.SharedKey</kbd> into your two factor authenticator app. Spaces and casing do not matter.</p>
-            <div class="alert alert-info">Learn how to <a href="https://go.microsoft.com/fwlink/?Linkid=852423">enable QR code generation</a>.</div>
-            <div id="qrCode"></div>
-            <div id="qrCodeData" data-url="@Model.AuthenticatorUri"></div>
+            <p>
+                掃描二維碼<div id="qrCode"></div>
+                <div id="qrCodeData" data-url="@Model.AuthenticatorUri"></div></br>
+                或輸入此密鑰 <kbd>@Model.SharedKey</kbd> 輸入到您的雙因素身份驗證應用程式中。空格和大小寫字母均不影響。</p>
+            @* <div class="alert alert-info">了解如何使用 <a href="https://go.microsoft.com/fwlink/?Linkid=852423">啟用QR Code生成</a>.</div> *@
+            
+            
         </li>
         <li>
             <p>
-                Once you have scanned the QR code or input the key above, your two factor authentication app will provide you
-                with a unique code. Enter the code in the confirmation box below.
+                當您掃描完二維碼或輸入上述金鑰後，您的雙因素身份驗證應用程式將會生成一個唯一的驗證碼。請將此驗證碼輸入到下方的確認框中。
             </p>
+            @* <div class="alert alert-info" style="margin-bottom: 20px;">了解如何使用 <a href="https://go.microsoft.com/fwlink/?Linkid=852423">啟用 QR Code 生成</a>。</div> *@
+            <div id="qrCode" style="margin-bottom: 20px;"></div>
+            <div id="qrCodeData" data-url="@Model.AuthenticatorUri"></div>
             <div class="row">
                 <div class="col-md-6">
                     <form id="send-code" method="post">
                         <div class="form-floating mb-3">
-                            <input asp-for="Input.Code" class="form-control" autocomplete="off" placeholder="Please enter the code."/>
-                            <label asp-for="Input.Code" class="control-label form-label">Verification Code</label>
+                            <input asp-for="Input.Code" class="form-control" autocomplete="off" placeholder="請輸入您的驗證碼"/>
+                            <label asp-for="Input.Code" class="control-label form-label">驗證碼</label>
                             <span asp-validation-for="Input.Code" class="text-danger"></span>
                         </div>
-                        <button type="submit" class="w-100 btn btn-lg btn-primary">Verify</button>
+                        <button type="submit" class="w-100 btn btn-lg btn-primary">驗證</button>
                         <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
                     </form>
                 </div>
@@ -50,4 +62,16 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/qrcode.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var qrCodeData = document.getElementById("qrCodeData").getAttribute("data-url");
+            var qrCodeElement = document.getElementById("qrCode");
+            new QRCode(qrCodeElement, {
+                text: qrCodeData,
+                width: 128,
+                height: 128
+            });
+        });
+    </script>
 }

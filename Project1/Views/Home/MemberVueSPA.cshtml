@@ -28,7 +28,7 @@
     @* 1.篩選員工介面 *@
     <div class="container">
         <div class="row" style="width:50%;margin-left:auto;margin-right:0">
-            <label class="col-md-4 form-label">篩選關鍵字</label>
+            @* <label class="col-md-4 form-label">篩選關鍵字</label> *@
             @* 篩選關鍵字會進到filter屬性 *@
             <input class="col-md-8 form-control" v-model="filter" placeholder="請輸入篩選關鍵字" v-on:keyup="filterMembers" />
         </div>
@@ -51,7 +51,7 @@
                     <td>註冊日期</td>
                     <td>居住地</td>
                     <td>訓練師</td>
-                    <td>管理員</td>
+                    @* <td>管理員</td> *@
                     @* 編輯:放按鈕 *@
                     <td>編輯</td>
                 </tr>
@@ -83,9 +83,9 @@
                         <td>
                             <input type="checkbox" v-model="memberDTO.isTrainer" />
                         </td>
-                        <td>
+                        @* <td>
                             <input type="checkbox" v-model="memberDTO.isAdministrator" />
-                        </td>
+                        </td> *@
                         @* 編輯範本中的按鈕 : 更新、取消*@
                         <td>
                             @* 更新後的資料當作參數 *@
@@ -105,9 +105,9 @@
                         <td>
                             <input type="checkbox" v-model="memberDTO.isTrainer" disabled/>
                         </td>
-                        <td>
+                        @* <td>
                             <input type="checkbox" v-model="memberDTO.isAdministrator" disabled/>
-                        </td>
+                        </td> *@
                         @* 顯示範本中的按鈕 : 編輯、刪除(函式名稱不可使用delete，因為是VUE的保留字)*@
                         <td>
                             @* 更新後的資料當作參數 *@
@@ -181,10 +181,10 @@
                         </label>
                     </div>
                     <div>
-                        <label>
+                        @* <label>
                             <input type="checkbox" v-model="isAdministrator" />
                             管理員
-                        </label>
+                        </label> *@
                     </div>
                 </div>
                 @* content包含footer *@
@@ -228,7 +228,7 @@
                     originalBirthday: "",
                     originalRegistrationDate: "",
                     originalIsTrainer:"",
-                    originalIsAdministrator:"",
+                    // originalIsAdministrator:"",
                     memberDTOArray: [
                         //測試結構
                         // {
@@ -245,7 +245,7 @@
                     residenceArea: "",
                     registrationDate:"",
                     isTrainer:"",
-                    isAdministrator:"",
+                    // isAdministrator:"",
                     cities: ["基隆市", "台北市", "新北市", "桃園市", "新竹市", "新竹縣", "苗栗縣", "台中市", "彰化縣", "南投縣", "雲林縣", "嘉義市", "嘉義縣", "台南市", "高雄市", "屏東縣", "宜蘭縣", "花蓮縣", "台東縣", "澎湖縣", "金門縣", "連江縣"]
                 
                 };
@@ -270,9 +270,9 @@
                         residenceArea: memberDTO.residenceArea,
                         //轉型成布林值
                         isTrainer : Boolean(memberDTO.isTrainer),
-                        isAdministrator : Boolean(memberDTO.isAdministrator)
+                        // isAdministrator : Boolean(memberDTO.isAdministrator)
                     };
-                    axios.put(`${baseAddress}/api/MembersAPI/${memberDTO.memberID}`, p).then(response => {
+                    axios.put(`/api/MembersAPI/${memberDTO.memberID}`, p).then(response => {
                         alert(response.data);
                         _this.filterMembers(); //修改成功取出新的結果
                     }).catch(err => {
@@ -299,7 +299,7 @@
                             item.birthday = _this.originalBirthday;
                             item.registrationDate = _this.originalRegistrationDate;
                             item.isTrainer = _this.isTrainer;
-                            item.isAdministrator = _this.isAdministrator;
+                            // item.isAdministrator = _this.isAdministrator;
                         }
                     }
                 },
@@ -336,7 +336,7 @@
                     let _this = this;
                     var ret = confirm(`確定要刪除編號為"${memberID}"的資料嗎?`);
                     if (ret == true) {
-                        axios.delete(`${baseAddress}/api/MembersAPI/${memberID}`).then(response => {
+                        axios.delete(`/api/MembersAPI/${memberID}`).then(response => {
                             alert(response.data);
                             _this.filterMembers();//刪除成功取出新的結果
                         }).catch(err => {
@@ -354,7 +354,7 @@
                     p.memberID = isNaN(Number(_this.filter)) ? -1 : Number(_this.filter);
                     p.name = p.email = p.phone = p.residenceArea = _this.filter;
 
-                    axios.post(`${baseAddress}/api/MembersAPI/filter`, p).then(response => {
+                    axios.post(`/api/MembersAPI/filter`, p).then(response => {
                         //alert(JSON.stringify(response.data));
                         //加入Edit屬性，類似viewbag動態語言
                         _this.memberDTOArray = response.data;
@@ -383,10 +383,10 @@
                         residenceArea: _this.residenceArea,
                         //轉型成布林值
                         isTrainer: Boolean(_this.isTrainer),
-                        isAdministrator: Boolean(_this.isAdministrator)
+                        // isAdministrator: Boolean(_this.isAdministrator)
                     };
                     // console.log(p);
-                    axios.post(`${baseAddress}/api/MembersAPI`, p).then(response => {
+                    axios.post(`/api/MembersAPI`, p).then(response => {
                         alert(response.data);
                         //新增完成後隱藏頁面
                         $("#insertModal").modal("hide");
@@ -405,7 +405,7 @@
                     this.registrationDate = "";
                     this.residenceArea = ""; //不能清空
                     this.isTrainer = ""; 
-                    this.isAdministrator = ""; 
+                    // this.isAdministrator = ""; 
                 },
                 //新增員工按鈕(顯示新增畫面)
                 showModal: function () {

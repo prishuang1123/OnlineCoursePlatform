@@ -11,5 +11,7 @@ namespace Project1.Models
 
         public DateTime Scheduler { get; set; }//讓課日期&時段
 
+        public int? EnrollmentCount { get; set; }// 報名人數
+
     }
 }

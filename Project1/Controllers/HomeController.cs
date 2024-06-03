@@ -19,28 +19,40 @@ namespace Project1.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ProjectDbContext _ProjectDbContext;
+        private readonly UserManager<ProjectUser> _userManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
+        private readonly IConfiguration _Configuration;
 
         //繼承後注入建構函式
         //關鍵字:base 呼叫父類的建構式
-        public HomeController(ILogger<HomeController> logger, ProjectDbContext ProjectDbConext, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager) : base(userManager, signInManager)
+        public HomeController(ILogger<HomeController> logger, UserManager<ProjectUser> userManager, SignInManager<ProjectUser> signInManager, RoleManager<ApplicationRole> roleManager, ProjectDbContext ProjectDbConext, IConfiguration configuration):base(userManager, signInManager)
         {
             _logger = logger;
             _ProjectDbContext = ProjectDbConext;
-
+            _Configuration = configuration;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         //GET Home/Index
         public async Task<IActionResult> Index()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (userId != null)
+            if(userId != null)
             {
                 var Mem = _ProjectDbContext.Member.Where(m => m.AspID == userId).FirstOrDefault();
-                var MemID = Mem.MemberID;
-                var MemName = Mem.Name;
-                ViewBag.MemID = MemID;
+                if(Mem == null)
+                {
+                    return RedirectToAction("Create", "Member");
+                }
+                    var MemID = Mem.MemberID;
+                    ViewBag.MemID = MemID;
             }
-
+            else
+            {
+                ViewBag.MemID = "Not Logged In";
+            }
+            
             return View();
         }
 

@@ -43,14 +43,16 @@
                                 <td>
                                     <div class="single-element-widget mt-30">
                                         <div v-for="(course, courseIndex) in classSchedule" :key="courseIndex">
-                                            <div v-if="course.courseID == @(cartItemGroup.Key)" class="switch-wrap d-flex justify-content-between">
+                                            <div v-if="course.courseID == @(cartItemGroup.Key)">
                                                 <div v-for="(scheduleId, scheduleIndex) in course.allScheduleId" :key="scheduleIndex">
-                                                    <p>{{ course.allScheduleDate[scheduleId] }}</p>
-                                                    <div class="primary-checkbox">
-                                                        <!-- Unique id for each checkbox -->
-                                                        <input type="checkbox" :id="'checkbox_' + course.courseID + '_' + scheduleId" v-model="course.selectedScheduleId[course.courseID + '-' + scheduleId]" :checked="course.selectedScheduleId.includes(course.courseID + '-' + scheduleId)" />
-                                                        <!-- Use the same unique id in the label's for attribute -->
-                                                        <label :for="'checkbox_' + course.courseID + '_' + scheduleId"></label>
+                                                    <div class="switch-wrap d-flex justify-content-between">
+                                                        <p>{{ course.allScheduleDate[scheduleId] }}</p>
+                                                        <div class="primary-checkbox">
+                                                            <!-- Unique id for each checkbox -->
+                                                            <input type="checkbox" :id="'checkbox_' + course.courseID + '_' + scheduleId" v-model="course.selectedScheduleId[course.courseID + '-' + scheduleId]" :checked="course.selectedScheduleId.includes(course.courseID + '-' + scheduleId)" />
+                                                            <!-- Use the same unique id in the label's for attribute -->
+                                                            <label :for="'checkbox_' + course.courseID + '_' + scheduleId"></label>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -150,7 +152,7 @@
 <!--================End Cart Area =================-->
 
 @section Scripts
-{    
+{
     <script>
         const baseUrl = "https://localhost:7177";
         const vueApp = {
@@ -165,7 +167,7 @@
                 
             },
             mounted() {
-                const GetClassScheduleUrl = `${baseUrl}/Browse/GetClassSchedule`;
+                const GetClassScheduleUrl = `/Browse/GetClassSchedule`;
                 axios.get(GetClassScheduleUrl).then(response => {
                     // Clear the existing classSchedule before populating it with new data
                     this.classSchedule = [];
@@ -213,6 +215,24 @@
                     }
                 });
             };
+            const updateQuantity = function () {
+                $.ajax({
+                    url: '/Browse/UpdateQuantity',
+                    type: 'POST',
+                    data: {
+                        id: parseInt(courseID),
+                    },
+                    success: function (response) {
+                        const quantity = document.getElementById("courseID" + courseID);
+                        quantity.value = response.quantity;
+                        console.log("courseID" + courseID)
+                        console.log(JSON.stringify(response))
+                    },
+                    error: function (err) {
+                        conosle.log(JSON.stringify(err));
+                    }
+                });
+            };
             $.ajax({
                 type: 'POST',
                 url: '/Browse/UpdateCartItem',
@@ -227,53 +247,20 @@
                     const totalPrice = document.getElementById("totalPrice" + courseID);
                     totalPrice.textContent = response.totalPrice;
                     updateSubtotal();
+                    updateQuantity();
                     console.log('Database updated successfully');
+                    // console.log(courseID);
+                    // console.log(typeof(courseID));
                 },
                 error: function (xhr, status, error) {
                     // Handle error response
                     console.error('Error updating database:', error);
                 }
             });
+            
+            
         });
         $(document).ready(function () {
-           
-            const updateDatabase = function (newQuantity, cartId) {
-                $.ajax({
-                    url: '/Browse/UpdateQuantity',
-                    type: 'POST',
-                    data: { 
-                        quantity: newQuantity,
-                        id: cartId,
-                    },
-                    success: function (response) {
-                        var totalPrice = document.getElementById("totalPrice" + cartId);
-                        totalPrice.textContent = response.totalPrice;
-                        updateSubtotal();
-                        
-                    },
-                    error: function (err) {
-                        conosle.log(JSON.stringify(err));
-                    }
-                });
-            };
-
-            const updateSubtotal = function () {
-                $.ajax({
-                    url: '/Browse/UpdateSubtotal',
-                    type: 'GET',
-                    data: {
-                        
-                    },
-                    success: function (response) {
-                        const subtotal = document.getElementById("subtotal");
-                        subtotal.textContent = response.subtotal;
-                        console.log(JSON.stringify(response));
-                    },
-                    error: function (err) {
-                        conosle.log(JSON.stringify(err));
-                    }
-                });
-            };
 
             const validateDiscountCode = function (discountCode) {
                 $.ajax({
@@ -293,8 +280,6 @@
                             const discountButton = document.getElementById("discountButton");
                             discountButton.setAttribute("disabled", "disabled");
                            
-                            sessionStorage.setItem("discountCode", discountCode.value);
-                            
                         }
                         else if (response.validationResult == "not applicable") {
                             alert("此優惠碼不適用");
@@ -340,55 +325,11 @@
                 });
             };
     
-            // const refreshViewCartPage = function(memberId)
-            // {
-            //     $.ajax({
-            //         url: '/Browse/ViewCart',
-            //         type: 'GET',
-            //         data: {
-            //             id: memberId,
-            //         },
-            //         success: function (response) {
-            //             if (response.success) {
-            //                 // Item deleted successfully, redirect to ViewCart
-            //                 window.location.href = '/Browse/ViewCart/' + data.id;
-            //                 // memberId = response.memberId;
-            //                 console.log(JSON.stringify(response))
-            //                 console.log("refresh viewcart!");
 
-            //             }
-            //             else {
-            //                 console.log(JSON.stringify(response))
-            //                 console.log("rereshViewCartPage can't work, id=null");
-            //             }
-            //         },
-            //         error: function (err) {
-            //             console.log(JSON.stringify(err));
-            //         }
-            //     });
-            // }
-
-            // window.increase = function (elementId) {
-            //     var result = document.getElementById(elementId); //quantity
-            //     result.value = parseInt(result.value) + 1;
-                
-            //     updateDatabase(parseInt(result.value), parseInt(elementId.substring(3)));
-            // }
-            // window.decrease = function (elementId) {
-            //     var result = document.getElementById(elementId);
-            //     if (parseInt(result.value) <= 1) {
-            //         alert("數量不可小於1");
-            //         result.value = 1;
-            //     }
-            //     else{
-            //         result.value = parseInt(result.value) - 1;
-            //     }
-            //     updateDatabase(parseInt(result.value), elementId.substring(3));
-            // }
             window.deleteCartItem = function (cartId) {
                 deleteCartItem(cartId);
-                alert("window.delete triggered");
-                alert(`cartId: ${cartId}, typeof: ${typeof(cartId)}`);
+                // alert("window.delete triggered");
+                // alert(`cartId: ${cartId}, typeof: ${typeof(cartId)}`);
             }
             window.discountCode = function () {
                 // event.preventDefault();

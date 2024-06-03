@@ -37,7 +37,7 @@ namespace Project1.Models
 
         public OrderDetail()
         {
-            this.CreatedAt = DateTime.UtcNow;
+            this.CreatedAt = DateTime.Now;
         }
 
 		public int? SchedulerID { get; set; } //上課時間編號

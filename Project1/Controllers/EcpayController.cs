@@ -12,6 +12,7 @@ using Project1.ViewModels;
 using System.Data;
 using System.Net.Http.Headers;
 using System.Runtime.Intrinsics.Arm;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
@@ -25,8 +26,8 @@ namespace Project1.Controllers
         //    return View();
         //}
         private readonly ProjectDbContext _db;
-        private readonly UserManager<IdentityUser> _userManager;
-        public EcpayController(ProjectDbContext db, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager):base(userManager, signInManager)
+        private readonly UserManager<ProjectUser> _userManager;
+        public EcpayController(ProjectDbContext db, UserManager<ProjectUser> userManager, SignInManager<ProjectUser> signInManager):base(userManager, signInManager)
         {
             _db = db;
             _userManager = userManager;
@@ -34,8 +35,14 @@ namespace Project1.Controllers
         //step1 : 網頁導入傳值到前端
         public ActionResult Index(string code, string paymentType)
         {
-            int memberId = Util.getMemberId(_db, _userManager,User);
-            
+            int memberId = Util.getMemberId(_db, _userManager, User);
+            //var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            //var memberId = 0;
+            //if (userId != null)
+            //{
+            //    var Mem = _db.Member.Where(m => m.AspID == userId).FirstOrDefault();
+            //    memberId = Mem.MemberID;
+            //}
             var orderId = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 20);
             //需填入你的網址
             var website = $"https://xpetcare.azurewebsites.net/";
@@ -126,6 +133,13 @@ namespace Project1.Controllers
         public string AddOrders([FromBody]JObject json)
         {
             int memberId = Util.getMemberId(_db, _userManager, User);
+            //var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            //var memberId = 0;
+            //if (userId != null)
+            //{
+            //    var Mem = _db.Member.Where(m => m.AspID == userId).FirstOrDefault();
+            //    memberId = Mem.MemberID;
+            //}
             string num = "0";
             try
             {
@@ -207,6 +221,7 @@ namespace Project1.Controllers
         [HttpPost]
         public ActionResult PayInfo(IFormCollection id)
         {
+            Console.WriteLine(id);
             var data = new Dictionary<string, string>();
             foreach (string key in id.Keys)
             {

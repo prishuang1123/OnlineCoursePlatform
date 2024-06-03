@@ -1,16 +1,33 @@
 ﻿@model System.Collections.Generic.Dictionary<string, string>
 @{
-    Layout = null;
+    // Layout = null;
 }
-<!DOCTYPE html>
-<html>
+
 <body>
+	<section class="order_details">
+		<div class="container">
+			<h3 id="result" class="title_confirmation">您的訂單已完成!</h3>
+		</div>
+	</section>
     <!--step6 : 顯示回傳結果-->
     @foreach (var key in @Model.Keys.ToList())
     {
-        @(key)
-        <input type="text" name="@key" value="@Model[key]" disabled />
+        <label for="@key" hidden>@(key)</label>
+        <input id="@key" type="text" name="@key" value="@Model[key]" readonly hidden/>
         <br />
     }
 </body>
-</html>
+
+@section Scripts{
+    <script>        
+        $(document).ready(function () {
+            let RtnCode = $("#RtnCode").val();
+            if (RtnCode === "1") {
+                $("#result").html("您的訂單已完成，付款成功!")
+            } else {
+                $('<div class="alert alert-info" role="alert">付款失敗!</div>').insertAfter($('#result'));
+                console.log(typeof(RtnCode));
+            }
+        });
+    </script>
+}
