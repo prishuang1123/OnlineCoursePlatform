@@ -354,12 +354,12 @@
                 color: #fff;
             }
 
-        /* .btn:active:after {
+        .btn:active:after {
             opacity: 1;
             transition: 0s;
             box-shadow: 0 0 0 0 #A88256;
         }
- */
+
         .card {
             min-width: 100%;
         }
@@ -381,13 +381,11 @@
             padding: 10px;
             z-index: 1000;
             display: none;
-            color:black;
+            color: black;
         }
 
-
-
-        .table td, .table th {
-            text-align: center;
+        textarea {
+            resize: none;
         }
     </style>
 }
@@ -396,8 +394,9 @@
     <div class="row">
         <div class="col-md-4 text-center mb-3">
             <img :src="trainerPhoto" alt="訓練師照片" class="img-thumbnail">
-            <h4>{{ trainerName }}</h4>
-
+            <h3>{{ trainerName }}<i class="bi bi-pencil-square" @@click="showEditModal"></i></h3><br />
+            <h4>經驗: {{ trainerExperience }}</h4>
+            <h4>專長:{{  trainerSpecializationName }}</h4>
             <div class="new-course-section">
                 <button type="button" class="btn btn-succ" @@click="showAddCourseModal">新增課程</button>
                 <h5 class="">我新增的課程:</h5>
@@ -406,7 +405,7 @@
                         <img :src="course.thumbnailUrl" alt="Course Thumbnail" style="border:1px solid #333">
                         <div class="course-card-details">
                             <h6>{{ course.courseName }}</h6>
-                           @*  <p>{{ course.description }}</p> *@
+                            @*  <p>{{ course.description }}</p> *@
                             <p>{{ course.approvalStatus }}</p>
                         </div>
                         <div class="course-card-actions">
@@ -417,8 +416,6 @@
                                     :disabled="course.approvalStatus !== '通過'">
                                 發佈
                             </button>
-                           @*  <!-- 查看預約按鈕 -->
-                            <button type="button" class="btn btn-primary btn-sm" @@click="viewReservations(course.courseID)">查看預約</button> *@
                         </div>
                         <button type="button" class="btn btn-danger btn-sm course-delete-button" @@click="deleteCourse(course.courseID)">
                             <i class="bi bi-trash"></i>
@@ -427,7 +424,7 @@
                 </div>
             </div>
             <div id='calendar' class="mt-3"></div>
-                <div id="tooltip" class="tooltip"></div>
+            <div id="tooltip" class="tooltip"></div>
         </div>
 
         <div class="col-md-8">
@@ -482,13 +479,45 @@
         </div>
     </div>
 
+    <!-- 編輯訓練師資料模態框 -->
+    <div class="modal fade" id="editTrainerModal" tabindex="-1" role="dialog" aria-labelledby="editTrainerModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editTrainerModalLabel">編輯訓練師資料</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="editTrainerPhoto">大頭貼</label>
+                        <input type="file" class="form-control" id="editTrainerPhoto" @@change="onTrainerPhotoChange">
+                        <div v-if="editTrainerPhotoPreview" class="img-wrapper mt-2">
+                            <img :src="editTrainerPhotoPreview" class="img-thumbnail">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="editTrainerExperience">經歷</label>
+                        <textarea class="form-control" id="editTrainerExperience" v-model="editTrainerExperience"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" @@click="updateTrainerInfo">變更</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <!-- 新增貼文模態框 -->
     <div class="modal fade" id="postModal" tabindex="-1" role="dialog" aria-labelledby="postModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="postModalLabel">建立貼文</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" @@click="closeModal">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -506,24 +535,23 @@
                         <input type="file" class="form-control" id="postImage1" @@change="onImage1Change" style="display: none;">
                         <div v-if="newPostImage1" class="img-wrapper">
                             <img :src="newPostImage1Url" class="img-preview">
-                            <button class="delete-img" @@click="removeNewImage(1)">X</button>
+                            <button class="delete-img" @@click="removeNewImage(1)">X</button> <!-- 新增删除图片按钮 -->
                         </div>
                         <label for="postImage2" :class="{'bi bi-image': true, 'd-none': newPostImage2}" style="margin-left: 10px;"></label>
                         <input type="file" class="form-control" id="postImage2" @@change="onImage2Change" style="display: none;">
                         <div v-if="newPostImage2" class="img-wrapper">
                             <img :src="newPostImage2Url" class="img-preview">
-                            <button class="delete-img" @@click="removeNewImage(2)">X</button>
+                            <button class="delete-img" @@click="removeNewImage(2)">X</button> <!-- 新增删除图片按钮 -->
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
-                    <button type="button" class="btn btn-primary" @@click="createPost">發布</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" @@click="closeModal">關閉</button>
+                    <button type="button" class="btn btn-primary" @@click="createPost" :disabled="!isPostValid">發布</button> <!-- 动态禁用发布按钮 -->
                 </div>
             </div>
         </div>
     </div>
-
     <!-- 編輯貼文模態框 -->
     <div class="modal fade" id="editPostModal" tabindex="-1" role="dialog" aria-labelledby="editPostModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -567,7 +595,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
-                    <button type="button" class="btn btn-primary" @@click="saveEditPost">保存</button>
+                    <button type="button" class="btn btn-primary" @@click="saveEditPost" :disabled="!isEditPostValid">保存</button>
                 </div>
             </div>
         </div>
@@ -660,7 +688,8 @@
                     </div>
                     <div class="form-group">
                         <label for="thumbnailUrl">封面圖:</label>
-                        <input type="file" class="form-control" id="thumbnailUrl" @@change="onThumbnailChange">
+                        <input type="file" class="form-control" id="thumbnailUrl" @@change="onThumbnailChange" style="display: none;">
+                        <label v-if="!newCourse.thumbnailUrl" for="thumbnailUrl" class="bi bi-image" style="font-size: 2rem; cursor: pointer;"></label>
                         <div v-if="newCourse.thumbnailUrl" class="image-preview-wrapper">
                             <img :src="thumbnailPreview" class="img-preview" />
                             <button type="button" class="btn-delete-img" @@click="removeThumbnail">✖</button>
@@ -669,7 +698,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
-                    <button type="button" class="btn btn-primary" @@click="createCourse">新增</button>
+                    <button type="button" class="btn btn-primary" @@click="createCourse" :disabled="!isFormValid">新增</button>
                 </div>
             </div>
         </div>
@@ -681,7 +710,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="viewEditCourseModalLabel">檢視課程</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" v-if="!isEditing" @@click="closeViewEditModal">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -742,7 +771,8 @@
                         </div>
                         <div class="form-group">
                             <label for="editThumbnailUrl">封面圖:</label>
-                            <input type="file" class="form-control" id="editThumbnailUrl" @@change="onEditThumbnailChange">
+                            <input type="file" class="form-control" id="editThumbnailUrl" @@change="onEditThumbnailChange" style="display: none;">
+                            <label v-if="!editThumbnailPreview" for="editThumbnailUrl" class="bi bi-image" style="font-size: 2rem; cursor: pointer;"></label>
                             <div v-if="editThumbnailPreview" class="image-preview-wrapper">
                                 <img :src="editThumbnailPreview" class="img-preview" />
                                 <button type="button" class="btn-delete-img" @@click="removeEditThumbnail">✖</button>
@@ -752,9 +782,9 @@
                 </div>
                 <div class="modal-footer">
                     <p class="review-status"><strong>審核狀態:</strong> {{ viewCourse.approvalStatus }}</p>
-                    <button type="button" class="btn btn-secondary" @@click="closeViewEditModal">關閉</button>
+                    <button type="button" class="btn btn-secondary" v-if="!isEditing" @@click="closeViewEditModal">關閉</button>
                     <button type="button" class="btn btn-primary" v-if="!isEditing" @@click="editCourse">編輯</button>
-                    <button type="button" class="btn btn-primary" v-if="isEditing" @@click="saveCourse">確定</button>
+                    <button type="button" class="btn btn-primary" v-if="isEditing" @@click="saveCourse" :disabled="!isEditFormValid">確定</button>
                     <button type="button" class="btn btn-secondary" v-if="isEditing" @@click="cancelEdit">取消</button>
                 </div>
             </div>
@@ -847,11 +877,7 @@
         </div>
     </div>
 
-
-
-
 </div>
-
 
 
 @section Scripts {
@@ -874,6 +900,8 @@
         var retractPublishUrl = "/Trainerrr/RetractPublish"; // 收回課程
         var getPublishedSchedulesUrl = "/Trainerrr/GetPublishedSchedules"; // 取得已發佈資訊
         var GetReservationsUrl = "/Trainerrr/GetReservations";//查看誰預約
+        var UpdateTrainerInfoUrl = "/Trainerrr/UpdateTrainerInfo"; // 編輯訓練師
+        // var GetSpecializationsUrl = "/Trainerrr/GetSpecializations"; // 專長
         var VueApp = {
             data() {
                 return {
@@ -883,6 +911,8 @@
                     newPostContent: "", // 新貼文內容
                     newPostImage1: null, // 新貼文圖片1
                     newPostImage2: null, // 新貼文圖片2
+                    newPostImage1Url: null, // 新貼文圖片1 URL
+                    newPostImage2Url: null, // 新貼文圖片2 URL
                     editPostId: null, // 編輯貼文ID
                     editPostTitle: "", // 編輯貼文標題
                     editPostContent: "", // 編輯貼文內容
@@ -899,6 +929,13 @@
 
                     trainerName: "", // 訓練師名稱
                     trainerPhoto: "", // 訓練師照片
+                    trainerExperience: "",//訓練師經歷
+                    trainerSpecializationName: "",//訓練師專長                
+                    editTrainerExperience: '',                 
+                    editTrainerPhoto: null,
+                    editTrainerPhotoPreview: null,
+
+
                     courses: [], // 課程資料
                     selectedCourses: [], // 選擇的課程
                     newCourse: { // 新課程資料
@@ -918,13 +955,15 @@
                     courseTypes: [], // 課程類型
                     locations: [], // 上課地點
                     isEditing: false, // 編輯狀態
+                    originalCourse: null, //課程取消或關閉
+                    tempThumbnail: null,  // 臨時封面圖
                     publishDateTime: null, // 發佈時間
                     publishedSchedules: [], // 已發佈的課程
                     editThumbnailPreview: null, // 編輯封面圖預覽
                     thumbnailPreview: null, // 新增封面圖預覽
-                    publishError: null ,// 發佈錯誤訊息
+                    publishError: null,// 發佈錯誤訊息
                     reservations: [] // 存儲預約資料
-             
+
                 };
             },
             mounted() {
@@ -950,6 +989,36 @@
                 });
             },
             computed: {
+                //檢查新增課程欄位都要填寫
+                isFormValid() {
+                    return this.newCourse.courseName.trim() !== "" &&
+                        this.newCourse.description.trim() !== "" &&
+                        this.newCourse.petCategoryID !== null &&
+                        this.newCourse.courseCategoryID !== null &&
+                        this.newCourse.courseTypeID !== null &&
+                        this.newCourse.locationID !== null &&
+                        this.newCourse.price !== null &&
+                        this.newCourse.maxParticipants !== null;
+                },
+                //編輯時必要欄位沒填寫無法按確認
+                isEditFormValid() {
+                    return this.viewCourse.courseName.trim() !== "" &&
+                        this.viewCourse.description.trim() !== "" &&
+                        this.viewCourse.petCategoryID !== null &&
+                        this.viewCourse.courseCategoryID !== null &&
+                        this.viewCourse.courseTypeID !== null &&
+                        this.viewCourse.locationID !== null &&
+                        this.viewCourse.price !== null &&
+                        this.viewCourse.maxParticipants !== null;
+
+                },
+                isPostValid() {
+                    return this.newPostTitle.trim() !== "" || this.newPostContent.trim() !== "" || this.newPostImage1 !== null || this.newPostImage2 !== null;
+                },
+                // 檢查編輯貼文的標題、內容和圖片是否至少有一個存在
+                isEditPostValid() {
+                    return this.editPostTitle.trim() !== "" || this.editPostContent.trim() !== "" || this.editPostImage1 !== null || this.editPostImage2 !== null || this.newEditPostImage1Url !== null || this.newEditPostImage2Url !== null;
+                },
                 // 計算屬性，取得有效的已發佈課程
                 validPublishedSchedules() {
                     const now = new Date();
@@ -962,6 +1031,43 @@
                 }
             },
             methods: {
+                // 顯示編輯模態框
+                showEditModal() {
+                    $('#editTrainerModal').modal('show');
+                },
+                // 當用戶選擇新照片時更新預覽
+                onTrainerPhotoChange(event) {
+                    const file = event.target.files[0];
+                    this.editTrainerPhoto = file;
+                    this.editTrainerPhotoPreview = URL.createObjectURL(file);
+                },
+                // 更新訓練師資訊
+                updateTrainerInfo() {
+                    const formData = new FormData();
+                    formData.append('experience', this.editTrainerExperience);
+                    if (this.editTrainerPhoto) {
+                        formData.append('photo', this.editTrainerPhoto);
+                    }
+
+                    axios.post(UpdateTrainerInfoUrl, formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    })
+                        .then(response => {
+                            if (response.data.success) {
+                                this.fetchTrainerInfo();
+                                $('#editTrainerModal').modal('hide');
+                            } else {
+                                alert(response.data.message);
+                            }
+                        })
+                        .catch(error => {
+                            console.log(error);
+                            alert("更新訓練師資訊失敗");
+                        });
+                },
+
                 // 獲取貼文
                 fetchPosts() {
                     axios.get(getBlogUrl).then(response => {
@@ -977,11 +1083,16 @@
                         if (trainer.success) {
                             this.trainerName = trainer.trainerName;
                             this.trainerPhoto = trainer.photo;
+                            this.trainerExperience = trainer.experience;
+                            this.trainerSpecializationName = trainer.specializationName;
+                            this.editTrainerExperience = trainer.experience;
+                           
                         } else {
                             alert(trainer.message);
                         }
                     }).catch(error => {
-                        alert(error);
+                        console.log(error);
+                        alert("無法獲取訓練師資訊");
                     });
                 },
                 // 獲取課程
@@ -1010,6 +1121,23 @@
                 showModal() {
                     $('#postModal').modal('show');
                 },
+                // 關閉新增貼文模態框時重置資料
+                closeModal() {
+                    this.resetNewPostData(); // 清除資料
+                    $('#postModal').modal('hide');
+                },
+                // 新增部分：刪除新圖片
+                removeNewImage(imageIndex) {
+                    if (imageIndex === 1) {
+                        this.newPostImage1 = null;
+                        this.newPostImage1Url = null;
+                        document.getElementById('postImage1').value = "";
+                    } else if (imageIndex === 2) {
+                        this.newPostImage2 = null;
+                        this.newPostImage2Url = null;
+                        document.getElementById('postImage2').value = "";
+                    }
+                },
                 // 創建新貼文
                 createPost() {
                     const formData = new FormData();
@@ -1024,6 +1152,7 @@
                         }
                     }).then(response => {
                         this.fetchPosts();
+                        this.resetNewPostData(); // 清除資料
                         $('#postModal').modal('hide');
                     }).catch(error => {
                         console.log(error);
@@ -1079,6 +1208,17 @@
                         alert(error);
                     });
                 },
+                // 重置新貼文資料
+                resetNewPostData() {
+                    this.newPostTitle = "";
+                    this.newPostContent = "";
+                    this.newPostImage1 = null;
+                    this.newPostImage2 = null;
+                    this.newPostImage1Url = null;
+                    this.newPostImage2Url = null;
+                    document.getElementById('postImage1').value = "";
+                    document.getElementById('postImage2').value = "";
+                },
                 // 當貼文圖片1變更
                 onImage1Change(event) {
                     this.newPostImage1 = event.target.files[0];
@@ -1125,13 +1265,6 @@
                         this.modalImages.push(image2);
                     }
                     $('#imageModal').modal('show');
-                },
-                // 點讚貼文
-                likePost(post) {
-                    if (!post.likes) {
-                        this.$set(post, 'likes', 0);
-                    }
-                    post.likes++;
                 },
                 // 顯示新增課程模態框
                 showAddCourseModal() {
@@ -1198,10 +1331,17 @@
                 },
                 // 顯示檢視/編輯課程模態框
                 showViewEditModal() {
+                    // 深拷貝 viewCourse 並存儲到 originalCourse
+                    this.originalCourse = JSON.parse(JSON.stringify(this.viewCourse));
+                    this.editThumbnailPreview = this.viewCourse.thumbnailUrl; // 设置封面图预览
                     $('#viewEditCourseModal').modal('show');
                 },
-                // 關閉檢視/編輯課程模態框
+                // 關閉檢視/編輯課程模態框並恢復原始資料
                 closeViewEditModal() {
+                    // 將 viewCourse 還原為 originalCourse
+                    this.viewCourse = JSON.parse(JSON.stringify(this.originalCourse));
+                    this.editThumbnailPreview = null;
+                    this.tempThumbnail = null;
                     $('#viewEditCourseModal').modal('hide');
                     this.isEditing = false;
                 },
@@ -1235,6 +1375,10 @@
                 },
                 // 取消編輯
                 cancelEdit() {
+                    // 將 viewCourse 還原為 originalCourse
+                    this.viewCourse = JSON.parse(JSON.stringify(this.originalCourse));
+                    this.editThumbnailPreview = null;
+                    this.tempThumbnail = null;
                     this.isEditing = false;
                 },
                 // 保存編輯後的課程
@@ -1248,8 +1392,8 @@
                     formData.append("locationID", this.viewCourse.locationID);
                     formData.append("price", this.viewCourse.price);
                     formData.append("maxParticipants", this.viewCourse.maxParticipants);
-                    if (this.viewCourse.thumbnailUrl) {
-                        formData.append("thumbnailUrl", this.viewCourse.thumbnailUrl);
+                    if (this.tempThumbnail) {
+                        formData.append("thumbnailUrl", this.tempThumbnail);
                     }
 
                     axios.post(`${editCourseUrl}/${this.viewCourse.courseID}`, formData, {
@@ -1257,9 +1401,12 @@
                             'Content-Type': 'multipart/form-data'
                         }
                     }).then(response => {
+                        // 保存成功後更新 viewCourse 的資料
+                        this.viewCourse.thumbnailUrl = response.data.thumbnailUrl;// 更新封面圖 URL
                         this.fetchCourses();
                         this.isEditing = false;
-                        this.closeViewEditModal();
+                        // 保存後回到檢視模式
+                        this.showViewEditModal();
                     }).catch(error => {
                         console.log(error);
                         alert(error);
@@ -1385,16 +1532,16 @@
                 },
                 // 當編輯課程封面圖變更
                 onEditThumbnailChange(event) {
-                    this.viewCourse.thumbnailUrl = event.target.files[0];
+                    this.tempThumbnail = event.target.files[0];
                     const file = event.target.files[0];
                     if (file) {
-                        this.viewCourse.thumbnailUrl = file;
+                        // this.viewCourse.thumbnailUrl = file;
                         this.editThumbnailPreview = URL.createObjectURL(file);
                     }
                 },
                 // 移除編輯課程封面圖
                 removeEditThumbnail() {
-                    this.viewCourse.thumbnailUrl = null;
+                    this.tempThumbnail = null;
                     this.editThumbnailPreview = null;
                     document.getElementById('editThumbnailUrl').value = "";
                 },
@@ -1407,15 +1554,6 @@
                         .catch(error => {
                             console.log(error);
                         });
-                },
-                viewReservations(schedulerID) {
-                    axios.get(`${GetReservationsUrl}?schedulerID=${schedulerID}`).then(response => {
-                        this.reservations = response.data;
-                        $('#viewReservationsModal').modal('show');
-                    }).catch(error => {
-                        console.log(error);
-                        alert("無法取得預約資料");
-                    });
                 },
                 // 格式化日期時間顯示
                 formatDateTime(dateTime) {
@@ -1467,7 +1605,7 @@
                         sessionStorage.setItem("ActID", arg.event.extendedProps.courseID);
                         arg.jsEvent.preventDefault();
                         window.open(arg.event.url, '_blank', 'width=700,height=600');
-                        
+
                     },
                 });
                 calendar.render();
@@ -1479,7 +1617,3 @@
         });
     </script>
 }
-
-
-
-
