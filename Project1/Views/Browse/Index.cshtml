@@ -175,7 +175,7 @@
 @*Vue寫法*@
 @section Scripts {
     <script>
-        const baseUrl = "https://localhost:7177";
+        // const baseUrl = "https://localhost:7177";
         const vueApp = {
             data() {
                 return {
@@ -188,7 +188,7 @@
                     filterCourse(categoryId) {
                         this.currentCategoryNum = categoryId;
                         // Make AJAX request to fetch updated course list
-                        axios.get(`${baseUrl}/Browse/GetCourseListPartial?Id=${categoryId}`)
+                        axios.get(`/Browse/GetCourseListPartial?Id=${categoryId}`)
                             .then(response => {
                                 // Replace the existing course list HTML with the updated one
                                 document.getElementById('courseListContainer').innerHTML = response.data;
