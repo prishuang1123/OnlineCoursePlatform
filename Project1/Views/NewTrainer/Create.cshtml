@@ -10,11 +10,18 @@
 
 <h4>訓練師基本資料</h4>
 <hr />
+@section Styles {
+    <style>
+        .hidden-field {
+            display: none;
+        }
+    </style>
+}
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger" ></div>
-            <div class="form-group">
+            <div class="form-group hidden-field">
                 <label asp-for="MemberID" class="control-label"></label>
                 <input asp-for="MemberID" class="form-control" />
                 <span asp-validation-for="MemberID" class="text-danger"></span>

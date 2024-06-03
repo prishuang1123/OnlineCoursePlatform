@@ -9,6 +9,13 @@
 
 <h4>訓練師資料</h4>
 <hr />
+@section Styles {
+    <style>
+        .hidden-field {
+            display: none;
+        }
+    </style>
+}
 @if (TempData["SuccessMessage"] != null)
 {
     <script>
@@ -21,7 +28,7 @@
         <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger" ></div>
             <input type="hidden" asp-for="TrainerID" />
-            <div class="form-group">
+            <div class="form-group hidden-field">
                 <label asp-for="MemberID" class="control-label"></label>
                 <input asp-for="MemberID" class="form-control" />
                 <span asp-validation-for="MemberID" class="text-danger"></span>
