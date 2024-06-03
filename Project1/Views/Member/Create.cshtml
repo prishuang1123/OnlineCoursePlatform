@@ -49,26 +49,34 @@
                 <input asp-for="ResidenceArea" class="form-control" />
                 <span asp-validation-for="ResidenceArea" class="text-danger"></span>
             </div>
-            @* <div class="form-group"> *@
-                @* <label asp-for="IsTrainer" class="control-label"></label> *@
-                @* <input asp-for="IsTrainer" class="form-control" /> *@
-                @* <span asp-validation-for="IsTrainer" class="text-danger"></span> *@
-            @* </div> *@
+            <div class="form-group"> 
+                <label asp-for="IsTrainer" class="control-label"></label> 
+                <input asp-for="IsTrainer" class="form-control" />
+                <span asp-validation-for="IsTrainer" class="text-danger"></span>
+            </div>
+
             <div class="form-group">
                 <label asp-for="Photo" class="control-label"></label>
-                <input class="form-control" type="file" id="Photo"/>
+                <input asp-for="Photo" class="form-control" type="file" name="photo" />
                 <span asp-validation-for="Photo" class="text-danger"></span>
             </div>
+
+            @* <div class="form-group">
+                <label asp-for="ThumbnailUrl" class="control-label"></label>
+                <input type="file" id="thumbnailFile" name="thumbnailFile" class="form-control" accept="image/*" />
+                <span asp-validation-for="ThumbnailUrl" class="text-danger"></span>
+            </div> *@
+
             <div class="form-group">
                 <label asp-for="Address" class="control-label"></label>
                 <input asp-for="Address" class="form-control" />
                 <span asp-validation-for="Address" class="text-danger"></span>
             </div>
-            @* <div class="form-group"> *@
-                @* <label asp-for="AspID" class="control-label"></label> *@
-                @* <input asp-for="AspID" class="form-control" /> *@
-                @* <span asp-validation-for="AspID" class="text-danger"></span> *@
-            @* </div> *@
+            <div class="form-group">
+                <label asp-for="AspID" class="control-label"></label>
+                <input asp-for="AspID" class="form-control" />
+                <span asp-validation-for="AspID" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <input type="submit" value="儲存" class="btn btn-primary" />
             </div>
@@ -82,7 +90,7 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    @* <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.js"></script>
     <script>
         // 初始化Dropzone
         Dropzone.autoDiscover = false;
@@ -106,6 +114,6 @@
                     console.log(response);
                 });
             }
-        }); *@
+        });
     </script>
 }

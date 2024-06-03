@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -17,12 +18,14 @@ namespace Project1.Controllers
         private readonly ProjectDbContext _context;
         private readonly UserManager<ProjectUser> _userManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
+        private readonly IWebHostEnvironment _environment;
 
-        public MemberController(UserManager<ProjectUser> userManager, SignInManager<ProjectUser> signInManager, RoleManager<ApplicationRole> roleManager, ProjectDbContext context) : base(userManager, signInManager)
+        public MemberController(UserManager<ProjectUser> userManager, SignInManager<ProjectUser> signInManager, RoleManager<ApplicationRole> roleManager, ProjectDbContext context, IWebHostEnvironment environment) : base(userManager, signInManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _context = context;
+            _environment = environment;
         }
 
         // GET: Member
@@ -72,8 +75,9 @@ namespace Project1.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MemberID,Name,Email,Phone,Birthday,RegistrationDate,ResidenceArea,IsTrainer,Photo,Address,AspID")] Member member)
+        public async Task<IActionResult> Create([Bind("MemberID,Name,Email,Phone,Birthday,RegistrationDate,ResidenceArea,IsTrainer,Photo,Address,AspID")] Member member,IFormFile photo)
         {
+            
             if (ModelState.IsValid)
             {
                 //wayne:確保AspID不會被覆蓋
@@ -84,14 +88,34 @@ namespace Project1.Controllers
                 }
                 member.AspID = user.Id;
 
-                //if (Photo != null && Photo.Length > 0)
-                //{
-                //    using (var memoryStream = new MemoryStream())
-                //    {
-                //        await Photo.CopyToAsync(memoryStream);
-                //        member.Photo = memoryStream.ToArray();
-                //    }
-                //}
+
+                //保存圖片
+                if (photo != null && photo.Length > 0)
+                {
+                    // 生成唯一的檔名
+                    var fileName = Path.GetFileNameWithoutExtension(photo.FileName);
+                    var extension = Path.GetExtension(photo.FileName);
+                    var uniqueFileName = $"{fileName}_{Guid.NewGuid()}{extension}";
+
+                    // 指定保存路徑
+                    var uploadPath = Path.Combine(_environment.WebRootPath, "img", "MembersPhoto");
+                    var filePath = Path.Combine(uploadPath, uniqueFileName);
+
+                    // 確保目錄存在
+                    if (!Directory.Exists(uploadPath))
+                    {
+                        Directory.CreateDirectory(uploadPath);
+                    }
+
+                    // 保存檔案
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await photo.CopyToAsync(stream);
+                    }
+
+                    // 將圖片路徑保存到資料庫
+                    member.Photo = Path.Combine("img", "MembersPhoto", uniqueFileName).Replace("\\", "/");
+                }
 
                 _context.Add(member);
                 await _context.SaveChangesAsync();
@@ -101,6 +125,9 @@ namespace Project1.Controllers
             }
             return View(member);
         }
+
+        
+
 
         // GET: Member/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -114,7 +141,8 @@ namespace Project1.Controllers
             {
                 return NotFound();
             }
-
+            var photoPath = member.Photo;
+            ViewData["PhotoPath"] = photoPath;
             return View(member);
         }
 
@@ -123,7 +151,7 @@ namespace Project1.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MemberID,Name,Email,Phone,Birthday,RegistrationDate,ResidenceArea,IsTrainer,Photo,Address,AspID")] Member member, IFormFile Photo)
+        public async Task<IActionResult> Edit(int id, [Bind("MemberID,Name,Email,Phone,Birthday,RegistrationDate,ResidenceArea,IsTrainer,Photo,Address,AspID")] Member member,IFormFile photo)
         {
             var userId = _userManager.GetUserId(User);
             var existingMember = await _context.Member.FirstOrDefaultAsync(m => m.AspID == userId);
@@ -132,19 +160,50 @@ namespace Project1.Controllers
                 return NotFound();
             }
 
-            //if (Photo != null && Photo.Length > 0)
-            //{
-            //    using (var memoryStream = new MemoryStream())
-            //    {
-            //        await Photo.CopyToAsync(memoryStream);
-            //        existingMember.Photo = memoryStream.ToArray();
-            //    }
-            //}
+           
 
             if (ModelState.IsValid)
             {
                 try
                 {
+                    //處理圖片上傳
+                    if (photo != null && photo.Length > 0)
+                    {
+                        // 生成唯一的檔名
+                        var fileName = Path.GetFileNameWithoutExtension(photo.FileName);
+                        var extension = Path.GetExtension(photo.FileName);
+                        var uniqueFileName = $"{fileName}_{Guid.NewGuid()}{extension}";
+
+                        // 指定保存路徑
+                        var uploadPath = Path.Combine(_environment.WebRootPath, "img/MembersPhoto");
+                        var filePath = Path.Combine(uploadPath, uniqueFileName);
+
+                        // 確保目錄存在
+                        if (!Directory.Exists(uploadPath))
+                        {
+                            Directory.CreateDirectory(uploadPath);
+                        }
+
+                        // 保存檔案
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await photo.CopyToAsync(stream);
+                        }
+
+                        // 刪除舊圖片
+                        if (!string.IsNullOrEmpty(existingMember.Photo))
+                        {
+                            var oldFilePath = Path.Combine(_environment.WebRootPath, existingMember.Photo);
+                            if (System.IO.File.Exists(oldFilePath))
+                            {
+                                System.IO.File.Delete(oldFilePath);
+                            }
+                        }
+
+                        // 將新圖片路徑保存到資料庫
+                        existingMember.Photo = Path.Combine("img/MembersPhoto", uniqueFileName);
+                    }
+
                     _context.Update(existingMember);
                     await _context.SaveChangesAsync();
                     TempData["SuccessMessage"] = "資料更新成功";
@@ -155,7 +214,6 @@ namespace Project1.Controllers
                     {
                         return NotFound();
                     }
-
                     else
                     {
                         throw;
