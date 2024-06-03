@@ -75,8 +75,9 @@ namespace Project1.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MemberID,Name,Email,Phone,Birthday,RegistrationDate,ResidenceArea,IsTrainer,Photo,Address,AspID")] Member member, IFormFile photo)
+        public async Task<IActionResult> Create([Bind("MemberID,Name,Email,Phone,Birthday,RegistrationDate,ResidenceArea,IsTrainer,Photo,Address,AspID")] Member member,IFormFile photo)
         {
+            
             if (ModelState.IsValid)
             {
                 //wayne:確保AspID不會被覆蓋
@@ -87,8 +88,8 @@ namespace Project1.Controllers
                 }
                 member.AspID = user.Id;
 
-                // 保存圖片
-                // 保存圖片
+
+                //保存圖片
                 if (photo != null && photo.Length > 0)
                 {
                     // 生成唯一的檔名
@@ -125,6 +126,9 @@ namespace Project1.Controllers
             return View(member);
         }
 
+        
+
+
         // GET: Member/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -147,7 +151,7 @@ namespace Project1.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MemberID,Name,Email,Phone,Birthday,RegistrationDate,ResidenceArea,IsTrainer,Photo,Address,AspID")] Member member, IFormFile photo)
+        public async Task<IActionResult> Edit(int id, [Bind("MemberID,Name,Email,Phone,Birthday,RegistrationDate,ResidenceArea,IsTrainer,Photo,Address,AspID")] Member member,IFormFile photo)
         {
             var userId = _userManager.GetUserId(User);
             var existingMember = await _context.Member.FirstOrDefaultAsync(m => m.AspID == userId);
@@ -156,13 +160,13 @@ namespace Project1.Controllers
                 return NotFound();
             }
 
-            
+           
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    // 處理圖片上傳
+                    //處理圖片上傳
                     if (photo != null && photo.Length > 0)
                     {
                         // 生成唯一的檔名

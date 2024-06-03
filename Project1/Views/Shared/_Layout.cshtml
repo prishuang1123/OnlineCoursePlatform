@@ -73,7 +73,14 @@
                                    aria-haspopup="true" aria-expanded="false">會員中心</a>
                                 <ul class="dropdown-menu">
                                     <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Member" asp-action="Edit">會員基本資料</a></li>
-                                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="NewTrainer" asp-action="Create">我要成為訓練師</a></li>
+                                    @if (ViewBag.IsTrainer == null || !ViewBag.IsTrainer)
+                                    {
+                                        <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="NewTrainer" asp-action="Create">我要成為訓練師</a></li>
+                                    }
+                                    @if (ViewBag.IsTrainer != null && ViewBag.IsTrainer)
+                                    {
+                                        <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="NewTrainer" asp-action="Edit">訓練師基本資料</a></li>
+                                    }
                                 </ul>
                             </li>
                             @* wayne:判斷當前用戶的身分 *@
