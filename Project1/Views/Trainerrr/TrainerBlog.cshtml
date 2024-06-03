@@ -176,7 +176,40 @@
             border-radius: 5px;
         }
 
-        /* 设置 iframe 容器的样式 */
+        /* 設置箭頭按鈕的樣式 */
+        .image-nav-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.3);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        a:not([href]):not([tabindex]) {
+            color: aliceblue;
+        }
+
+        /* 左側箭頭按鈕位置 */
+        .prev-button {
+            left: 10px;
+           
+          
+        }
+
+        /* 右側箭頭按鈕位置 */
+        .next-button {
+            right: 10px;
+        }
+
+        /* 設置 iframe 容器的樣式 */
         .iframe-container {
             position: relative;
             width: 100%;
@@ -360,12 +393,21 @@
                     <h5 class="modal-title" id="imageModalLabel">圖片預覽</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body position-relative">
                     <img id="previewImage" src="" class="img-fluid w-100" alt="Preview Image">
+                    <!-- 左側箭頭按鈕 -->
+                    <a class="image-nav-button prev-button" onclick="prevImage()">
+                        <i class="bi bi-chevron-left"></i>
+                    </a>
+                    <!-- 右側箭頭按鈕 -->
+                    <a class="image-nav-button next-button" onclick="nextImage()">
+                        <i class="bi bi-chevron-right"></i>
+                    </a>
                 </div>
             </div>
         </div>
     </div>
+
 </div>
 
 @section Scripts {
@@ -376,8 +418,8 @@
     <!-- 引入 Bootstrap JS 庫 -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        var GetCourseDetailsUrl = "/Trainerrr/GetCourseDetails";
-        var courseIdGlobal; // 添加一个全局变量来存储当前的课程ID
+        var GetCourseDetailsUrl = "https://localhost:7177/Trainerrr/GetCourseDetails";
+        var courseIdGlobal; // 添加一個全局變量來存儲當前的課程ID
 
         function toggleCourseContainer() {
             var courseContainer = document.getElementById('courseContainer');
@@ -393,7 +435,7 @@
                 .then(function (response) {
                     var course = response.data;
                     if (course) {
-                        courseIdGlobal = courseId; // 存储当前的课程ID到全局变量中
+                        courseIdGlobal = courseId; // 存儲當前的課程ID到全局變量中
                         document.getElementById('courseThumbnail').src = course.thumbnailUrl;
                         document.getElementById('courseName').textContent = course.courseName;
                         document.getElementById('courseDescription').textContent = course.description;
@@ -412,7 +454,7 @@
         }
 
         function reserveCourse() {
-            // 使用全局变量中的课程ID跳转到单一课程页面
+            // 使用全局變量中的課程ID跳轉到單一課程頁面
             window.location.href = `/Trainerrr/singleCourse/${courseIdGlobal}`;
             sessionStorage.setItem("ActID", courseIdGlobal);
         }
@@ -421,24 +463,30 @@
         var imageUrls = [];
 
         function openImageModal(imageUrl1, imageUrl2) {
+            // 初始化圖片URL陣列，只包含有效的URL
             imageUrls = [imageUrl1, imageUrl2].filter(url => url !== '');
+            // 設定當前顯示的圖片索引為0
             currentImageIndex = 0;
+            // 更新預覽圖片的src屬性為當前顯示的圖片URL
             document.getElementById('previewImage').src = imageUrls[currentImageIndex];
+            // 顯示圖片預覽模態框
             var imageModal = new bootstrap.Modal(document.getElementById('imageModal'));
             imageModal.show();
         }
 
-        document.getElementById('imageModal').addEventListener('wheel', function (event) {
-            if (event.deltaY < 0) {
-                // Scroll up
-                currentImageIndex = (currentImageIndex > 0) ? currentImageIndex - 1 : imageUrls.length - 1;
-            } else {
-                // Scroll down
-                currentImageIndex = (currentImageIndex < imageUrls.length - 1) ? currentImageIndex + 1 : 0;
-            }
+        function prevImage() {
+            // 顯示上一張圖片，若已經是第一張則循環到最後一張
+            currentImageIndex = (currentImageIndex > 0) ? currentImageIndex - 1 : imageUrls.length - 1;
+            // 更新預覽圖片的src屬性為當前顯示的圖片URL
             document.getElementById('previewImage').src = imageUrls[currentImageIndex];
-        });
+        }
+
+        function nextImage() {
+            // 顯示下一張圖片，若已經是最後一張則循環到第一張
+            currentImageIndex = (currentImageIndex < imageUrls.length - 1) ? currentImageIndex + 1 : 0;
+            // 更新預覽圖片的src屬性為當前顯示的圖片URL
+            document.getElementById('previewImage').src = imageUrls[currentImageIndex];
+        }
     </script>
 }
-
 

@@ -533,6 +533,7 @@ namespace Project1.Controllers
                 return null; // 如果沒有找到 Member，返回 null
             }
 
+
             return _context.Trainer.FirstOrDefault(t => t.MemberID == member.MemberID); // 根據 MemberID 查找 Trainer
         }
 
@@ -545,13 +546,20 @@ namespace Project1.Controllers
             var currentTrainer = GetCurrentTrainer();
             if (currentTrainer == null)
             {
-                return Json(new { success = false, message = "請重新登入訓練師" });
+
+                return Json(new { success = false, message = "愈時請重新登入!" });
             }
+            // 根據 SpecializationID 查找 SpecializationName
+            var specialization = _context.Specialization.FirstOrDefault(s => s.SpecializationID == currentTrainer.SpecializationID);
+            var specializationName = specialization != null ? specialization.SpecializationName : "Unknown";
+
             return Json(new
             {
                 success = true,
                 trainerName = currentTrainer.TrainerName,
-                photo = currentTrainer.Photo
+                photo = currentTrainer.Photo,
+                Experience = currentTrainer.Experience,
+                specializationName = specializationName
             });
         }
 
@@ -560,12 +568,18 @@ namespace Project1.Controllers
         {
             // 取得當前登入的訓練師
             var currentTrainer = GetCurrentTrainer();
+            if (currentTrainer == null)
+            {
+                return Json(new { success = false, message = "請登入訓練師" });
+            }
 
             var blogs = await _context.Blog
                                       .Include(b => b.Trainer)
                                       .Where(b => b.TrainerID == currentTrainer.TrainerID)
                                       .OrderByDescending(b => b.PostedDate)
                                       .ToListAsync();
+
+
 
             var blogPosts = blogs.Select(b => new
             {
@@ -577,7 +591,8 @@ namespace Project1.Controllers
                 b.Image2,
                 b.PostedDate,
                 TrainerName = b.Trainer.TrainerName,
-                TrainerPhoto = b.Trainer.Photo // 包括 Trainer.Photo
+                TrainerPhoto = b.Trainer.Photo, // 包括 Trainer.Photo
+
 
             }).ToList();
 
@@ -586,15 +601,15 @@ namespace Project1.Controllers
         }
 
         //處理發文
-        //[HttpPost]
+        [HttpPost]
         public async Task<IActionResult> CreatePost([FromForm] string title, [FromForm] string content, [FromForm] IFormFile? image1, [FromForm] IFormFile? image2)
         {
             var currentTrainer = GetCurrentTrainer();
             var blogPost = new Blog
             {
                 TrainerID = currentTrainer.TrainerID,
-                Title = title,
-                Content = content,
+                Title = title ?? "",
+                Content = content ?? "",
                 PostedDate = DateTime.Now
             };
 
@@ -629,6 +644,15 @@ namespace Project1.Controllers
                 blogPost.Image2 = "";
 
             }
+            //if (title == null)
+            //{
+            //    blogPost.Title = "";
+            //}
+            //else if (content == null)
+            //{
+            //    blogPost.Content = "";
+            //}
+
 
             _context.Blog.Add(blogPost);
             await _context.SaveChangesAsync();
@@ -651,8 +675,8 @@ namespace Project1.Controllers
             }
 
             // 更新貼文標題和內容
-            blogPost.Title = title;
-            blogPost.Content = content;
+            blogPost.Title = title ?? "";
+            blogPost.Content = content ?? "";
 
             // 解析被刪除圖片的列表
             var deletedImagesList = JsonConvert.DeserializeObject<List<string>>(deletedImages);
@@ -667,10 +691,7 @@ namespace Project1.Controllers
                 }
                 blogPost.Image1 = null; // 清空數據庫中的圖片路徑
             }
-            //else if (blogPost.Image1 == null)
-            //{
-            //    blogPost.Image1 = ""; // 清空圖片路徑
-            //}
+
 
             // 如果圖片2在被刪除的列表中，刪除圖片並清空對應欄位
             if (deletedImagesList.Contains(blogPost.Image2))
@@ -682,10 +703,7 @@ namespace Project1.Controllers
                 }
                 blogPost.Image2 = null; // 清空數據庫中的圖片路徑
             }
-            //else if (blogPost.Image2 == null)
-            //{
-            //    blogPost.Image2 = ""; // 清空圖片路徑
-            //}
+
 
             // 如果有新圖片1，保存並更新圖片路徑
             if (image1 != null)
@@ -748,8 +766,12 @@ namespace Project1.Controllers
         //課程預覽
         public async Task<JsonResult> GetCourses()
         {
-            // 取得當前登入的訓練師
+            //取得當前登入的訓練師
             var currentTrainer = GetCurrentTrainer();
+            if (currentTrainer == null)
+            {
+                return Json(new { success = false, message = "請登入訓練師" });
+            }
 
             var courses = await _context.Course
                                         .Where(c => c.TrainerID == currentTrainer.TrainerID)
@@ -803,10 +825,15 @@ namespace Project1.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateCourse([FromForm] Course course, [FromForm] IFormFile? thumbnailUrl)
         {
+            //取得當前登入的訓練師
             var currentTrainer = GetCurrentTrainer();
+            if (currentTrainer == null)
+            {
+                return Json(new { success = false, message = "請登入訓練師" });
+            }
             course.TrainerID = currentTrainer.TrainerID;
             course.CreatedAt = DateTime.Now;
-            course.ApprovalStatus ="待審核";
+            course.ApprovalStatus = "待審核";
 
 
             if (thumbnailUrl != null)
@@ -819,11 +846,12 @@ namespace Project1.Controllers
                 }
                 course.ThumbnailUrl = $"/img/{fileName}";
             }
-            else {
+            else
+            {
                 course.ThumbnailUrl = $"/img/coursethumbnail/noimage.jpg";
 
             }
-            
+
 
             _context.Course.Add(course);
             await _context.SaveChangesAsync();
@@ -837,6 +865,7 @@ namespace Project1.Controllers
         [HttpPost]
         public async Task<IActionResult> EditCourse(int id, [FromForm] Course course, [FromForm] IFormFile? thumbnailUrl)
         {
+
             var existingCourse = await _context.Course.FindAsync(id);
             if (existingCourse == null)
             {
@@ -980,10 +1009,42 @@ namespace Project1.Controllers
         }
 
 
+        // 獲取所有專長資料
+        public JsonResult GetSpecializations()
+        {
+            var specializations = _context.Specialization.ToList();
+            return Json(specializations);
+        }
 
+        // 更新訓練師資料
+        [HttpPost]
+        public async Task<IActionResult> UpdateTrainerInfo([FromForm] string experience, [FromForm] int specializationID, [FromForm] IFormFile? photo)
+        {
+            var currentTrainer = GetCurrentTrainer();
+            if (currentTrainer == null)
+            {
+                return Json(new { success = false, message = "請重新登入" });
+            }
 
+            currentTrainer.Experience = experience;
+            //currentTrainer.SpecializationID = specializationID;
 
+            if (photo != null)
+            {
+                var fileName = Path.GetFileName(photo.FileName);
+                var filePath = Path.Combine("wwwroot/img", fileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await photo.CopyToAsync(stream);
+                }
+                currentTrainer.Photo = $"/img/{fileName}";
+            }
 
+            _context.Trainer.Update(currentTrainer);
+            await _context.SaveChangesAsync();
+
+            return Json(new { success = true });
+        }
         //---------------------------------------------------------------------------------------------
 
         //訓練師總覽頁面
@@ -1227,6 +1288,7 @@ namespace Project1.Controllers
 
         public async Task<JsonResult> GetTrainerSchedule(int id)
         {
+
             try
             {
 
@@ -1288,7 +1350,7 @@ namespace Project1.Controllers
                     schedule.EnrollmentCount = maxParticipants - enrollCount;
                 }
 
-                if (allClassSchedules.Count == 0)
+                if (allClassSchedules.Count ==null)
                 {
                     return Json(new { message = "No schedules found for the given course ID" });
                 }
