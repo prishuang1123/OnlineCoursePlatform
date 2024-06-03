@@ -1,17 +1,25 @@
 ﻿@model Project1.Models.Trainer
-
+@inject Project1.Data.ProjectDbContext _context
 @{
     ViewData["Title"] = "Edit";
+    var specializations = _context.Specialization.ToList();
 }
 
-<h1>Edit</h1>
+<h1>編輯訓練師資料</h1>
 
-<h4>Trainer</h4>
+<h4>訓練師資料</h4>
 <hr />
-<div class="row">
+@if (TempData["SuccessMessage"] != null)
+{
+    <script>
+        var message = '@Html.Raw(TempData["SuccessMessage"].ToString())';
+        alert(message);
+    </script>
+}
     <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<div class="row">
+        <form asp-action="Edit" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger" ></div>
             <input type="hidden" asp-for="TrainerID" />
             <div class="form-group">
                 <label asp-for="MemberID" class="control-label"></label>
@@ -23,10 +31,27 @@
                 <input asp-for="TrainerName" class="form-control" />
                 <span asp-validation-for="TrainerName" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            @* <div class="form-group">
                 <label asp-for="SpecializationID" class="control-label"></label>
                 <input asp-for="SpecializationID" class="form-control" />
                 <span asp-validation-for="SpecializationID" class="text-danger"></span>
+            </div> *@
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label asp-for="SpecializationID" class="control-label" style="margin-top: 7px;"></label>
+                    </div>
+                    <div class="col-md-8">
+                        <select asp-for="SpecializationID" class="form-control">
+                            <option value="">請選擇專業領域</option>
+                            @foreach (var specialization in specializations)
+                            {
+                                <option value="@specialization.SpecializationID">@specialization.SpecializationName</option>
+                            }
+                        </select>
+                        <span asp-validation-for="SpecializationID" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
             <div class="form-group">
                 <label asp-for="Experience" class="control-label"></label>
@@ -43,22 +68,47 @@
                 <input asp-for="Status" class="form-control" />
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            @* <div class="form-group">
                 <label asp-for="Photo" class="control-label"></label>
                 <input asp-for="Photo" class="form-control" />
                 <span asp-validation-for="Photo" class="text-danger"></span>
+            </div> *@
+            <!-- 顯示當前圖片 -->
+            <div class="form-group">
+                <label>當前大頭貼</label>
+                <div>
+                    <img src="@Url.Content($"~/{ViewData["PhotoPath"]}")" alt="Member Photo" style="max-width: 200px;" />
+                </div>
+            </div>
+            <!-- 上傳新圖片 -->
+            <div class="form-group">
+                <label asp-for="Photo" class="control-label"></label>
+                <input asp-for="Photo" class="form-control" type="file" name="photo" />
+                <span asp-validation-for="Photo" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="修改" class="btn btn-primary" onclick="confirmSubmission(event)"/>
             </div>
         </form>
     </div>
 </div>
 
-<div>
+@* <div>
     <a asp-action="Index">Back to List</a>
+</div> *@
+<div>
+    <a asp-controller="Home" asp-action="Index">回首頁</a>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        function confirmSubmission(event) {
+            event.preventDefault(); // 阻止表單提交
+            if (confirm("你確定要修改嗎？")) {
+                // 如果用戶確認，則提交表單
+                event.target.form.submit();
+            }
+        }
+    </script>
 }
