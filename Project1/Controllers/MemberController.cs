@@ -65,7 +65,8 @@ namespace Project1.Controllers
             var model = new Member
             {
                 AspID = user.Id,
-                Email = user.Email
+                Email = user.Email,
+                IsTrainer = false
             };
             return View(model);
         }
